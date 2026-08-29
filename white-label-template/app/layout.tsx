@@ -1,9 +1,13 @@
 import type { Metadata } from "next";
-// Display face, self-hosted via Fontsource (bundled at build, no CDN).
-// TODO(client): if the brand needs a different face, swap the package
-// and the --font-display stack in globals.css together.
-import "@fontsource/barlow-condensed/600.css";
-import "@fontsource/barlow-condensed/700.css";
+// Faces are self-hosted via Fontsource (bundled at build, no CDN, no
+// layout shift). Only the weights actually used are imported.
+// TODO(client): if the brand needs different faces, swap these imports
+// and the --font-* stacks in globals.css together.
+import "@fontsource/big-shoulders-display/latin-700";
+import "@fontsource/big-shoulders-display/latin-800";
+import "@fontsource/ibm-plex-sans/latin-400";
+import "@fontsource/ibm-plex-sans/latin-600";
+import "@fontsource/ibm-plex-mono/latin-500";
 import "./globals.css";
 import { client } from "@/client.config";
 import { JsonLd } from "@/components/JsonLd";

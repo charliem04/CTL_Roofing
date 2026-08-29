@@ -5,29 +5,49 @@
 /* ── BRAND TOKENS — edit these per client (see tailwind.config.ts) ──
    Values are space-separated RGB channels so Tailwind opacity works.
 
-   Default skin is derived from the trades world: warm paper ground
-   (estimate-pad bias), near-black warm ink, work-order rubric red as
-   the single accent, hairline rules instead of shadows. */
+   CTL skin: the palette is sampled from the logo — indigo #2D3581
+   (state outline), periwinkle #5160A6 (wordmark panel), gold #F1CC47
+   (the "Committed to Local" bar). Ground is white with a blue-biased
+   pale neutral for alternating bands; the deep ink ground carries the
+   hero, the metal band and the footer. Gold is the only call-to-action
+   color and never carries text smaller than a button label. */
 :root {
-  /* TODO(client): brand colors */
-  --brand: 168 48 28;          /* work-order red */
-  --brand-strong: 134 38 22;
-  --brand-soft: 244 233 229;
+  /* Structure accent — indigo. Links, focus rings, hover rules. */
+  --brand: 45 53 129;
+  --brand-strong: 30 37 96;
+  --brand-soft: 81 96 166; /* periwinkle — mono labels, hairline hovers */
 
-  --ink: 28 27 24;             /* warm near-black */
-  --ink-soft: 82 79 72;
-  --ink-faint: 133 129 119;
+  /* Action accent — gold. Buttons only, always on ink text. */
+  --accent: 241 204 71;
+  --accent-lift: 248 220 124;
+  --accent-press: 212 168 31;
 
-  --surface: 251 250 246;      /* paper — warm neutral bias */
-  --surface-alt: 244 242 235;  /* tonal step, no shadows */
-  --line: 224 220 209;
+  --ink: 11 18 51; /* deepest ground, and heading color on light */
+  --ink-soft: 60 65 92; /* body copy on light ground */
+  --ink-faint: 121 125 143; /* captions, placeholder text */
+  --ink-invert: 255 255 255; /* headings on the deep ground */
+  --ink-invert-soft: 184 189 206; /* body copy on the deep ground */
 
-  /* TODO(client): typefaces. Display ships self-hosted via Fontsource
-     (see app/layout.tsx import). To swap: npm i @fontsource/<face>,
-     change the import, change this stack. */
-  --font-display: "Barlow Condensed", "Arial Narrow", system-ui, sans-serif;
-  --font-body: system-ui, -apple-system, "Segoe UI", sans-serif;
-  --font-utility: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --surface: 255 255 255;
+  --surface-alt: 237 239 247; /* pale neutral, blue-biased */
+  --surface-deep: 11 18 51; /* dark band ground */
+  --surface-deep-alt: 19 28 69; /* raised dark surface */
+
+  --danger: 163 32 32; /* form errors — the only red on the site */
+  --danger-soft: 253 246 246;
+
+  --line: 221 223 235; /* hairline on light */
+  --line-dark: 233 237 250; /* hairline on dark grounds — used at 20% */
+
+  /* Type. Display is the condensed sign-painter face the CTL wordmark
+     is set in; body and utility are the Plex pair. All self-hosted via
+     Fontsource (see app/layout.tsx) — no CDN, no layout shift. */
+  --font-display: "Big Shoulders Display", "Arial Narrow", Impact, sans-serif;
+  --font-body: "IBM Plex Sans", -apple-system, "Segoe UI", sans-serif;
+  --font-utility: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+
+  /* Standing-seam panel pitch — the rib spacing on the metal band. */
+  --rib: 26px;
 }
 
 html {
@@ -41,61 +61,115 @@ html {
 }
 
 body {
-  @apply bg-surface font-body text-ink-soft antialiased;
+  @apply bg-surface font-body text-[17px] leading-[1.62] text-ink-soft antialiased;
 }
 
-h1, h2, h3 {
-  @apply font-display uppercase tracking-wide text-ink;
+h1, h2, h3, h4 {
+  @apply font-display uppercase text-ink;
+  letter-spacing: 0.005em;
 }
 
-h4 {
-  @apply text-ink;
+h1, h2 {
+  @apply font-extrabold leading-[0.9];
+}
+
+h3, h4 {
+  @apply font-bold leading-none;
 }
 
 /* Selection, caret, scrollbar — themed, not inherited */
 ::selection {
-  background: rgb(var(--ink));
-  color: rgb(var(--surface));
+  background: rgb(var(--accent));
+  color: rgb(var(--ink));
 }
 
-input, textarea {
+input, textarea, select {
   caret-color: rgb(var(--brand));
 }
 
-@media (min-width: 768px) {
-  * {
-    scrollbar-width: thin;
-    scrollbar-color: rgb(var(--ink-faint)) transparent;
-  }
+html {
+  scrollbar-color: rgb(var(--brand-soft)) rgb(var(--surface-alt));
+  scrollbar-width: thin;
 }
 
-/* Visible keyboard focus everywhere */
+::-webkit-scrollbar {
+  width: 11px;
+  height: 11px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgb(var(--surface-alt));
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgb(var(--brand-soft));
+  border: 3px solid rgb(var(--surface-alt));
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgb(var(--brand));
+}
+
+/* Visible keyboard focus everywhere. On the deep ground the ring
+   switches to gold, which is the only thing that reads there. */
 :focus-visible {
   outline: 2px solid rgb(var(--brand));
-  outline-offset: 2px;
+  outline-offset: 3px;
+  border-radius: 1px;
+}
+
+.on-deep :focus-visible {
+  outline-color: rgb(var(--accent));
 }
 
 /* ── Spacing registers ──────────────────────────────────────────────
-   Intra-component: 8/12/20px (gap-2 / gap-3 / gap-5 in markup).
-   Section beat: 56px mobile / 88px desktop. The contact section takes
-   a deliberately larger 128px top break (.section-break) to mark the
-   change of register into the work-order sheet. */
+   Intra-component: 6/10/16/26/42px (the gap-* scale in markup).
+   Band beat: a single clamp so the page breathes the same at every
+   width. Two bands break the register deliberately — the storm strip
+   is a thin 18px shelf, and the utility bar is a 40px rail. */
 .section {
-  @apply mx-auto w-full max-w-content px-5 py-14 sm:px-8 md:py-[88px];
+  @apply mx-auto w-full max-w-content px-[clamp(18px,4vw,44px)];
 }
 
-.section-break {
-  @apply md:pt-32;
+.band {
+  @apply py-[clamp(74px,9vw,126px)];
 }
 
-/* Mono utility labels — form-header register (license, hours, field
-   labels). Used sparingly; not a decorative kicker above headings. */
+/* Mono utility labels — the register CTL's own paperwork uses for
+   field names, hours and spec keys. Never a decorative kicker. */
 .u-label {
-  @apply font-mono text-[11px] uppercase tracking-[0.12em] text-ink-faint;
-  font-variant-numeric: tabular-nums;
+  @apply font-mono text-[12px] font-medium uppercase tracking-[0.09em] text-brand-soft;
 }
 
 /* Buttons: pressed state everywhere, no hover lifts */
 .btn-press {
-  @apply transition-colors active:translate-y-px;
+  @apply transition-colors duration-150 active:translate-y-px;
+}
+
+/* Bullet list: a gold seam tick instead of a disc */
+.ticks li {
+  @apply relative pl-5 text-base;
+}
+
+.ticks li::before {
+  content: "";
+  @apply absolute left-0 top-[9px] h-[3px] w-[9px] bg-accent;
+}
+
+/* The standing-seam rib field. Vertical hairlines at panel pitch,
+   masked top and bottom so the band reads as sheet metal catching
+   light rather than as a striped background. */
+.seam-field::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    90deg,
+    rgb(var(--accent) / 0.16) 0 1px,
+    transparent 1px var(--rib)
+  );
+  -webkit-mask-image: linear-gradient(180deg, transparent, #000 22%, #000 62%, transparent 100%);
+  mask-image: linear-gradient(180deg, transparent, #000 22%, #000 62%, transparent 100%);
+  opacity: 0.7;
+  pointer-events: none;
 }

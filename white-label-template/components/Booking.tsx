@@ -8,6 +8,7 @@
 import { useEffect, useRef } from "react";
 import { client } from "@/client.config";
 import { Reveal } from "./Reveal";
+import { SectionHead } from "./SectionHead";
 
 declare global {
   interface Window {
@@ -70,14 +71,12 @@ export function Booking() {
   if (!client.calLink) return null;
 
   return (
-    <section id="booking" className="border-y border-line bg-surface-alt">
+    <section id="booking" className="band bg-surface-alt">
       <div className="section">
-        <Reveal>
-          <h2 className="text-4xl font-bold sm:text-5xl">
-            {client.copy.bookingHeading}
-          </h2>
-          <p className="mt-3 max-w-xl leading-relaxed">{client.copy.bookingBlurb}</p>
-        </Reveal>
+        <SectionHead
+          heading={client.copy.bookingHeading}
+          lede={client.copy.bookingBlurb}
+        />
         <Reveal delay={0.08}>
           <div
             ref={ref}

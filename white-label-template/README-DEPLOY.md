@@ -1,37 +1,41 @@
 # Go-Live Checklist — touch every item before a client site ships
 
-Workflow per client: `git clone` → new repo → work through this list top
-to bottom → `npm run deploy`.
+This tree is currently configured for **CTL Pro Construction LLC (CTL
+Roofing)**, Broussard LA. Items already done for CTL are checked; the
+open boxes are what still stands between this and a DNS cutover.
 
-## 1. `client.config.ts` — every `TODO(client)` field
-- [ ] `businessName`, `legalName`, `tagline`, `subheadline`
-- [ ] `siteUrl` (the real production domain, https, no trailing slash)
-- [ ] `metaTitle`, `metaDescription`
-- [ ] `phone`, `phoneHref` (E.164), `email`
-- [ ] `address`, `hours`
-- [ ] `mapEmbedSrc` (Google Maps → Share → Embed → copy the iframe `src`)
-- [ ] `calLink` (client's Cal.com "username/event" — or `""` to hide booking)
-- [ ] `socials` (empty string hides a link)
-- [ ] `services` — icons, titles, descriptions
-- [ ] `form.serviceOptions`, `form.urgencyOptions` — the two required
-      dropdowns on the contact sheet; match the trades the client actually
-      takes calls for
-- [ ] `about` — heading, body paragraphs, stats (or `[]`)
-- [ ] `testimonials` — REAL reviews only (or `[]` to hide the section)
-- [ ] `badges` — real license number(s)
-- [ ] `copy` — skim; defaults usually fine
+Workflow for a new client: `git clone` → new repo → work back through
+this list top to bottom → `npm run deploy`.
 
-## 2. Images — `/public`
-- [ ] Replace `placeholder/logo.svg` (or add real logo + update `logoPath`)
-- [ ] Replace hero image slot in `components/Hero.tsx` with a real
-      job-site photo/video (see the TODO comment there) + write alt text
-- [ ] Replace `placeholder/about.svg` reference + write alt text in
-      `components/About.tsx`
-- [ ] Create a real 1200×630 OG image, update `ogImagePath`
+## 1. `client.config.ts` — every field
+- [x] `businessName`, `legalName`, `tagline`, `taglineEmphasis`, `subheadline`
+- [x] `siteUrl` (https://www.ctlpro.com, no trailing slash)
+- [x] `metaTitle`, `metaDescription`
+- [x] `phone`/`phoneHref` and `stormPhone`/`stormPhoneHref` (E.164), `email`
+- [x] `address`, `hours`, `hoursShort`
+- [ ] `mapEmbedSrc` (Google Maps → Share → Embed → copy the iframe `src`).
+      Empty today, so the contact column skips the map panel.
+- [x] `bookingUrl` — the Calendly link every primary CTA points at.
+      `calLink` is empty, so the Cal.com inline section stays hidden.
+- [x] `socials` (Facebook + Google review link; Instagram empty = hidden)
+- [x] `services`, `metal`, `process`, `brands`, `about`, `gallery`
+- [x] `form.serviceOptions` — the one dropdown on the request sheet
+- [ ] `testimonials` — REAL reviews only. Empty today, so the section
+      does not render; add quotes CTL has cleared for the site.
+- [ ] `badges` — real license number(s). Empty today, so no license line
+      prints. Confirm CTL's LA contractor license and add it.
+- [x] `copy` — headings, CTAs, hero facts, closing band
+
+## 2. Images — `/public/ctl`
+- [x] Logo, hero, four service photos, metal panel, team, owner,
+      eight gallery shots, materials — all real CTL job photography
+- [x] OG image (1200×630, `og.jpg`)
+- [ ] Favicon — not yet set; add `app/icon.png` when CTL supplies one
 
 ## 3. Environment — `.env.local` (copy from `.env.example`)
 - [ ] `NEXT_PUBLIC_FORM_ENDPOINT` — Formspree URL or Cloudflare Worker.
-      Unset = form silently succeeds in demo mode. DO NOT SHIP UNSET.
+      Unset = the form silently succeeds in demo mode. DO NOT SHIP UNSET.
+      The payload includes `address`, so map that field on the receiver.
 - [ ] `NEXT_PUBLIC_LEAD_WEBHOOK_URL` — only for Speed-to-Lead clients
 - [ ] `NEXT_PUBLIC_PLAUSIBLE_DOMAIN` — or leave empty for no analytics
 - [ ] Mirror these in Cloudflare Pages → Settings → Environment variables
@@ -43,28 +47,31 @@ to bottom → `npm run deploy`.
       actually runs (analytics on/off, lead webhook on/off)
 
 ## 5. Brand
-- [ ] `app/globals.css` — set the color tokens (`--brand*`, `--ink*`,
-      `--surface*`, `--line`). Default skin: paper ground, warm ink,
-      work-order red accent, 2px radius, rules instead of shadows.
-- [ ] Display font: default is Barlow Condensed via Fontsource. To
-      swap: `npm i @fontsource/<face>`, change the import in
-      `app/layout.tsx`, and update `--font-display` in globals.css.
+- [x] `app/globals.css` — color tokens sampled from the CTL logo:
+      indigo `#2D3581`, periwinkle `#5160A6`, gold `#F1CC47`, ink
+      `#0B1233`. Gold is the only call-to-action color; indigo carries
+      structure, links and focus rings.
+- [x] Type: Big Shoulders Display (display) + IBM Plex Sans/Mono
+      (body/utility), self-hosted via Fontsource — latin subsets only,
+      imported in `app/layout.tsx`. To swap: `npm i @fontsource/<face>`,
+      change the import, and update `--font-*` in globals.css.
 
 ## 6. Verify before DNS cutover
-- [ ] `npm run build` clean
+- [x] `npm run build` clean (static export to `./out`)
+- [x] `npm run check` — 0 errors, 0 warnings. The 4 advisories are
+      false positives (gradient `100%` stops read as round stats;
+      em-dashes counted inside CSS comments). New findings elsewhere
+      mean a component edit inherited a default — fix it, or suppress
+      consciously with `deliberate-ignore`.
 - [ ] Form submits end-to-end (check inbox AND lead webhook if enabled)
-- [ ] Cal.com embed loads and books a test slot
+- [ ] Calendly link opens and books a test slot
 - [ ] Cookie banner: decline → no analytics request in Network tab;
       accept → script loads
 - [ ] Lighthouse mobile ≥ 90 performance
-- [ ] Rich Results Test on the LocalBusiness JSON-LD
-- [ ] tel:/sms: links work from a real phone
+- [ ] Rich Results Test on the `RoofingContractor` JSON-LD
+- [ ] tel:/sms: links work from a real phone — both the office line and
+      the storm line
 - [ ] Grep the repo for `TODO(client)` — must return zero results
-- [ ] `npm run check` — the design checker's remaining findings all sit
-      in `client.config.ts` flagging placeholder identity (acme,
-      example.com, 555 number). They go quiet once real client data is
-      in. New findings elsewhere mean a component edit inherited a
-      default — fix or consciously suppress with `deliberate-ignore`.
 
 ## Deploy
 ```bash

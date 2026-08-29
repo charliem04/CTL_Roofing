@@ -7,7 +7,7 @@ import { client } from "@/client.config";
 export function JsonLd() {
   const data = {
     "@context": "https://schema.org",
-    "@type": "LocalBusiness", // TODO(client): narrow if applicable, e.g. "HVACBusiness", "Electrician", "AutoRepair"
+    "@type": "RoofingContractor",
     name: client.businessName,
     legalName: client.legalName,
     description: client.metaDescription,
@@ -21,7 +21,17 @@ export function JsonLd() {
       addressRegion: client.address.region,
       postalCode: client.address.postalCode,
     },
+    areaServed: client.about.towns.map((town) => ({
+      "@type": "City",
+      name: `${town}, ${client.address.region}`,
+    })),
     image: client.siteUrl + client.ogImagePath,
+    logo: client.siteUrl + client.logoPath,
+    sameAs: [
+      client.socials.facebook,
+      client.socials.instagram,
+      client.socials.google,
+    ].filter(Boolean),
   };
 
   return (

@@ -20,10 +20,13 @@
 export type ContactPayload = {
   name: string;
   phone: string;
+  /** Empty when the form does not ask for it (CTL's does not) */
   email: string;
+  /** Property the work is for; empty when the form does not ask */
+  address: string;
   /** Which job — one of client.form.serviceOptions */
   service: string;
-  /** How soon — one of client.form.urgencyOptions */
+  /** How soon; empty when the form does not ask */
   urgency: string;
   /** Free-text detail; optional on the form */
   message: string;
@@ -56,6 +59,7 @@ export async function submitContact(
     name: payload.name,
     phone: payload.phone,
     email: payload.email,
+    address: payload.address,
     service: payload.service,
     urgency: payload.urgency,
     message: payload.message,

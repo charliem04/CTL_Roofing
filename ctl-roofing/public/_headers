@@ -1,0 +1,33 @@
+# Cloudflare Pages response headers.
+# Rules are matched in order; the most specific match wins per header.
+
+/*
+  # Don't let a browser guess a MIME type we didn't send.
+  X-Content-Type-Options: nosniff
+  # Send the origin to other sites, the full path only to ourselves.
+  Referrer-Policy: strict-origin-when-cross-origin
+  # Nothing here should ever be framed by anyone else.
+  X-Frame-Options: DENY
+  Content-Security-Policy: frame-ancestors 'none'
+  # Features this site has no business asking for.
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=()
+
+# Next's build output is content-hashed, so a given URL's bytes never
+# change. Cache it hard and forever.
+/_next/static/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Photography is NOT hashed — replacing a job photo reuses its filename.
+# A day of browser cache with revalidation after that, so a swapped
+# photo appears within a day rather than never.
+/ctl/*
+  Cache-Control: public, max-age=86400, must-revalidate
+
+/icon.png
+  Cache-Control: public, max-age=86400, must-revalidate
+
+# A full Content-Security-Policy is deliberately NOT set here. This site
+# loads Calendly in an iframe and Plausible as a script, both only after
+# consent, and a policy written without testing against those would fail
+# closed at the worst moment. Worth adding as its own task, with the
+# embed exercised against it before it ships.

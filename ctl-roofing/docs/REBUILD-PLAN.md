@@ -147,9 +147,25 @@ their route flips to `live: true`.
 
 ## Phase 2 backlog
 
-Areas we serve (hub + 6–10 towns) · case studies (6–8) · gallery page ·
-video tab · reviews · careers + application form · blog (10 posts from
-existing Facebook copy) · warranty explainer · showroom.
+**Done:** gallery page (40 photographs, five filters, shared lightbox).
+
+**Ordered by what unblocks what.** Case studies come before areas: a
+town page without local projects on it is a thin, near-duplicate page,
+which is the doorway pattern search engines demote. Both wait on
+Robert's project list, which makes that list the single highest-value
+thing to get out of him.
+
+1. Case studies (6–8) — blocked on projects with before/after photos
+2. Areas we serve (hub + 6–10 towns) — built on top of the case studies
+3. Meet the team — blocked on headshots
+4. Reviews — blocked on permission to reproduce them
+5. Careers + application form — needs a provider that accepts résumé
+   uploads, since a static export cannot take a file. Deliberate on
+   services before building the funnel.
+6. Video tab — two files exist in `ctl_pictures`; the 34MB one needs
+   compressing or hosting off-site before it goes anywhere near a page
+7. Blog — on hold; not a launch priority
+8. Warranty explainer · showroom
 
 ## Blocked on Robert
 

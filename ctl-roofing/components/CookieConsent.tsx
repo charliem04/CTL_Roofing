@@ -22,12 +22,17 @@ export function CookieConsent() {
   return (
     <div
       role="dialog"
-      aria-label="Cookie consent"
+      aria-label="Analytics consent"
       className="fixed inset-x-3 bottom-20 z-50 mx-auto max-w-xl rounded border border-ink bg-surface p-5 md:bottom-5"
     >
+      {/* Says what actually happens. The analytics we use are cookieless
+          and the only thing stored is this answer — claiming "we use
+          cookies" would be easier and untrue. */}
       <p className="text-sm leading-relaxed">
-        We use cookies for basic analytics to understand how the site is used.
-        No analytics load unless you accept. See our{" "}
+        May we load privacy-friendly analytics to see which pages get used? It
+        sets no cookies and doesn&apos;t follow you to other sites. Decline and
+        the script never loads. Either way we remember your answer in this
+        browser. See our{" "}
         <Link href="/privacy/" className="font-medium text-brand underline underline-offset-2">
           privacy policy
         </Link>

@@ -50,30 +50,39 @@ Phase-2 pages are registered in `lib/routes.ts` with `live: false`.
 Nothing links to them and the sitemap omits them until that flips.
 
 - [x] `/`, `/services/` + five service pages, `/storm-damage/`,
-      `/contact/`, `/financing/`, `/terms/`, `/privacy/`, 404
-- [ ] Phase 2: `/gallery/`, `/case-studies/`, `/video/`, `/team/`,
-      `/areas/` + town pages, `/reviews/`, `/careers/`, blog
+      `/contact/`, `/financing/`, `/gallery/`, `/terms/`, `/privacy/`, 404
+- [ ] Phase 2: `/case-studies/`, `/video/`, `/team/`, `/areas/` + town
+      pages, `/reviews/`, `/careers/`, blog
 
 ## 3. Images — `/public/ctl`
 - [x] Logo, hero, four service photos, metal panel, team, owner,
-      eight gallery shots, materials — all real CTL job photography
+      materials — all real CTL job photography
+- [x] Gallery: 40 photographs across five categories, in
+      `content/gallery.ts`, feeding both the home band and `/gallery/`
 - [x] OG image (1200×630, `og.jpg`)
 - [x] Favicon — `app/icon.png`, the CTL letterform on the wordmark
       periwinkle with the gold bar; legible at 32px
 
 ## 4. Environment — `.env.local` (copy from `.env.example`)
-- [ ] `NEXT_PUBLIC_FORM_ENDPOINT` — Formspree URL or Cloudflare Worker.
-      Unset = the form silently succeeds in demo mode. DO NOT SHIP UNSET.
-      The payload includes `address`, so map that field on the receiver.
-- [ ] `NEXT_PUBLIC_LEAD_WEBHOOK_URL` — only for Speed-to-Lead clients
+- [ ] `NEXT_PUBLIC_WEB3FORMS_KEY` — REQUIRED. The access key for the
+      office inbox. Without it the form refuses to submit and shows the
+      phone number; it no longer pretends to succeed.
+- [ ] `NEXT_PUBLIC_LEAD_WEBHOOK_URL` — the CRM copy of the lead, once a
+      CRM is chosen. Fired in parallel and never awaited, so a CRM
+      outage cannot cost the email.
 - [ ] `NEXT_PUBLIC_PLAUSIBLE_DOMAIN` — or leave empty for no analytics
-- [ ] Mirror these in Cloudflare Pages → Settings → Environment variables
+- [ ] Mirror these in Cloudflare Pages → Settings → Environment
+      variables, for Production *and* Preview
 
-## 5. Legal — ⚠️ both pages ship with REPLACE BEFORE LAUNCH banners
-- [ ] `app/terms/page.tsx` — review/replace text, set effective date,
-      remove the warning banner block
-- [ ] `app/privacy/page.tsx` — same, and confirm disclosures match what
-      actually runs (analytics on/off, lead webhook on/off)
+## 5. Legal — written, not yet lawyer-reviewed
+Both pages now describe what this site actually does, service by
+service, with an effective date set. They are a careful draft, not
+legal advice.
+- [ ] CTL's attorney reads both — particularly the claims-role section
+      in the terms, which states that CTL does not adjust claims
+- [ ] Re-check the privacy page whenever a processor is added or
+      removed. It names Web3Forms, Calendly, Plausible and Cloudflare
+      by name, so adding a CRM or call tracking means adding a line.
 
 ## 6. Brand
 - [x] `app/globals.css` — color tokens sampled from the CTL logo:
@@ -106,10 +115,75 @@ Nothing links to them and the sitemap omits them until that flips.
       the storm line
 - [ ] Grep the repo for `TODO(client)` — must return zero results
 
-## Deploy
+## Deploy — Cloudflare Pages
+
+The old ctlpro.com site is still live and DNS still points at it. Ship
+to a `*.pages.dev` preview first, check it there, and only then move
+DNS. Nothing below touches the live site until the final step.
+
+### 1. Connect the repo
+
+Cloudflare dashboard → Workers & Pages → Create → Pages → Connect to Git.
+
+| Setting | Value |
+|---|---|
+| Production branch | `main` |
+| Framework preset | None |
+| Build command | `npm run build` |
+| Build output directory | `out` |
+| **Root directory (advanced)** | `ctl-roofing` |
+
+The root directory is the one people miss. The Next project is not at
+the repo root, and without it the build fails looking for a package.json.
+
+Node version comes from `.nvmrc` (20). If Pages ignores it, set a
+`NODE_VERSION` environment variable to `20`.
+
+### 2. Environment variables
+
+Set these under Settings → Environment variables, for **both**
+Production and Preview — a preview without them behaves differently
+from production, which defeats the point of checking it there.
+
+- [ ] `NEXT_PUBLIC_WEB3FORMS_KEY` — required, or the form refuses to
+      submit and tells people to phone
+- [ ] `NEXT_PUBLIC_PLAUSIBLE_DOMAIN` — `ctlpro.com`, or empty for none
+- [ ] `NEXT_PUBLIC_LEAD_WEBHOOK_URL` — once a CRM is chosen
+
+### 3. Check the preview
+
+- [ ] Submit the form and confirm the email actually arrives
+- [ ] Submit with the key deliberately wrong, and confirm the visitor
+      sees the failure and the phone number rather than a false success
+- [ ] Book a real slot through the inline calendar
+- [ ] Decline the analytics banner, then confirm no Plausible request
+      in the Network tab; accept, and confirm it loads
+- [ ] Both phone numbers and the text link from an actual phone
+- [ ] Lighthouse mobile ≥ 90
+
+### 4. Before DNS moves
+
+- [ ] Fill in `public/_redirects` from the old site's URLs — crawl it
+      while it is still up. This gets harder after cutover, not easier.
+- [ ] Legal pages read and approved (see §5)
+- [ ] Decide on the `www` vs apex canonical and make the other redirect
+- [ ] `siteUrl` in `client.config.ts` matches the winner
+
+### 5. Cutover
+
+Pages → Custom domains → add the domain, then move the DNS records.
+Afterwards:
+
+- [ ] Turn on HSTS in the Cloudflare dashboard (deliberately not set in
+      `_headers` — committing to it before the domain is fully served
+      over HTTPS is hard to undo)
+- [ ] Submit `{siteUrl}/sitemap.xml` in Google Search Console
+- [ ] Re-check the old site's top URLs now redirect rather than 404
+
+### Manual deploy, if ever needed
+
 ```bash
+cd ctl-roofing
 npm run build            # emits ./out (static export)
 npx wrangler pages deploy out
 ```
-Then Cloudflare Pages → Custom domains → attach the client domain, and
-submit the sitemap (`{siteUrl}/sitemap.xml`) in Google Search Console.

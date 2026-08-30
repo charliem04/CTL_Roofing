@@ -16,6 +16,7 @@ import { storm } from "@/content/storm";
 import { financing } from "@/content/financing";
 import { contactPage } from "@/content/contact";
 import { towns } from "@/content/towns";
+import { gallery, galleryCategories } from "@/content/gallery";
 import {
   caseStudies,
   pendingContent,
@@ -60,6 +61,24 @@ export function getFinancing() {
 /** True only when real lender terms exist — gates the estimator. */
 export function hasFinanceTerms(): boolean {
   return financing.offers.length > 0;
+}
+
+/* ── Gallery ──────────────────────────────────────────────────────── */
+
+export function getGallery() {
+  return gallery;
+}
+
+/** The subset the home page band shows. */
+export function getFeaturedGallery() {
+  return gallery.filter((s) => s.featured);
+}
+
+/** Only categories that actually have photos in them. */
+export function getGalleryCategories() {
+  return galleryCategories.filter((c) =>
+    gallery.some((s) => s.category === c.id)
+  );
 }
 
 /* ── Areas ────────────────────────────────────────────────────────── */

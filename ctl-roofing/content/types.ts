@@ -18,6 +18,20 @@ export type Photo = {
   caption?: string;
 };
 
+/** Filters on the gallery page, each mapping to a service. */
+export type GalleryCategory =
+  | "roofing"
+  | "metal"
+  | "outdoor"
+  | "remodeling"
+  | "storm";
+
+export type GalleryShot = Photo & {
+  category: GalleryCategory;
+  /** Shown in the home page band as well as the gallery page */
+  featured?: boolean;
+};
+
 export type Faq = {
   q: string;
   a: string;

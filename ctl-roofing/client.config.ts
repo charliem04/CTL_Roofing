@@ -17,14 +17,6 @@ export type Testimonial = {
   detail: string; // e.g. "Homeowner, Broussard" or "Fleet manager"
 };
 
-export type Shot = {
-  src: string;
-  alt: string;
-  caption: string;
-  /** Portrait tiles break the gallery's horizon line */
-  orientation?: "landscape" | "portrait";
-};
-
 export const client = {
   // ── Identity ──────────────────────────────────────────────────────
   businessName: "CTL Roofing",
@@ -104,8 +96,6 @@ export const client = {
     instagram: "https://www.instagram.com/ctlpro",
     google: "https://g.page/r/CdzPt0LheRXZEAI/review", // review link
   },
-  /** Off-site page for financing terms. Empty string hides the link. */
-  financingUrl: "https://www.ctlpro.com/new-page-1",
 
   // ── Storm strip (sits directly under the hero) ────────────────────
   storm: {
@@ -244,48 +234,8 @@ export const client = {
   },
 
   // ── Recent work gallery ───────────────────────────────────────────
-  gallery: [
-    {
-      src: "/ctl/work-standing-seam.jpg",
-      alt: "Aerial view of a standing seam metal roof installation",
-      caption: "Standing seam install",
-    },
-    {
-      src: "/ctl/work-shingle-replacement.jpg",
-      alt: "Brick home with a completed shingle roof",
-      caption: "Shingle replacement",
-    },
-    {
-      src: "/ctl/work-patio-cover.jpg",
-      alt: "Attached patio cover with wood columns",
-      caption: "Patio cover",
-    },
-    {
-      src: "/ctl/work-tear-off.jpg",
-      alt: "Crew tearing off an old roof deck",
-      caption: "Tear-off in progress",
-    },
-    {
-      src: "/ctl/work-interior-remodel.jpg",
-      alt: "Interior remodel under way in a living room",
-      caption: "Interior remodel",
-    },
-    {
-      src: "/ctl/work-window-replacement.jpg",
-      alt: "New windows installed in a sunroom",
-      caption: "Window replacement",
-    },
-    {
-      src: "/ctl/work-exterior-renovation.jpg",
-      alt: "Home mid-renovation with new siding going on",
-      caption: "Exterior renovation",
-    },
-    {
-      src: "/ctl/work-architectural-shingles.jpg",
-      alt: "Close view of newly laid architectural shingles",
-      caption: "Architectural shingles",
-    },
-  ] as Shot[],
+  // Photographs live in content/gallery.ts, which feeds both the home
+  // band and the gallery page from one list.
 
   /** Photo printed beside the contact details column. */
   contactPhoto: {

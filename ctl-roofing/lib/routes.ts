@@ -39,14 +39,14 @@ export const nav: RouteNode[] = [
     children: serviceChildren,
   },
   {
-    // Phase 2 gives this a hub of its own. Until then it points at the
-    // gallery band on the home page rather than at a route that 404s.
-    href: "/#work",
+    // The gallery is the hub for now, so this points at a real page
+    // rather than at a band on the home page. When case studies and
+    // video land they become the dropdown and this stays the parent.
+    href: "/gallery/",
     label: "Our Work",
     live: true,
-    priority: 0,
+    priority: 0.8,
     children: [
-      { href: "/gallery/", label: "Gallery", live: false },
       { href: "/case-studies/", label: "Case studies", live: false },
       { href: "/video/", label: "Video", live: false },
     ],

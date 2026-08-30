@@ -20,7 +20,7 @@ export function Footer() {
     { href: "/storm-damage/", label: "Storm damage & insurance" },
     { href: "/financing/", label: "Financing" },
     { href: "/#about", label: "About us" },
-    { href: "/#work", label: "Our work" },
+    { href: "/gallery/", label: "Our work" },
   ];
 
   const reach = [

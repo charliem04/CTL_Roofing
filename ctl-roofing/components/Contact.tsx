@@ -228,7 +228,15 @@ export function Contact() {
                 )}
                 {status === "error" && (
                   <span className="mt-4 block border-l-2 border-danger pl-3 text-sm font-medium text-danger">
-                    {error}
+                    {error}{" "}
+                    {/* A failed submit is the one moment the phone number
+                        has to be right there, not back up the page. */}
+                    <a
+                      href={`tel:${client.phoneHref}`}
+                      className="font-mono font-semibold tabular-nums text-danger underline underline-offset-4"
+                    >
+                      {client.phone}
+                    </a>
                   </span>
                 )}
               </p>

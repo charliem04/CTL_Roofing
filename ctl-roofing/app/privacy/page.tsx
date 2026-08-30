@@ -8,65 +8,122 @@ export const metadata: Metadata = {
 };
 
 /*
- * ⚠️ REPLACE BEFORE LAUNCH ⚠️
- * Generic starter policy — NOT legal advice. Review and replace before
- * launch. Keep it accurate: if you enable analytics or the lead
- * webhook, the disclosures below must reflect what actually runs.
+ * Written to describe what this site actually does, service by service,
+ * rather than to cover every eventuality in the abstract. If the site
+ * gains a processor — a CRM, a call-tracking provider, a chat widget —
+ * this page has to gain a line, or it stops being true.
+ *
+ * It is not legal advice. Have CTL's attorney read it before launch.
  */
-export default function PrivacyPage() {
-  const effective = "____________"; // TODO(client): set effective date
+const EFFECTIVE = "August 30, 2026";
 
+export default function PrivacyPage() {
   return (
     <LegalPage title="Privacy Policy">
-      <p className="rounded border border-line bg-surface-alt p-4 text-sm font-medium">
-        ⚠️ REPLACE BEFORE LAUNCH — this is generic starter text, not legal
-        advice. Review with the business owner or their attorney.
-      </p>
-      <p>Effective date: {effective}</p>
+      <p>Effective {EFFECTIVE}</p>
+
       <p>
-        This Privacy Policy describes how {client.legalName} ("we," "us," or
-        "our") collects and uses information when you use this website.
+        This policy explains what {client.legalName} does with information
+        collected through {client.siteUrl.replace("https://", "")}. We have
+        tried to describe what actually happens rather than everything that
+        conceivably could.
       </p>
-      <h2>Information you provide</h2>
+
+      <h2>What you give us</h2>
       <p>
-        When you submit our contact form or book an appointment, we collect
-        the information you enter — typically your name, phone number, email
-        address, and a description of the work you need. We use it to respond
-        to your request, schedule service, and communicate with you about your
-        job, including by phone, email, or text message.
+        The assessment request form asks for your name, phone number, the
+        address of the property, the kind of work you need, and anything you
+        want to tell us about it. That is the whole form — it does not ask
+        for an email address, and there is no account to create.
       </p>
-      <h2>Information collected automatically</h2>
       <p>
-        With your consent, we use privacy-focused analytics to understand
-        aggregate site usage (pages visited, referral source). No analytics
-        scripts load unless you accept cookies via the consent banner.
+        If you call or text either of our numbers, we have your phone number
+        and whatever you tell us. If you book through the calendar, the
+        scheduling provider collects whatever their booking form asks for.
       </p>
-      <h2>Service providers</h2>
+
+      <h2>What we do with it</h2>
       <p>
-        Form submissions and booking requests are processed by third-party
-        service providers acting on our behalf (for example, a form delivery
-        service, a scheduling provider, and a lead-management system). These
-        providers process your information only to deliver those services.
+        We use it to call you back, arrange the assessment, quote the work,
+        and carry it out. That means contacting you by phone, text or email
+        about your request and the job that follows from it. We do not add
+        you to a marketing list because you asked for a roof inspection.
       </p>
-      <h2>Sharing</h2>
+
+      <h2>Where it goes</h2>
       <p>
-        We do not sell your personal information. We share it only with the
-        service providers described above or when required by law.
+        A form submission is delivered to our office inbox by{" "}
+        <strong>Web3Forms</strong>, a form-delivery service acting on our
+        behalf. Where we have enabled it, the same details are also recorded
+        in our customer-relationship system so a request does not get lost
+        between people. Both process the information only to provide those
+        services to us.
       </p>
-      <h2>Retention and your choices</h2>
       <p>
-        We keep contact and job information as long as needed for business and
-        legal purposes. You may ask us to correct or delete your information
-        by contacting us at {client.email}.
+        The booking calendar is hosted by <strong>Calendly</strong>. It does
+        not load until you either accept analytics or press the button on the
+        booking panel — until then, nothing is sent to them. Once loaded, your
+        use of the calendar is subject to Calendly&apos;s own privacy policy.
       </p>
+      <p>
+        The site is hosted on <strong>Cloudflare Pages</strong>, which keeps
+        standard server logs, including IP addresses, for security and
+        operational purposes.
+      </p>
+
+      <h2>Analytics, and the banner</h2>
+      <p>
+        If you accept on the banner, we load <strong>Plausible Analytics</strong>{" "}
+        to see which pages get used and where visitors arrive from. Plausible
+        sets no cookies, collects no personal information, and does not follow
+        you to other websites. If you decline, the script is never loaded at
+        all.
+      </p>
+      <p>
+        Your answer to that banner is stored in your own browser&apos;s local
+        storage so we stop asking. That is the only thing this site stores on
+        your device. Clearing your browser data clears it, and the banner will
+        ask again.
+      </p>
+
+      <h2>What we do not do</h2>
+      <p>
+        We do not sell your personal information, and we do not share it with
+        anyone beyond the providers named above except where the law requires
+        it. This site is not directed at children, and we do not knowingly
+        collect information from them.
+      </p>
+
+      <h2>How long we keep it</h2>
+      <p>
+        Job records — estimates, invoices, permits, photographs and the
+        documents that go with them — are kept for as long as we need them for
+        the work, the warranty and our legal and tax obligations. Enquiries
+        that never became jobs are kept for a reasonable period and then
+        cleared.
+      </p>
+
+      <h2>Your choices</h2>
+      <p>
+        Ask us to correct or delete what we hold about you and we will, unless
+        we are required to keep it. Ask us to stop contacting you and we will
+        stop. Either way, write to {client.email} or call {client.phone}.
+      </p>
+
       <h2>Changes</h2>
       <p>
-        We may update this policy from time to time. The effective date above
-        reflects the latest revision.
+        If we change how any of this works, we change this page and move the
+        effective date at the top.
       </p>
+
       <h2>Contact</h2>
       <p>
-        Privacy questions: {client.email} or {client.phone}.
+        {client.legalName}
+        <br />
+        {client.address.street}, {client.address.city}, {client.address.region}{" "}
+        {client.address.postalCode}
+        <br />
+        {client.email} · {client.phone}
       </p>
     </LegalPage>
   );

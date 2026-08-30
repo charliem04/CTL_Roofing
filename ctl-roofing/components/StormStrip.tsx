@@ -1,4 +1,5 @@
 import { client } from "@/client.config";
+import { MoreLink } from "./MoreLink";
 
 /**
  * A thin gold shelf directly under the hero — the one band that breaks
@@ -17,6 +18,9 @@ export function StormStrip() {
             {client.storm.label}
           </h2>
           <p className="mt-1 max-w-[70ch] font-semibold text-ink">{client.storm.body}</p>
+          <p className="mt-2">
+            <MoreLink href="/storm-damage/">How storm claims actually work</MoreLink>
+          </p>
         </div>
         <a
           href={`tel:${client.stormPhoneHref}`}

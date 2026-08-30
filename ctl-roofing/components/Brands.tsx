@@ -28,8 +28,8 @@ export function Brands() {
         </dl>
 
         <Reveal delay={0.1}>
-          <a href="#contact" className={`mt-10 ${btn("ink")}`}>
-            Get a free estimate
+          <a href="/services/" className={`mt-10 ${btn("ink")}`}>
+            See what we install
           </a>
         </Reveal>
       </div>

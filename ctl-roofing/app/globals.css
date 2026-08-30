@@ -156,6 +156,22 @@ html {
   @apply absolute left-0 top-[9px] h-[3px] w-[9px] bg-accent;
 }
 
+/* The same list, marked as an exclusion rather than an inclusion —
+   used for "what we don't do" beside "what we do". A muted rule, not a
+   red cross: these are boundaries, not failures. */
+.ticks-muted li {
+  @apply relative pl-5 text-base;
+}
+
+.ticks-muted li::before {
+  content: "";
+  @apply absolute left-0 top-[11px] h-px w-[9px] bg-ink-faint;
+}
+
+.on-deep .ticks-muted li::before {
+  @apply bg-ink-invert-soft/50;
+}
+
 /* The standing-seam rib field. Vertical hairlines at panel pitch,
    masked top and bottom so the band reads as sheet metal catching
    light rather than as a striped background. */

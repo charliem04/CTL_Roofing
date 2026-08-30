@@ -8,6 +8,29 @@ import { nav, liveChildren, type RouteNode } from "@/lib/routes";
 import { btn } from "./Button";
 
 /**
+ * How long a menu survives the pointer leaving it. Long enough to cross
+ * the gap to a neighbouring item or cut a diagonal to the bottom entry;
+ * short enough that a menu you have walked away from is gone before you
+ * notice it. Opening is immediate — an open delay reads as lag.
+ */
+const CLOSE_DELAY_MS = 160;
+
+/**
+ * Did this element get focus from the keyboard rather than a pointer?
+ * `:focus-visible` is the browser's own answer to that question, and
+ * using it keeps the distinction consistent with the focus rings the
+ * rest of the site draws. Older engines that reject the selector fall
+ * back to "no", which costs a keyboard nicety and breaks nothing.
+ */
+function isKeyboardFocus(el: EventTarget | null): boolean {
+  try {
+    return el instanceof HTMLElement && el.matches(":focus-visible");
+  } catch {
+    return false;
+  }
+}
+
+/**
  * Five items and a CTA, per the nav spec. Items with live children open
  * a menu; items without are plain links, which is what keeps a section
  * whose children are still being built from advertising dead routes.
@@ -16,6 +39,13 @@ import { btn } from "./Button";
  * opens, Escape closes and returns focus to the trigger, and clicking
  * the trigger itself navigates to the hub. Nothing here traps a
  * keyboard user inside a dropdown.
+ *
+ * Two details do most of the work in making them feel solid. The gap
+ * between a trigger and its panel is padding on the panel's wrapper,
+ * not margin on the panel, so it is part of the hover target instead of
+ * a dead strip the pointer falls through. And leaving starts a short
+ * countdown rather than closing outright, so cutting a corner on the
+ * way to the last item does not shut the menu in your face.
  */
 export function Nav() {
   const pathname = usePathname() ?? "/";
@@ -23,6 +53,29 @@ export function Nav() {
   const [openMenu, setOpenMenu] = useState<string | null>(null);
   const [scrolled, setScrolled] = useState(false);
   const headerRef = useRef<HTMLElement>(null);
+  const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const cancelClose = () => {
+    if (closeTimer.current) {
+      clearTimeout(closeTimer.current);
+      closeTimer.current = null;
+    }
+  };
+  const openMenuNow = (href: string) => {
+    cancelClose();
+    setOpenMenu(href);
+  };
+  const closeMenuNow = () => {
+    cancelClose();
+    setOpenMenu(null);
+  };
+  /** Leaving starts a countdown; coming back within it cancels. */
+  const closeMenuSoon = () => {
+    cancelClose();
+    closeTimer.current = setTimeout(() => setOpenMenu(null), CLOSE_DELAY_MS);
+  };
+
+  useEffect(() => cancelClose, []);
 
   // The rule under the header darkens once the hero starts leaving —
   // the only thing that changes, so the header never jumps in height.
@@ -34,18 +87,33 @@ export function Nav() {
   }, []);
 
   // Close menus on route change and on Escape or an outside click.
+  // These cancel any pending close as well as clearing the state — a
+  // timer left running would fire later and shut a menu the visitor had
+  // meanwhile reopened.
   useEffect(() => {
-    setOpenMenu(null);
+    closeMenuNow();
     setDrawer(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
 
   useEffect(() => {
     if (!openMenu) return;
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setOpenMenu(null);
+      if (e.key !== "Escape") return;
+      // Send focus back to the trigger that opened this, so Escape
+      // does not drop a keyboard user at the top of the document.
+      //
+      // Focus first, close second, and the order matters: focusing the
+      // trigger fires the group's onFocus, which reopens the menu.
+      // Closing afterwards wins, so Escape actually closes.
+      const trigger = headerRef.current?.querySelector<HTMLButtonElement>(
+        'button[aria-expanded="true"]'
+      );
+      trigger?.focus();
+      closeMenuNow();
     };
     const onClick = (e: MouseEvent) => {
-      if (!headerRef.current?.contains(e.target as Node)) setOpenMenu(null);
+      if (!headerRef.current?.contains(e.target as Node)) closeMenuNow();
     };
     document.addEventListener("keydown", onKey);
     document.addEventListener("click", onClick);
@@ -53,6 +121,7 @@ export function Nav() {
       document.removeEventListener("keydown", onKey);
       document.removeEventListener("click", onClick);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [openMenu]);
 
   const isCurrent = (node: RouteNode) =>
@@ -96,8 +165,30 @@ export function Nav() {
               <div
                 key={item.href}
                 className="relative"
-                onMouseEnter={() => setOpenMenu(item.href)}
-                onMouseLeave={() => setOpenMenu(null)}
+                // Hover only for real mice. On a touch screen a tap
+                // fires pointerenter too, which used to open the menu
+                // and close it again in the same gesture.
+                onPointerEnter={(e) => {
+                  if (e.pointerType === "mouse") openMenuNow(item.href);
+                }}
+                onPointerLeave={(e) => {
+                  if (e.pointerType === "mouse") closeMenuSoon();
+                }}
+                // Keyboard: tabbing in opens, tabbing out of the whole
+                // group closes. relatedTarget is where focus went.
+                //
+                // Only keyboard focus opens it. A pointer pressing the
+                // caret focuses it first and clicks second, so opening
+                // on any focus made the click toggle it straight back
+                // shut — the caret looked like it did nothing at all.
+                onFocus={(e) => {
+                  if (isKeyboardFocus(e.target)) openMenuNow(item.href);
+                }}
+                onBlur={(e) => {
+                  if (!e.currentTarget.contains(e.relatedTarget as Node)) {
+                    closeMenuSoon();
+                  }
+                }}
               >
                 <span className="flex items-center gap-1">
                   <NavLink href={item.href} current={current}>
@@ -107,7 +198,7 @@ export function Nav() {
                     type="button"
                     aria-expanded={open}
                     aria-label={`${item.label} menu`}
-                    onClick={() => setOpenMenu(open ? null : item.href)}
+                    onClick={() => (open ? closeMenuNow() : openMenuNow(item.href))}
                     className="p-1 text-ink-faint transition-colors duration-150 hover:text-brand active:text-brand-strong"
                   >
                     <svg viewBox="0 0 12 12" className={`h-3 w-3 transition-transform duration-200 ${open ? "rotate-180" : ""}`} fill="none" stroke="currentColor" strokeWidth="2" aria-hidden>
@@ -117,20 +208,27 @@ export function Nav() {
                 </span>
 
                 {open && (
-                  <ul className="absolute left-0 top-full z-50 mt-2 min-w-[240px] list-none rounded border border-line bg-surface py-1.5">
-                    {kids.map((kid) => (
-                      <li key={kid.href}>
-                        <Link
-                          href={kid.href}
-                          className={`block px-4 py-2.5 text-[15px] no-underline transition-colors duration-150 hover:bg-surface-alt hover:text-brand active:bg-line/40 ${
-                            kid.href === pathname ? "text-brand" : "text-ink"
-                          }`}
-                        >
-                          {kid.label}
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
+                  // The wrapper carries the offset as padding rather than
+                  // the panel carrying it as margin. That keeps the strip
+                  // between the trigger and the panel inside the hover
+                  // target — a margin there is a dead zone the pointer
+                  // crosses on the way down, which read as flickering.
+                  <div className="absolute left-0 top-full z-50 pt-2">
+                    <ul className="min-w-[240px] list-none rounded border border-line bg-surface py-1.5">
+                      {kids.map((kid) => (
+                        <li key={kid.href}>
+                          <Link
+                            href={kid.href}
+                            className={`block px-4 py-2.5 text-[15px] no-underline transition-colors duration-150 hover:bg-surface-alt hover:text-brand active:bg-line/40 ${
+                              kid.href === pathname ? "text-brand" : "text-ink"
+                            }`}
+                          >
+                            {kid.label}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 )}
               </div>
             );

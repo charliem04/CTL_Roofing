@@ -2,6 +2,7 @@ import { client } from "@/client.config";
 import { Reveal } from "./Reveal";
 import { SeamMark } from "./SectionHead";
 import { btn } from "./Button";
+import { MoreLink } from "./MoreLink";
 
 /**
  * "Committed to local" is the company's stated value and the line on
@@ -31,6 +32,9 @@ export function About() {
             className="mt-10 w-full rounded"
           />
 
+          <p className="mt-6">
+            <MoreLink href="/areas/" tone="deep">Every town we serve</MoreLink>
+          </p>
           <ul className="mt-6 flex list-none flex-wrap gap-2 p-0">
             {about.towns.map((town) => (
               <li
@@ -68,6 +72,9 @@ export function About() {
             ))}
           </div>
 
+          <p className="mt-6">
+            <MoreLink href="/team/" tone="deep">Meet the crew</MoreLink>
+          </p>
           {client.socials.google && (
             <a
               href={client.socials.google}

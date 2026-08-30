@@ -11,12 +11,21 @@ import "@fontsource/ibm-plex-mono/latin-500";
 import "./globals.css";
 import { client } from "@/client.config";
 import { JsonLd } from "@/components/JsonLd";
+import { UtilityBar } from "@/components/UtilityBar";
+import { Nav } from "@/components/Nav";
+import { Footer } from "@/components/Footer";
+import { StickyCTA } from "@/components/StickyCTA";
+import { CookieConsent } from "@/components/CookieConsent";
+import { Analytics } from "@/components/Analytics";
+import { InteractionTracking } from "@/components/InteractionTracking";
 
-// All SEO metadata is driven by client.config.ts — no per-client edits here.
+// Site-level metadata. Individual pages override title/description via
+// their own `metadata` export, built from lib/meta.ts.
 export const metadata: Metadata = {
   metadataBase: new URL(client.siteUrl),
   title: client.metaTitle,
   description: client.metaDescription,
+  alternates: { canonical: client.siteUrl },
   openGraph: {
     title: client.metaTitle,
     description: client.metaDescription,
@@ -27,13 +36,26 @@ export const metadata: Metadata = {
   },
 };
 
+/**
+ * The chrome lives here, not on the home page — every route gets the
+ * same utility rail, header, footer and sticky bar, and a new page
+ * cannot accidentally ship without them.
+ */
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
       <body>
-        {children}
+        <UtilityBar />
+        <Nav />
+        {/* Bottom padding clears the mobile Call | Text | Book bar. */}
+        <main className="pb-16 lg:pb-0">{children}</main>
+        <Footer />
+        <StickyCTA />
+        <CookieConsent />
+        <Analytics />
+        <InteractionTracking />
         <JsonLd />
       </body>
     </html>

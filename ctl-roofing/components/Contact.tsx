@@ -9,6 +9,7 @@
 import { useState, type FormEvent } from "react";
 import { client } from "@/client.config";
 import { submitContact } from "@/lib/submitContact";
+import { trackEvent } from "@/lib/tracking";
 import { Reveal } from "./Reveal";
 import { SectionHead } from "./SectionHead";
 import { btn } from "./Button";
@@ -66,6 +67,7 @@ export function Contact() {
     if (result.ok) {
       setStatus("sent");
       setForm(EMPTY);
+      trackEvent("Form submit", { service: form.service });
     } else {
       setError(result.error);
       setStatus("error");

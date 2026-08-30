@@ -10,6 +10,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { client } from "@/client.config";
 import { Reveal } from "./Reveal";
 import { SectionHead } from "./SectionHead";
+import { MoreLink } from "./MoreLink";
 
 export function Gallery() {
   const shots = client.gallery;
@@ -95,6 +96,10 @@ export function Gallery() {
             ))}
           </ul>
         </Reveal>
+
+        <p className="mt-10">
+          <MoreLink href="/gallery/">The full gallery</MoreLink>
+        </p>
       </div>
 
       {shot && (

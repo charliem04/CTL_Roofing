@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "deploy": "npm run build && npx wrangler pages deploy out",
-    "check": "node scripts/check.mjs app components client.config.ts"
+    "check": "node scripts/check.mjs app components lib content client.config.ts"
   },
   "dependencies": {
     "@fontsource/big-shoulders-display": "^5.3.0",

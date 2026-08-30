@@ -2,14 +2,20 @@ import { client } from "@/client.config";
 import { Reveal } from "./Reveal";
 import { SeamMark } from "./SectionHead";
 import { btn } from "./Button";
+import { MoreLink } from "./MoreLink";
 
 /**
  * The one band that gets the deep ground and the seam field behind it.
  * Metal is the highest-consideration product CTL sells, so it gets the
- * page's longest read: a formed panel, a spec table, and no photos of
- * anything else competing for attention.
+ * longest read: a formed panel, a spec table, and no photos of anything
+ * else competing for attention.
+ *
+ * Shared by the home page and the roofing page, which is why the anchor
+ * lives here — the home band's "All roofing services" link lands on the
+ * same #metal id further into the site. `moreHref` is what distinguishes
+ * the two: on the roofing page there is nowhere further to send anyone.
  */
-export function MetalRoofing() {
+export function MetalSpec({ moreHref }: { moreHref?: string }) {
   const { metal } = client;
   return (
     <section
@@ -68,9 +74,16 @@ export function MetalRoofing() {
             ))}
           </dl>
 
-          <a href={client.bookingUrl || "#contact"} className={`mt-10 ${btn("gold")}`}>
-            {metal.cta}
-          </a>
+          <div className="mt-10 flex flex-wrap items-center gap-x-8 gap-y-4">
+            <a href={client.bookingUrl || "/contact/"} className={btn("gold")}>
+              {metal.cta}
+            </a>
+            {moreHref && (
+              <MoreLink href={moreHref} tone="deep">
+                All roofing services
+              </MoreLink>
+            )}
+          </div>
         </Reveal>
       </div>
     </section>

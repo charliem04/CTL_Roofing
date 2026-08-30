@@ -1,6 +1,7 @@
 import { client } from "@/client.config";
 import { Reveal } from "./Reveal";
 import { SectionHead } from "./SectionHead";
+import { MoreLink } from "./MoreLink";
 
 /**
  * Four steps under ruled tops — the first rule gold so the eye starts
@@ -45,6 +46,12 @@ export function Process() {
               </div>
             ))}
           </dl>
+        </Reveal>
+
+        <Reveal delay={0.14}>
+          <p className="mt-10">
+            <MoreLink href="/case-studies/">See how it ran on real jobs</MoreLink>
+          </p>
         </Reveal>
       </div>
     </section>

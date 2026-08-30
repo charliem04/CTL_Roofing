@@ -11,17 +11,6 @@
  * ════════════════════════════════════════════════════════════════════
  */
 
-export type ServiceCard = {
-  title: string;
-  /** Photo for the card header — file in /public */
-  image: string;
-  imageAlt: string;
-  /** 1 column reads as a list, 2 columns as a spec sheet */
-  columns: { label?: string; items: string[] }[];
-  /** Wide cards take 7 of 12 grid columns, narrow ones 5 */
-  span: "wide" | "narrow";
-};
-
 export type Testimonial = {
   quote: string;
   name: string;
@@ -59,6 +48,8 @@ export const client = {
   // ── Contact ───────────────────────────────────────────────────────
   phone: "337-658-6596",
   phoneHref: "+13376586596", // E.164, used for tel:/sms: links
+  /** Texts go to the office line. Same number, different intent. */
+  smsHref: "+13376586596",
   /** Second line answered around the clock after weather events. */
   stormPhone: "337-534-0040",
   stormPhoneHref: "+13375340040",
@@ -96,10 +87,21 @@ export const client = {
    */
   calLink: "",
 
+  /**
+   * Call tracking. Dynamic number insertion is the provider's own
+   * script rewriting numbers in the page at runtime, so this is a URL,
+   * not a number. Empty = every number on the site stays the real one
+   * below, which is the correct state until a provider is chosen.
+   * The script loads only after cookie consent, with the analytics.
+   */
+  tracking: {
+    dniScriptUrl: "", // TODO(client): e.g. CallRail's //cdn.callrail.com/companies/…/swap.js
+  },
+
   // ── Socials (empty string hides the link) ─────────────────────────
   socials: {
     facebook: "https://www.facebook.com/ctlprola",
-    instagram: "",
+    instagram: "https://www.instagram.com/ctlpro",
     google: "https://g.page/r/CdzPt0LheRXZEAI/review", // review link
   },
   /** Off-site page for financing terms. Empty string hides the link. */
@@ -112,88 +114,9 @@ export const client = {
   },
 
   // ── Services ──────────────────────────────────────────────────────
-  services: [
-    {
-      title: "Roofing",
-      image: "/ctl/service-roofing.jpg",
-      imageAlt: "Aerial view of a shingle roof replacement in progress",
-      span: "wide",
-      columns: [
-        {
-          label: "Residential",
-          items: [
-            "Shingle roofing",
-            "Standing seam metal",
-            "Flat roofs",
-            "Repairs and maintenance",
-          ],
-        },
-        {
-          label: "Commercial",
-          items: [
-            "Modified bitumen, TPO, PVC",
-            "Standing seam and exposed fastener metal",
-            "Silicone coatings",
-            "Repairs and maintenance",
-          ],
-        },
-      ],
-    },
-    {
-      title: "Remodeling & restoration",
-      image: "/ctl/service-remodeling.jpg",
-      imageAlt: "Finished bathroom remodel with tiled shower and double vanity",
-      span: "narrow",
-      columns: [
-        {
-          items: [
-            "Fire and flood restoration",
-            "Siding upgrades to James Hardie",
-            "Window and exterior door replacement",
-            "Bathroom and kitchen remodeling",
-          ],
-        },
-      ],
-    },
-    {
-      title: "Outdoor living",
-      image: "/ctl/service-outdoor.jpg",
-      imageAlt: "Finished aluminum patio cover over a concrete slab",
-      span: "narrow",
-      columns: [
-        {
-          items: [
-            "Outdoor kitchens with fireplace or firepit",
-            "Aluminum patio covers and screen rooms",
-            "Concrete slab additions",
-            "Fences",
-          ],
-        },
-      ],
-    },
-    {
-      title: "Emergency, handyman & inspections",
-      image: "/ctl/service-emergency.jpg",
-      imageAlt: "Crew tarping a storm-damaged roof",
-      span: "wide",
-      columns: [
-        {
-          items: [
-            "Tarping and leak stop",
-            "Water damage removal and property dry-out",
-            "Carpentry, sheetrock, painting, fences",
-          ],
-        },
-        {
-          items: [
-            "Full-scope roof evaluations",
-            "Code deficiencies and roof age",
-            "Fair market valuation",
-          ],
-        },
-      ],
-    },
-  ] as ServiceCard[],
+  // Service content lives in content/services.ts now that each one has
+  // its own page — home cards, the hub grid and the pages all read the
+  // same records through lib/content.ts. Nothing to configure here.
 
   // ── Metal roofing feature band ────────────────────────────────────
   metal: {

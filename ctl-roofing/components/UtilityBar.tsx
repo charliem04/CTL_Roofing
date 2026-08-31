@@ -8,7 +8,13 @@ import { SocialIcons } from "./SocialIcons";
  */
 export function UtilityBar() {
   return (
-    <div className="bg-surface-deep text-ink-invert-soft/80">
+    /* A named <section> so this counts as a landmark. Unlandmarked it
+       was the one strip of the page a screen-reader user could only
+       reach by walking the whole document. */
+    <section
+      aria-label="Hours and contact"
+      className="bg-surface-deep text-ink-invert-soft/80"
+    >
       <div className="section flex min-h-10 flex-wrap items-center justify-between gap-x-6 gap-y-1 py-2 font-mono text-[12px] uppercase tracking-[0.09em]">
         <span>{client.copy.utilityBar}</span>
         <span className="flex items-center gap-4">
@@ -28,6 +34,6 @@ export function UtilityBar() {
           <SocialIcons size={15} className="max-sm:hidden" />
         </span>
       </div>
-    </div>
+    </section>
   );
 }

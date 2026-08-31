@@ -20,7 +20,7 @@ export default function ServicesPage() {
       />
       <section className="band bg-surface-alt">
         <div className="section">
-          <ServiceCards />
+          <ServiceCards headingLevel={2} />
         </div>
       </section>
       {/* How a project runs is the same on every one of them, so it is

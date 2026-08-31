@@ -7,8 +7,14 @@ import { trailFor } from "@/lib/routes";
  * nav. Emits BreadcrumbList structured data alongside it — the same
  * trail, stated twice, once for people and once for crawlers.
  */
-export function Breadcrumbs({ path }: { path: string }) {
-  const trail = trailFor(path);
+export function Breadcrumbs({
+  path,
+  leafLabel,
+}: {
+  path: string;
+  leafLabel?: string;
+}) {
+  const trail = trailFor(path, leafLabel);
   if (trail.length < 2) return null;
 
   const data = {

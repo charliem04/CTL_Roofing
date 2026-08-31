@@ -48,41 +48,39 @@ export default function VideoPage() {
         <div className="section">
           <ul className="grid list-none gap-12 p-0">
             {clips.map((c) => (
-              <Reveal key={c.slug}>
-                <li className="grid gap-8 md:grid-cols-[minmax(0,420px)_minmax(0,1fr)] md:items-start">
-                  {/*
-                    preload="none" matters more than it looks: this is a
-                    10MB file, and nothing should download it because
-                    somebody scrolled past. The poster carries the tile
-                    until the visitor actually presses play.
-                  */}
-                  <video
-                    controls
-                    preload="none"
-                    playsInline
-                    poster={c.poster}
-                    width={c.width}
-                    height={c.height}
-                    className="w-full rounded border border-line bg-surface-deep"
-                  >
-                    <source src={c.src} type="video/mp4" />
-                    Your browser can&apos;t play this video.{" "}
-                    <a href={c.src}>Download it instead</a>.
-                  </video>
+              <Reveal as="li" key={c.slug} className="grid gap-8 md:grid-cols-[minmax(0,420px)_minmax(0,1fr)] md:items-start">
+                {/*
+                  preload="none" matters more than it looks: this is a
+                  10MB file, and nothing should download it because
+                  somebody scrolled past. The poster carries the tile
+                  until the visitor actually presses play.
+                */}
+                <video
+                  controls
+                  preload="none"
+                  playsInline
+                  poster={c.poster}
+                  width={c.width}
+                  height={c.height}
+                  className="w-full rounded border border-line bg-surface-deep"
+                >
+                  <source src={c.src} type="video/mp4" />
+                  Your browser can&apos;t play this video.{" "}
+                  <a href={c.src}>Download it instead</a>.
+                </video>
 
-                  <div>
-                    <p className="u-label">
-                      Video · {runtime(c.duration)}
-                    </p>
-                    <h2 className="mt-2 text-display-2">{c.title}</h2>
-                    <p className="mt-4 max-w-[58ch] text-lg">{c.description}</p>
-                    <p className="mt-6">
-                      <MoreLink href="/services/roofing/">
-                        What a replacement involves
-                      </MoreLink>
-                    </p>
-                  </div>
-                </li>
+                <div>
+                  <p className="u-label">
+                    Video · {runtime(c.duration)}
+                  </p>
+                  <h2 className="mt-2 text-display-2">{c.title}</h2>
+                  <p className="mt-4 max-w-[58ch] text-lg">{c.description}</p>
+                  <p className="mt-6">
+                    <MoreLink href="/services/roofing/">
+                      What a replacement involves
+                    </MoreLink>
+                  </p>
+                </div>
               </Reveal>
             ))}
           </ul>

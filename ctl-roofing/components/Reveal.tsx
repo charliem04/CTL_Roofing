@@ -5,23 +5,37 @@
  * content enters the viewport. Pass `delay` (seconds) to stagger
  * siblings, or use <RevealGroup> for cascade on lists/grids.
  * Respects prefers-reduced-motion (renders static).
+ *
+ * `as` picks the element it renders. It exists because the default div
+ * is invalid inside a list: `<ul><Reveal><li>…` emits `<ul><div><li>`,
+ * which axe flags as a broken list and which strips the list semantics
+ * a screen reader announces ("list, 8 items"). Inside a <ul>, <ol> or
+ * <dl>, pass the element the parent expects and move the <li> markup
+ * onto the Reveal itself.
  */
 import { motion, useReducedMotion } from "framer-motion";
 import type { ReactNode } from "react";
+
+type RevealAs = "div" | "li" | "figure";
 
 export function Reveal({
   children,
   delay = 0,
   className,
+  as = "div",
 }: {
   children: ReactNode;
   delay?: number;
   className?: string;
+  as?: RevealAs;
 }) {
   const reduce = useReducedMotion();
-  if (reduce) return <div className={className}>{children}</div>;
+  const Motion = motion[as];
+  const Plain = as;
+
+  if (reduce) return <Plain className={className}>{children}</Plain>;
   return (
-    <motion.div
+    <Motion
       className={className}
       initial={{ opacity: 0, y: 12 }}
       whileInView={{ opacity: 1, y: 0 }}
@@ -29,7 +43,7 @@ export function Reveal({
       transition={{ duration: 0.4, delay, ease: [0.21, 0.65, 0.36, 1] }}
     >
       {children}
-    </motion.div>
+    </Motion>
   );
 }
 

@@ -17,7 +17,17 @@ const spanClass = {
   full: "md:col-span-12",
 };
 
-export function ServiceCards({ className }: { className?: string }) {
+export function ServiceCards({ className,
+  /**
+   * The cards are h3 under a section heading on the home page, but on
+   * the services hub they are the section's top-level content with no
+   * h2 above them — h1 straight to h3 is a skipped level.
+   */
+  headingLevel = 3,
+}: { className?: string;
+  headingLevel?: 2 | 3;
+}) {
+  const Heading = `h${headingLevel}` as "h2" | "h3";
   const services = getServices();
 
   return (
@@ -45,9 +55,9 @@ export function ServiceCards({ className }: { className?: string }) {
               </figure>
 
               <div className="flex flex-1 flex-col px-6 pb-8 pt-6">
-                <h3 className="mb-4 text-display-3 transition-colors duration-200 group-hover:text-brand">
+                <Heading className="mb-4 text-display-3 transition-colors duration-200 group-hover:text-brand">
                   {s.navLabel}
-                </h3>
+                </Heading>
 
                 <div
                   className={`grid gap-6 ${

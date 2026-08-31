@@ -13,7 +13,7 @@ export function StormStrip() {
         <div>
           <h2
             id="storm-label"
-            className="font-mono text-[12px] font-medium uppercase tracking-[0.09em] text-ink/60"
+            className="font-mono text-[12px] font-medium uppercase tracking-[0.09em] text-ink/75"
           >
             {client.storm.label}
           </h2>

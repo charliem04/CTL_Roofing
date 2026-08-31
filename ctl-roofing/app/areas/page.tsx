@@ -88,13 +88,11 @@ export default function AreasPage() {
           </Reveal>
           <dl className="mt-10 grid gap-x-10 md:grid-cols-3">
             {areas.points.map((p, i) => (
-              <Reveal key={p.title} delay={i * 0.06}>
-                <div className="border-t border-line-dark/20 py-5">
+              <Reveal key={p.title} delay={i * 0.06} className="border-t border-line-dark/20 py-5">
                   <dt className="font-display text-[21px] font-bold uppercase text-ink-invert">
                     {p.title}
                   </dt>
                   <dd className="m-0 mt-2.5 text-base">{p.body}</dd>
-                </div>
               </Reveal>
             ))}
           </dl>

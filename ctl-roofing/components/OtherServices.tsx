@@ -20,24 +20,22 @@ export function OtherServices({ currentSlug }: { currentSlug: string }) {
         <SectionHead heading="Also from CTL" />
         <ul className="mt-10 list-none border-t border-line p-0">
           {others.map((s, i) => (
-            <Reveal key={s.slug} delay={i * 0.05}>
-              <li>
-                <Link
-                  href={s.meta.path}
-                  className="group grid gap-2 border-b border-line py-6 no-underline transition-colors duration-200 hover:bg-surface active:bg-line/40 sm:grid-cols-[minmax(0,1fr)_minmax(0,1.5fr)] sm:gap-8"
-                >
-                  <h3 className="flex items-center gap-3 text-display-3 text-ink transition-colors duration-200 group-hover:text-brand">
-                    {s.navLabel}
-                    <span
-                      aria-hidden
-                      className="text-base text-brand-soft transition-transform duration-150 group-hover:translate-x-1"
-                    >
-                      →
-                    </span>
-                  </h3>
-                  <p className="text-base sm:pt-1">{s.summary}</p>
-                </Link>
-              </li>
+            <Reveal as="li" key={s.slug} delay={i * 0.05}>
+              <Link
+                href={s.meta.path}
+                className="group grid gap-2 border-b border-line py-6 no-underline transition-colors duration-200 hover:bg-surface active:bg-line/40 sm:grid-cols-[minmax(0,1fr)_minmax(0,1.5fr)] sm:gap-8"
+              >
+                <h3 className="flex items-center gap-3 text-display-3 text-ink transition-colors duration-200 group-hover:text-brand">
+                  {s.navLabel}
+                  <span
+                    aria-hidden
+                    className="text-base text-brand-soft transition-transform duration-150 group-hover:translate-x-1"
+                  >
+                    →
+                  </span>
+                </h3>
+                <p className="text-base sm:pt-1">{s.summary}</p>
+              </Link>
             </Reveal>
           ))}
         </ul>

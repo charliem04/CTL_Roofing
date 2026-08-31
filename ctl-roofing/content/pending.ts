@@ -1,4 +1,4 @@
-import type { CaseStudy, Post, Review, TeamMember } from "./types";
+import type { Post, Review, TeamMember } from "./types";
 
 /**
  * ════════════════════════════════════════════════════════════════════
@@ -17,7 +17,6 @@ import type { CaseStudy, Post, Review, TeamMember } from "./types";
  */
 
 export const team: TeamMember[] = [];
-export const caseStudies: CaseStudy[] = [];
 export const reviews: Review[] = [];
 export const posts: Post[] = [];
 

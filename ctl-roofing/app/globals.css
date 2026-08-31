@@ -24,7 +24,8 @@
 
   --ink: 11 18 51; /* deepest ground, and heading color on light */
   --ink-soft: 60 65 92; /* body copy on light ground */
-  --ink-faint: 121 125 143; /* captions, placeholder text */
+  --ink-faint: 99 104 125; /* captions, placeholder text — 4.8:1 on
+                              surface-alt, 5.5:1 on white at 12px */
   --ink-invert: 255 255 255; /* headings on the deep ground */
   --ink-invert-soft: 184 189 206; /* body copy on the deep ground */
 
@@ -137,8 +138,22 @@ html {
 
 /* Mono utility labels — the register CTL's own paperwork uses for
    field names, hours and spec keys. Never a decorative kicker. */
-.u-label {
-  @apply font-mono text-[12px] font-medium uppercase tracking-[0.09em] text-brand-soft;
+/* In @layer components on purpose. Unlayered, this rule is emitted
+   after @tailwind utilities and wins against every text-* utility —
+   which is how <p class="u-label text-accent"> silently rendered
+   periwinkle instead of gold. Layered, a utility overrides it. */
+@layer components {
+  .u-label {
+    @apply font-mono text-[12px] font-medium uppercase tracking-[0.09em] text-brand-soft;
+  }
+
+  /* Periwinkle at 12px on the ink ground measures 3.1:1 — unreadable,
+     and it was on every dark band on the site. Lifted just far enough
+     to clear 4.5:1 (measures 6.8:1) while still reading as the same
+     periwinkle rather than as plain grey. */
+  .on-deep .u-label {
+    color: rgb(141 154 212);
+  }
 }
 
 /* Buttons: pressed state everywhere, no hover lifts */

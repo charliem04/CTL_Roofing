@@ -23,12 +23,11 @@ import { teamPage } from "@/content/team";
 import { reviewsPage } from "@/content/reviews";
 import {
   caseStudies,
-  pendingContent,
-  posts,
-  reviews,
-  team,
-} from "@/content/pending";
-import type { ServicePage, Town } from "@/content/types";
+  caseStudiesByDate,
+  caseStudiesHub,
+} from "@/content/caseStudies";
+import { pendingContent, posts, reviews, team } from "@/content/pending";
+import type { CaseStudy, ServicePage, Town } from "@/content/types";
 
 /* ── Services ─────────────────────────────────────────────────────── */
 
@@ -119,8 +118,23 @@ export function getTeam() {
   return team;
 }
 
-export function getCaseStudies() {
-  return caseStudies;
+/* ── Case studies ─────────────────────────────────────────────────── */
+
+export function getCaseStudiesHub() {
+  return caseStudiesHub;
+}
+
+/** Newest first. Empty until Robert sends projects — see the module. */
+export function getCaseStudies(): CaseStudy[] {
+  return caseStudiesByDate();
+}
+
+export function getCaseStudy(slug: string): CaseStudy | undefined {
+  return caseStudies.find((c) => c.slug === slug);
+}
+
+export function getCaseStudySlugs(): string[] {
+  return caseStudies.map((c) => c.slug);
 }
 
 export function getReviewsPage() {

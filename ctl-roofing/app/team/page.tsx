@@ -61,26 +61,24 @@ export default function TeamPage() {
           <SectionHead heading="The crew" lede={page.crewNote} />
           <ul className="mt-10 grid list-none grid-cols-2 gap-x-3 gap-y-6 p-0 sm:grid-cols-3 lg:grid-cols-4">
             {page.crew.map((person, i) => (
-              <Reveal key={person.photo} delay={Math.min(i, 6) * 0.04}>
-                <li>
-                  <figure className="m-0">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src={person.photo}
-                      alt={`${person.name} of CTL Pro Construction`}
-                      width={560}
-                      height={700}
-                      loading="lazy"
-                      className="aspect-[4/5] w-full rounded border border-line object-cover"
-                    />
-                    {/* Name only. We were sent faces and names, not job
-                        titles, and a guessed title under a real face is
-                        worse than no title at all. */}
-                    <figcaption className="mt-2.5 font-display text-[17px] font-bold uppercase leading-tight text-ink">
-                      {person.name}
-                    </figcaption>
-                  </figure>
-                </li>
+              <Reveal as="li" key={person.photo} delay={Math.min(i, 6) * 0.04}>
+                <figure className="m-0">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={person.photo}
+                    alt={`${person.name} of CTL Pro Construction`}
+                    width={560}
+                    height={700}
+                    loading="lazy"
+                    className="aspect-[4/5] w-full rounded border border-line object-cover"
+                  />
+                  {/* Name only. We were sent faces and names, not job
+                      titles, and a guessed title under a real face is
+                      worse than no title at all. */}
+                  <figcaption className="mt-2.5 font-display text-[17px] font-bold uppercase leading-tight text-ink">
+                    {person.name}
+                  </figcaption>
+                </figure>
               </Reveal>
             ))}
           </ul>
@@ -93,23 +91,21 @@ export default function TeamPage() {
           <SectionHead heading="Where the work gets run" />
           <ul className="mt-10 grid list-none gap-6 p-0 md:grid-cols-2">
             {page.gallery.map((shot) => (
-              <Reveal key={shot.src}>
-                <li>
-                  <figure className="m-0">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src={shot.src}
-                      alt={shot.alt}
-                      width={shot.width}
-                      height={shot.height}
-                      loading="lazy"
-                      className="h-[320px] w-full rounded object-cover"
-                    />
-                    <figcaption className="u-label mt-2.5">
-                      {shot.caption}
-                    </figcaption>
-                  </figure>
-                </li>
+              <Reveal as="li" key={shot.src}>
+                <figure className="m-0">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={shot.src}
+                    alt={shot.alt}
+                    width={shot.width}
+                    height={shot.height}
+                    loading="lazy"
+                    className="h-[320px] w-full rounded object-cover"
+                  />
+                  <figcaption className="u-label mt-2.5">
+                    {shot.caption}
+                  </figcaption>
+                </figure>
               </Reveal>
             ))}
           </ul>

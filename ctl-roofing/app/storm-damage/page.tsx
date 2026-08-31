@@ -38,19 +38,17 @@ export default function StormDamagePage() {
           />
           <ol className="mt-10 grid list-none gap-x-8 gap-y-10 p-0 sm:grid-cols-2">
             {storm.firstHours.steps.map((step, i) => (
-              <Reveal key={step.title} delay={i * 0.06}>
-                <li className="grid grid-cols-[auto_1fr] items-start gap-5">
-                  <span
-                    aria-hidden
-                    className="font-display text-[52px] font-extrabold leading-none text-accent"
-                  >
-                    {i + 1}
-                  </span>
-                  <div>
-                    <h3 className="text-display-3">{step.title}</h3>
-                    <p className="mt-2.5 text-base">{step.body}</p>
-                  </div>
-                </li>
+              <Reveal as="li" key={step.title} delay={i * 0.06} className="grid grid-cols-[auto_1fr] items-start gap-5">
+                <span
+                  aria-hidden
+                  className="font-display text-[52px] font-extrabold leading-none text-accent"
+                >
+                  {i + 1}
+                </span>
+                <div>
+                  <h3 className="text-display-3">{step.title}</h3>
+                  <p className="mt-2.5 text-base">{step.body}</p>
+                </div>
               </Reveal>
             ))}
           </ol>
@@ -77,13 +75,15 @@ export default function StormDamagePage() {
 
           <dl className="mt-10 grid gap-x-10 md:grid-cols-2">
             {storm.adjuster.items.map((item, i) => (
-              <Reveal key={item.label} delay={i * 0.05}>
-                <div className="border-t border-line-dark/20 py-5">
+              <Reveal
+                key={item.label}
+                delay={i * 0.05}
+                className="border-t border-line-dark/20 py-5"
+              >
                   <dt className="font-mono text-[12px] font-medium uppercase tracking-[0.09em] text-accent">
                     {item.label}
                   </dt>
                   <dd className="m-0 mt-2 text-base">{item.value}</dd>
-                </div>
               </Reveal>
             ))}
           </dl>

@@ -118,6 +118,29 @@ export function Lightbox({
   );
 }
 
+/**
+ * The grid paints these at ~267 CSS px and crops them to 4:3, but the
+ * files are 1100px wide — the gallery page was pulling 3.4MB to show
+ * thumbnails. public/ctl/gallery/thumb/ holds a pre-cropped 640x480 of
+ * each, which covers a 2x display exactly and is 60% lighter. The
+ * lightbox still opens the full-size original.
+ *
+ * Only paths under /ctl/gallery/ are rewritten. The eight home-band
+ * photos at /ctl/work-*.jpg are deliberately left alone: they are
+ * already encoded tightly enough that a 640x480 re-encode came out
+ * fractionally LARGER, so a thumbnail would cost a request and save
+ * nothing. Anything else is returned untouched too, so a tile pointed
+ * at some other photo renders it rather than 404ing on a thumbnail
+ * nobody generated.
+ *
+ * Regenerate with the scratchpad imgtool/thumbs.mjs after adding photos.
+ */
+function thumbFor(src: string): string {
+  return src.startsWith("/ctl/gallery/")
+    ? src.replace("/ctl/gallery/", "/ctl/gallery/thumb/")
+    : src;
+}
+
 /** Tile shared by the band and the page. */
 export function GalleryTile({
   shot,
@@ -139,11 +162,11 @@ export function GalleryTile({
     >
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
-        src={shot.src}
+        src={thumbFor(shot.src)}
         alt={shot.alt}
         loading="lazy"
-        width={shot.width}
-        height={shot.height}
+        width={640}
+        height={480}
         className="aspect-[4/3] w-full object-cover"
       />
       {shot.caption && (

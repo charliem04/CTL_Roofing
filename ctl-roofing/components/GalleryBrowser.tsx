@@ -110,10 +110,8 @@ export function GalleryBrowser() {
 
       <ul className="mt-4 grid list-none grid-cols-2 gap-3 p-0 md:grid-cols-3 lg:grid-cols-4">
         {shots.map((s, i) => (
-          <Reveal key={s.src} delay={Math.min(i, 7) * 0.03}>
-            <li>
-              <GalleryTile shot={s} onOpen={() => open(i)} />
-            </li>
+          <Reveal as="li" key={s.src} delay={Math.min(i, 7) * 0.03}>
+            <GalleryTile shot={s} onOpen={() => open(i)} />
           </Reveal>
         ))}
       </ul>

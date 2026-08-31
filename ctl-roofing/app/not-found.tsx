@@ -14,8 +14,11 @@ export const metadata = {
  * who land here were trying to reach someone.
  */
 export default function NotFound() {
+  // A <section>, not a <main>: app/layout.tsx already provides the main
+  // landmark, and a document with two of them is invalid — assistive
+  // tech loses the "skip to main" target it relies on.
   return (
-    <main className="on-deep flex min-h-[70vh] items-center bg-surface-deep text-ink-invert-soft">
+    <section className="on-deep flex min-h-[70vh] items-center bg-surface-deep text-ink-invert-soft">
       <div className="section py-20">
         <p className="u-label text-accent">Error 404</p>
         <h1 className="mt-4 max-w-[18ch] text-display-2 text-ink-invert">
@@ -35,7 +38,7 @@ export default function NotFound() {
           </a>
         </div>
 
-        <nav aria-label="Services" className="mt-12 border-t border-line-dark/20 pt-6">
+        <nav aria-label="Where to go instead" className="mt-12 border-t border-line-dark/20 pt-6">
           <p className="u-label">What we do</p>
           <ul className="mt-4 flex flex-wrap gap-x-8 gap-y-2 p-0">
             {getServices().map((s) => (
@@ -51,6 +54,6 @@ export default function NotFound() {
           </ul>
         </nav>
       </div>
-    </main>
+    </section>
   );
 }

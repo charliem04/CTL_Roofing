@@ -17,18 +17,19 @@ export function Process() {
 
         <ol className="mt-10 grid list-none gap-6 p-0 sm:grid-cols-2 lg:grid-cols-4">
           {process.steps.map((step, i) => (
-            <Reveal key={step.title} delay={i * 0.06}>
-              <li
-                className={`border-t-[3px] pt-6 ${
-                  i === 0 ? "border-accent" : "border-brand"
-                }`}
-              >
-                <span className="mb-2.5 block font-mono text-[13px] tracking-[0.08em] text-brand-soft">
-                  {String(i + 1).padStart(2, "0")}
-                </span>
-                <h3 className="mb-2.5 text-display-3">{step.title}</h3>
-                <p className="text-base">{step.body}</p>
-              </li>
+            <Reveal
+              as="li"
+              key={step.title}
+              delay={i * 0.06}
+              className={`border-t-[3px] pt-6 ${
+                i === 0 ? "border-accent" : "border-brand"
+              }`}
+            >
+              <span className="mb-2.5 block font-mono text-[13px] tracking-[0.08em] text-brand-soft">
+                {String(i + 1).padStart(2, "0")}
+              </span>
+              <h3 className="mb-2.5 text-display-3">{step.title}</h3>
+              <p className="text-base">{step.body}</p>
             </Reveal>
           ))}
         </ol>

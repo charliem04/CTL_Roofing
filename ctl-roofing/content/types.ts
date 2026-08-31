@@ -108,11 +108,25 @@ export type CaseStudy = {
   slug: string;
   title: string;
   town: string;
+  /** Groups the study under a parish on the areas hub. */
+  parish?: string;
+  /** The service line it belongs to, e.g. "/services/roofing/". */
+  service?: string;
+  /** ISO date the job completed. Newest first on the index. */
+  completed?: string;
   problem: string;
   scope: string;
   materials: string[];
   effort: string;
   result: string;
+  /**
+   * The pair that does the actual persuading. Both or neither — a
+   * lone "after" is just a gallery photo, and a lone "before" is a
+   * problem with no answer.
+   */
+  before?: Photo;
+  after?: Photo;
+  /** Anything else worth showing: detail shots, materials, the crew. */
   photos: Photo[];
 };
 

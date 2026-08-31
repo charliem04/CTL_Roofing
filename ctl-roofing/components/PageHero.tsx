@@ -14,16 +14,19 @@ export function PageHero({
   heading,
   lede,
   photo,
+  crumbLabel,
 }: {
   path: string;
   heading: string;
   lede: string;
   photo?: Photo;
+  /** For a page the route registry cannot name — see trailFor(). */
+  crumbLabel?: string;
 }) {
   return (
     <section className="on-deep bg-surface-deep text-ink-invert-soft">
       <div className="section pb-12 pt-6 md:pb-16">
-        <Breadcrumbs path={path} />
+        <Breadcrumbs path={path} leafLabel={crumbLabel} />
         <div className="mt-8 grid items-end gap-8 md:grid-cols-[1.15fr_0.85fr]">
           <div>
             <SeamMark className="mb-4" />

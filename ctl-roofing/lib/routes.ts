@@ -113,9 +113,22 @@ export function livePaths(): { path: string; priority: number }[] {
   return out;
 }
 
-/** Breadcrumb trail for a path, derived from the registry. */
-export function trailFor(path: string): { href: string; label: string }[] {
+/**
+ * Breadcrumb trail for a path, derived from the registry.
+ *
+ * `leafLabel` is for a page the registry cannot know about by name — a
+ * case study, or anything else generated per content item. Without it
+ * such a page fell through to a one-entry trail, which <Breadcrumbs>
+ * declines to render: no visible trail and, worse, no BreadcrumbList
+ * schema on exactly the deep pages that most need one. With it, the
+ * page is hung off the longest registered path that prefixes it.
+ */
+export function trailFor(
+  path: string,
+  leafLabel?: string
+): { href: string; label: string }[] {
   const trail = [{ href: "/", label: "Home" }];
+
   for (const node of [...nav, ...auxRoutes]) {
     if (node.href === path) {
       trail.push({ href: node.href, label: node.label });
@@ -130,5 +143,28 @@ export function trailFor(path: string): { href: string; label: string }[] {
       return trail;
     }
   }
+
+  if (!leafLabel) return trail;
+
+  // No exact match: find the deepest registered ancestor. "/" is not a
+  // candidate — it is already the first crumb.
+  let best: RouteNode | undefined;
+  let bestParent: RouteNode | undefined;
+  for (const node of [...nav, ...auxRoutes]) {
+    for (const cand of [node, ...(node.children ?? [])]) {
+      if (cand.href === "/" || cand.href.includes("#")) continue;
+      if (!path.startsWith(cand.href)) continue;
+      if (best && cand.href.length <= best.href.length) continue;
+      best = cand;
+      bestParent = cand === node ? undefined : node;
+    }
+  }
+  if (!best) return trail;
+
+  if (bestParent && !bestParent.href.includes("#")) {
+    trail.push({ href: bestParent.href, label: bestParent.label });
+  }
+  trail.push({ href: best.href, label: best.label });
+  trail.push({ href: path, label: leafLabel });
   return trail;
 }

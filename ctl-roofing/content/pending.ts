@@ -34,7 +34,7 @@ export const pendingContent = {
   },
   reviews: {
     needs:
-      "Confirmation that customer reviews may be reproduced here, and the reviews themselves. Until then the Google review link stays the route to them.",
+      "A Google Cloud API key with Places API (New) enabled and the place ID for the listing, which switches the live Google band on (see .env.example). Facebook is separate and manual: Meta killed the recommendations API in 2025, so any recommendation we want on the site has to be copied across by hand with that customer's permission, into facebookPicks in content/reviews.ts.",
     from: "Robert",
   },
   licence: {

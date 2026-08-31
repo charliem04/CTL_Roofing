@@ -20,6 +20,7 @@ import { gallery, galleryCategories } from "@/content/gallery";
 import { areas, townsByParish } from "@/content/areas";
 import { clips, videoPage } from "@/content/video";
 import { teamPage } from "@/content/team";
+import { reviewsPage } from "@/content/reviews";
 import {
   caseStudies,
   pendingContent,
@@ -122,6 +123,15 @@ export function getCaseStudies() {
   return caseStudies;
 }
 
+export function getReviewsPage() {
+  return reviewsPage;
+}
+
+/**
+ * Curated reviews only. The live Google feed does not come through
+ * here — it cannot be cached, so it is fetched in the browser by
+ * components/GoogleReviews.tsx and never touches the content layer.
+ */
 export function getReviews() {
   return reviews;
 }

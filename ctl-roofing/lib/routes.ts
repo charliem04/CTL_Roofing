@@ -48,18 +48,20 @@ export const nav: RouteNode[] = [
     priority: 0.8,
     children: [
       { href: "/case-studies/", label: "Case studies", live: false },
-      { href: "/video/", label: "Video", live: false },
+      { href: "/video/", label: "Video", live: true, priority: 0.6 },
     ],
   },
   { href: "/financing/", label: "Financing", live: true, priority: 0.7 },
   {
-    href: "/#about",
+    // Meet the team is the hub here, the same way the gallery is for
+    // Our Work: the parent is the page itself, so it is never listed
+    // twice — once as a parent and again as its own child.
+    href: "/team/",
     label: "About",
     live: true,
-    priority: 0,
+    priority: 0.7,
     children: [
-      { href: "/team/", label: "Meet the team", live: false },
-      { href: "/areas/", label: "Areas we serve", live: false },
+      { href: "/areas/", label: "Areas we serve", live: true, priority: 0.8 },
       { href: "/reviews/", label: "Reviews", live: false },
       { href: "/careers/", label: "Careers", live: false },
     ],

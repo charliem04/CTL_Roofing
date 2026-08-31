@@ -17,6 +17,9 @@ import { financing } from "@/content/financing";
 import { contactPage } from "@/content/contact";
 import { towns } from "@/content/towns";
 import { gallery, galleryCategories } from "@/content/gallery";
+import { areas, townsByParish } from "@/content/areas";
+import { clips, videoPage } from "@/content/video";
+import { teamPage } from "@/content/team";
 import {
   caseStudies,
   pendingContent,
@@ -85,6 +88,28 @@ export function getGalleryCategories() {
 
 export function getTowns(): Town[] {
   return towns;
+}
+
+/* ── Areas, video, team ───────────────────────────────────────────── */
+
+export function getAreas() {
+  return areas;
+}
+
+export function getTownsByParish() {
+  return townsByParish();
+}
+
+export function getVideoPage() {
+  return videoPage;
+}
+
+export function getClips() {
+  return clips;
+}
+
+export function getTeamPage() {
+  return teamPage;
 }
 
 /* ── Phase 2 collections (empty until the content exists) ─────────── */

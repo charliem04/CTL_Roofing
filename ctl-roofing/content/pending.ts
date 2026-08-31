@@ -52,6 +52,11 @@ export const pendingContent = {
       "A photo from a commercial job — a low-slope membrane, a coating in progress or a finished commercial metal roof — plus one or two reference properties if the owners are happy to be named.",
     from: "Robert",
   },
+  videoDetail: {
+    needs:
+      "A working export of the second video — the file supplied is a 417KB truncated download that decodes one frame and stops. Plus titles in CTL's own words for each clip, and ideally captions, since the audio carries the whole message.",
+    from: "Robert",
+  },
   serviceArea: {
     needs: "The definitive service-area town list, before the town pages are built.",
     from: "Robert",

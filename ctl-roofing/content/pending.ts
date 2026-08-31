@@ -24,7 +24,7 @@ export const posts: Post[] = [];
 export const pendingContent = {
   team: {
     needs:
-      "Eight headshots shot the same way — same wall, same crop, same shirt — with each person's name, role and one line about them.",
+      "Job titles for the eight crew headshots, plus confirmation of the name spellings — the site currently prints the filenames Robert sent verbatim (Alex Alverez, JP Bourdreaux). A line each in their own words would finish the section.",
     from: "Robert",
   },
   caseStudies: {

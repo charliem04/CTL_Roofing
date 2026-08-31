@@ -13,7 +13,6 @@ export const metadata = pageMetadata(page.meta);
 
 export default function TeamPage() {
   const { owner } = client.about;
-  const slots = Array.from({ length: page.portraitSlots });
 
   return (
     <>
@@ -59,27 +58,28 @@ export default function TeamPage() {
       {/* ── The crew ───────────────────────────────────────────────── */}
       <section className="band bg-surface-alt">
         <div className="section">
-          <SectionHead
-            heading="The crew"
-            lede={page.portraitNote}
-          />
-          <ul className="mt-10 grid list-none grid-cols-2 gap-3 p-0 sm:grid-cols-3 lg:grid-cols-4">
-            {slots.map((_, i) => (
-              <Reveal key={i} delay={Math.min(i, 6) * 0.04}>
+          <SectionHead heading="The crew" lede={page.crewNote} />
+          <ul className="mt-10 grid list-none grid-cols-2 gap-x-3 gap-y-6 p-0 sm:grid-cols-3 lg:grid-cols-4">
+            {page.crew.map((person, i) => (
+              <Reveal key={person.photo} delay={Math.min(i, 6) * 0.04}>
                 <li>
-                  {/* Abstract tiles, deliberately not photographs of
-                      people. A stock headshot under a CTL job title
-                      would be a lie about who works here. */}
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={page.portraitTiles[i % page.portraitTiles.length]}
-                    alt=""
-                    aria-hidden
-                    width={560}
-                    height={700}
-                    loading="lazy"
-                    className="aspect-[4/5] w-full rounded border border-line object-cover"
-                  />
+                  <figure className="m-0">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={person.photo}
+                      alt={`${person.name} of CTL Pro Construction`}
+                      width={560}
+                      height={700}
+                      loading="lazy"
+                      className="aspect-[4/5] w-full rounded border border-line object-cover"
+                    />
+                    {/* Name only. We were sent faces and names, not job
+                        titles, and a guessed title under a real face is
+                        worse than no title at all. */}
+                    <figcaption className="mt-2.5 font-display text-[17px] font-bold uppercase leading-tight text-ink">
+                      {person.name}
+                    </figcaption>
+                  </figure>
                 </li>
               </Reveal>
             ))}

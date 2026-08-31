@@ -4,17 +4,19 @@ import type { CtaCopy, PageMeta, Photo } from "./types";
  * ════════════════════════════════════════════════════════════════════
  *  MEET THE TEAM
  *
- *  Robert is real: real photograph, real role, his own words. The
- *  group photographs are real CTL photographs.
+ *  Every photograph on this page is a real CTL photograph and every
+ *  face is somebody who actually works here.
  *
- *  The eight individual portraits are not shot yet, so the grid uses
- *  abstract placeholder tiles — deliberately not photographs of people.
- *  A stock headshot of a stranger under a CTL job title would be a lie
- *  about who works here, and it is the one thing this page must not do.
- *  Names and roles are absent for the same reason: we do not know them,
- *  so we do not print them.
+ *  The crew names are taken verbatim from the filenames Robert
+ *  supplied with the headshots — including the spellings. Nothing is
+ *  normalised, because a surname is not ours to correct.
  *
- *  ⚠️ See `team` in content/pending.ts for the shot brief.
+ *  Roles are absent on purpose. We were sent faces and names, not job
+ *  titles, and a guessed title under a real person's face is the one
+ *  thing this page must not do.
+ *
+ *  ⚠️ See `team` in content/pending.ts — roles, and spelling
+ *  confirmation, are still outstanding.
  * ════════════════════════════════════════════════════════════════════
  */
 
@@ -55,17 +57,23 @@ export const teamPage = {
   ] satisfies Photo[],
 
   /**
-   * How many portrait slots the grid holds. Each renders a placeholder
-   * tile until a real headshot replaces it — no invented names.
+   * The crew, alphabetically — no ranking implied by the order.
+   * Portraits are 4:5 crops of the headshots Robert supplied, held in
+   * public/ctl/team/ under the same filename stem he used.
    */
-  portraitSlots: 8,
-  portraitTiles: [
-    "/ctl/team/portrait-1.jpg",
-    "/ctl/team/portrait-2.jpg",
-    "/ctl/team/portrait-3.jpg",
+  crew: [
+    { name: "Alex Alverez", photo: "/ctl/team/alex-alverez.jpg" },
+    { name: "Ceci Harper", photo: "/ctl/team/ceci-harper.jpg" },
+    { name: "Jody Holliday", photo: "/ctl/team/jody-holliday.jpg" },
+    { name: "JP Bourdreaux", photo: "/ctl/team/jp-bourdreaux.jpg" },
+    { name: "Megan Chauvin", photo: "/ctl/team/megan-chauvin.jpg" },
+    { name: "Paige Thacker", photo: "/ctl/team/paige-thacker.jpg" },
+    { name: "Peyton Peltier", photo: "/ctl/team/peyton-peltier.jpg" },
+    { name: "Scott Toups", photo: "/ctl/team/scott-toups.jpg" },
   ],
   /** Visitor-facing, not an internal note. */
-  portraitNote: "Crew portraits are being shot. Faces to follow.",
+  crewNote:
+    "Not a stock photo among them. These are the people who answer the phone, price the job and get on the roof.",
 
   values: [
     {

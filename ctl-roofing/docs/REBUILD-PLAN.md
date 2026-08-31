@@ -7,9 +7,10 @@ order, the decisions taken, and what is still blocked on the client.
 
 | Decision | Choice |
 |---|---|
-| Scope now | **Phase 1** — foundation, home rewire, services hub + 5 children, storm/insurance, contact, financing. Areas, case studies, reviews, careers, blog are phase 2. |
+| Scope now | Phase 1 shipped, then most of phase 2: gallery, areas hub, video, team, reviews. Case studies, town pages, careers and the blog remain. |
+| What this build is for | **A spec pitch.** Robert has not commissioned it, there is no deploy access and no crawl of the old site. It has to stand up on its own as a demo, which is why nothing on it reads as unfinished. |
 | CMS | **CMS-ready, no CMS yet.** Content lives in typed modules under `content/`, read through one loader (`lib/content.ts`). Adding Decap/Sveltia or a headless CMS later replaces the loader, not the pages. |
-| Missing client content | **Visible placeholders.** A single `<Pending>` component renders an honest, obviously-unfinished block naming exactly what is needed and from whom. Nothing is invented to fill a gap. |
+| Missing client content | **Dev-only gap markers.** `<Pending>` returns null outside `npm run dev` — a note reading "waiting on Robert" is the right thing in a dev server and the wrong thing to show the client it names. Every gap therefore needs real visitor-facing copy in the built site: nothing invented, nothing apologetic, no reference to what is missing. The gaps stay tracked in `content/pending.ts`. |
 
 ## Constraint that shapes everything
 
@@ -17,9 +18,11 @@ order, the decisions taken, and what is still blocked on the client.
 Pages. No server runtime. Consequences the plan has to respect:
 
 - No API routes. Every form posts to `NEXT_PUBLIC_FORM_ENDPOINT`.
-- Reviews cannot be fetched per-request. Either build-time fetch, or
-  curated quotes in content. Google's Places terms restrict caching
-  review text, so curated-with-permission is the safe default.
+- Reviews cannot be fetched at build time — not because of the export,
+  but because Google's Places policy forbids caching or storing review
+  text, and baking it into the HTML is exactly that. Solved by fetching
+  client-side per view (`components/GoogleReviews.tsx`). Facebook has no
+  API at all any more, so those are hard-coded. See Part I.
 - A careers page with résumé upload needs an endpoint that accepts
   multipart — the current JSON submit path does not. Phase 2 problem.
 - Call tracking is a script + swapped numbers, not server logic.
@@ -28,9 +31,10 @@ Pages. No server runtime. Consequences the plan has to respect:
 
 ## Status
 
-Phase 1 is built: Parts A–H below are done and on the branch. The
-phase-2 backlog and the blocked-on-Robert list at the foot of this file
-are what remains.
+Phase 1 is built: Parts A–H below are done and on the branch. Phase 2
+is most of the way there — the gallery, areas hub, video tab, team page
+and reviews are live (Part I). Case studies and careers are what remain,
+and both are blocked on Robert rather than on build time.
 
 ## Part A — Content architecture (CMS-ready) ✅
 
@@ -135,50 +139,140 @@ which means every number on the site is the real one.
 
 ---
 
-## What phase 2 switches on
+## Part I — Phase 2 as built ✅
 
-`lib/routes.ts` already carries the phase-2 routes with `live: false`.
-Nothing links to them, the sitemap omits them, and the nav renders
-"Our Work" and "About" as plain links to the home page's own bands
-rather than as dropdowns onto pages that do not exist. The home funnel
-links to the gallery, case studies, the team and the areas hub are
-written and in place — they render nothing today and appear the moment
-their route flips to `live: true`.
+**Gallery** (`/gallery/`) — 40 photographs, five category filters,
+shared lightbox. One source (`content/gallery.ts`) feeds both the home
+band and the page; `featured` picks the home subset.
+
+**Areas** (`/areas/`) — hub only, 16 towns grouped into 6 parishes by
+`townsByParish()`. Deliberately no per-town pages: a town page with no
+local project on it is a thin near-duplicate, which is the doorway
+pattern search engines demote. Town pages become worth building once
+case studies exist to put on them.
+
+**Video** (`/video/`) — one clip, 10.6MB, `preload="none"` so nothing
+downloads until play is pressed (verified: zero mp4 requests on scroll).
+The second supplied file is a 417KB truncated download that decodes one
+frame and stops, so it is excluded rather than shipped broken.
+
+**Team** (`/team/`) — Robert at the top in his own words, then eight
+crew headshots cropped 4:5 from the photos supplied. Names only. No job
+titles, because we were sent faces and names and a guessed title under a
+real person's face is not a thing this site does.
+
+**Reviews** (`/reviews/`) — two platforms, two mechanics, and the
+difference is not a choice we made:
+
+- *Google is live.* `components/GoogleReviews.tsx` calls Places API
+  (New) from the browser on every view. Nothing is cached, because the
+  Places policy forbids storing review content — `place_id` is the only
+  documented exception. The API caps a response at five reviews, so the
+  page is built around five rather than paginating toward a sixth that
+  does not exist. Author name, author photo and a link back to the
+  review are all required attribution; do not strip them. Unconfigured,
+  the band degrades to a link to the listing and makes zero outbound
+  requests.
+- *Facebook is hard-coded, permanently.* Meta deprecated Page
+  recommendations in Graph API v22.0 and killed them across every
+  version on 9 September 2025 — reading one returns error code 12.
+  There is no API to wait for and scraping violates their terms. Ten
+  recommendations and the 98%/39-people figure were copied by hand into
+  `content/reviews.ts`, verbatim, with the capture date printed on the
+  page next to the stat.
+
+**No AggregateRating JSON-LD anywhere, deliberately.** Reviews about CTL
+on CTL's own site are self-serving; Google has not shown review snippets
+for self-serving LocalBusiness markup since 2019, so the stars would not
+appear, and marking it up anyway is what earns a structured-data manual
+action across the whole domain. The reasoning is repeated in a comment
+at the top of `app/reviews/page.tsx` so nobody helpfully adds it back.
+
+---
+
+## How a route goes live
+
+`lib/routes.ts` is the single registry. A route with `live: false` is
+linked from nowhere, omitted from the sitemap, and skipped by the
+breadcrumb trail; flipping it to `true` is the entire switch-on. Live
+today: gallery, video, areas, team, reviews, plus everything from phase
+1. Still `false`: case studies and careers.
+
+Two shapes worth preserving. A parent whose children are all dead
+renders as a plain link to its own page rather than an empty dropdown.
+And a parent is never also its own child — "Our Work" points at the
+gallery and "About" at the team page, so neither is listed twice in the
+sitemap.
 
 ## Phase 2 backlog
 
-**Done:** gallery page (40 photographs, five filters, shared lightbox).
+**Done:** gallery, areas hub, video, team, reviews — see Part I.
 
-**Ordered by what unblocks what.** Case studies come before areas: a
-town page without local projects on it is a thin, near-duplicate page,
-which is the doorway pattern search engines demote. Both wait on
-Robert's project list, which makes that list the single highest-value
-thing to get out of him.
+**What is left, ordered by what unblocks what.**
 
-1. Case studies (6–8) — blocked on projects with before/after photos
-2. Areas we serve (hub + 6–10 towns) — built on top of the case studies
-3. Meet the team — blocked on headshots
-4. Reviews — blocked on permission to reproduce them
-5. Careers + application form — needs a provider that accepts résumé
-   uploads, since a static export cannot take a file. Deliberate on
-   services before building the funnel.
-6. Video tab — two files exist in `ctl_pictures`; the 34MB one needs
-   compressing or hosting off-site before it goes anywhere near a page
-7. Blog — on hold; not a launch priority
-8. Warranty explainer · showroom
+1. **Case studies (6–8)** — blocked on Robert's project list with
+   before/after photos. Still the single highest-value thing to get out
+   of him: it unblocks per-town pages, gives the gallery captions
+   something to link to, and is the only remaining page type that adds
+   real ranking surface.
+2. **Per-town pages** — built on top of the case studies, not before.
+3. **Careers + application form** — needs a provider that accepts a
+   résumé upload, since a static export cannot take a file. Decide the
+   provider before building the funnel.
+4. **Blog** — on hold; not a launch priority.
+5. **Warranty explainer · showroom.**
 
 ## Blocked on Robert
 
-Carried over from the plan, plus what the build surfaced:
+Everything here is tracked in `content/pending.ts` as well, which is
+what the dev-only `<Pending>` panels render. Nothing on this list shows
+to a visitor.
 
-1. Eight headshots, same wall / crop / shirt, with name, role, one line
-2. LA contractor licence number
-3. Manufacturer certifications — and specifically whether they are
-   FORTIFIED-certified (a photo shows a FORTIFIED sign; that is an
-   insurance-discount trust badge in Louisiana)
-4. Financing partner name, real terms, prequalification link
-5. Definitive service-area town list
-6. Six to eight projects with before/after photos for case studies
-7. Whether reviews may be reproduced on-site, and from where
-8. Call-tracking provider and the per-channel numbers
-9. Confirmation of the claims-role language in Part E
+**Stops a page from being finished**
+
+1. **Job titles for the eight crew** — the headshots and names are on
+   `/team/` now; the roles are the missing half. A line each in their
+   own words would finish the section. Spellings are confirmed.
+2. **Six to eight projects with before/after photos** — unblocks case
+   studies, and case studies unblock town pages.
+3. **A working export of the second video** — the supplied file is a
+   417KB truncated download. Also: titles in CTL's own words, and
+   captions, since the audio carries the message.
+4. **A commercial job photo** — low-slope membrane, a coating in
+   progress or a finished commercial metal roof.
+
+**Stops something switching on**
+
+5. **Google Cloud API key + place ID** — turns the live Google reviews
+   band on. Places API (New), key restricted to HTTP referrers. Note it
+   bills per page view; set a budget alert in the first week. Details in
+   `.env.example`.
+6. **Web3Forms key** — without it the contact form refuses to submit and
+   tells the visitor to phone, which is the honest failure. Nothing on
+   the site captures a lead until this exists.
+7. **Financing partner name, real terms, prequalification link** — the
+   payment estimator stays switched off until these are real. A monthly
+   figure on the site is a number a customer will hold you to.
+8. **Call-tracking provider and the per-channel numbers** — until then
+   every number on the site is the real one.
+
+**Legal / factual sign-off**
+
+9. **LA contractor licence number.**
+10. **Manufacturer certifications** — specifically whether CTL is
+    FORTIFIED-certified. A supplied photo shows a FORTIFIED sign, but
+    the certification is unverified, so the photo is excluded and no
+    badge is claimed. It is an insurance-discount trust badge in
+    Louisiana and worth confirming.
+11. **Claims-role language on the storm page** — Louisiana public
+    adjusting is licensed under La. R.S. 22:1691. The copy is written to
+    stay on the right side of that line; it needs a read.
+12. **Attorney review of the legal pages.**
+13. **The old site's URLs**, for `_redirects`. No crawl access yet, so
+    the redirect map cannot be built.
+
+**Refresh, not blocking**
+
+14. The Facebook stat and recommendations are a hand-read snapshot dated
+    on the page. Re-read them when the number moves — there is no feed
+    that will do it for us.

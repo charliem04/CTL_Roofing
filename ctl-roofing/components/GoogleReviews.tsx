@@ -119,7 +119,7 @@ export function GoogleReviews({ limit = 3 }: { limit?: number } = {}) {
                   {r.uri ? (
                     <a
                       href={r.uri}
-                      className="text-ink-faint no-underline transition-colors duration-150 hover:text-brand"
+                      className="text-ink-faint no-underline transition-colors duration-150 hover:text-brand active:text-brand-strong"
                       rel="nofollow noopener"
                       target="_blank"
                     >
@@ -140,7 +140,7 @@ export function GoogleReviews({ limit = 3 }: { limit?: number } = {}) {
         Reviews from Google, loaded live ·{" "}
         <a
           href={listing}
-          className="text-ink-faint underline decoration-line underline-offset-4 transition-colors duration-150 hover:text-brand"
+          className="text-ink-faint underline decoration-line underline-offset-4 transition-colors duration-150 hover:text-brand active:text-brand-strong"
           rel="noopener"
           target="_blank"
         >

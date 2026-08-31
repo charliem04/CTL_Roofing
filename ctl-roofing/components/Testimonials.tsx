@@ -1,25 +1,34 @@
 import { client } from "@/client.config";
+import { getReviewsPage } from "@/lib/content";
+import { googleFeedConfigured } from "@/lib/googleReviews";
 import { isLive } from "@/lib/routes";
 import { SectionHead } from "./SectionHead";
 import { GoogleReviews } from "./GoogleReviews";
+import { ReviewColumns } from "./ReviewColumns";
 import { MoreLink } from "./MoreLink";
 
 /**
- * The home page's proof band.
+ * The home page's proof band, in preference order.
  *
- * It shows the same live Google feed the reviews page does, rather than
- * a hand-picked set of quotes: whatever three Google returns first is
- * what a visitor sees, and the number beside them is today's number.
- * Curating a home page down to the three best reviews while the listing
- * says something else is the kind of thing the FTC's review rule exists
- * to stop, and it is a bad trade anyway — a live 4.9 with a count is
- * more persuasive than three anonymous glowing paragraphs.
+ * 1. The live Google feed, when a Places key is configured. Whatever
+ *    three Google returns first is what a visitor sees, and the number
+ *    beside them is today's number.
+ * 2. Otherwise the first three Facebook recommendations, which are real
+ *    and already in the content — better than a bare link, and the
+ *    reviews page below carries all ten.
+ * 3. Otherwise the link to the Google listing.
  *
- * `client.testimonials` stays supported for a client with no Google
- * presence. CTL has one, so it is empty and this reads from Google.
+ * The three shown are the first three as stored, never the three that
+ * flatter most. Reordering reviews by how good they make us look is the
+ * behaviour the FTC's 2024 rule on testimonials exists to stop, and it
+ * is a bad trade anyway: a live rating with a count out-argues three
+ * hand-picked paragraphs.
+ *
+ * `client.testimonials` stays supported for a client with neither.
  */
 export function Testimonials() {
   const legacy = client.testimonials;
+  const facebook = getReviewsPage().facebookPicks;
 
   return (
     <section id="testimonials" className="band bg-surface">
@@ -40,8 +49,10 @@ export function Testimonials() {
               </figure>
             ))}
           </div>
-        ) : (
+        ) : googleFeedConfigured() || facebook.length === 0 ? (
           <GoogleReviews />
+        ) : (
+          <ReviewColumns reviews={facebook.slice(0, 3)} layout="grid" />
         )}
 
         {isLive("/reviews/") && (

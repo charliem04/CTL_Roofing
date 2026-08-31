@@ -62,10 +62,10 @@ export const teamPage = {
    * public/ctl/team/ under the same filename stem he used.
    */
   crew: [
-    { name: "Alex Alverez", photo: "/ctl/team/alex-alverez.jpg" },
+    { name: "Alex Alvarez", photo: "/ctl/team/alex-alverez.jpg" },
     { name: "Ceci Harper", photo: "/ctl/team/ceci-harper.jpg" },
     { name: "Jody Holliday", photo: "/ctl/team/jody-holliday.jpg" },
-    { name: "JP Bourdreaux", photo: "/ctl/team/jp-bourdreaux.jpg" },
+    { name: "JP Boudreaux", photo: "/ctl/team/jp-bourdreaux.jpg" },
     { name: "Megan Chauvin", photo: "/ctl/team/megan-chauvin.jpg" },
     { name: "Paige Thacker", photo: "/ctl/team/paige-thacker.jpg" },
     { name: "Peyton Peltier", photo: "/ctl/team/peyton-peltier.jpg" },

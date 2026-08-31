@@ -46,7 +46,7 @@ Set in `wrangler.toml` under `[vars]`:
 
 | Var | Meaning |
 |---|---|
-| `ALLOWED_ORIGINS` | Comma-separated, exact scheme+host, no wildcards. Checked server-side, not just via CORS. |
+| `ALLOWED_ORIGINS` | Comma-separated, exact scheme+host, no wildcards. Browser-case protection only — see the validation list below. |
 | `MAX_UPLOAD_BYTES` | Default 5 MB. Keep it in step with `MAX_RESUME_BYTES` in `lib/submitApplication.ts`. |
 | `RATE_LIMIT_PER_HOUR` | Only does anything when the KV namespace is bound. |
 
@@ -54,7 +54,7 @@ Secrets (`wrangler secret put`, never in the toml):
 
 | Secret | Meaning |
 |---|---|
-| `TURNSTILE_SECRET` | Unset = captcha not enforced. Set it before launch. |
+| `TURNSTILE_SECRET` | **Required.** Unset, the Worker refuses every upload (500) and tells applicants to email the office. The dev env opts out with `ALLOW_INSECURE_NO_CAPTCHA`; never set that on the deployed Worker. |
 | `NOTIFY_WEBHOOK` | Unset = the file is stored silently and only the Workers log knows. |
 
 ### Two configuration traps
@@ -72,19 +72,28 @@ that is down.
 ## What it validates, and in what order
 
 1. `OPTIONS` → CORS preflight. Anything but `POST` → 405.
-2. Origin against the allowlist, server-side. The browser's CORS check
-   is advisory; `curl` ignores it.
-3. `Content-Length` before the body is read, so an oversized upload is
-   refused without buffering it.
+2. Origin against the allowlist. Worth being honest about: this stops
+   another *website's* browser posting on a visitor's behalf and
+   nothing else — a script sets the header to whatever it likes.
+   Turnstile is the layer that actually gates this endpoint.
+3. `Content-Length` before the body is read. An optimisation, not a
+   control — a chunked request carries no `Content-Length`, so the real
+   limit is the post-parse size check (verified: still returns 413).
 4. Per-IP rate limit, if a KV namespace is bound.
 5. Honeypot field → answers `200 {ok:true}` and stores nothing, so a bot
    learns nothing from the response.
-6. Turnstile, when the secret is set.
+6. Turnstile. Required; see above.
 7. Name and phone present.
 8. File extension, then **magic bytes**. Extension and `Content-Type`
    are both supplied by the uploader, so only the bytes are evidence:
-   `%PDF`, `PK\x03\x04` for docx, `\xD0\xCF\x11\xE0` for doc.
-9. The R2 key is generated here — `applications/YYYY/MM/<uuid>-<safe
+   `%PDF`, and `PK\x03\x04` for docx. `.doc`, `.docm`, `.dotm`, `.rtf`
+   and `.pages` are refused by name with a message telling the
+   applicant to save as PDF.
+9. Every text field is scrubbed of control characters, and metadata
+   values are percent-encoded to printable ASCII — R2 custom metadata
+   travels in HTTP headers, so a newline is header injection and an
+   accented name would otherwise fail the put.
+10. The R2 key is generated here — `applications/YYYY/MM/<uuid>-<safe
    name>`. A filename from a form field is never a path.
 
 Errors returned to the browser are deliberately vague; the real reason
@@ -112,10 +121,29 @@ Applicant details ride on the object as custom metadata — name, phone,
 email, role, original filename, timestamp, IP — so an object is never an
 orphan blob whose owner is only recoverable from an email somewhere.
 
+Those values are percent-encoded, so a plain name reads normally in the
+dashboard and `José` appears as `Jos%C3%A9`. Run it through
+`decodeURIComponent` (or `python3 -c "import urllib.parse,sys;
+print(urllib.parse.unquote(sys.argv[1]))" '<value>'`) to read it back.
+
+## What this does NOT do
+
+**Nothing scans these files.** The magic-byte check proves a file is a
+genuine PDF or DOCX, which is precisely why it is not a safety
+guarantee — a real PDF can carry an exploit and a real Office document
+can carry a macro. `.doc` is refused outright because the legacy OLE
+format is the worst offender, but the residual risk sits with whoever
+in the office opens the attachment.
+
+Mitigation is procedural, not technical: preview résumés in a browser
+or Google Docs rather than opening them in Word, and keep the machines
+that do open them patched.
+
 ## Before this handles a real application
 
-- [ ] `TURNSTILE_SECRET` set. Without it the only bot defence is a
-      honeypot, which stops the lazy ones and nothing else.
+- [ ] `TURNSTILE_SECRET` set, and `ALLOW_INSECURE_NO_CAPTCHA` absent
+      from the deployed config. Without the secret the Worker refuses
+      everything, which is safe but means nobody can apply.
 - [ ] A WAF rate-limiting rule on the route. The KV limiter runs *after*
       the request has already reached the Worker and cost money; a WAF
       rule stops it before that.

@@ -297,7 +297,7 @@ export function CareersForm({
               id="field-resume"
               name="resume"
               type="file"
-              accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+              accept=".pdf,.docx,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
               aria-invalid={invalid.includes("resume")}
               aria-describedby="field-resume-hint"
               onChange={(e) => {

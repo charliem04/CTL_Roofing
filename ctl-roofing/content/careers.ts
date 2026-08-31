@@ -142,7 +142,7 @@ export const careersPage = {
   /** Copy around the file field itself. */
   resumeLabel: "Your résumé",
   resumeHint:
-    "PDF or Word, up to 5MB. If you do not have one written up, attach anything that lists where you have worked — we are not marking it.",
+    "PDF or Word (.docx), up to 5MB. Older .doc files are not accepted — open it in Word and use Save As, PDF. If you do not have a résumé written up, attach anything that lists where you have worked; we are not marking it.",
 
   /** What happens next, so nobody is left wondering. */
   afterHeading: "What happens next",

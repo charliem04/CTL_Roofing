@@ -13,21 +13,36 @@
  *  strangers' phone numbers and addresses is the failure mode worth
  *  designing out, not the file-size limit.
  *
- *  ── THE LAYERS, and why each is here ────────────────────────────────
+ *  ── THE LAYERS, and what each is actually worth ─────────────────────
  *
- *  1. Origin allowlist. The browser's CORS check is advisory — curl
- *     ignores it — so the origin is checked server-side too and the
- *     response echoes one matched origin, never "*".
- *  2. Content-Length gate before the body is read, so an oversized
- *     upload is refused without buffering it into memory.
- *  3. Extension + declared MIME + MAGIC BYTES. The first two are
- *     attacker-controlled; the third is the one that means anything.
- *  4. Turnstile, when a secret is configured. This is the only thing
- *     that actually stops a bot flooding the bucket.
- *  5. Optional KV rate limit per IP as a backstop for when Turnstile
- *     is not yet configured.
- *  6. The stored key is generated here. A filename from a form field
+ *  1. Origin allowlist. Be honest about this one: it stops another
+ *     WEBSITE's browser posting on a visitor's behalf, and nothing
+ *     else. A script sets the Origin header to whatever it likes, so
+ *     this is not a defence against a determined caller. It is here for
+ *     the browser case only.
+ *  2. TURNSTILE. This is the actual gate — the only layer that
+ *     distinguishes a person from a script. It is REQUIRED: with no
+ *     secret configured the Worker refuses every upload rather than
+ *     quietly running wide open. See ALLOW_INSECURE_NO_CAPTCHA.
+ *  3. Content-Length gate before the body is read. An optimisation, not
+ *     a control — a chunked request has no Content-Length, so the real
+ *     size limit is the post-parse check further down.
+ *  4. Extension + MAGIC BYTES. Extension and Content-Type are both
+ *     supplied by the uploader; only the bytes are evidence.
+ *  5. Optional KV rate limit per IP, as a backstop. A WAF rate-limiting
+ *     rule on the route is better because it stops the request before
+ *     it reaches the Worker and bills.
+ *  6. Every text field is scrubbed of control characters before it
+ *     touches metadata or the notification, and metadata values are
+ *     encoded to printable ASCII, because R2 custom metadata travels in
+ *     HTTP headers.
+ *  7. The stored key is generated here. A filename from a form field
  *     is never a path.
+ *
+ *  NOT covered, and worth knowing: nothing scans these files. A valid
+ *  PDF or DOCX can still carry an exploit or a macro, and whoever opens
+ *  one in the office is the last line of defence. .doc is refused
+ *  outright because the legacy OLE format is the worst offender.
  *
  *  Errors returned to the browser are deliberately vague. Details go to
  *  the Workers log, where the operator can see them and an attacker
@@ -42,8 +57,17 @@ export interface Env {
   ALLOWED_ORIGINS: string;
   /** Bytes. Default 5 MB if unset or unparseable. */
   MAX_UPLOAD_BYTES?: string;
-  /** Cloudflare Turnstile secret. Unset = captcha not enforced. */
+  /**
+   * Cloudflare Turnstile secret. REQUIRED — with this unset the Worker
+   * refuses every upload, unless ALLOW_INSECURE_NO_CAPTCHA is set.
+   */
   TURNSTILE_SECRET?: string;
+  /**
+   * Deliberately ugly name. Set to "true" ONLY in local dev, where
+   * there is no Turnstile widget to solve. Setting it in production
+   * leaves the endpoint open to any script that can send a valid PDF.
+   */
+  ALLOW_INSECURE_NO_CAPTCHA?: string;
   /** Where the "new application" ping goes. Unset = no ping. */
   NOTIFY_WEBHOOK?: string;
   /** Optional KV namespace for the per-IP backstop limiter. */
@@ -63,12 +87,15 @@ const ALLOWED = [
     mime: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
     magic: [0x50, 0x4b, 0x03, 0x04], // PK.. — docx is a zip
   },
-  {
-    ext: "doc",
-    mime: "application/msword",
-    magic: [0xd0, 0xcf, 0x11, 0xe0], // OLE compound file
-  },
 ] as const;
+
+/**
+ * Refused on purpose, with a message that tells the applicant what to
+ * do instead. .doc is the legacy OLE format — the classic macro
+ * carrier — and nothing here scans it, so the person who would eat the
+ * risk is whoever in the office double-clicks it.
+ */
+const REFUSED_EXTENSIONS = new Set(["doc", "docm", "dotm", "rtf", "pages"]);
 
 /* ── Small helpers ─────────────────────────────────────────────────── */
 
@@ -144,6 +171,81 @@ function safeName(name: string): string {
       .replace(/^[.-]+/, "")
       .slice(0, 80) || "resume"
   );
+}
+
+/**
+ * Scrub a submitted text field.
+ *
+ * Strips C0 and C1 control characters — CR and LF among them — because
+ * these strings do not stay in this Worker. They go into R2 custom
+ * metadata, which travels as HTTP headers, and into the notification
+ * webhook, which usually ends up as an email. A newline in either place
+ * is header injection; a run of control bytes is a corrupted record.
+ *
+ * Whitespace is then collapsed and the value capped. Nothing is escaped
+ * for HTML here on purpose: escaping belongs at the point of rendering,
+ * and doing it early would store `&amp;` in somebody's surname.
+ */
+function cleanText(value: unknown, max: number): string {
+  return String(value ?? "")
+    // eslint-disable-next-line no-control-regex
+    .replace(/[\u0000-\u001f\u007f-\u009f]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim()
+    .slice(0, max);
+}
+
+/**
+ * Make a value safe to put in R2 custom metadata.
+ *
+ * Custom metadata rides in HTTP headers, which are ASCII. A name like
+ * "José" is not hypothetical in Acadiana, and an unencodable header
+ * value means the put throws and a real applicant gets a 502.
+ *
+ * So: percent-encode `%` itself and anything outside printable ASCII,
+ * and leave everything else alone. Plain names pass through unchanged
+ * and stay readable in the dashboard; accents and emoji survive
+ * losslessly as %XX. Decode with decodeURIComponent when reading.
+ */
+function asciiMeta(value: string): string {
+  let out = "";
+  for (const ch of value) {
+    const code = ch.codePointAt(0) ?? 0;
+    if (ch === "%") {
+      out += "%25";
+    } else if (code >= 0x20 && code <= 0x7e) {
+      out += ch;
+    } else {
+      for (const byte of new TextEncoder().encode(ch)) {
+        out += "%" + byte.toString(16).toUpperCase().padStart(2, "0");
+      }
+    }
+  }
+  return out;
+}
+
+/**
+ * Clean the questionnaire answers without losing their structure.
+ *
+ * The form sends one JSON blob so a new question needs no change here.
+ * Parse it, scrub both sides of every pair, and re-serialise. If it is
+ * not the shape we expect, fall back to scrubbing it as plain text
+ * rather than passing an unknown string through untouched.
+ */
+function cleanAnswers(raw: string): string {
+  try {
+    const parsed: unknown = JSON.parse(raw);
+    if (parsed && typeof parsed === "object" && !Array.isArray(parsed)) {
+      const out: Record<string, string> = {};
+      for (const [k, v] of Object.entries(parsed as Record<string, unknown>)) {
+        out[cleanText(k, 200)] = cleanText(v, 2000);
+      }
+      return JSON.stringify(out);
+    }
+  } catch {
+    // falls through
+  }
+  return cleanText(raw, 8000);
 }
 
 /**
@@ -277,6 +379,9 @@ export default {
       return json({ ok: true }, 200, origin, env);
     }
 
+    // Turnstile is the only layer that tells a person from a script, so
+    // a missing secret is a refusal rather than a silent bypass. The
+    // escape hatch exists for local dev and announces itself every time.
     if (env.TURNSTILE_SECRET) {
       const token = String(form.get("cf-turnstile-response") ?? "");
       if (!token || !(await verifyTurnstile(token, ip, env.TURNSTILE_SECRET))) {
@@ -288,13 +393,26 @@ export default {
           "We couldn't verify that you're human. Please reload and try again."
         );
       }
+    } else if (env.ALLOW_INSECURE_NO_CAPTCHA === "true") {
+      console.error(
+        "[careers] RUNNING WITHOUT CAPTCHA — ALLOW_INSECURE_NO_CAPTCHA is set. " +
+          "If this is production, the endpoint is open to any script."
+      );
+    } else {
+      return reject(
+        "TURNSTILE_SECRET is not configured and no explicit opt-out is set",
+        500,
+        origin,
+        env,
+        "Applications are temporarily unavailable. Please email your résumé to the office."
+      );
     }
 
-    const name = String(form.get("name") ?? "").trim().slice(0, 120);
-    const phone = String(form.get("phone") ?? "").trim().slice(0, 40);
-    const email = String(form.get("email") ?? "").trim().slice(0, 160);
-    const role = String(form.get("role") ?? "").trim().slice(0, 120);
-    const answers = String(form.get("answers") ?? "").slice(0, 8000);
+    const name = cleanText(form.get("name"), 120);
+    const phone = cleanText(form.get("phone"), 40);
+    const email = cleanText(form.get("email"), 160);
+    const role = cleanText(form.get("role"), 120);
+    const answers = cleanAnswers(String(form.get("answers") ?? ""));
 
     if (!name || !phone) {
       return reject(
@@ -327,6 +445,15 @@ export default {
     }
 
     const ext = extensionOf(file.name);
+    if (REFUSED_EXTENSIONS.has(ext)) {
+      return reject(
+        `refused legacy/macro format: .${ext}`,
+        415,
+        origin,
+        env,
+        `We can't accept .${ext} files. Please save it as a PDF and try again — in Word that is File, Save As, PDF.`
+      );
+    }
     const spec = ALLOWED.find((a) => a.ext === ext);
     if (!spec) {
       return reject(
@@ -334,7 +461,7 @@ export default {
         415,
         origin,
         env,
-        "Please send a PDF or Word document."
+        "Please send a PDF or a .docx Word document."
       );
     }
 
@@ -350,7 +477,7 @@ export default {
         415,
         origin,
         env,
-        "That file doesn't look like a PDF or Word document."
+        "That file doesn't look like a PDF or a .docx Word document."
       );
     }
 
@@ -368,14 +495,17 @@ export default {
         // Applicant details ride with the file so the bucket is
         // self-describing — an object is never an orphan blob whose
         // owner is only recoverable from an email somewhere.
+        // Percent-encoded: these become HTTP headers, which are ASCII.
+        // Plain values pass through unchanged; decode with
+        // decodeURIComponent when reading the bucket.
         customMetadata: {
-          name,
-          phone,
-          email,
-          role,
+          name: asciiMeta(name),
+          phone: asciiMeta(phone),
+          email: asciiMeta(email),
+          role: asciiMeta(role),
           originalFilename: safeName(file.name),
           submittedAt: now.toISOString(),
-          ip,
+          ip: asciiMeta(ip),
         },
       });
     } catch (e) {

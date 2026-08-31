@@ -52,7 +52,15 @@ const ENDPOINT = process.env.NEXT_PUBLIC_CAREERS_ENDPOINT ?? "";
 
 /** Keep in step with MAX_UPLOAD_BYTES in workers/careers-upload. */
 export const MAX_RESUME_BYTES = 5 * 1024 * 1024;
-export const ACCEPTED_EXTENSIONS = [".pdf", ".doc", ".docx"] as const;
+
+/**
+ * PDF and .docx only. Legacy .doc is refused deliberately, here and in
+ * the Worker: it is the OLE macro format, nothing in the pipeline scans
+ * these files, and the person who would carry that risk is whoever in
+ * the office double-clicks the attachment.
+ */
+export const ACCEPTED_EXTENSIONS = [".pdf", ".docx"] as const;
+const REFUSED_EXTENSIONS = [".doc", ".docm", ".dotm", ".rtf", ".pages"] as const;
 
 const EMAIL_INSTEAD = `We couldn't send that. Please email your résumé to ${client.email} instead — we don't want you to lose the application.`;
 
@@ -68,8 +76,14 @@ export function checkResume(file: File | null): string | null {
     return "That file is over 5MB. Please attach a smaller PDF or Word document.";
   }
   const lower = file.name.toLowerCase();
+  const refused = REFUSED_EXTENSIONS.find((ext) => lower.endsWith(ext));
+  if (refused) {
+    // Say what to do, not just what went wrong — plenty of good roofers
+    // have a résumé their cousin typed up in Word in 2011.
+    return `We can't accept ${refused} files. Please save it as a PDF and try again — in Word that is File, Save As, PDF.`;
+  }
   if (!ACCEPTED_EXTENSIONS.some((ext) => lower.endsWith(ext))) {
-    return "Please attach a PDF or a Word document.";
+    return "Please attach a PDF or a .docx Word document.";
   }
   return null;
 }

@@ -19,12 +19,14 @@ MAX_UPLOAD_BYTES = "5242880"   # 5 MB
 RATE_LIMIT_PER_HOUR = "5"
 
 # ── Secrets — set with `wrangler secret put`, never in this file ─────
-#   wrangler secret put TURNSTILE_SECRET
+#   wrangler secret put TURNSTILE_SECRET   <- REQUIRED
 #   wrangler secret put NOTIFY_WEBHOOK
 #
-# TURNSTILE_SECRET is what actually keeps bots out. Until it is set the
-# Worker accepts anything that passes validation, so treat the KV
-# limiter below as a stopgap and not a solution.
+# TURNSTILE_SECRET is the only layer that tells a person from a script.
+# It is required: with it unset the Worker refuses every upload and
+# tells applicants to email the office, rather than quietly running
+# open to anyone who can send a valid PDF. The KV limiter below is a
+# backstop, not a substitute.
 
 # ── Optional: the per-IP backstop limiter ────────────────────────────
 # Create with `wrangler kv namespace create RATE_LIMIT`, then paste the
@@ -42,6 +44,10 @@ RATE_LIMIT_PER_HOUR = "5"
 ALLOWED_ORIGINS = "http://localhost:3000,http://localhost:4173"
 MAX_UPLOAD_BYTES = "5242880"
 RATE_LIMIT_PER_HOUR = "50"
+# Local only — there is no Turnstile widget to solve against a dev
+# server. Never set this on the deployed Worker: it is the difference
+# between a gated endpoint and an open one.
+ALLOW_INSECURE_NO_CAPTCHA = "true"
 
 [[env.dev.r2_buckets]]
 binding = "RESUMES"

@@ -1,16 +1,19 @@
 import type { PendingContent } from "@/content/types";
 
 /**
- * The honest placeholder.
+ * A gap marker for us, never for a visitor.
  *
- * Where the client still owes us content, the page says so — what is
- * missing and who owes it — instead of filler, lorem, a stock photo or
- * an invented number. It is deliberately styled as unfinished: dashed
- * rule, no photo, no CTA. A visitor reading it learns nothing false.
+ * This renders only in development. A note reading "waiting on Robert"
+ * is exactly the right thing to see in `npm run dev` and exactly the
+ * wrong thing to put in front of the client it names — on a demo build
+ * it reads as unfinished homework, and on a live site it reads as an
+ * internal memo left on the wall.
  *
- * Every one of these is a line item on the go-live checklist. When the
- * content arrives, the panel is replaced by the real thing, not by a
- * quieter version of itself.
+ * So the rule is: every place that would show a gap has to supply real,
+ * honest visitor-facing content for the built site. Nothing invented,
+ * nothing apologetic, and no reference to what is missing. The gaps
+ * themselves stay tracked in content/pending.ts, which is what the
+ * handover sheet is generated from.
  */
 export function Pending({
   content,
@@ -19,6 +22,8 @@ export function Pending({
   content: PendingContent;
   className?: string;
 }) {
+  if (process.env.NODE_ENV !== "development") return null;
+
   return (
     <div
       className={`rounded border border-dashed border-brand-soft/60 bg-surface-alt/60 p-6 ${
@@ -27,7 +32,7 @@ export function Pending({
     >
       <p className="u-label flex items-center gap-2">
         <span aria-hidden className="inline-block h-2 w-2 rounded-full bg-accent-press" />
-        Content pending
+        Content pending · dev only
       </p>
       <p className="mt-3 max-w-[62ch] text-ink">{content.needs}</p>
       {content.from && (

@@ -27,7 +27,10 @@ export default function FinancingPage() {
         photo={financing.photo}
       />
 
-      {/* ── The estimator, or an honest account of why there isn't one ── */}
+      {/* ── The estimator, once there are real terms to drive it ─────
+          Until then this reads as a straight answer to the question a
+          homeowner actually asked, not as a hole in the page. The one
+          thing it must never do is print an invented rate. */}
       <section className="band bg-surface-alt">
         <div className="section grid gap-10 md:grid-cols-[1.05fr_0.95fr]">
           <div>
@@ -36,7 +39,7 @@ export default function FinancingPage() {
               lede={
                 termsReady
                   ? "Move the slider to the size of the project. The figures come from our lender's current terms."
-                  : "This is where the estimator goes. It is switched off until the lender's real terms are in hand — a monthly figure on a website is a number you will be held to."
+                  : "It depends on two things: the size of the job, and the terms you qualify for. We can put both in front of you in one conversation."
               }
             />
             <Reveal delay={0.06}>
@@ -47,7 +50,22 @@ export default function FinancingPage() {
                     bounds={financing.estimator}
                   />
                 ) : (
-                  <Pending content={getPending("financingTerms")} />
+                  <div className="space-y-4 text-lg">
+                    <p>
+                      A roof is one of the few purchases this size that
+                      nobody plans for, and the monthly figure is usually
+                      what decides whether it gets done properly or patched
+                      again. So we would rather talk about it early than
+                      have you find out at the end.
+                    </p>
+                    <p>
+                      The free assessment gives you a written scope and a
+                      real number. Bring that to the conversation and we can
+                      go through what the payment options look like against
+                      it — no guesswork on either side.
+                    </p>
+                    <Pending content={getPending("financingTerms")} />
+                  </div>
                 )}
               </div>
             </Reveal>

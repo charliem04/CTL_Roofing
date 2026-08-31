@@ -34,7 +34,7 @@ export const pendingContent = {
   },
   reviews: {
     needs:
-      "A Google Cloud API key with Places API (New) enabled and the place ID for the listing, which switches the live Google band on (see .env.example). Facebook is separate and manual: Meta killed the recommendations API in 2025, so any recommendation we want on the site has to be copied across by hand with that customer's permission, into facebookPicks in content/reviews.ts.",
+      "A Google Cloud API key with Places API (New) enabled and the place ID for the listing, which switches the live Google band on (see .env.example). Facebook is already populated: ten recommendations and the 98%/39-people figure were copied across by hand, since Meta killed the recommendations API in 2025. That snapshot is dated on the page and needs re-reading whenever the numbers move.",
     from: "Robert",
   },
   licence: {

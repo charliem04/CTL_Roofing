@@ -119,8 +119,9 @@ export type CaseStudy = {
 export type Review = {
   quote: string;
   name: string;
-  detail: string;
-  /** Where it was left, e.g. "Google" — never reproduce without permission */
+  /** Town, job type, anything that grounds it. Often we simply do not know. */
+  detail?: string;
+  /** Where it was left, e.g. "Google" or "Facebook". */
   source: string;
 };
 

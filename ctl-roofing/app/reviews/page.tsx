@@ -3,9 +3,9 @@ import { getPending, getReviewsPage } from "@/lib/content";
 import { pageMetadata } from "@/lib/meta";
 import { PageHero } from "@/components/PageHero";
 import { SectionHead } from "@/components/SectionHead";
-import { Reveal } from "@/components/Reveal";
 import { CtaBand } from "@/components/CtaBand";
 import { GoogleReviews } from "@/components/GoogleReviews";
+import { ReviewColumns, capturedMonth } from "@/components/ReviewColumns";
 import { Pending } from "@/components/Pending";
 import { btn } from "@/components/Button";
 
@@ -62,35 +62,42 @@ export default function ReviewsPage() {
         </div>
       </section>
 
-      {/*
-        The Facebook band earns a place on the page only when there is
-        something in it. An empty section whose entire message is "there
-        is more of this elsewhere" is a band the visitor scrolls past,
-        and the platform grid below already carries that link.
-      */}
+      {/* ── Facebook, copied across by hand ───────────────────────── */}
       {page.facebookPicks.length > 0 && (
         <section className="band bg-surface-alt">
           <div className="section">
             <SectionHead
               heading="On Facebook"
-              lede="Recommendations customers left on our page, reproduced with their permission."
+              lede="Recommendations from our Facebook page, reproduced word for word."
             />
-            <ul className="mt-10 grid list-none gap-x-10 gap-y-9 border-t border-line pt-8 md:grid-cols-3">
-              {page.facebookPicks.map((r) => (
-                <Reveal key={r.name}>
-                  <li>
-                    <figure className="m-0">
-                      <blockquote className="m-0 text-ink">
-                        &ldquo;{r.quote}&rdquo;
-                      </blockquote>
-                      <figcaption className="u-label mt-4">
-                        {r.name} · {r.detail}
-                      </figcaption>
-                    </figure>
-                  </li>
-                </Reveal>
-              ))}
-            </ul>
+
+            <p className="mt-9 flex flex-wrap items-baseline gap-x-3 gap-y-1 border-t border-line pt-8">
+              <span className="font-display text-[34px] font-bold leading-none text-ink">
+                {page.facebookStat.percent}%
+              </span>
+              <span className="u-label">
+                recommend CTL · based on the opinion of{" "}
+                {page.facebookStat.people} people
+              </span>
+            </p>
+
+            <ReviewColumns reviews={page.facebookPicks} />
+
+            {/* The figure above is a hand-read snapshot, not a live feed,
+                so it carries the month it was read. Move the date in
+                content/reviews.ts whenever the numbers are refreshed. */}
+            <p className="border-t border-line pt-5 font-mono text-[12px] uppercase tracking-[0.09em] text-ink-faint">
+              Recommendations from Facebook, read{" "}
+              {capturedMonth(page.facebookStat.capturedOn)} ·{" "}
+              <a
+                href={client.socials.facebookReviews}
+                className="text-ink-faint underline decoration-line underline-offset-4 transition-colors duration-150 hover:text-brand active:text-brand-strong"
+                rel="noopener"
+                target="_blank"
+              >
+                See the page
+              </a>
+            </p>
           </div>
         </section>
       )}

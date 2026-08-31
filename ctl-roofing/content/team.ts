@@ -7,16 +7,18 @@ import type { CtaCopy, PageMeta, Photo } from "./types";
  *  Every photograph on this page is a real CTL photograph and every
  *  face is somebody who actually works here.
  *
- *  The crew names are taken verbatim from the filenames Robert
- *  supplied with the headshots — including the spellings. Nothing is
- *  normalised, because a surname is not ours to correct.
+ *  The crew names came off the filenames Robert supplied with the
+ *  headshots. Two of those filenames misspelled the surname; Charles
+ *  corrected Alvarez and Boudreaux in 0fd85e9, so the names on the page
+ *  are the confirmed spellings and no longer the file stems. The image
+ *  paths still carry the original stems on purpose — renaming assets to
+ *  chase a text fix breaks links for nothing.
  *
  *  Roles are absent on purpose. We were sent faces and names, not job
  *  titles, and a guessed title under a real person's face is the one
  *  thing this page must not do.
  *
- *  ⚠️ See `team` in content/pending.ts — roles, and spelling
- *  confirmation, are still outstanding.
+ *  ⚠️ See `team` in content/pending.ts — roles are still outstanding.
  * ════════════════════════════════════════════════════════════════════
  */
 

@@ -24,7 +24,7 @@ export const posts: Post[] = [];
 export const pendingContent = {
   team: {
     needs:
-      "Job titles for the eight crew headshots, plus confirmation of the name spellings — the site currently prints the filenames Robert sent verbatim (Alex Alverez, JP Bourdreaux). A line each in their own words would finish the section.",
+      "Job titles for the eight crew headshots. Spellings are confirmed. A line each in their own words would finish the section.",
     from: "Robert",
   },
   caseStudies: {
@@ -34,7 +34,7 @@ export const pendingContent = {
   },
   reviews: {
     needs:
-      "Confirmation that customer reviews may be reproduced here, and the reviews themselves. Until then the Google review link stays the route to them.",
+      "A Google Cloud API key with Places API (New) enabled and the place ID for the listing, which switches the live Google band on (see .env.example). Facebook is separate and manual: Meta killed the recommendations API in 2025, so any recommendation we want on the site has to be copied across by hand with that customer's permission, into facebookPicks in content/reviews.ts.",
     from: "Robert",
   },
   licence: {

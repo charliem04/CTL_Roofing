@@ -62,7 +62,7 @@ export const nav: RouteNode[] = [
     priority: 0.7,
     children: [
       { href: "/areas/", label: "Areas we serve", live: true, priority: 0.8 },
-      { href: "/reviews/", label: "Reviews", live: false },
+      { href: "/reviews/", label: "Reviews", live: true, priority: 0.7 },
       { href: "/careers/", label: "Careers", live: false },
     ],
   },

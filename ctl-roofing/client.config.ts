@@ -93,8 +93,13 @@ export const client = {
   // ── Socials (empty string hides the link) ─────────────────────────
   socials: {
     facebook: "https://www.facebook.com/ctlprola",
+    // Meta has no reviews API any more (see content/reviews.ts), so the
+    // recommendations tab is the only route to them — a link, not a feed.
+    facebookReviews: "https://www.facebook.com/ctlprola/reviews",
     instagram: "https://www.instagram.com/ctlpro",
-    google: "https://g.page/r/CdzPt0LheRXZEAI/review", // review link
+    // Leaves a review. The token encodes Google CID 15642542889135230940,
+    // which is the same listing the Maps URL points at — checked, not assumed.
+    google: "https://g.page/r/CdzPt0LheRXZEAI/review",
   },
 
   // ── Storm strip (sits directly under the hero) ────────────────────

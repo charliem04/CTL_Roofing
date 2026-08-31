@@ -24,7 +24,10 @@ Pages. No server runtime. Consequences the plan has to respect:
   client-side per view (`components/GoogleReviews.tsx`). Facebook has no
   API at all any more, so those are hard-coded. See Part I.
 - A careers page with résumé upload needs an endpoint that accepts
-  multipart — the current JSON submit path does not. Phase 2 problem.
+  multipart, which the JSON submit path cannot do. Solved in Part J with
+  a Cloudflare Worker writing to a private R2 bucket — the one piece of
+  server-side code in the project, and the only thing here that can
+  break at 2am.
 - Call tracking is a script + swapped numbers, not server logic.
 
 ---
@@ -32,9 +35,9 @@ Pages. No server runtime. Consequences the plan has to respect:
 ## Status
 
 Phase 1 is built: Parts A–H below are done and on the branch. Phase 2
-is most of the way there — the gallery, areas hub, video tab, team page
-and reviews are live (Part I). Case studies and careers are what remain,
-and both are blocked on Robert rather than on build time.
+is done too — the gallery, areas hub, video tab, team page and reviews
+are live (Part I), and case studies and careers are built but dark
+(Part J), waiting on content and a deploy rather than on code.
 
 ## Part A — Content architecture (CMS-ready) ✅
 
@@ -190,6 +193,69 @@ at the top of `app/reviews/page.tsx` so nobody helpfully adds it back.
 
 ---
 
+## Part J — Case studies and careers, scaffolded ✅
+
+Both page types are built. Both routes stay `live: false`, so nothing
+links to them and the sitemap omits them; both index pages carry
+`noindex` derived from `isLive()` rather than hardcoded, so it lifts
+itself on switch-on.
+
+**Case studies.** `content/caseStudies.ts` is empty and documents the
+shape. The detail template is `components/CaseStudyArticle.tsx` rather
+than a route, because `output: "export"` refuses a dynamic route whose
+`generateStaticParams()` returns `[]` — it reads "no params" as "no
+generateStaticParams" and fails the build. As a component it stays
+compiled and typechecked; the twelve-line page file that activates it
+is written out in its header.
+
+*Switch on:* add studies, create the page file, flip the flag.
+
+**Careers.** `content/careers.ts` holds the copy and a six-question
+questionnaire; `roles` is empty because nobody has said what CTL hires
+for, or whether they are hiring. While it is empty the page runs as a
+general application, which names no job that may not exist.
+
+WARNING: the questions need an employment attorney's read. They are
+written conservatively — every one is about doing the job, the physical
+question describes the work and asks whether the applicant can do it
+(an essential-function question, not a health question), and nothing
+touches criminal history, age, health, family or citizenship. Careful is
+not the same as cleared.
+
+**The upload path, the only server-side code in the project.**
+`workers/careers-upload` is a Cloudflare Worker: one multipart POST in,
+validated hard, written to a PRIVATE R2 bucket, office pinged. No read
+path, no listing, no way to pull a file back over HTTP. That is the
+point — the bucket holds strangers' names, numbers and CVs, so the
+failure mode designed out is "someone found a public URL", not "someone
+uploaded a big file".
+
+Validated in order: origin allowlist server-side (CORS is advisory,
+curl ignores it), Content-Length before the body is read, per-IP KV
+limit if bound, honeypot, Turnstile, name and phone, extension, then
+MAGIC BYTES — because extension and Content-Type are both supplied by
+the uploader. The R2 key is generated Worker-side; a filename from a
+form field is never a path.
+
+Exercised locally against `wrangler dev` with a real R2: happy paths for
+PDF and DOCX store; wrong origin 403, no origin 403, GET 405, honeypot
+200-with-nothing-stored, missing phone 400, no file 400, `.exe` 415,
+text-renamed-`.pdf` 415, 6MB 413. A traversal filename landed as
+`applications/2026/08/<uuid>-etc-passwd.pdf`. The browser form was then
+driven end to end against that Worker — real file, real 200, real object
+in the bucket — and the magic-byte rejection surfaces to the applicant
+verbatim with no false success.
+
+*Switch on:* deploy the Worker (its README has the sequence), set
+`NEXT_PUBLIC_CAREERS_ENDPOINT` and `NEXT_PUBLIC_TURNSTILE_SITE_KEY`,
+add roles, attorney sign-off, flip the flag.
+
+Unset endpoint means the form refuses and points at the office email.
+That is why the gate is the route and not a banner: a live "apply here"
+form with nothing behind it takes somebody's resume and drops it.
+
+---
+
 ## How a route goes live
 
 `lib/routes.ts` is the single registry. A route with `live: false` is
@@ -206,21 +272,19 @@ sitemap.
 
 ## Phase 2 backlog
 
-**Done:** gallery, areas hub, video, team, reviews — see Part I.
+**Done:** gallery, areas hub, video, team, reviews (Part I). Case
+studies and careers are built and dark (Part J).
 
-**What is left, ordered by what unblocks what.**
+**What is left.**
 
-1. **Case studies (6–8)** — blocked on Robert's project list with
-   before/after photos. Still the single highest-value thing to get out
-   of him: it unblocks per-town pages, gives the gallery captions
-   something to link to, and is the only remaining page type that adds
-   real ranking surface.
+1. **Case-study content (6-8 projects)** — the page type is finished, so
+   this is now purely a content drop. Still the single highest-value
+   thing to get out of Robert: it unblocks per-town pages and is the
+   only remaining page type that adds real ranking surface.
 2. **Per-town pages** — built on top of the case studies, not before.
-3. **Careers + application form** — needs a provider that accepts a
-   résumé upload, since a static export cannot take a file. Decide the
-   provider before building the funnel.
+3. **Careers go-live** — deploy the Worker, add roles, attorney read.
 4. **Blog** — on hold; not a launch priority.
-5. **Warranty explainer · showroom.**
+5. **Warranty explainer, showroom.**
 
 ## Blocked on Robert
 

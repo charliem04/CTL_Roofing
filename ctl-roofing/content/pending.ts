@@ -56,6 +56,11 @@ export const pendingContent = {
       "A working export of the second video — the file supplied is a 417KB truncated download that decodes one frame and stops. Plus titles in CTL's own words for each clip, and ideally captions, since the audio carries the whole message.",
     from: "Robert",
   },
+  careers: {
+    needs:
+      "Whether CTL is hiring and for what — job titles, full time or seasonal, what each role actually does and the genuine minimum it needs. Also: an employment attorney's read of the six questions in content/careers.ts before the page goes live, because hiring questions carry real legal exposure. And the upload Worker deployed (workers/careers-upload) so the form has somewhere to put a résumé.",
+    from: "Robert",
+  },
   serviceArea: {
     needs: "The definitive service-area town list, before the town pages are built.",
     from: "Robert",

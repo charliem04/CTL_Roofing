@@ -21,6 +21,7 @@ import { areas, townsByParish } from "@/content/areas";
 import { clips, videoPage } from "@/content/video";
 import { teamPage } from "@/content/team";
 import { reviewsPage } from "@/content/reviews";
+import { careersPage } from "@/content/careers";
 import {
   caseStudies,
   caseStudiesByDate,
@@ -116,6 +117,12 @@ export function getTeamPage() {
 
 export function getTeam() {
   return team;
+}
+
+/* ── Careers ──────────────────────────────────────────────────────── */
+
+export function getCareersPage() {
+  return careersPage;
 }
 
 /* ── Case studies ─────────────────────────────────────────────────── */

@@ -1,0 +1,48 @@
+name = "ctl-careers-upload"
+main = "src/index.ts"
+compatibility_date = "2026-08-01"
+
+# ── R2 ───────────────────────────────────────────────────────────────
+# This bucket must stay PRIVATE. Do not connect a custom domain to it
+# and do not enable the r2.dev public URL — it holds strangers' names,
+# phone numbers and CVs. The Worker only ever writes; reading is done
+# from the dashboard or `wrangler r2 object get`.
+[[r2_buckets]]
+binding = "RESUMES"
+bucket_name = "ctl-resumes"
+
+[vars]
+# Exact scheme+host, comma separated. No wildcards, no trailing slash.
+# Add the Pages preview domain while testing, then take it out again.
+ALLOWED_ORIGINS = "https://www.ctlpro.com,https://ctlpro.com"
+MAX_UPLOAD_BYTES = "5242880"   # 5 MB
+RATE_LIMIT_PER_HOUR = "5"
+
+# ── Secrets — set with `wrangler secret put`, never in this file ─────
+#   wrangler secret put TURNSTILE_SECRET
+#   wrangler secret put NOTIFY_WEBHOOK
+#
+# TURNSTILE_SECRET is what actually keeps bots out. Until it is set the
+# Worker accepts anything that passes validation, so treat the KV
+# limiter below as a stopgap and not a solution.
+
+# ── Optional: the per-IP backstop limiter ────────────────────────────
+# Create with `wrangler kv namespace create RATE_LIMIT`, then paste the
+# id here and uncomment. Without it, overRateLimit() is a no-op.
+# [[kv_namespaces]]
+# binding = "RATE_LIMIT"
+# id = "<paste the id wrangler prints>"
+
+# ── Local development ────────────────────────────────────────────────
+# NOTE: a named environment does NOT inherit top-level bindings, only
+# top-level `main`/`name`. Every binding the Worker reads has to be
+# repeated here or env.RESUMES arrives undefined and every upload fails
+# at the R2 put with a 502. Same applies to any future [env.staging].
+[env.dev.vars]
+ALLOWED_ORIGINS = "http://localhost:3000,http://localhost:4173"
+MAX_UPLOAD_BYTES = "5242880"
+RATE_LIMIT_PER_HOUR = "50"
+
+[[env.dev.r2_buckets]]
+binding = "RESUMES"
+bucket_name = "ctl-resumes-dev"

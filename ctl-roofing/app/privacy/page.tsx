@@ -13,7 +13,7 @@ export const metadata: Metadata = {
  * gains a processor — a CRM, a call-tracking provider, a chat widget —
  * this page has to gain a line, or it stops being true.
  *
- * It is not legal advice. Have CTL's attorney read it before launch.
+ * It is not legal advice. Have CTL’s attorney read it before launch.
  */
 const EFFECTIVE = "August 30, 2026";
 
@@ -84,7 +84,7 @@ export default function PrivacyPage() {
         The booking calendar is hosted by <strong>Calendly</strong>. It does
         not load until you either accept analytics or press the button on the
         booking panel — until then, nothing is sent to them. Once loaded, your
-        use of the calendar is subject to Calendly&apos;s own privacy policy.
+        use of the calendar is subject to Calendly’s own privacy policy.
       </p>
       <p>
         A job application does not go through a form service. The résumé is
@@ -109,7 +109,7 @@ export default function PrivacyPage() {
         all.
       </p>
       <p>
-        Your answer to that banner is stored in your own browser&apos;s local
+        Your answer to that banner is stored in your own browser’s local
         storage so we stop asking. That is the only thing this site stores on
         your device. Clearing your browser data clears it, and the banner will
         ask again.
@@ -127,7 +127,7 @@ export default function PrivacyPage() {
       <p>
         Job records — estimates, invoices, permits, photographs and the
         documents that go with them — are kept for as long as we need them for
-        the work, the warranty and our legal and tax obligations. Enquiries
+        the work, the warranty and our legal and tax obligations. Inquiries
         that never became jobs are kept for a reasonable period and then
         cleared.
       </p>

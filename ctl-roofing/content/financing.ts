@@ -8,7 +8,7 @@ import type { CtaCopy, Faq, FinanceOffer, PageMeta, Photo } from "./types";
  *  `offers` below. There is no fallback rate, no "typical" APR and no
  *  illustrative example — with `offers: []` the estimator renders the
  *  pending panel instead of a payment. Do not add an offer until the
- *  lender's real terms are in hand; a monthly payment on this page is a
+ *  lender’s real terms are in hand; a monthly payment on this page is a
  *  quote a customer will hold you to.
  * ════════════════════════════════════════════════════════════════════
  */
@@ -60,11 +60,11 @@ export const financing = {
       },
       {
         title: "Beating a deductible timing problem",
-        body: "Insurance pays on its own schedule. Financing can bridge the gap so the work starts when the weather allows rather than when the cheque clears.",
+        body: "Insurance pays on its own schedule. Financing can bridge the gap so the work starts when the weather allows rather than when the check clears.",
       },
       {
         title: "Doing the whole scope at once",
-        body: "Roof, siding and windows in one mobilisation costs less than three visits, and gets one consistent set of flashing details.",
+        body: "Roof, siding and windows in one mobilization costs less than three visits, and gets one consistent set of flashing details.",
       },
     ],
   },
@@ -89,7 +89,7 @@ export const financing = {
     },
     {
       q: "Can financing cover a whole renovation, not just a roof?",
-      a: "Talk to us about the full scope. What a lender will cover is the lender's decision, and it is worth asking before splitting a project up.",
+      a: "Talk to us about the full scope. What a lender will cover is the lender’s decision, and it is worth asking before splitting a project up.",
     },
   ] satisfies Faq[],
 

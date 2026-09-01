@@ -14,8 +14,8 @@ import { client } from "@/client.config";
 
 /**
  * Band order is the sales conversation in order: what CTL does, the
- * product that needs the longest explanation, how a job runs, what it's
- * built from, who's doing it, proof, and only then the ask.
+ * product that needs the longest explanation, how a job runs, what it’s
+ * built from, who’s doing it, proof, and only then the ask.
  *
  * Every band carries its own way onward — a service card goes to that
  * service, the storm strip to the claims page — so a visitor never has

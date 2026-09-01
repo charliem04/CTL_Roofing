@@ -3,7 +3,7 @@
  * rather than hidden behind an accordion that has to be fought with on
  * a phone. The first one starts open; the rest are one tap away, and
  * they are real <details> elements, so find-in-page and the keyboard
- * both work without any of this component's help.
+ * both work without any of this component’s help.
  *
  * Emits FAQPage structured data from the same array that renders the
  * list, so the two can never say different things.

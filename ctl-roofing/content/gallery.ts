@@ -10,8 +10,8 @@ import type { GalleryCategory, GalleryShot } from "./types";
  *  the "full gallery" could end up missing the photos on the home page.
  *
  *  Alt text describes what is actually visible in the frame. These are
- *  CTL's own job photographs — no stock, and nothing captioned as
- *  something it isn't.
+ *  CTL’s own job photographs — no stock, and nothing captioned as
+ *  something it isn’t.
  * ════════════════════════════════════════════════════════════════════
  */
 
@@ -142,7 +142,7 @@ export const gallery: GalleryShot[] = [
   },
   {
     src: "/ctl/gallery/shingle-aerial-finished.jpg",
-    alt: "Aerial view of a finished grey shingle roof on a brick home",
+    alt: "Aerial view of a finished gray shingle roof on a brick home",
     caption: "Finished from above",
     width: 1100,
     height: 619,
@@ -158,7 +158,7 @@ export const gallery: GalleryShot[] = [
   },
   {
     src: "/ctl/gallery/shingle-brick-ranch.jpg",
-    alt: "Brick ranch home with a completed shingle roof and mature planting out front",
+    alt: "Brick ranch home with a completed shingle roof and mature landscaping out front",
     caption: "Brick ranch, done",
     width: 1100,
     height: 825,
@@ -166,7 +166,7 @@ export const gallery: GalleryShot[] = [
   },
   {
     src: "/ctl/gallery/shingle-crew-install.jpg",
-    alt: "Crew laying shingles across the front slope of a single-storey brick home",
+    alt: "Crew laying shingles across the front slope of a single-story brick home",
     caption: "Laying the front slope",
     width: 1100,
     height: 508,
@@ -198,8 +198,8 @@ export const gallery: GalleryShot[] = [
   },
   {
     src: "/ctl/gallery/shingle-two-story.jpg",
-    alt: "Two-storey brick home with a finished shingle roof",
-    caption: "Two storeys, finished",
+    alt: "Two-story brick home with a finished shingle roof",
+    caption: "Two stories, finished",
     width: 1100,
     height: 733,
     category: "roofing",
@@ -275,7 +275,7 @@ export const gallery: GalleryShot[] = [
   },
   {
     src: "/ctl/gallery/porch-wood-columns.jpg",
-    alt: "Front porch with stained wood columns on a white weatherboard home",
+    alt: "Covered patio across the back of a white lap-sided home, new wood posts carrying the roof over a fresh slab",
     caption: "Porch columns",
     width: 1100,
     height: 825,
@@ -283,7 +283,7 @@ export const gallery: GalleryShot[] = [
   },
   {
     src: "/ctl/gallery/sunroom-exterior.jpg",
-    alt: "Enclosed sunroom on the side of a brick home, new windows all round",
+    alt: "Enclosed sunroom on the side of a brick home, new windows all around",
     caption: "Sunroom",
     width: 1100,
     height: 825,
@@ -320,7 +320,7 @@ export const gallery: GalleryShot[] = [
   },
   {
     src: "/ctl/gallery/interior-new-windows.jpg",
-    alt: "Room with newly fitted windows above an exposed brick wall",
+    alt: "Room with newly installed windows above an exposed brick wall",
     caption: "New windows in",
     width: 1100,
     height: 825,

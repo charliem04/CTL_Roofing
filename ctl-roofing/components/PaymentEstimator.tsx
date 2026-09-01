@@ -129,7 +129,7 @@ export function PaymentEstimator({
       <p className="mt-5 text-sm text-ink-faint">
         An estimate, not an offer. The figures use the terms shown and assume
         the full project cost is financed with nothing down. What you are
-        actually offered depends on the lender's decision.
+        actually offered depends on the lender’s decision.
       </p>
     </div>
   );

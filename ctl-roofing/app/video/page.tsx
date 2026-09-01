@@ -65,7 +65,7 @@ export default function VideoPage() {
                   className="w-full rounded border border-line bg-surface-deep"
                 >
                   <source src={c.src} type="video/mp4" />
-                  Your browser can&apos;t play this video.{" "}
+                  Your browser can’t play this video.{" "}
                   <a href={c.src}>Download it instead</a>.
                 </video>
 
@@ -94,7 +94,7 @@ export default function VideoPage() {
               >
                 photo gallery
               </a>{" "}
-              has forty jobs in it.
+              has forty photographs in it.
             </p>
           </Reveal>
         </div>

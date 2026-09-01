@@ -37,7 +37,7 @@ export type Faq = {
   a: string;
 };
 
-/** The CTA band that closes every page, in that page's own words. */
+/** The CTA band that closes every page, in that page’s own words. */
 export type CtaCopy = {
   heading: string;
   body: string;
@@ -56,7 +56,7 @@ export type PageMeta = {
  * obviously-unfinished panel rather than filled with invented copy.
  */
 export type PendingContent = {
-  /** What is missing, in the client's language */
+  /** What is missing, in the client’s language */
   needs: string;
   /** Who has to supply it */
   from?: string;

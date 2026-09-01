@@ -17,7 +17,7 @@ const CLOSE_DELAY_MS = 160;
 
 /**
  * Did this element get focus from the keyboard rather than a pointer?
- * `:focus-visible` is the browser's own answer to that question, and
+ * `:focus-visible` is the browser’s own answer to that question, and
  * using it keeps the distinction consistent with the focus rings the
  * rest of the site draws. Older engines that reject the selector fall
  * back to "no", which costs a keyboard nicety and breaks nothing.
@@ -41,7 +41,7 @@ function isKeyboardFocus(el: EventTarget | null): boolean {
  * keyboard user inside a dropdown.
  *
  * Two details do most of the work in making them feel solid. The gap
- * between a trigger and its panel is padding on the panel's wrapper,
+ * between a trigger and its panel is padding on the panel’s wrapper,
  * not margin on the panel, so it is part of the hover target instead of
  * a dead strip the pointer falls through. And leaving starts a short
  * countdown rather than closing outright, so cutting a corner on the
@@ -104,7 +104,7 @@ export function Nav() {
       // does not drop a keyboard user at the top of the document.
       //
       // Focus first, close second, and the order matters: focusing the
-      // trigger fires the group's onFocus, which reopens the menu.
+      // trigger fires the group’s onFocus, which reopens the menu.
       // Closing afterwards wins, so Escape actually closes.
       const trigger = headerRef.current?.querySelector<HTMLButtonElement>(
         'button[aria-expanded="true"]'

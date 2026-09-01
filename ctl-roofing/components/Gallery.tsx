@@ -1,7 +1,7 @@
 "use client";
 
 /**
- * The home page's recent-work band: a curated handful, with the way
+ * The home page’s recent-work band: a curated handful, with the way
  * through to the full set. The photos, the tile and the lightbox all
  * come from elsewhere — this component is only the framing.
  */

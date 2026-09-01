@@ -45,7 +45,7 @@ export const reviewsPage = {
     path: "/reviews/",
   } satisfies PageMeta,
 
-  heading: "What the neighbours say",
+  heading: "What the neighbors say",
   lede: "The Google reviews below come straight off our listing as you load the page — not a screenshot, not a selection we curated. The Facebook recommendations are reproduced word for word from our page.",
 
   /**

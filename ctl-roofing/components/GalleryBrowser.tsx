@@ -10,7 +10,7 @@
  * worth opening before they open it.
  *
  * Each filtered view carries a link to the service it belongs to, which
- * is the actual point of a gallery on a contractor's site: someone
+ * is the actual point of a gallery on a contractor’s site: someone
  * looking at patio covers should be one click from the patio page.
  */
 import { useCallback, useMemo, useRef, useState } from "react";

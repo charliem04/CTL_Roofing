@@ -20,7 +20,7 @@ const spanClass = {
 export function ServiceCards({ className,
   /**
    * The cards are h3 under a section heading on the home page, but on
-   * the services hub they are the section's top-level content with no
+   * the services hub they are the section’s top-level content with no
    * h2 above them — h1 straight to h3 is a skipped level.
    */
   headingLevel = 3,

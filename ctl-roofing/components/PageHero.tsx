@@ -4,8 +4,8 @@ import { SeamMark } from "./SectionHead";
 
 /**
  * Interior page opener. Deliberately shorter than the home hero and
- * without its own call to action — the home page's job is to stop you,
- * an interior page's job is to answer the question you arrived with.
+ * without its own call to action — the home page’s job is to stop you,
+ * an interior page’s job is to answer the question you arrived with.
  * The photo sits beside the words rather than under them, so the fold
  * still carries copy on a phone.
  */

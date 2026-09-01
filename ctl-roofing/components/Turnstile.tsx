@@ -5,7 +5,7 @@ import Script from "next/script";
 /**
  * The Cloudflare Turnstile widget, such as it is.
  *
- * Turnstile's own script finds every `.cf-turnstile` on the page and
+ * Turnstile’s own script finds every `.cf-turnstile` on the page and
  * renders into it, then writes the token into a hidden input named
  * `cf-turnstile-response` inside that element — which means the token
  * arrives in `new FormData(form)` with no React state to manage. That

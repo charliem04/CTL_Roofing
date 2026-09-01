@@ -22,7 +22,7 @@ export default function NotFound() {
       <div className="section py-20">
         <p className="u-label text-accent">Error 404</p>
         <h1 className="mt-4 max-w-[18ch] text-display-2 text-ink-invert">
-          That page isn&apos;t here
+          That page isn’t here
         </h1>
         <p className="mt-4 max-w-[52ch] text-lg">
           It may have moved, or the link may be wrong. If you were trying to

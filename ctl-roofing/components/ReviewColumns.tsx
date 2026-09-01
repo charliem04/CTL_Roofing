@@ -12,7 +12,7 @@ import type { Review } from "@/content/types";
  * the short ones. Columns just flow, and `break-inside-avoid` keeps a
  * quote from splitting across two of them.
  *
- * `grid` (the home band's three): a fixed three-up. Column balancing
+ * `grid` (the home band’s three): a fixed three-up. Column balancing
  * needs more items than it has here — with three, one long review fills
  * a whole column, the other two stack beside it, and the third column
  * is left empty. A grid puts one in each.

@@ -12,7 +12,7 @@ import { towns } from "./towns";
  *  first. Until then this page does the honest version of the job:
  *  where CTL works, grouped the way people here actually describe it.
  *
- *  ⚠️ The town list came from CTL's own site and is unconfirmed —
+ *  ⚠️ The town list came from CTL’s own site and is unconfirmed —
  *  see `serviceArea` in content/pending.ts.
  * ════════════════════════════════════════════════════════════════════
  */
@@ -64,7 +64,7 @@ export const areas = {
     },
     {
       title: "Close enough to come back",
-      body: "A five-year labor warranty is only worth what the drive is. Everywhere on this page is inside a comfortable morning of the shop.",
+      body: "A 5-year labor warranty is only worth what the drive is. Everywhere on this page is within a comfortable morning’s drive of the shop.",
     },
     {
       title: "First on the road after weather",

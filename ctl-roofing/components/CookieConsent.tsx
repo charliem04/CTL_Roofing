@@ -30,7 +30,7 @@ export function CookieConsent() {
           cookies" would be easier and untrue. */}
       <p className="text-sm leading-relaxed">
         May we load privacy-friendly analytics to see which pages get used? It
-        sets no cookies and doesn&apos;t follow you to other sites. Decline and
+        sets no cookies and doesn’t follow you to other sites. Decline and
         the script never loads. Either way we remember your answer in this
         browser. See our{" "}
         <Link href="/privacy/" className="font-medium text-brand underline underline-offset-2">

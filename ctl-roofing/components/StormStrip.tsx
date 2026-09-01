@@ -3,7 +3,7 @@ import { MoreLink } from "./MoreLink";
 
 /**
  * A thin gold shelf directly under the hero — the one band that breaks
- * the page's section rhythm, because after weather this is the only
+ * the page’s section rhythm, because after weather this is the only
  * thing on the page some visitors need.
  */
 export function StormStrip() {

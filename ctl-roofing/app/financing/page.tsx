@@ -38,7 +38,7 @@ export default function FinancingPage() {
               heading="What would it cost a month?"
               lede={
                 termsReady
-                  ? "Move the slider to the size of the project. The figures come from our lender's current terms."
+                  ? "Move the slider to the size of the project. The figures come from our lender’s current terms."
                   : "It depends on two things: the size of the job, and the terms you qualify for. We can put both in front of you in one conversation."
               }
             />

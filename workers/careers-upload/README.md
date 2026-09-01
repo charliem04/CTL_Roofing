@@ -4,11 +4,18 @@ The only server-side code in the CTL project. It exists for one reason:
 a static export cannot receive a file, and `/careers/` needs to take a
 résumé.
 
-It accepts one multipart `POST`, validates it hard, writes the file to a
-**private** R2 bucket, and pings the office. There is no read path, no
-listing endpoint, and no way to get a file back out over HTTP —
-retrieving an application is done from the R2 dashboard or with
-`wrangler r2 object get`.
+One route, `POST /`. It takes a job application with a résumé,
+validates it hard, writes the file to a **private** R2 bucket and pings
+the office.
+
+Nothing else lives here. The contact form does not come through this
+Worker — it posts to Web3Forms directly, which needs no server and so
+should not have one in front of it. Keeping the Worker to one job means
+the site's revenue path cannot be taken down by a Worker deploy.
+
+There is no read path, no listing endpoint, and no way to get a file
+back out over HTTP — retrieving an application is done from the R2
+dashboard or with `wrangler r2 object get`.
 
 That is the important design decision. The bucket holds strangers'
 names, phone numbers and CVs, so the failure mode worth engineering out

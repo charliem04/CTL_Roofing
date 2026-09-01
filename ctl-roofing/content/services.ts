@@ -81,7 +81,7 @@ export const services: ServicePage[] = [
         heading: "What goes on before the roof",
         body: [
           "The visible roof is the last layer. Underneath it sits the decking, the underlayment and the flashing details — and those are what decide whether the roof lasts its rated life or leaks in five years.",
-          "A high-temperature self-adhered underlayment goes down first, because the best roofing systems are built from the deck up. If the deck is soft, rotten or under-nailed, that gets fixed before anything goes over it. You see the decking before it's covered.",
+          "A high-temperature self-adhered underlayment goes down first, because the best roofing systems are built from the deck up. If the deck is soft, rotten or under-nailed, that gets fixed before anything goes over it. You see the decking before it’s covered.",
         ],
       },
       {
@@ -161,7 +161,7 @@ export const services: ServicePage[] = [
       {
         heading: "Restoration runs on a clock",
         body: [
-          "After fire or flood, the sequence matters more than the finish. Water has to come out, the structure has to dry, and what cannot be dried has to come out before anything is closed back up. Skipping that is how a rebuilt wall grows mould behind new paint.",
+          "After fire or flood, the sequence matters more than the finish. Water has to come out, the structure has to dry, and what cannot be dried has to come out before anything is closed back up. Skipping that is how a rebuilt wall grows mold behind new paint.",
           "The same production team that runs a roof replacement runs a restoration, with the same written scope and the same office staff keeping permits, invoices and documents on file — which matters when an insurer asks for them a year later.",
         ],
       },
@@ -169,7 +169,7 @@ export const services: ServicePage[] = [
         heading: "While the exterior is open",
         body: [
           "A siding or window job is the cheapest time to fix what is behind them. Wall sheathing, flashing at windows and doors, and the water management details around them are only accessible once the old material is off.",
-          "If you are already replacing the roof, doing the exterior in the same run saves a second mobilisation and gets one set of flashing details done consistently.",
+          "If you are already replacing the roof, doing the exterior in the same run saves a second mobilization and gets one set of flashing details done consistently.",
         ],
       },
     ],
@@ -279,7 +279,7 @@ export const services: ServicePage[] = [
       "Tarping and leak stop, dry-out, handyman work, and full-scope roof evaluations.",
     photo: {
       src: "/ctl/emergency-tearoff.jpg",
-      alt: "A CTL crew tearing off a large brick home's roof with tarps laid over the landscaping below",
+      alt: "A CTL crew tearing off a large brick home’s roof with tarps laid over the landscaping below",
       width: 1200,
       height: 554,
     },
@@ -331,7 +331,7 @@ export const services: ServicePage[] = [
       },
       {
         q: "Will a tarp hold until the repair?",
-        a: "A properly installed tarp buys time, not a season. It is there to stop the loss growing while the scope, the claim or the materials get sorted.",
+        a: "A properly installed tarp buys time, not a season. It is there to stop the loss growing while the scope, the claim or the materials get sorted out.",
       },
     ],
     cta: {
@@ -347,7 +347,7 @@ export const services: ServicePage[] = [
     meta: {
       title: "Commercial Roofing — TPO, PVC, Modified Bitumen & Coatings",
       description:
-        "Commercial roofing across Acadiana: modified bitumen, TPO and PVC, standing seam and exposed fastener metal, silicone coatings, plus repairs and maintenance programmes.",
+        "Commercial roofing across Acadiana: modified bitumen, TPO and PVC, standing seam and exposed fastener metal, silicone coatings, plus repairs and maintenance programs.",
       path: "/services/commercial/",
     },
     heading: "Commercial",
@@ -395,7 +395,7 @@ export const services: ServicePage[] = [
     ],
     faqs: [
       {
-        q: "Do you do maintenance programmes, not just replacements?",
+        q: "Do you do maintenance programs, not just replacements?",
         a: "Repairs and maintenance are a standing part of the commercial work. On a low-slope roof, scheduled attention to seams, drains and penetrations is most of what decides how long the membrane lasts.",
       },
       {
@@ -408,7 +408,7 @@ export const services: ServicePage[] = [
       },
     ],
     cta: {
-      heading: "Get the building's roof on paper",
+      heading: "Get the building’s roof on paper",
       body: "An evaluation gives you condition, remaining life and a written scope — the three things a budget conversation needs.",
     },
   },

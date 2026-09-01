@@ -8,7 +8,7 @@ import { CtaBand } from "@/components/CtaBand";
 const meta = {
   title: "Our Work — Roofing, Metal, Patios & Remodels in Acadiana",
   description:
-    "Photographs of CTL Pro Construction's own jobs across Acadiana: shingle and standing seam metal roofs, tear-offs, storm response, patio covers and interior remodels.",
+    "Photographs of CTL Pro Construction’s own jobs across Acadiana: shingle and standing seam metal roofs, tear-offs, storm response, patio covers and interior remodels.",
   path: "/gallery/",
 };
 
@@ -33,7 +33,7 @@ export default function GalleryPage() {
       <PageHero
         path={meta.path}
         heading="Recent work"
-        lede="Every photograph here is a CTL job. Roofs, patios, interiors and full renovations across Acadiana and South Louisiana — filter by the kind of work you are weighing up."
+        lede="Every photograph here is a CTL job. Roofs, patios, interiors and full renovations across Acadiana and South Louisiana — filter by the kind of work you are weighing."
         photo={shots[0]}
       />
 
@@ -46,7 +46,7 @@ export default function GalleryPage() {
       <CtaBand
         cta={{
           heading: "Want this on your house?",
-          body: "Start with the free roof and property assessment. We'll look at what you have, tell you what it needs, and put a written scope behind it.",
+          body: "Start with the free roof and property assessment. We’ll look at what you have, tell you what it needs, and put a written scope behind it.",
         }}
       />
 

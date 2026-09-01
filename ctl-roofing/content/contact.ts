@@ -9,7 +9,7 @@ export const contactPage = {
   } satisfies PageMeta,
 
   heading: "Talk to us",
-  lede: "Three ways in, and they all end the same place: someone from CTL standing on your roof telling you what is actually going on with it.",
+  lede: "Every way in ends the same place: someone from CTL standing on your roof telling you what is actually going on with it.",
 
   photo: {
     src: "/ctl/office.jpg",
@@ -20,7 +20,7 @@ export const contactPage = {
 
   booking: {
     heading: "Pick your own time",
-    lede: "The assessment slots are on the calendar. Choose one and we'll confirm by text — no phone tag.",
+    lede: "The assessment slots are on the calendar. Choose one and we’ll confirm by text — no phone tag.",
   },
 
   cta: {

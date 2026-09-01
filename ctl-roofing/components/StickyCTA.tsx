@@ -6,7 +6,7 @@
  * Traffic here is mostly mobile and often urgent, and those three are
  * genuinely different intents — call when water is coming in, text when
  * it can wait but typing is easier, book when the decision is already
- * made. Hidden at lg, where the header's own call and assessment
+ * made. Hidden at lg, where the header’s own call and assessment
  * buttons are on screen anyway.
  */
 import { client } from "@/client.config";

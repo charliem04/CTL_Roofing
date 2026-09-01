@@ -5,7 +5,7 @@ import { ServiceCards } from "./ServiceCards";
 import { MoreLink } from "./MoreLink";
 
 /**
- * The home page's services band. The grid itself lives in
+ * The home page’s services band. The grid itself lives in
  * <ServiceCards> and is shared with the services hub; this component is
  * just the framing and the way out of it.
  */

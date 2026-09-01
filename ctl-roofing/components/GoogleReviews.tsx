@@ -99,7 +99,7 @@ export function GoogleReviews({ limit = 3 }: { limit?: number } = {}) {
                 &ldquo;{r.text}&rdquo;
               </blockquote>
               {/* Author name, author photo and a link back to the review
-                  are all required attribution under Google's Places
+                  are all required attribution under Google’s Places
                   policy. Do not strip them for a tidier card. */}
               <figcaption className="mt-4 flex items-center gap-2.5">
                 {r.authorPhoto && (

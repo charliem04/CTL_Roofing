@@ -5,7 +5,7 @@ import { btn } from "./Button";
 import { MoreLink } from "./MoreLink";
 
 /**
- * "Committed to local" is the company's stated value and the line on
+ * "Committed to local" is the company’s stated value and the line on
  * the logo, so it gets stated plainly and then evidenced: the crew, the
  * owner, and the sixteen towns actually worked.
  */

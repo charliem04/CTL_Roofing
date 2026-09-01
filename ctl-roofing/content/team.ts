@@ -15,7 +15,7 @@ import type { CtaCopy, PageMeta, Photo } from "./types";
  *  chase a text fix breaks links for nothing.
  *
  *  Roles are absent on purpose. We were sent faces and names, not job
- *  titles, and a guessed title under a real person's face is the one
+ *  titles, and a guessed title under a real person’s face is the one
  *  thing this page must not do.
  *
  *  ⚠️ See `team` in content/pending.ts — roles are still outstanding.

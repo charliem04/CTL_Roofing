@@ -80,14 +80,14 @@ export const client = {
   calLink: "",
 
   /**
-   * Call tracking. Dynamic number insertion is the provider's own
+   * Call tracking. Dynamic number insertion is the provider’s own
    * script rewriting numbers in the page at runtime, so this is a URL,
    * not a number. Empty = every number on the site stays the real one
    * below, which is the correct state until a provider is chosen.
    * The script loads only after cookie consent, with the analytics.
    */
   tracking: {
-    dniScriptUrl: "", // TODO(client): e.g. CallRail's //cdn.callrail.com/companies/…/swap.js
+    dniScriptUrl: "", // TODO(client): e.g. CallRail’s //cdn.callrail.com/companies/…/swap.js
   },
 
   // ── Socials (empty string hides the link) ─────────────────────────
@@ -118,8 +118,8 @@ export const client = {
     heading: ["Built to last.", "Designed to impress."],
     pull: "Clean lines. No exposed fasteners. No unnecessary maintenance.",
     body: [
-      "A properly installed concealed-fastener standing seam roof can protect a home for decades with very little upkeep — one of the longest-lasting systems available. It isn't a roof you plan to replace in fifteen years.",
-      "What you can't see matters just as much. A high-temperature self-adhered underlayment goes down first, because the best roofing systems are built from the deck up, not just from the top down.",
+      "A properly installed concealed-fastener standing seam roof can protect a home for decades with very little upkeep — one of the longest-lasting systems available. It isn’t a roof you plan to replace in fifteen years.",
+      "What you can’t see matters just as much. A high-temperature self-adhered underlayment goes down first, because the best roofing systems are built from the deck up, not just from the top down.",
     ],
     specs: [
       { label: "Fasteners", value: "Concealed — nothing exposed to the weather" },
@@ -152,7 +152,7 @@ export const client = {
       },
       {
         title: "Final walkthrough",
-        body: "We walk the finished job with you and don't close it out until you're satisfied. Office staff keeps every payment, permit and document on file.",
+        body: "We walk the finished job with you and don’t close it out until you’re satisfied. Office staff keeps every payment, permit and document on file.",
       },
     ],
     promises: [
@@ -178,7 +178,7 @@ export const client = {
   // ── Manufacturers we install ──────────────────────────────────────
   brands: {
     heading: "What we build with",
-    lede: "We stock and install products with real manufacturer backing — the warranty is only as good as what's under it.",
+    lede: "We stock and install products with real manufacturer backing — the warranty is only as good as what’s under it.",
     items: [
       { name: "James Hardie", detail: "Fiber cement siding and trim" },
       { name: "ProVia", detail: "Doors, windows, siding, stone and roofing" },
@@ -202,8 +202,8 @@ export const client = {
 
   // ── About / local ─────────────────────────────────────────────────
   about: {
-    heading: "Committed to local isn't a slogan",
-    lede: "It's the core value the company runs on. We invest in the communities we serve, support local businesses, and do business with integrity and accountability. Being local means more than having a local address — it means being committed to the people who call Acadiana home.",
+    heading: "Committed to local isn’t a slogan",
+    lede: "It’s the core value the company runs on. We invest in the communities we serve, support local businesses, and do business with integrity and accountability. Being local means more than having a local address — it means being committed to the people who call Acadiana home.",
     photoPath: "/ctl/team.jpg",
     photoAlt: "The CTL Pro Construction team at their Lafayette office",
     owner: {
@@ -277,14 +277,14 @@ export const client = {
     testimonialsHeading: "Word travels",
     bookingHeading: "Book a time that works",
     bookingBlurb:
-      "Pick a slot and we'll confirm by text. Prefer to talk? Call or send the form below.",
+      "Pick a slot and we’ll confirm by text. Prefer to talk? Call or send the form below.",
     contactHeading: "Request an assessment",
     contactLede:
-      "Tell us where you are and what you're seeing. We'll call to set a time — usually the same business day.",
+      "Tell us where you are and what you’re seeing. We’ll call to set a time — usually the same business day.",
     contactSubmit: "Request my assessment",
     contactConfirmation:
-      "Got it. We'll call you at the number you gave to set a time for your free roof and property assessment.",
-    closingHeading: "Don't ignore that water spot on the ceiling",
+      "Got it. We’ll call you at the number you gave to set a time for your free roof and property assessment.",
+    closingHeading: "Don’t ignore that water spot on the ceiling",
     closingBody:
       "A stain is usually the symptom, not the problem. By the time water shows up inside, decking, insulation and framing may already be involved. Catch it early and save thousands.",
     footerBlurb:

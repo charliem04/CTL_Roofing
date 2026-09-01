@@ -66,7 +66,7 @@ export default function ServiceDetailPage({ params }: Params) {
 
       {/* Commercial has no commercial-job photography yet, and a
           residential photo standing in for one would be a lie. The page
-          reads fine without a gallery strip, so it simply doesn't have
+          reads fine without a gallery strip, so it simply doesn’t have
           one — this is only a reminder to us while the gap is open, and
           the whole section is compiled out of the built site. */}
       {service.slug === "commercial" &&

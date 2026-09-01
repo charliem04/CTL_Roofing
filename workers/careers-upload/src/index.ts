@@ -427,6 +427,10 @@ export default {
       return reject(`origin not allowed: ${origin ?? "(none)"}`, 403, origin, env);
     }
 
+    // One route. Both "/" and "/apply" reach it, because the site's
+    // NEXT_PUBLIC_CAREERS_ENDPOINT has been written both ways and a
+    // trailing path should not be the difference between a job
+    // application arriving and a 404.
     const limit = maxBytes(env);
     const declaredLength = Number.parseInt(
       request.headers.get("Content-Length") ?? "",

@@ -4,7 +4,7 @@ import type { CtaCopy, PageMeta } from "./types";
  * ════════════════════════════════════════════════════════════════════
  *  VIDEO
  *
- *  CTL's own footage, re-encoded for the web: H.264 at 540px wide with
+ *  CTL’s own footage, re-encoded for the web: H.264 at 540px wide with
  *  faststart, so it begins before it has finished downloading. Nothing
  *  autoplays and nothing preloads — a 10MB file has no business
  *  downloading itself because someone scrolled past it.
@@ -15,7 +15,7 @@ import type { CtaCopy, PageMeta } from "./types";
  *  before it can go anywhere near a page.
  *
  *  ⚠️ Descriptions here are written from what is visible in the frames.
- *  Titles in CTL's own words, and captions for accessibility, are
+ *  Titles in CTL’s own words, and captions for accessibility, are
  *  pending — see `videoDetail` in content/pending.ts.
  * ════════════════════════════════════════════════════════════════════
  */

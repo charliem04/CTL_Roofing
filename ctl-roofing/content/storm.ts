@@ -5,7 +5,7 @@ import type { CtaCopy, Faq, PageMeta, Photo } from "./types";
  *  STORM DAMAGE & INSURANCE CLAIMS
  *
  *  ⚠️ LEGAL CHECK BEFORE LAUNCH — in Louisiana, negotiating or settling
- *  a claim on a homeowner's behalf is public adjusting and requires a
+ *  a claim on a homeowner’s behalf is public adjusting and requires a
  *  licence (La. R.S. 22:1691 et seq.). This page is deliberately
  *  written so CTL documents, meets the adjuster on site, and scopes the
  *  repair, while the homeowner files and decides. Robert should confirm
@@ -20,7 +20,7 @@ export const storm = {
   meta: {
     title: "Storm Damage & Insurance Claims — What To Do First",
     description:
-      "What to do in the first 48 hours after storm damage in Acadiana, what an adjuster looks for on a roof, what CTL does during a claim, and what policies typically cover and don't.",
+      "What to do in the first 48 hours after storm damage in Acadiana, what an adjuster looks for on a roof, what CTL does during a claim, and what policies typically cover and don’t.",
     path: "/storm-damage/",
   } satisfies PageMeta,
 
@@ -53,7 +53,7 @@ export const storm = {
       },
       {
         title: "Open the claim yourself",
-        body: "Call your insurer or use their app, and write down the claim number, the adjuster's name and the date of loss. You open it, not a contractor — and be careful about signing anything that assigns your claim or your benefits to someone else.",
+        body: "Call your insurer or use their app, and write down the claim number, the adjuster’s name and the date of loss. You open it, not a contractor — and be careful about signing anything that assigns your claim or your benefits to someone else.",
       },
     ],
   },
@@ -91,14 +91,14 @@ export const storm = {
       {
         label: "Code upgrades",
         value:
-          "What current code requires that the old roof did not have. Whether that is payable depends on your policy's ordinance-or-law coverage.",
+          "What current code requires that the old roof did not have. Whether that is payable depends on your policy’s ordinance-or-law coverage.",
       },
     ],
   },
 
   /** The role boundary, stated plainly. */
   role: {
-    heading: "What we do — and what we don't",
+    heading: "What we do — and what we don’t",
     does: {
       label: "CTL does",
       items: [
@@ -113,7 +113,7 @@ export const storm = {
       label: "CTL does not",
       items: [
         "File the claim for you — you open it with your insurer",
-        "Negotiate or settle the claim on your behalf; in Louisiana that is public adjusting and requires a licence",
+        "Negotiate or settle the claim on your behalf; in Louisiana that is public adjusting and requires a license",
         "Ask you to sign over your claim or your insurance benefits",
         "Promise what your policy will pay before your insurer says so",
       ],

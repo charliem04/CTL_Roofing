@@ -17,10 +17,10 @@ export const metadata = pageMetadata(page.meta);
  * ── On the AggregateRating markup that is NOT on this page ──────────
  *
  * The obvious move here is a JSON-LD AggregateRating so the listing
- * shows stars in search. Don't add it.
+ * shows stars in search. Don’t add it.
  *
  * Google calls a review "self-serving" when it is about entity A and
- * sits on entity A's own website — including when it arrives through an
+ * sits on entity A’s own website — including when it arrives through an
  * embedded third-party widget, which is exactly what the band below is.
  * Since 2019 Google has not shown review snippets for self-serving
  * LocalBusiness or Organization markup, so the stars would not appear
@@ -28,7 +28,7 @@ export const metadata = pageMetadata(page.meta);
  * manual action, and those apply to the whole domain, not one page.
  *
  * The stars a searcher sees for CTL come from the Google Business
- * Profile, which is fed by the listing itself. This page's job is to
+ * Profile, which is fed by the listing itself. This page’s job is to
  * convert the visitor who already clicked, and it does that without
  * lying to a crawler.
  *
@@ -55,7 +55,7 @@ export default function ReviewsPage() {
         <div className="section">
           <SectionHead
             heading="On Google"
-            lede="Google shows the five most recent it considers most useful. The rest are one click away."
+            lede="Google shows the five it considers most useful. The rest are one click away."
           />
           {/* Every review the API returns — Google caps it at five. */}
           <GoogleReviews limit={5} />

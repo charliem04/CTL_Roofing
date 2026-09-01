@@ -8,6 +8,8 @@ import { Reveal } from "@/components/Reveal";
 import { CtaBand } from "@/components/CtaBand";
 import { CareersForm } from "@/components/CareersForm";
 import { Pending } from "@/components/Pending";
+import { MoreLink } from "@/components/MoreLink";
+import { btn } from "@/components/Button";
 
 const page = getCareersPage();
 
@@ -19,7 +21,7 @@ const page = getCareersPage();
  * lifts itself on switch-on.
  *
  * A live "apply here" form with no endpoint behind it would take
- * somebody's résumé and drop it. That is a worse failure than the page
+ * somebody’s résumé and drop it. That is a worse failure than the page
  * not existing, which is why the gate is the route and not a banner.
  */
 export const metadata = pageMetadata(page.meta, {
@@ -66,7 +68,7 @@ export default function CareersPage() {
             </div>
           ) : (
             <>
-              <SectionHead heading="What's open" />
+              <SectionHead heading="What’s open" />
               <ul className="mt-10 grid list-none gap-px border border-line bg-line p-0 md:grid-cols-2">
                 {roles.map((r, i) => (
                   <Reveal as="li" key={r.slug} delay={Math.min(i, 4) * 0.05} className="bg-surface p-7">
@@ -147,7 +149,28 @@ export default function CareersPage() {
         </div>
       </section>
 
-      <CtaBand cta={page.cta} />
+      {/* The one page that does not close on the assessment booking.
+          Somebody applying for a job has no use for "schedule a free
+          assessment", and the band’s default second button is the storm
+          line — which would sit directly under copy telling them to call
+          the office. */}
+      <CtaBand
+        cta={page.cta}
+        actions={
+          <>
+            <a href={`tel:${client.phoneHref}`} className={btn("gold")}>
+              Call {client.phone}
+            </a>
+            <MoreLink
+              href={`mailto:${client.email}`}
+              tone="deep"
+              className="ml-1 self-center"
+            >
+              Or email the office
+            </MoreLink>
+          </>
+        }
+      />
 
       {jsonLd.length > 0 && (
         <script

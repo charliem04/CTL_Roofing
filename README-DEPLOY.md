@@ -1,5 +1,9 @@
 # Go-Live Checklist — touch every item before a client site ships
 
+> For CTL specifically, `ctl-handover.html` in this directory is the
+> client-facing version of what is built and what is still needed.
+> Open it in a browser.
+
 Workflow per client: `git clone` → new repo → work through this list top
 to bottom → `npm run deploy`.
 

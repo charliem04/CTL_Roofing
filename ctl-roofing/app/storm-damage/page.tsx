@@ -162,7 +162,7 @@ export default function StormDamagePage() {
       <FaqList
         faqs={storm.faqs}
         heading="Storm and claim questions"
-        lede={`If water is coming in right now, stop reading and call the storm line on ${client.stormPhone}.`}
+        lede={`If water is coming in right now, stop reading and call the storm line at ${client.stormPhone}.`}
       />
 
       <CtaBand cta={storm.cta} />

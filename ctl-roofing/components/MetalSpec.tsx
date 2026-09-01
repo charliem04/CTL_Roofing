@@ -11,7 +11,7 @@ import { MoreLink } from "./MoreLink";
  * else competing for attention.
  *
  * Shared by the home page and the roofing page, which is why the anchor
- * lives here — the home band's "All roofing services" link lands on the
+ * lives here — the home band’s "All roofing services" link lands on the
  * same #metal id further into the site. `moreHref` is what distinguishes
  * the two: on the roofing page there is nowhere further to send anyone.
  */

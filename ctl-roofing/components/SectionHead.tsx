@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 import { Reveal } from "./Reveal";
 
 /**
- * The three ascending ribs are the site's one repeated mark: a standing
+ * The three ascending ribs are the site’s one repeated mark: a standing
  * seam panel seen end-on, taken from the roof CTL builds rather than
  * from an icon set. It opens every band and appears nowhere else.
  */

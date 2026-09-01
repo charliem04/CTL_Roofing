@@ -1,7 +1,7 @@
 "use client";
 
 /**
- * Calendly, embedded rather than linked — the plan's point being that
+ * Calendly, embedded rather than linked — the plan’s point being that
  * bouncing someone to calendly.com mid-decision loses the ones who were
  * only half sure.
  *
@@ -57,8 +57,8 @@ export function BookingEmbed() {
     );
   }
 
-  // An iframe rather than Calendly's widget script: same booking flow,
-  // no third-party JavaScript running in the page's own context.
+  // An iframe rather than Calendly’s widget script: same booking flow,
+  // no third-party JavaScript running in the page’s own context.
   const src = `${client.bookingUrl}${
     client.bookingUrl.includes("?") ? "&" : "?"
   }hide_gdpr_banner=1&background_color=ffffff&text_color=0b1233&primary_color=2d3581`;

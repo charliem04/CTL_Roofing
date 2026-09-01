@@ -43,7 +43,7 @@ export const pendingContent = {
   },
   financingTerms: {
     needs:
-      "The financing partner's name, the real terms (APR and available terms in months) and the prequalification link. The payment estimator stays switched off until these are real — a monthly figure on the site is a number a customer will hold you to.",
+      "The financing partner’s name, the real terms (APR and available terms in months) and the prequalification link. The payment estimator stays switched off until these are real — a monthly figure on the site is a number a customer will hold you to.",
     from: "Robert",
   },
   commercialProject: {
@@ -53,12 +53,12 @@ export const pendingContent = {
   },
   videoDetail: {
     needs:
-      "A working export of the second video — the file supplied is a 417KB truncated download that decodes one frame and stops. Plus titles in CTL's own words for each clip, and ideally captions, since the audio carries the whole message.",
+      "A working export of the second video — the file supplied is a 417KB truncated download that decodes one frame and stops. Plus titles in CTL’s own words for each clip, and ideally captions, since the audio carries the whole message.",
     from: "Robert",
   },
   careers: {
     needs:
-      "Whether CTL is hiring and for what — job titles, full time or seasonal, what each role actually does and the genuine minimum it needs. Also: an employment attorney's read of the six questions in content/careers.ts before the page goes live, because hiring questions carry real legal exposure. And the upload Worker deployed (workers/careers-upload) so the form has somewhere to put a résumé.",
+      "Whether CTL is hiring and for what — job titles, full time or seasonal, what each role actually does and the genuine minimum it needs. Also: an employment attorney’s read of the six questions in content/careers.ts before the page goes live, because hiring questions carry real legal exposure. And the upload Worker deployed (workers/careers-upload) so the form has somewhere to put a résumé.",
     from: "Robert",
   },
   serviceArea: {

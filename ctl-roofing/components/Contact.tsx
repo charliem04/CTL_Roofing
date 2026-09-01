@@ -4,11 +4,11 @@
  * The request sheet. Four fields and a note — an assessment request is
  * a phone call waiting to happen, not an intake questionnaire, so the
  * form asks only what a dispatcher needs to call back: who, what
- * number, which property, and what they're seeing.
+ * number, which property, and what they’re seeing.
  */
 import { useState, type FormEvent } from "react";
 import { client } from "@/client.config";
-import { submitContact } from "@/lib/submitContact";
+import { contactConfigured, submitContact } from "@/lib/submitContact";
 import { trackEvent } from "@/lib/tracking";
 import { Reveal } from "./Reveal";
 import { SectionHead } from "./SectionHead";
@@ -45,6 +45,9 @@ export function Contact() {
 
   async function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    // A slow network invites a second press, and a double-submitted
+    // enquiry is two calls to the same person from two people.
+    if (status === "sending") return;
     const missing = REQUIRED.filter((r) => !form[r.key].trim()).map((r) => r.key);
     setInvalid(missing);
     if (missing.length) {
@@ -198,6 +201,15 @@ export function Contact() {
               <button type="submit" disabled={status === "sending"} className={`mt-6 ${btn("gold")} disabled:cursor-not-allowed disabled:border-line disabled:bg-surface-alt disabled:text-ink-faint`}>
                 {status === "sending" ? "Sending…" : client.copy.contactSubmit}
               </button>
+
+              {process.env.NODE_ENV === "development" && !contactConfigured() && (
+                // Dev only. In production the form still fails loudly
+                // rather than swallowing a lead, but the visitor gets
+                // "call us", not a configuration note.
+                <p className="mt-3 font-mono text-[12px] uppercase tracking-[0.09em] text-danger">
+                  Dev: NEXT_PUBLIC_WEB3FORMS_KEY is unset — this form will refuse
+                </p>
+              )}
 
               {client.bookingUrl && (
                 <p className="mt-4 text-sm text-ink-faint">

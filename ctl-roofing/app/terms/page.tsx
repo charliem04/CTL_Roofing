@@ -13,7 +13,7 @@ export const metadata: Metadata = {
  * governs the job, and nothing a visitor reads here should be capable
  * of contradicting it.
  *
- * It is not legal advice. Have CTL's attorney read it before launch —
+ * It is not legal advice. Have CTL’s attorney read it before launch —
  * particularly the claims-role and limitation sections.
  */
 const EFFECTIVE = "August 30, 2026";
@@ -53,8 +53,8 @@ export default function TermsPage() {
         illustration produced from the terms shown beside it, assuming the
         whole project cost is financed with nothing down. It is not an offer
         of credit, not a prequalification, and not a promise of any rate.
-        What you are actually offered is the lender&apos;s decision, on the
-        lender&apos;s terms.
+        What you are actually offered is the lender’s decision, on the
+        lender’s terms.
       </p>
 
       <h2>Insurance claims</h2>
@@ -62,7 +62,7 @@ export default function TermsPage() {
         We document storm damage, meet your adjuster at the property, and
         provide a written repair scope. We do not file, negotiate or settle
         insurance claims on your behalf — in Louisiana that is public
-        adjusting and requires a licence we do not hold and do not claim to.
+        adjusting and requires a license we do not hold and do not claim to.
         Nothing on this site is legal advice or insurance advice, and nothing
         here predicts what your policy will pay. Your policy and your insurer
         decide that.

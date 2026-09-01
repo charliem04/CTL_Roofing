@@ -11,7 +11,7 @@ import type { CtaCopy, PageMeta } from "./types";
  *     opening is worse than an invented photograph: somebody rewrites
  *     a résumé for it.
  *
- *  2. THE QUESTIONS BELOW NEED AN EMPLOYMENT ATTORNEY'S EYE. Hiring
+ *  2. THE QUESTIONS BELOW NEED AN EMPLOYMENT ATTORNEY’S EYE. Hiring
  *     questions carry real legal exposure — what you may ask, and how
  *     you must phrase it, is not a design decision. These are written
  *     conservatively:
@@ -42,7 +42,7 @@ import type { CtaCopy, PageMeta } from "./types";
 export type Role = {
   slug: string;
   title: string;
-  /** "Full time", "Seasonal", "Sub-contract" — CTL's own words. */
+  /** "Full time", "Seasonal", "Sub-contract" — CTL’s own words. */
   basis: string;
   /** Where the work is, when it is not simply Acadiana. */
   location?: string;
@@ -73,7 +73,7 @@ export const careersPage = {
   } satisfies PageMeta,
 
   heading: "Work here",
-  lede: "We hire local and we keep people. If you can do the work and turn up when you said you would, we would rather hear from you than not.",
+  lede: "We hire local and we keep people. If you can do the work and show up when you said you would, we would rather hear from you than not.",
 
   /**
    * ⚠️ Empty until Robert says what CTL hires for and whether they are
@@ -124,7 +124,7 @@ export const careersPage = {
     },
     {
       id: "licence",
-      label: "Do you have a valid driver's licence?",
+      label: "Do you have a valid driver’s license?",
       kind: "choice",
       options: ["Yes", "No"],
       required: true,
@@ -147,7 +147,7 @@ export const careersPage = {
   /** Copy around the file field itself. */
   resumeLabel: "Your résumé",
   resumeHint:
-    "PDF or Word (.docx), up to 5MB. Older .doc files are not accepted — open it in Word and use Save As, PDF. If you do not have a résumé written up, attach anything that lists where you have worked; we are not marking it.",
+    "PDF or Word (.docx), up to 5MB. Older .doc files are not accepted — open it in Word and use Save As, PDF. If you do not have a résumé written up, attach anything that lists where you have worked; we are not grading it.",
 
   /** What happens next, so nobody is left wondering. */
   afterHeading: "What happens next",

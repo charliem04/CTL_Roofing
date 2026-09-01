@@ -8,11 +8,11 @@ import { ReviewColumns } from "./ReviewColumns";
 import { MoreLink } from "./MoreLink";
 
 /**
- * The home page's proof band, in preference order.
+ * The home page’s proof band, in preference order.
  *
  * 1. The live Google feed, when a Places key is configured. Whatever
  *    three Google returns first is what a visitor sees, and the number
- *    beside them is today's number.
+ *    beside them is today’s number.
  * 2. Otherwise the first three Facebook recommendations, which are real
  *    and already in the content — better than a bare link, and the
  *    reviews page below carries all ten.
@@ -20,7 +20,7 @@ import { MoreLink } from "./MoreLink";
  *
  * The three shown are the first three as stored, never the three that
  * flatter most. Reordering reviews by how good they make us look is the
- * behaviour the FTC's 2024 rule on testimonials exists to stop, and it
+ * behaviour the FTC’s 2024 rule on testimonials exists to stop, and it
  * is a bad trade anyway: a live rating with a count out-argues three
  * hand-picked paragraphs.
  *

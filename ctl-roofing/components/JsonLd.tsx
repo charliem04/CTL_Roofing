@@ -2,7 +2,7 @@ import { client } from "@/client.config";
 
 /**
  * LocalBusiness structured data, generated from client.config.ts.
- * Validate after launch with Google's Rich Results Test.
+ * Validate after launch with Google’s Rich Results Test.
  */
 export function JsonLd() {
   const data = {

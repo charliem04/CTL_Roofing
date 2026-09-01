@@ -9,6 +9,11 @@ import { isLive } from "@/lib/routes";
  * phase-2 page can be linked from everywhere it belongs today and
  * simply switch on when `live` flips in the route registry — no dead
  * links in the meantime, and no forgotten wiring later.
+ *
+ * That gate only makes sense for routes this site owns. Anything with a
+ * scheme — mailto:, tel:, an outside URL — is not in the registry and
+ * never will be, so gating it means the link silently disappears with
+ * no error anywhere. Those are passed straight through instead.
  */
 export function MoreLink({
   href,
@@ -21,10 +26,13 @@ export function MoreLink({
   tone?: "ink" | "deep";
   className?: string;
 }) {
+  // mailto:, tel:, https: — off-site, so the registry has no opinion.
+  const external = /^[a-z][a-z0-9+.-]*:/i.test(href) || href.startsWith("//");
   // Same-page anchors and the home page are always reachable; anything
   // else has to be a live route in the registry.
   const path = href.split("#")[0];
-  const reachable = path === "" || path === "/" || isLive(path);
+  const reachable =
+    external || path === "" || path === "/" || isLive(path);
   if (!reachable) return null;
 
   const colors =

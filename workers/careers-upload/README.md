@@ -33,7 +33,17 @@ npx wrangler secret put TURNSTILE_SECRET
 # a Slack incoming webhook, or the CRM — anything that takes JSON.
 npx wrangler secret put NOTIFY_WEBHOOK
 
+# Any long random string. This is what lets the bucket record "these
+# uploads came from one place" without recording where that place is.
+# Unset, no IP-derived value is stored at all.
+npx wrangler secret put IP_HASH_SALT
+
 npx wrangler deploy
+
+# NOT OPTIONAL. Applies the 365-day expiry to the bucket. Skip this and
+# applications accumulate forever, which makes the twelve months the
+# privacy policy promises untrue. See "Retention" below.
+npm run retention
 ```
 
 Then put the deployed URL in the site's `NEXT_PUBLIC_CAREERS_ENDPOINT`,
@@ -56,6 +66,7 @@ Secrets (`wrangler secret put`, never in the toml):
 |---|---|
 | `TURNSTILE_SECRET` | **Required.** Unset, the Worker refuses every upload (500) and tells applicants to email the office. The dev env opts out with `ALLOW_INSECURE_NO_CAPTCHA`; never set that on the deployed Worker. |
 | `NOTIFY_WEBHOOK` | Unset = the file is stored silently and only the Workers log knows. |
+| `IP_HASH_SALT` | Salt for the stored IP digest. Unset = nothing IP-derived is stored, which is safe but loses the "same source" signal. |
 
 ### Two configuration traps
 
@@ -105,6 +116,7 @@ goes to `wrangler tail`.
 npm run dev          # wrangler dev --env dev, port 8787
 npm run typecheck
 npm run tail         # production logs
+npm run retention    # applies the R2 expiry rule (see Retention)
 ```
 
 `--env dev` allows `http://localhost:3000` and `:4173` and uses a

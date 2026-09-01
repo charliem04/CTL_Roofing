@@ -19,6 +19,7 @@ import { existsSync } from "node:fs";
 import { createRequire } from "node:module";
 import { applyPreviewHeaders } from "./preview-headers.mjs";
 import { applyCsp } from "./csp.mjs";
+import { checkSeo } from "./seo.mjs";
 
 const require = createRequire(import.meta.url);
 
@@ -57,4 +58,4 @@ if (build.status !== 0) {
 
 // The CSP is generated for both builds — a preview that behaves
 // differently from production is a preview that proves less.
-process.exit(applyCsp() && applyPreviewHeaders() ? 0 : 1);
+process.exit(applyCsp() && checkSeo() && applyPreviewHeaders() ? 0 : 1);

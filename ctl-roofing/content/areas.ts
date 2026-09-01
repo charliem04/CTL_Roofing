@@ -40,9 +40,9 @@ export function townsByParish() {
 
 export const areas = {
   meta: {
-    title: "Areas We Serve — Roofing Across Acadiana & South Louisiana",
+    title: "Areas We Serve — Acadiana & South Louisiana",
     description:
-      "CTL Pro Construction works across Acadiana and South Louisiana — Lafayette, Broussard, Youngsville, New Iberia, Abbeville, Breaux Bridge and the parishes around them. Free roof and property assessment.",
+      "Roofing and construction across Acadiana and South Louisiana — Lafayette, Broussard, Youngsville, New Iberia, Abbeville, Breaux Bridge and more.",
     path: "/areas/",
   } satisfies PageMeta,
 

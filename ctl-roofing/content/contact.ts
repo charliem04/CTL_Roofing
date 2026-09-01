@@ -2,7 +2,7 @@ import type { CtaCopy, PageMeta, Photo } from "./types";
 
 export const contactPage = {
   meta: {
-    title: "Contact — Book A Free Roof & Property Assessment",
+    title: "Contact — Free Roof & Property Assessment",
     description:
       "Call, text or book a free roof and property assessment with CTL Pro Construction. Office and around-the-clock storm line, Lafayette showroom address and hours.",
     path: "/contact/",

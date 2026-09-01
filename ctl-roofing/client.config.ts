@@ -32,9 +32,9 @@ export const client = {
   // ── Domain / SEO ──────────────────────────────────────────────────
   siteUrl: "https://www.ctlpro.com", // no trailing slash
   metaTitle:
-    "CTL Roofing — Committed to Local | Roofing & Construction in Acadiana",
+    "CTL Roofing — Roofing & Construction in Acadiana",
   metaDescription:
-    "CTL Pro Construction is a Broussard-based roofing and construction company serving Acadiana and South Louisiana since 2019. Roof replacement, storm restoration, remodeling, patio covers and windows. Free roof and property assessment.",
+    "Broussard-based roofing and construction serving Acadiana since 2019. Roof replacement, storm restoration, remodeling and patio covers. Free assessment.",
   ogImagePath: "/ctl/og.jpg",
 
   // ── Contact ───────────────────────────────────────────────────────

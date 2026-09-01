@@ -4,11 +4,19 @@ The only server-side code in the CTL project. It exists for one reason:
 a static export cannot receive a file, and `/careers/` needs to take a
 résumé.
 
-It accepts one multipart `POST`, validates it hard, writes the file to a
-**private** R2 bucket, and pings the office. There is no read path, no
-listing endpoint, and no way to get a file back out over HTTP —
-retrieving an application is done from the R2 dashboard or with
-`wrangler r2 object get`.
+Two routes, one set of guards:
+
+| Route | What it does |
+|---|---|
+| `POST /` (or `/apply`) | Takes a job application with a résumé, validates it hard, writes the file to a **private** R2 bucket, pings the office. |
+| `POST /lead` | Takes a contact-form enquiry and forwards it to Web3Forms using a key held here as a secret, so it is not sitting in the site's JavaScript. |
+
+Both go through the same origin check, Turnstile verification, rate
+limit and field scrubbing.
+
+On the upload route there is no read path, no listing endpoint, and no
+way to get a file back out over HTTP — retrieving an application is done
+from the R2 dashboard or with `wrangler r2 object get`.
 
 That is the important design decision. The bucket holds strangers'
 names, phone numbers and CVs, so the failure mode worth engineering out
@@ -32,6 +40,10 @@ npx wrangler secret put TURNSTILE_SECRET
 # Where the "new application" notification goes. A Web3Forms endpoint,
 # a Slack incoming webhook, or the CRM — anything that takes JSON.
 npx wrangler secret put NOTIFY_WEBHOOK
+
+# The contact form's destination. Moving this key off the site and onto
+# the Worker is the point of the /lead route — see "The lead route".
+npx wrangler secret put WEB3FORMS_KEY
 
 # Any long random string. This is what lets the bucket record "these
 # uploads came from one place" without recording where that place is.
@@ -67,6 +79,8 @@ Secrets (`wrangler secret put`, never in the toml):
 | `TURNSTILE_SECRET` | **Required.** Unset, the Worker refuses every upload (500) and tells applicants to email the office. The dev env opts out with `ALLOW_INSECURE_NO_CAPTCHA`; never set that on the deployed Worker. |
 | `NOTIFY_WEBHOOK` | Unset = the file is stored silently and only the Workers log knows. |
 | `IP_HASH_SALT` | Salt for the stored IP digest. Unset = nothing IP-derived is stored, which is safe but loses the "same source" signal. |
+| `WEB3FORMS_KEY` | The contact form's destination inbox key, for `/lead`. Unset, `/lead` refuses and the visitor is told to phone. |
+| `LEAD_WEBHOOK_URL` | Optional CRM copy of each lead. Fired in parallel and never awaited, so a CRM outage cannot cost a lead. |
 
 ### Two configuration traps
 
@@ -121,6 +135,26 @@ npm run retention    # applies the R2 expiry rule (see Retention)
 
 `--env dev` allows `http://localhost:3000` and `:4173` and uses a
 separate `ctl-resumes-dev` bucket, simulated on disk by miniflare.
+
+## The lead route
+
+The contact form used to post straight to Web3Forms from the browser.
+That works, but the access key ships inside the site's JavaScript, so
+anyone can lift it and post to the office inbox — and the only thing in
+the way is a honeypot.
+
+`POST /lead` moves that key here as a secret and puts the enquiry behind
+Turnstile, the rate limit and the same field scrubbing as the upload
+route. Set `NEXT_PUBLIC_LEAD_ENDPOINT` in the site to `<worker-url>/lead`.
+
+**Then unset `NEXT_PUBLIC_WEB3FORMS_KEY` in the site build.** Next
+inlines every `NEXT_PUBLIC_*` value whether or not the branch reading it
+runs, so leaving it set means the key is still in the bundle and nothing
+has been gained. `next.config.mjs` fails the build if both are set
+rather than leaving that to memory.
+
+The site keeps the direct-to-Web3Forms path so leads can be taken before
+this Worker is deployed. It is a fallback, not a peer.
 
 ## Retention
 

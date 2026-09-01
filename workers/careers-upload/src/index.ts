@@ -71,6 +71,16 @@ export interface Env {
   /** Where the "new application" ping goes. Unset = no ping. */
   NOTIFY_WEBHOOK?: string;
   /**
+   * Web3Forms access key for the /lead route. A SECRET here rather than
+   * a public value in the site bundle — that is most of the point of
+   * routing the contact form through this Worker. Unset, /lead refuses.
+   */
+  WEB3FORMS_KEY?: string;
+  /** Override the Web3Forms endpoint. Rarely needed. */
+  WEB3FORMS_ENDPOINT?: string;
+  /** Optional CRM webhook for leads. Fired in parallel, never awaited. */
+  LEAD_WEBHOOK_URL?: string;
+  /**
    * Optional KV namespace. Used for two things: the per-IP backstop
    * limiter, and short-lived storage of the raw submitting IP (see
    * IP_RETENTION_DAYS).
@@ -193,6 +203,13 @@ function maxBytes(env: Env): number {
   const n = Number.parseInt(env.MAX_UPLOAD_BYTES ?? "", 10);
   return Number.isFinite(n) && n > 0 ? n : DEFAULT_MAX_BYTES;
 }
+
+/**
+ * The contact form carries no file, so it has no business sending
+ * megabytes. 64KB is generous for six text fields and means a junk
+ * body is refused before it is read rather than after.
+ */
+const MAX_LEAD_BYTES = 64 * 1024;
 
 /**
  * Collapse a submitted filename to something safe to put in a key.
@@ -405,6 +422,120 @@ async function rememberIp(key: string, ip: string, env: Env): Promise<void> {
   }
 }
 
+/* ── The lead route ────────────────────────────────────────────────── */
+
+/**
+ * The contact form's destination.
+ *
+ * It used to post straight to Web3Forms from the browser, which works
+ * but means the access key ships inside the site's JavaScript for
+ * anyone to lift and use. Routing it through here makes that key a
+ * secret and puts the enquiry behind the same origin check, Turnstile,
+ * rate limit and scrubbing that the résumé upload already had.
+ *
+ * The email is what must succeed; the CRM copy is fired in parallel and
+ * never awaited, so a CRM outage cannot cost CTL a lead.
+ */
+async function handleLead(
+  form: FormData,
+  origin: string | null,
+  env: Env
+): Promise<Response> {
+  const name = cleanText(form.get("name"), 120);
+  const phone = cleanText(form.get("phone"), 40);
+
+  if (!name || !phone) {
+    return reject(
+      "lead missing name or phone",
+      400,
+      origin,
+      env,
+      "Please give us a name and a phone number."
+    );
+  }
+
+  const fields: Record<string, string> = {
+    name,
+    phone,
+    email: cleanText(form.get("email"), 160),
+    address: cleanText(form.get("address"), 240),
+    service: cleanText(form.get("service"), 120),
+    urgency: cleanText(form.get("urgency"), 80),
+    message: cleanText(form.get("message"), 4000),
+  };
+  // Blank rows make a notification email harder to read, not easier.
+  for (const k of Object.keys(fields)) if (!fields[k]) delete fields[k];
+
+  const source = cleanText(form.get("source"), 300);
+  const meta: Record<string, string> = {
+    submittedAt: new Date().toISOString(),
+    // Only when we have one — an empty row is a blank line in the email.
+    ...(source ? { source } : {}),
+  };
+
+  if (env.LEAD_WEBHOOK_URL) {
+    // Deliberately not awaited.
+    void fetch(env.LEAD_WEBHOOK_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ ...fields, ...meta }),
+    }).catch((e) => console.error("[lead] CRM webhook failed:", e));
+  }
+
+  if (!env.WEB3FORMS_KEY) {
+    return reject(
+      "WEB3FORMS_KEY is not configured — the lead had nowhere to go",
+      500,
+      origin,
+      env,
+      "We couldn't send that. Please call us instead — we don't want to lose your request."
+    );
+  }
+
+  try {
+    const res = await fetch(
+      env.WEB3FORMS_ENDPOINT || "https://api.web3forms.com/submit",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({
+          access_key: env.WEB3FORMS_KEY,
+          subject: `Assessment request — ${name}`,
+          from_name: "ctlpro.com",
+          ...fields,
+          ...meta,
+        }),
+      }
+    );
+    // Web3Forms answers 200 with {success:false} for its own rejections,
+    // so the status alone is not the answer.
+    const data = (await res.json().catch(() => null)) as {
+      success?: boolean;
+    } | null;
+    if (!res.ok || data?.success === false) {
+      console.error("[lead] Web3Forms rejected:", res.status, data);
+      return reject(
+        "web3forms rejected the submission",
+        502,
+        origin,
+        env,
+        "We couldn't send that. Please call us instead — we don't want to lose your request."
+      );
+    }
+  } catch (e) {
+    console.error("[lead] Web3Forms threw:", e);
+    return reject(
+      "web3forms unreachable",
+      502,
+      origin,
+      env,
+      "We couldn't send that. Please call us instead — we don't want to lose your request."
+    );
+  }
+
+  return json({ ok: true }, 200, origin, env);
+}
+
 /* ── The handler ───────────────────────────────────────────────────── */
 
 export default {
@@ -427,18 +558,30 @@ export default {
       return reject(`origin not allowed: ${origin ?? "(none)"}`, 403, origin, env);
     }
 
-    const limit = maxBytes(env);
+    // Two routes, one set of guards. "/" stays the application route so
+    // an already-configured NEXT_PUBLIC_CAREERS_ENDPOINT keeps working.
+    let path = "/";
+    try {
+      path = new URL(request.url).pathname.replace(/\/+$/, "") || "/";
+    } catch {
+      /* keep the default */
+    }
+    const isLead = path === "/lead";
+
+    const limit = isLead ? MAX_LEAD_BYTES : maxBytes(env);
     const declaredLength = Number.parseInt(
       request.headers.get("Content-Length") ?? "",
       10
     );
     if (Number.isFinite(declaredLength) && declaredLength > limit) {
       return reject(
-        `content-length ${declaredLength} over ${limit}`,
+        `content-length ${declaredLength} over ${limit} on ${path}`,
         413,
         origin,
         env,
-        "That file is too large. Please send a résumé under 5MB."
+        isLead
+          ? "That message is too long. Please shorten it and try again."
+          : "That file is too large. Please send a résumé under 5MB."
       );
     }
 
@@ -449,7 +592,9 @@ export default {
         429,
         origin,
         env,
-        "Too many applications from this connection. Please try again later."
+        isLead
+          ? "Too many messages from this connection. Please call us instead."
+          : "Too many applications from this connection. Please try again later."
       );
     }
 
@@ -494,6 +639,9 @@ export default {
         "Applications are temporarily unavailable. Please email your résumé to the office."
       );
     }
+
+    // Everything above is shared. From here the two routes diverge.
+    if (isLead) return handleLead(form, origin, env);
 
     const name = cleanText(form.get("name"), 120);
     const phone = cleanText(form.get("phone"), 40);

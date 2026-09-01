@@ -63,6 +63,9 @@ ALLOW_INSECURE_NO_CAPTCHA = "true"
 IP_RETENTION_DAYS = "30"
 # Dev-only salt. The real one is a secret, never a var.
 IP_HASH_SALT = "dev-only-salt"
+# Dev-only: point the lead route at a local stub instead of Web3Forms.
+WEB3FORMS_KEY = "dev-stub-key"
+WEB3FORMS_ENDPOINT = "http://127.0.0.1:8999/submit"
 
 [[env.dev.r2_buckets]]
 binding = "RESUMES"

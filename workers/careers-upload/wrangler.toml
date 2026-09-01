@@ -18,9 +18,21 @@ ALLOWED_ORIGINS = "https://www.ctlpro.com,https://ctlpro.com"
 MAX_UPLOAD_BYTES = "5242880"   # 5 MB
 RATE_LIMIT_PER_HOUR = "5"
 
+# How long the raw submitting IP survives in KV. The résumé itself is
+# kept for 365 days by the R2 lifecycle rule (npm run retention); the
+# address that sent it is only useful for a few weeks of abuse
+# investigation, so it goes first. Requires the KV namespace below.
+IP_RETENTION_DAYS = "30"
+
 # ── Secrets — set with `wrangler secret put`, never in this file ─────
 #   wrangler secret put TURNSTILE_SECRET   <- REQUIRED
 #   wrangler secret put NOTIFY_WEBHOOK
+#   wrangler secret put IP_HASH_SALT       <- any long random string
+#
+# IP_HASH_SALT is what lets the bucket record "these uploads came from
+# one place" without recording where that place is. Unset, no
+# IP-derived value is stored on the object at all: an unsalted hash of
+# an IPv4 address is a lookup table away from being the address.
 #
 # TURNSTILE_SECRET is the only layer that tells a person from a script.
 # It is required: with it unset the Worker refuses every upload and
@@ -48,7 +60,16 @@ RATE_LIMIT_PER_HOUR = "50"
 # server. Never set this on the deployed Worker: it is the difference
 # between a gated endpoint and an open one.
 ALLOW_INSECURE_NO_CAPTCHA = "true"
+IP_RETENTION_DAYS = "30"
+# Dev-only salt. The real one is a secret, never a var.
+IP_HASH_SALT = "dev-only-salt"
 
 [[env.dev.r2_buckets]]
 binding = "RESUMES"
 bucket_name = "ctl-resumes-dev"
+
+# Local KV so the rate limiter and the short-lived raw-IP store are
+# actually exercised in dev rather than silently skipped.
+[[env.dev.kv_namespaces]]
+binding = "RATE_LIMIT"
+id = "careers-dev-kv"

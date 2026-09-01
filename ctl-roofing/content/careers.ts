@@ -24,6 +24,11 @@ import type { CtaCopy, PageMeta } from "./types";
  *         claim. Do not add any of those without advice.
  *     Conservative is not the same as cleared. Get them read.
  *
+ *  ⚠️ THE RETENTION NUMBER IN `after` IS A PROMISE. A rule on the R2
+ *  bucket enforces it (workers/careers-upload/scripts/set-retention.sh)
+ *  and the privacy policy repeats it. Change one and change all three,
+ *  or the page is telling applicants something untrue.
+ *
  *  ── HOW AN APPLICATION ACTUALLY TRAVELS ─────────────────────────────
  *
  *  A static export cannot receive a file, so the form posts to the
@@ -149,7 +154,7 @@ export const careersPage = {
   after: [
     "Someone in the office reads it — not a filter, a person.",
     "If it looks like a fit we call you, usually within a week.",
-    "If it is not a fit right now we keep it on file rather than deleting it, and we will call when something changes.",
+    "If it is not a fit right now we keep it on file for a year and call you if something opens up. After that it is deleted automatically — ask sooner and we will delete it sooner.",
   ],
 
   cta: {

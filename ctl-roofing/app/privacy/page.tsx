@@ -17,6 +17,20 @@ export const metadata: Metadata = {
  */
 const EFFECTIVE = "August 30, 2026";
 
+/*
+ * Job applications are deleted after this long, and an R2 lifecycle
+ * rule does the deleting rather than a person remembering to. Three
+ * places have to agree — change one, change all three:
+ *
+ *   1. this constant
+ *   2. RETENTION_DAYS in workers/careers-upload/src/index.ts
+ *   3. RETENTION_DAYS in workers/careers-upload/scripts/set-retention.sh
+ *
+ * Saying a number here that the bucket does not enforce is worse than
+ * saying nothing.
+ */
+const APPLICATION_RETENTION = "twelve months";
+
 export default function PrivacyPage() {
   return (
     <LegalPage title="Privacy Policy">
@@ -41,6 +55,13 @@ export default function PrivacyPage() {
         and whatever you tell us. If you book through the calendar, the
         scheduling provider collects whatever their booking form asks for.
       </p>
+      <p>
+        If you apply for a job, the application form asks for your name,
+        phone number, an optional email address, a few questions about the
+        work, and your résumé. That document is yours and it is the reason
+        the rest of this section exists — it usually contains more about you
+        than anything else this site collects.
+      </p>
 
       <h2>What we do with it</h2>
       <p>
@@ -64,6 +85,14 @@ export default function PrivacyPage() {
         not load until you either accept analytics or press the button on the
         booking panel — until then, nothing is sent to them. Once loaded, your
         use of the calendar is subject to Calendly&apos;s own privacy policy.
+      </p>
+      <p>
+        A job application does not go through a form service. The résumé is
+        uploaded straight into our own private storage on{" "}
+        <strong>Cloudflare R2</strong>, where only we can reach it — there is
+        no public address for those files and no way to request one. The
+        details you typed are emailed to the office alongside it so somebody
+        knows it arrived.
       </p>
       <p>
         The site is hosted on <strong>Cloudflare Pages</strong>, which keeps
@@ -102,12 +131,28 @@ export default function PrivacyPage() {
         that never became jobs are kept for a reasonable period and then
         cleared.
       </p>
+      <p>
+        <strong>Job applications are deleted after {APPLICATION_RETENTION}.</strong>{" "}
+        That is enforced automatically by a rule on the storage itself, not by
+        somebody remembering to tidy up, so it happens whether we think about
+        it or not. If you would rather we did not keep yours that long, say
+        so and we will delete it sooner.
+      </p>
+      <p>
+        We do not store the internet address your application was sent from
+        alongside it. What we keep on the file is a scrambled fingerprint of
+        it, which lets us tell that a burst of junk applications came from one
+        place without recording where that place is. The address itself is
+        held separately for thirty days and then deleted.
+      </p>
 
       <h2>Your choices</h2>
       <p>
         Ask us to correct or delete what we hold about you and we will, unless
-        we are required to keep it. Ask us to stop contacting you and we will
-        stop. Either way, write to {client.email} or call {client.phone}.
+        we are required to keep it. That includes a job application — ask and
+        the résumé goes, rather than waiting out the {APPLICATION_RETENTION}.
+        Ask us to stop contacting you and we will stop. Either way, write to{" "}
+        {client.email} or call {client.phone}.
       </p>
 
       <h2>Changes</h2>

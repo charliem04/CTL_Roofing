@@ -110,6 +110,28 @@ npm run tail         # production logs
 `--env dev` allows `http://localhost:3000` and `:4173` and uses a
 separate `ctl-resumes-dev` bucket, simulated on disk by miniflare.
 
+## Retention
+
+Applications are deleted after **365 days**, enforced by an R2 lifecycle
+rule rather than by anyone remembering:
+
+```sh
+npm run retention                                  # applies the rule
+npx wrangler r2 bucket lifecycle list ctl-resumes  # confirms it
+```
+
+Three places carry that number and all three must agree: `RETENTION_DAYS`
+in `src/index.ts`, `RETENTION_DAYS` in `scripts/set-retention.sh`, and
+`APPLICATION_RETENTION` in the site's `app/privacy/page.tsx`. Each stored
+object also carries a `retainUntil` date in its metadata, so an object
+says for itself when it should be gone.
+
+The submitting IP is deliberately on a shorter clock. The object gets a
+salted hash (`ipHash`) — enough to spot a burst from one source, useless
+for identifying anyone without the salt — while the raw address goes to
+KV under `srcip:<key>` with a 30-day TTL and expires on its own. Set
+`IP_HASH_SALT`, or nothing IP-derived is recorded at all.
+
 ## Reading applications
 
 ```sh
@@ -148,8 +170,11 @@ that do open them patched.
       the request has already reached the Worker and cost money; a WAF
       rule stops it before that.
 - [ ] Bucket confirmed private — no custom domain, no r2.dev URL.
-- [ ] A retention decision. These are job applications with personal
-      data in them; decide how long they are kept and set an R2 lifecycle
-      rule to match. The privacy policy should say the same number.
+- [ ] `IP_HASH_SALT` set. Without it no IP-derived value is stored at
+      all, which is safe but loses the "same source" signal.
+- [ ] `npm run retention` run against the real bucket, and
+      `wrangler r2 bucket lifecycle list ctl-resumes` showing the rule.
+      Until that is applied, applications accumulate forever and the
+      twelve months the privacy policy promises is not true.
 - [ ] `NOTIFY_WEBHOOK` set, and a test application actually arriving in
       the inbox somebody reads.

@@ -6,6 +6,7 @@
     "dev": "wrangler dev --env dev",
     "deploy": "wrangler deploy",
     "typecheck": "tsc --noEmit",
+    "retention": "bash scripts/set-retention.sh",
     "tail": "wrangler tail"
   },
   "devDependencies": {

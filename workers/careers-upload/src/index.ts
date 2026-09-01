@@ -70,14 +70,54 @@ export interface Env {
   ALLOW_INSECURE_NO_CAPTCHA?: string;
   /** Where the "new application" ping goes. Unset = no ping. */
   NOTIFY_WEBHOOK?: string;
-  /** Optional KV namespace for the per-IP backstop limiter. */
+  /**
+   * Optional KV namespace. Used for two things: the per-IP backstop
+   * limiter, and short-lived storage of the raw submitting IP (see
+   * IP_RETENTION_DAYS).
+   */
   RATE_LIMIT?: KVNamespace;
   /** Applications per IP per hour when RATE_LIMIT is bound. Default 5. */
   RATE_LIMIT_PER_HOUR?: string;
+  /**
+   * Secret salt for hashing the submitting IP. With this unset, NOTHING
+   * IP-derived is stored on the object — an unsalted hash of an IPv4
+   * address is trivially reversed (the whole space is 4 billion), so
+   * storing one would be pseudo-privacy rather than privacy.
+   */
+  IP_HASH_SALT?: string;
+  /**
+   * How long the raw IP survives in KV. Default 30 days — long enough
+   * to investigate a burst of abuse, far shorter than the résumé itself
+   * is kept. Requires RATE_LIMIT to be bound; without it the raw IP is
+   * simply never written down here at all.
+   */
+  IP_RETENTION_DAYS?: string;
 }
 
 const DEFAULT_MAX_BYTES = 5 * 1024 * 1024;
 const DEFAULT_RATE_PER_HOUR = 5;
+const DEFAULT_IP_RETENTION_DAYS = 30;
+
+/**
+ * How long an application is kept, in days.
+ *
+ * This Worker does not enforce it — an R2 lifecycle rule does, so the
+ * deletion happens whether or not anybody remembers. The constant is
+ * here so the three places that must agree can be checked against each
+ * other:
+ *
+ *   1. this value
+ *   2. the lifecycle rule, applied by `npm run retention`
+ *   3. the "How long we keep it" section of the privacy policy
+ *
+ * Change one and change all three, or the site is making a promise the
+ * bucket does not keep.
+ *
+ * NOT exported: the Workers runtime treats every named export of the
+ * entry module as a handler or binding and refuses to start with
+ * "Incorrect type for map entry 'RETENTION_DAYS'". Keep it local.
+ */
+const RETENTION_DAYS = 365;
 
 /** What a résumé is allowed to be, and how to recognise one for real. */
 const ALLOWED = [
@@ -318,6 +358,53 @@ async function overRateLimit(ip: string, env: Env): Promise<boolean> {
   return false;
 }
 
+/**
+ * A salted, truncated hash of the submitting IP.
+ *
+ * The raw address is not written to the object. What abuse
+ * investigation actually needs from the bucket is "did these twenty
+ * uploads come from one place", and a hash answers that. Blocking an
+ * address is done from Cloudflare's own logs and WAF, which is where
+ * the real IP belongs and where it ages out on Cloudflare's schedule.
+ *
+ * Returns "" when no salt is configured, and stores nothing rather than
+ * storing an unsalted hash — IPv4 is a four-billion-entry space, so an
+ * unsalted digest is a lookup table away from being the address itself.
+ */
+async function hashIp(ip: string, env: Env): Promise<string> {
+  if (!ip || !env.IP_HASH_SALT) return "";
+  const bytes = new TextEncoder().encode(`${env.IP_HASH_SALT}:${ip}`);
+  const digest = await crypto.subtle.digest("SHA-256", bytes);
+  return [...new Uint8Array(digest)]
+    .slice(0, 8)
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("");
+}
+
+/**
+ * Park the raw IP against the object key, on a short clock.
+ *
+ * This is the "drop the IP sooner than the file" half: the résumé lives
+ * for RETENTION_DAYS, the address that sent it lives for
+ * IP_RETENTION_DAYS. KV's expirationTtl does the deleting, so it happens
+ * whether or not anybody remembers. No KV bound means the raw IP is
+ * never recorded here at all, which is the safe direction to fail.
+ */
+async function rememberIp(key: string, ip: string, env: Env): Promise<void> {
+  if (!env.RATE_LIMIT || !ip) return;
+  const days =
+    Number.parseInt(env.IP_RETENTION_DAYS ?? "", 10) ||
+    DEFAULT_IP_RETENTION_DAYS;
+  try {
+    await env.RATE_LIMIT.put(`srcip:${key}`, ip, {
+      expirationTtl: Math.max(60, days * 86400),
+    });
+  } catch (e) {
+    // Never cost somebody their application over an audit breadcrumb.
+    console.error("[careers] could not record source IP:", e);
+  }
+}
+
 /* ── The handler ───────────────────────────────────────────────────── */
 
 export default {
@@ -481,6 +568,13 @@ export default {
       );
     }
 
+    const ipDigest = await hashIp(ip, env);
+    if (ip && !ipDigest) {
+      console.warn(
+        "[careers] IP_HASH_SALT is not set — storing no IP-derived value on the object."
+      );
+    }
+
     const now = new Date();
     const key = [
       "applications",
@@ -505,7 +599,13 @@ export default {
           role: asciiMeta(role),
           originalFilename: safeName(file.name),
           submittedAt: now.toISOString(),
-          ip: asciiMeta(ip),
+          // A salted digest, never the address. See hashIp().
+          ...(ipDigest ? { ipHash: ipDigest } : {}),
+          retainUntil: new Date(
+            now.getTime() + RETENTION_DAYS * 86400_000
+          )
+            .toISOString()
+            .slice(0, 10),
         },
       });
     } catch (e) {
@@ -521,6 +621,10 @@ export default {
         env
       );
     }
+
+    // The raw address goes to KV on a 30-day clock, not onto the object
+    // that is kept for a year. Failure here is logged and ignored.
+    await rememberIp(key, ip, env);
 
     // Tell the office. Never blocks the applicant: if the ping fails
     // the file is already safely in R2, and losing the notification is

@@ -78,9 +78,15 @@ npx wrangler login                 # opens a browser; needs a Cloudflare account
 npm run preview:deploy             # builds with NEXT_PUBLIC_PREVIEW=1 and pushes
 ```
 
-The first run asks to create the Pages project (`ctl-preview`); accept,
-and pick "Direct Upload". It prints a `*.pages.dev` URL — that is the
-link to send. Non-interactively (CI, or no browser), set
+The first run asks to create the Pages project (`ctl-preview`) — accept,
+and **enter `main` as the production branch**. Pages calls a deployment
+"production" (the clean `ctl-preview.pages.dev`) only when its branch
+matches the project's production branch; anything else gets a
+hash-prefixed preview URL. Wrangler infers the branch from git, so
+`--branch main` is pinned in the script and every deploy lands on the
+clean URL whatever branch you happen to be on.
+
+It prints a `*.pages.dev` URL — that is the link to send. Non-interactively (CI, or no browser), set
 `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` instead of logging
 in; the token needs the "Cloudflare Pages: Edit" permission.
 

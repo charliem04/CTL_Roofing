@@ -9,7 +9,7 @@
     "lint": "next lint",
     "deploy": "npm run build && npx wrangler pages deploy out --project-name ctl-roofing",
     "preview:build": "node scripts/preview-build.mjs",
-    "preview:deploy": "npm run preview:build && npx wrangler pages deploy out --project-name ctl-preview --commit-dirty=true",
+    "preview:deploy": "npm run preview:build && npx wrangler pages deploy out --project-name ctl-preview --branch main --commit-dirty=true",
     "check": "node scripts/check.mjs app components lib content client.config.ts"
   },
   "dependencies": {

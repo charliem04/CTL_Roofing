@@ -239,10 +239,42 @@
     color: var(--heading);
     word-break: break-word;
   }
+  ul.built .what a {
+    color: inherit;
+    text-decoration: none;
+    border-bottom: 1px solid var(--line);
+  }
+  ul.built .what a:hover,
+  ul.built .what a:focus-visible { border-bottom-color: currentColor; }
   ul.built .note { color: var(--text-faint); font-size: 14.5px; }
   @media (max-width: 620px) {
     ul.built li { grid-template-columns: minmax(0, 1fr) auto; }
     ul.built .note { grid-column: 1 / -1; }
+  }
+
+  /* ── The live link, in the header ───────────────────────────────── */
+  .live {
+    margin: 26px 0 0;
+    padding: 16px 18px;
+    border: 1px solid rgb(255 255 255 / 0.18);
+    border-left: 3px solid var(--gold);
+    background: rgb(255 255 255 / 0.05);
+    max-width: 62ch;
+  }
+  .live a {
+    display: block;
+    font-family: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+    font-size: 17px;
+    font-weight: 500;
+    color: var(--gold);
+    word-break: break-all;
+  }
+  .live span {
+    display: block;
+    margin-top: 7px;
+    font-size: 14px;
+    line-height: 1.55;
+    opacity: 0.82;
   }
 
   /* ── Tags. Gold is reserved for the things that need Robert ─────── */
@@ -392,10 +424,17 @@
       on the screen instead of a proposal describing one.
     </p>
 
+    <p class="live">
+      <a href="https://ctl-preview.pages.dev/">ctl-preview.pages.dev</a>
+      <span>Open it. Every page below links straight into it. This is a
+      temporary address for this conversation, not a published site —
+      it carries a banner saying so, search engines are kept off it, and
+      it comes down when we are done.</span>
+    </p>
     <dl class="meta mono">
       <div><dt>Prepared for</dt><dd>Robert LeBas</dd></div>
-      <div><dt>Status</dt><dd>Built, not deployed</dd></div>
-      <div><dt>Date</dt><dd>31 August 2026</dd></div>
+      <div><dt>Status</dt><dd>Built · preview live</dd></div>
+      <div><dt>Date</dt><dd>1 September 2026</dd></div>
     </dl>
   </div>
 </header>
@@ -425,25 +464,25 @@
 
       <div class="panel">
         <ul class="built">
-          <li><span class="what">/</span><span class="note">Home — hero, services, storm strip, gallery band, reviews, booking, contact form</span><span class="tag mono done">Finished</span></li>
-          <li><span class="what">/services/</span><span class="note">Hub for all five service lines</span><span class="tag mono done">Finished</span></li>
-          <li><span class="what">/services/roofing/</span><span class="note">Roofing — materials, process, warranty, FAQs</span><span class="tag mono done">Finished</span></li>
-          <li><span class="what">/services/remodeling-restoration/</span><span class="note">Remodeling &amp; restoration</span><span class="tag mono done">Finished</span></li>
-          <li><span class="what">/services/outdoor-living/</span><span class="note">Patios, decks, outdoor structures</span><span class="tag mono done">Finished</span></li>
-          <li><span class="what">/services/emergency-inspections/</span><span class="note">Emergency response and inspections</span><span class="tag mono done">Finished</span></li>
-          <li><span class="what">/services/commercial/</span><span class="note">Commercial roofing</span><span class="tag mono now">Needs a photo</span></li>
-          <li><span class="what">/storm-damage/</span><span class="note">Storm damage and the insurance claim process</span><span class="tag mono now">Needs a read</span></li>
-          <li><span class="what">/gallery/</span><span class="note">40 job photographs, five filters, lightbox</span><span class="tag mono done">Finished</span></li>
-          <li><span class="what">/video/</span><span class="note">Job walkthrough video</span><span class="tag mono now">Second file broken</span></li>
-          <li><span class="what">/team/</span><span class="note">Robert, plus eight crew headshots</span><span class="tag mono now">Needs job titles</span></li>
-          <li><span class="what">/reviews/</span><span class="note">Live Google reviews and ten Facebook recommendations</span><span class="tag mono now">Needs a Google key</span></li>
-          <li><span class="what">/areas/</span><span class="note">16 towns across 6 parishes</span><span class="tag mono done">Finished</span></li>
-          <li><span class="what">/financing/</span><span class="note">Financing options and a monthly payment estimator</span><span class="tag mono now">Needs real terms</span></li>
-          <li><span class="what">/contact/</span><span class="note">Assessment request form and booking</span><span class="tag mono now">Needs a form key</span></li>
-          <li><span class="what">/terms/</span><span class="note">Terms of service</span><span class="tag mono now">Needs a lawyer</span></li>
-          <li><span class="what">/privacy/</span><span class="note">Privacy policy</span><span class="tag mono now">Needs a lawyer</span></li>
-          <li><span class="what">/case-studies/</span><span class="note">Built and switched off — the page type is finished, waiting on projects to put in it</span><span class="tag mono now">Needs projects</span></li>
-          <li><span class="what">/careers/</span><span class="note">Built and switched off — application form, questionnaire and résumé upload all working</span><span class="tag mono now">Needs roles</span></li>
+          <li><span class="what"><a href="https://ctl-preview.pages.dev/">/</a></span><span class="note">Home — hero, services, storm strip, gallery band, reviews, booking, contact form</span><span class="tag mono done">Finished</span></li>
+          <li><span class="what"><a href="https://ctl-preview.pages.dev/services/">/services/</a></span><span class="note">Hub for all five service lines</span><span class="tag mono done">Finished</span></li>
+          <li><span class="what"><a href="https://ctl-preview.pages.dev/services/roofing/">/services/roofing/</a></span><span class="note">Roofing — materials, process, warranty, FAQs</span><span class="tag mono done">Finished</span></li>
+          <li><span class="what"><a href="https://ctl-preview.pages.dev/services/remodeling-restoration/">/services/remodeling-restoration/</a></span><span class="note">Remodeling &amp; restoration</span><span class="tag mono done">Finished</span></li>
+          <li><span class="what"><a href="https://ctl-preview.pages.dev/services/outdoor-living/">/services/outdoor-living/</a></span><span class="note">Patios, decks, outdoor structures</span><span class="tag mono done">Finished</span></li>
+          <li><span class="what"><a href="https://ctl-preview.pages.dev/services/emergency-inspections/">/services/emergency-inspections/</a></span><span class="note">Emergency response and inspections</span><span class="tag mono done">Finished</span></li>
+          <li><span class="what"><a href="https://ctl-preview.pages.dev/services/commercial/">/services/commercial/</a></span><span class="note">Commercial roofing</span><span class="tag mono now">Needs a photo</span></li>
+          <li><span class="what"><a href="https://ctl-preview.pages.dev/storm-damage/">/storm-damage/</a></span><span class="note">Storm damage and the insurance claim process</span><span class="tag mono now">Needs a read</span></li>
+          <li><span class="what"><a href="https://ctl-preview.pages.dev/gallery/">/gallery/</a></span><span class="note">40 job photographs, five filters, lightbox</span><span class="tag mono done">Finished</span></li>
+          <li><span class="what"><a href="https://ctl-preview.pages.dev/video/">/video/</a></span><span class="note">Job walkthrough video</span><span class="tag mono now">Second file broken</span></li>
+          <li><span class="what"><a href="https://ctl-preview.pages.dev/team/">/team/</a></span><span class="note">Robert, plus eight crew headshots</span><span class="tag mono now">Needs job titles</span></li>
+          <li><span class="what"><a href="https://ctl-preview.pages.dev/reviews/">/reviews/</a></span><span class="note">Live Google reviews and ten Facebook recommendations</span><span class="tag mono now">Needs a Google key</span></li>
+          <li><span class="what"><a href="https://ctl-preview.pages.dev/areas/">/areas/</a></span><span class="note">16 towns across 6 parishes</span><span class="tag mono done">Finished</span></li>
+          <li><span class="what"><a href="https://ctl-preview.pages.dev/financing/">/financing/</a></span><span class="note">Financing options and a monthly payment estimator</span><span class="tag mono now">Needs real terms</span></li>
+          <li><span class="what"><a href="https://ctl-preview.pages.dev/contact/">/contact/</a></span><span class="note">Assessment request form and booking</span><span class="tag mono now">Needs a form key</span></li>
+          <li><span class="what"><a href="https://ctl-preview.pages.dev/terms/">/terms/</a></span><span class="note">Terms of service</span><span class="tag mono now">Needs a lawyer</span></li>
+          <li><span class="what"><a href="https://ctl-preview.pages.dev/privacy/">/privacy/</a></span><span class="note">Privacy policy</span><span class="tag mono now">Needs a lawyer</span></li>
+          <li><span class="what"><a href="https://ctl-preview.pages.dev/case-studies/">/case-studies/</a></span><span class="note">Built and switched off — the page type is finished, waiting on projects to put in it</span><span class="tag mono now">Needs projects</span></li>
+          <li><span class="what"><a href="https://ctl-preview.pages.dev/careers/">/careers/</a></span><span class="note">Built and switched off — application form, questionnaire and résumé upload all working</span><span class="tag mono now">Needs roles</span></li>
         </ul>
       </div>
     </section>
@@ -855,11 +894,13 @@
           watching for the first week and then forgetting about.
         </p>
         <p>
-          <strong>The current site is untouched.</strong> Nothing has been
-          deployed, no DNS has been pointed anywhere, and ctlpro.com is
-          running exactly as it was. Going live is a deliberate, scheduled
-          step, and it should not happen before the redirect map in item 13
-          exists.
+          <strong>The current site is untouched.</strong> No DNS has been
+          pointed anywhere and ctlpro.com is running exactly as it was. The
+          preview address at the top of this document is a separate,
+          temporary copy for you to look at — search engines are kept off
+          it and it comes down when we are done. Going live on your own
+          domain is a deliberate, scheduled step, and it should not happen
+          before the redirect map in item 16 exists.
         </p>
       </div>
     </section>
@@ -867,7 +908,7 @@
     <!-- ── 6 ──────────────────────────────────────────────────────── -->
     <footer class="foot">
       <p>
-        Prepared by Charles Meyers · 31 August 2026 · Built for CTL Pro
+        Prepared by Charles Meyers · 1 September 2026 · Built for CTL Pro
         Construction LLC, 1605 Eraste Landry Road, Lafayette LA 70506. This
         document describes work completed on speculation; it is not an
         invoice, a contract, or an engagement.

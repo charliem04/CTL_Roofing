@@ -66,3 +66,47 @@ npx wrangler pages deploy out
 ```
 Then Cloudflare Pages → Custom domains → attach the client domain, and
 submit the sitemap (`{siteUrl}/sitemap.xml`) in Google Search Console.
+
+## Preview deploy — the pitch link, before there is a client
+
+For putting the site on a temporary URL to show it to somebody, while
+it is still a replica of a business that has not asked for it.
+
+```bash
+cd ctl-roofing
+npx wrangler login                 # opens a browser; needs a Cloudflare account
+npm run preview:deploy             # builds with NEXT_PUBLIC_PREVIEW=1 and pushes
+```
+
+The first run asks to create the Pages project (`ctl-preview`) — accept,
+and **enter `main` as the production branch**. Pages calls a deployment
+"production" (the clean `ctl-preview.pages.dev`) only when its branch
+matches the project's production branch; anything else gets a
+hash-prefixed preview URL. Wrangler infers the branch from git, so
+`--branch main` is pinned in the script and every deploy lands on the
+clean URL whatever branch you happen to be on.
+
+It prints a `*.pages.dev` URL — that is the link to send. Non-interactively (CI, or no browser), set
+`CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` instead of logging
+in; the token needs the "Cloudflare Pages: Edit" permission.
+
+`NEXT_PUBLIC_PREVIEW=1` is what makes that build safe to expose:
+
+| Layer | What it stops |
+|---|---|
+| Banner on every page, not dismissible | Somebody believing it is CTL's site and calling the number on it |
+| `noindex, nofollow` on every page | The replica competing with ctlpro.com in search |
+| `robots.txt` disallowing everything, no sitemap advertised | A well-behaved crawler before it fetches a page |
+| `X-Robots-Tag` response header | Images and other files a meta tag cannot reach |
+
+Do NOT set `NEXT_PUBLIC_WEB3FORMS_KEY` on a preview build. With no key
+the contact form refuses and tells the visitor to phone, which is the
+honest failure; with a key, a stranger's enquiry lands in CTL's inbox
+from a site CTL has never seen.
+
+**Take it down when the conversation ends.** Nothing here does that for
+you — `npx wrangler pages project delete ctl-preview`.
+
+When CTL says yes, this all goes away: deploy with `npm run deploy`
+(no preview flag), which restores the real robots.txt, the sitemap and
+the indexable pages, and drops the banner.

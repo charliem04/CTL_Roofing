@@ -5,7 +5,6 @@ import { btn } from "@/components/Button";
 
 export const metadata = {
   title: `Page not found | ${client.businessName}`,
-  robots: { index: false },
 };
 
 /**

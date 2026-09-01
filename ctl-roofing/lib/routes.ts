@@ -21,6 +21,15 @@ export type RouteNode = {
   children?: RouteNode[];
   /** Sitemap weight for live routes. */
   priority?: number;
+  /**
+   * A page that exists and is linked, but should not be indexed — the
+   * legal pages. It stays out of the sitemap AND sends noindex, from
+   * this one flag, because a sitemap entry is a request to index and
+   * listing a noindex page asks Google for two contradictory things.
+   * Search Console reports it as "Excluded by noindex", which is noise
+   * that hides real coverage problems.
+   */
+  noindex?: boolean;
 };
 
 const serviceChildren: RouteNode[] = getServices().map((s) => ({
@@ -72,8 +81,8 @@ export const nav: RouteNode[] = [
 /** Routes that exist but are not top-level nav items. */
 export const auxRoutes: RouteNode[] = [
   { href: "/storm-damage/", label: "Storm damage & insurance", live: true, priority: 0.9 },
-  { href: "/terms/", label: "Terms of service", live: true, priority: 0.2 },
-  { href: "/privacy/", label: "Privacy policy", live: true, priority: 0.2 },
+  { href: "/terms/", label: "Terms of service", live: true, noindex: true },
+  { href: "/privacy/", label: "Privacy policy", live: true, noindex: true },
 ];
 
 /**
@@ -95,14 +104,32 @@ export function liveChildren(node: RouteNode): RouteNode[] {
   return (node.children ?? []).filter((c) => c.live);
 }
 
-/** Every real page path, for the sitemap. Anchors and dead routes out. */
+/**
+ * Should this path be indexed? False for a route that is not built and
+ * for one flagged `noindex`. The pages read this for their own robots
+ * meta, so the tag and the sitemap can never disagree.
+ */
+export function isIndexable(href: string): boolean {
+  for (const node of [...nav, ...auxRoutes]) {
+    if (node.href === href) return node.live && !node.noindex;
+    const child = node.children?.find((c) => c.href === href);
+    if (child) return child.live && !child.noindex;
+  }
+  return false;
+}
+
+/**
+ * Every path the sitemap should list. Anchors, dead routes and
+ * noindex pages out — a sitemap is a request to index, so listing a
+ * page that refuses indexing asks for two opposite things at once.
+ */
 export function livePaths(): { path: string; priority: number }[] {
   const out: { path: string; priority: number }[] = [
     { path: "/", priority: 1 },
   ];
   const walk = (nodes: RouteNode[]) => {
     for (const n of nodes) {
-      if (n.live && !n.href.includes("#")) {
+      if (n.live && !n.noindex && !n.href.includes("#")) {
         out.push({ path: n.href, priority: n.priority ?? 0.5 });
       }
       if (n.children) walk(n.children);

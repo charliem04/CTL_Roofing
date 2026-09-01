@@ -1,10 +1,14 @@
 import type { Metadata } from "next";
 import { client } from "@/client.config";
+import { isIndexable } from "@/lib/routes";
 import { LegalPage } from "../legal";
+import { robotsFor } from "@/lib/meta";
 
 export const metadata: Metadata = {
   title: `Privacy Policy — ${client.businessName}`,
-  robots: { index: false },
+  // From the route registry, the same flag that keeps it out of the
+  // sitemap — so the tag and the sitemap cannot drift apart.
+  robots: robotsFor(isIndexable("/privacy/")),
 };
 
 /*

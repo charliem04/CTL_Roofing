@@ -10,7 +10,9 @@ import "@fontsource/ibm-plex-sans/latin-600";
 import "@fontsource/ibm-plex-mono/latin-500";
 import "./globals.css";
 import { client } from "@/client.config";
+import { IS_PREVIEW } from "@/lib/preview";
 import { JsonLd } from "@/components/JsonLd";
+import { PreviewBanner } from "@/components/PreviewBanner";
 import { UtilityBar } from "@/components/UtilityBar";
 import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/Footer";
@@ -23,6 +25,11 @@ import { InteractionTracking } from "@/components/InteractionTracking";
 // their own `metadata` export, built from lib/meta.ts.
 export const metadata: Metadata = {
   metadataBase: new URL(client.siteUrl),
+  // Belt and braces with the per-page noindex in lib/meta.ts, the
+  // preview robots.txt and the X-Robots-Tag header: a replica of a real
+  // business competing with that business in search is the expensive
+  // failure, and each of these can be missed on its own.
+  ...(IS_PREVIEW ? { robots: { index: false, follow: false } } : {}),
   title: client.metaTitle,
   description: client.metaDescription,
   alternates: { canonical: client.siteUrl },
@@ -47,6 +54,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
+        <PreviewBanner />
         <UtilityBar />
         <Nav />
         {/* Bottom padding clears the mobile Call | Text | Book bar. */}

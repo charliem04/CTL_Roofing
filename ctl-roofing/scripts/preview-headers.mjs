@@ -10,10 +10,13 @@
  * what a <meta> tag cannot: the PDFs, images and any non-HTML file
  * Google will happily index on its own.
  *
- * Runs only from `npm run preview:build`. A production build never
- * calls it, so out/_headers is exactly public/_headers there.
+ * Called by scripts/preview-build.mjs, and runnable on its own after a
+ * manual preview build. A production build never calls it, so
+ * out/_headers is exactly public/_headers there.
  */
 import { appendFileSync, existsSync, readFileSync } from "node:fs";
+import { fileURLToPath } from "node:url";
+import { resolve } from "node:path";
 
 const FILE = "out/_headers";
 const MARKER = "# ── preview build ──";
@@ -29,17 +32,26 @@ ${MARKER}
   X-Robots-Tag: noindex, nofollow, noarchive, nosnippet, noimageindex
 `;
 
-if (!existsSync(FILE)) {
-  console.error(
-    `[preview] ${FILE} does not exist — run the build first, and check that public/_headers is still there.`
-  );
-  process.exit(1);
+/** @returns true on success, false if there was nothing to write to. */
+export function applyPreviewHeaders() {
+  if (!existsSync(FILE)) {
+    console.error(
+      `[preview] ${FILE} does not exist — run the build first, and check that public/_headers is still there.`
+    );
+    return false;
+  }
+
+  if (readFileSync(FILE, "utf8").includes(MARKER)) {
+    console.log("[preview] headers already present, nothing to do");
+    return true;
+  }
+
+  appendFileSync(FILE, BLOCK);
+  console.log("[preview] X-Robots-Tag: noindex added to out/_headers");
+  return true;
 }
 
-if (readFileSync(FILE, "utf8").includes(MARKER)) {
-  console.log("[preview] headers already present, nothing to do");
-  process.exit(0);
+// Run when invoked directly, stay quiet when imported.
+if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+  process.exit(applyPreviewHeaders() ? 0 : 1);
 }
-
-appendFileSync(FILE, BLOCK);
-console.log("[preview] X-Robots-Tag: noindex added to out/_headers");

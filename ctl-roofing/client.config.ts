@@ -74,12 +74,6 @@ export const client = {
    */
   bookingUrl: "https://calendly.com/d/ct7p-3by-878/free-consultation",
   /**
-   * Cal.com inline embed ("username/event"). Left empty because this
-   * site books through the Calendly link above.
-   */
-  calLink: "",
-
-  /**
    * Call tracking. Dynamic number insertion is the provider’s own
    * script rewriting numbers in the page at runtime, so this is a URL,
    * not a number. Empty = every number on the site stays the real one

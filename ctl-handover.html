@@ -1,0 +1,880 @@
+<!doctype html>
+<!--
+  CTL PRO CONSTRUCTION — SITE HANDOVER
+
+  Open this file in any browser. It is self-contained apart from the
+  Google Fonts link below; offline it falls back to the stacks declared
+  alongside each face, which is a slightly plainer page and nothing
+  worse.
+
+  THIS FILE IS THE SOURCE OF TRUTH. The same document is also published
+  as a shareable link at
+  https://claude.ai/code/artifact/d2ccf3ec-9e6e-4d42-a7b0-c15a0dd7d81f
+  which is served as a fragment — the host injects its own doctype,
+  <head> and <body>. To republish after editing here, strip everything
+  from <!doctype html> down to <body> and the closing </body></html>,
+  and publish the remainder to that URL. Edit this file, not a copy of
+  the fragment, or the two will drift.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>CTL Pro Site Handover</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800&family=IBM+Plex+Mono:wght@500&family=IBM+Plex+Sans:wght@400;600&display=swap">
+
+<style>
+  /* Palette lifted from the CTL logo, same tokens the site itself uses:
+     indigo state outline, periwinkle wordmark panel, gold "Committed to
+     Local" bar. The neutral is biased blue rather than left grey. */
+  :root {
+    --ink: #0b1233;
+    --indigo: #2d3581;
+    --peri: #5160a6;
+    --gold: #f1cc47;
+    --gold-press: #d4a81f;
+
+    --ground: #edeff7;
+    --surface: #ffffff;
+    --surface-2: #f6f7fc;
+    --line: #dddfeb;
+    --line-strong: #c3c8de;
+
+    --text: #3c415c;
+    --text-faint: #6b7085;
+    --heading: var(--ink);
+
+    --measure: 64ch;
+  }
+
+  /* Default "system" setting stamps nothing on the root, so this is the
+     state most viewers land in. An explicit light choice must still beat
+     a dark OS, hence the :not() guard. */
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground: #080d24;
+      --surface: #101740;
+      --surface-2: #161e4c;
+      --line: #29315c;
+      --line-strong: #3c4573;
+      --text: #b8bdce;
+      --text-faint: #8990a8;
+      --heading: #ffffff;
+      --peri: #8d9ad4;
+      --indigo: #97a2dd;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --ground: #080d24;
+    --surface: #101740;
+    --surface-2: #161e4c;
+    --line: #29315c;
+    --line-strong: #3c4573;
+    --text: #b8bdce;
+    --text-faint: #8990a8;
+    --heading: #ffffff;
+    --peri: #8d9ad4;
+    --indigo: #97a2dd;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--text);
+    font-family: "IBM Plex Sans", -apple-system, "Segoe UI", sans-serif;
+    font-size: 16px;
+    line-height: 1.62;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: "Big Shoulders Display", "Arial Narrow", Impact, sans-serif;
+    color: var(--heading);
+    text-transform: uppercase;
+    letter-spacing: 0.005em;
+    text-wrap: balance;
+    margin: 0;
+  }
+
+  .mono {
+    font-family: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    font-variant-numeric: tabular-nums;
+  }
+
+  a { color: var(--indigo); }
+
+  :focus-visible {
+    outline: 2px solid var(--indigo);
+    outline-offset: 3px;
+    border-radius: 1px;
+  }
+
+  .wrap {
+    max-width: 940px;
+    margin: 0 auto;
+    padding: 0 clamp(18px, 4vw, 40px);
+  }
+
+  /* ── Seam mark: three ribs, the site's one repeated device ──────── */
+  .seam {
+    display: flex;
+    align-items: flex-end;
+    gap: 4px;
+    height: 24px;
+  }
+  .seam i { display: block; width: 4px; background: var(--gold); }
+  .seam i:nth-child(1) { height: 11px; }
+  .seam i:nth-child(2) { height: 17px; }
+  .seam i:nth-child(3) { height: 24px; }
+
+  /* ── Masthead ───────────────────────────────────────────────────── */
+  header.top {
+    background: var(--ink);
+    color: #b8bdce;
+    padding: clamp(34px, 6vw, 58px) 0 clamp(30px, 5vw, 48px);
+  }
+  header.top h1 {
+    color: #fff;
+    font-size: clamp(38px, 6.4vw, 68px);
+    line-height: 0.9;
+    font-weight: 800;
+    margin-top: 16px;
+    max-width: 18ch;
+  }
+  header.top h1 em { font-style: normal; color: var(--gold); display: block; }
+  header.top p {
+    max-width: var(--measure);
+    margin: 20px 0 0;
+    font-size: clamp(16px, 1.6vw, 18px);
+    color: #c6cbdb;
+  }
+  .kicker { color: #8990a8; }
+
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px 36px;
+    margin-top: 30px;
+    padding-top: 22px;
+    border-top: 1px solid rgba(233, 237, 250, 0.16);
+  }
+  .meta div { display: flex; flex-direction: column; gap: 2px; }
+  .meta dt { color: #8990a8; }
+  .meta dd { margin: 0; color: #fff; font-size: 15px; }
+
+  /* ── Status strip ───────────────────────────────────────────────── */
+  .status {
+    background: var(--gold);
+    color: var(--ink);
+  }
+  .status .wrap {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 34px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+  }
+  .status div { display: flex; align-items: baseline; gap: 8px; }
+  .status b {
+    font-family: "Big Shoulders Display", sans-serif;
+    font-size: 26px;
+    font-weight: 800;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+  .status span { font-size: 14px; color: rgba(11, 18, 51, 0.72); }
+
+  main { padding: clamp(40px, 6vw, 68px) 0 clamp(48px, 7vw, 80px); }
+
+  section + section { margin-top: clamp(38px, 5vw, 60px); }
+
+  .sec-head { margin-bottom: 26px; }
+  .sec-head h2 {
+    font-size: clamp(26px, 3.4vw, 38px);
+    font-weight: 800;
+    line-height: 0.95;
+    margin-top: 12px;
+  }
+  .sec-head p {
+    max-width: var(--measure);
+    margin: 12px 0 0;
+  }
+
+  /* ── Panel: the plain white card everything sits in ─────────────── */
+  .panel {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 2px;
+    padding: clamp(20px, 3vw, 28px);
+  }
+  .panel p { max-width: var(--measure); margin: 0 0 1em; }
+  .panel p:last-child { margin-bottom: 0; }
+  .panel strong { color: var(--heading); font-weight: 600; }
+
+  /* ── Page ledger ────────────────────────────────────────────────── */
+  ul.built { list-style: none; margin: 0; padding: 0; }
+  ul.built li {
+    display: grid;
+    grid-template-columns: minmax(0, 14rem) minmax(0, 1fr) auto;
+    gap: 4px 20px;
+    align-items: baseline;
+    padding: 13px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  ul.built li:first-child { padding-top: 0; }
+  ul.built li:last-child { border-bottom: 0; padding-bottom: 0; }
+  ul.built .what {
+    font-family: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+    font-size: 13px;
+    color: var(--heading);
+    word-break: break-word;
+  }
+  ul.built .note { color: var(--text-faint); font-size: 14.5px; }
+  @media (max-width: 620px) {
+    ul.built li { grid-template-columns: minmax(0, 1fr) auto; }
+    ul.built .note { grid-column: 1 / -1; }
+  }
+
+  /* ── Tags. Gold is reserved for the things that need Robert ─────── */
+  .tag {
+    justify-self: start;
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: 2px;
+    border: 1px solid var(--line-strong);
+    color: var(--text-faint);
+    white-space: nowrap;
+  }
+  .tag.done {
+    border-color: var(--peri);
+    color: var(--indigo);
+  }
+  .tag.now {
+    border-color: var(--gold-press);
+    background: rgba(241, 204, 71, 0.16);
+    color: var(--ink);
+  }
+  :root[data-theme="dark"] .tag.now { color: var(--gold); }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) .tag.now { color: var(--gold); }
+  }
+
+  /* ── Figures ────────────────────────────────────────────────────── */
+  .figs {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+    border-radius: 2px;
+    margin-bottom: 26px;
+  }
+  .figs div { background: var(--surface); padding: 18px 20px; }
+  .figs b {
+    display: block;
+    font-family: "Big Shoulders Display", sans-serif;
+    font-size: 38px;
+    font-weight: 800;
+    line-height: 1;
+    color: var(--indigo);
+    font-variant-numeric: tabular-nums;
+  }
+  .figs span { display: block; margin-top: 6px; color: var(--text-faint); }
+
+  /* ── The asks ───────────────────────────────────────────────────── */
+  .group + .group { margin-top: 30px; }
+  .group > h3 {
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 1.05;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--line-strong);
+  }
+  .group > h3 + p {
+    max-width: var(--measure);
+    margin: 10px 0 16px;
+    color: var(--text-faint);
+    font-size: 14.5px;
+  }
+
+  ol.asks { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; }
+
+  .ask {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 2px;
+    padding: 22px clamp(18px, 3vw, 26px);
+    display: grid;
+    grid-template-columns: 2.2rem 1fr;
+    gap: 4px 18px;
+    align-items: baseline;
+  }
+  .ask .n {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--peri);
+    font-variant-numeric: tabular-nums;
+    padding-top: 3px;
+  }
+  .ask h4 {
+    font-size: 21px;
+    font-weight: 700;
+    line-height: 1.05;
+    grid-column: 2;
+  }
+  .ask .body { grid-column: 2; }
+  .ask p { margin: 8px 0 0; max-width: var(--measure); }
+  .ask .why {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid var(--line);
+    color: var(--text-faint);
+    font-size: 14.5px;
+  }
+  .ask .why strong { color: var(--indigo); font-weight: 600; }
+  .ask .tag { grid-column: 2; margin-bottom: 2px; }
+
+  @media (max-width: 560px) {
+    .ask { grid-template-columns: 1fr; }
+    .ask h4, .ask .body, .ask .tag { grid-column: 1; }
+    .ask .n { padding-top: 0; }
+  }
+
+  /* ── Decisions ──────────────────────────────────────────────────── */
+  .decisions { display: grid; gap: 14px; }
+  @media (min-width: 760px) { .decisions { grid-template-columns: 1fr 1fr; } }
+
+  .confirm {
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--indigo);
+    border-radius: 2px;
+    padding: 22px clamp(18px, 3vw, 26px);
+  }
+  .confirm h3 { font-size: 20px; font-weight: 700; line-height: 1.1; }
+  .confirm p { margin: 10px 0 0; max-width: var(--measure); }
+
+  footer.foot {
+    border-top: 1px solid var(--line);
+    margin-top: clamp(40px, 6vw, 64px);
+    padding-top: 22px;
+    color: var(--text-faint);
+    font-size: 14px;
+  }
+  footer.foot p { max-width: 72ch; margin: 0; }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; }
+  }
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <span class="seam" aria-hidden="true"><i></i><i></i><i></i></span>
+    <p class="mono kicker" style="margin:14px 0 0">CTL Pro Construction LLC · Website rebuild</p>
+    <h1>A new site,<em>built on spec.</em></h1>
+    <p>
+      This is a complete, working replacement for ctlpro.com — nineteen
+      pages, built and tested. Nobody asked for it and nothing has been
+      invoiced. It exists so the conversation can start with something real
+      on the screen instead of a proposal describing one.
+    </p>
+
+    <dl class="meta mono">
+      <div><dt>Prepared for</dt><dd>Robert LeBas</dd></div>
+      <div><dt>Status</dt><dd>Built, not deployed</dd></div>
+      <div><dt>Date</dt><dd>31 August 2026</dd></div>
+    </dl>
+  </div>
+</header>
+
+<div class="status">
+  <div class="wrap">
+    <div><b>19</b><span>pages built</span></div>
+    <div><b>16</b><span>things needed from you</span></div>
+    <div><b>7</b><span>calls made on your behalf</span></div>
+    <div><b>0</b><span>invented photos, names or numbers</span></div>
+  </div>
+</div>
+
+<main>
+  <div class="wrap">
+
+    <!-- ── 1 ──────────────────────────────────────────────────────── -->
+    <section>
+      <div class="sec-head">
+        <span class="seam" aria-hidden="true"><i></i><i></i><i></i></span>
+        <h2>What is on it</h2>
+        <p>
+          Every page below is built and renders. The tag says whether it is
+          finished or whether it is waiting on something from your end.
+        </p>
+      </div>
+
+      <div class="panel">
+        <ul class="built">
+          <li><span class="what">/</span><span class="note">Home — hero, services, storm strip, gallery band, reviews, booking, contact form</span><span class="tag mono done">Finished</span></li>
+          <li><span class="what">/services/</span><span class="note">Hub for all five service lines</span><span class="tag mono done">Finished</span></li>
+          <li><span class="what">/services/roofing/</span><span class="note">Roofing — materials, process, warranty, FAQs</span><span class="tag mono done">Finished</span></li>
+          <li><span class="what">/services/remodeling-restoration/</span><span class="note">Remodeling &amp; restoration</span><span class="tag mono done">Finished</span></li>
+          <li><span class="what">/services/outdoor-living/</span><span class="note">Patios, decks, outdoor structures</span><span class="tag mono done">Finished</span></li>
+          <li><span class="what">/services/emergency-inspections/</span><span class="note">Emergency response and inspections</span><span class="tag mono done">Finished</span></li>
+          <li><span class="what">/services/commercial/</span><span class="note">Commercial roofing</span><span class="tag mono now">Needs a photo</span></li>
+          <li><span class="what">/storm-damage/</span><span class="note">Storm damage and the insurance claim process</span><span class="tag mono now">Needs a read</span></li>
+          <li><span class="what">/gallery/</span><span class="note">40 job photographs, five filters, lightbox</span><span class="tag mono done">Finished</span></li>
+          <li><span class="what">/video/</span><span class="note">Job walkthrough video</span><span class="tag mono now">Second file broken</span></li>
+          <li><span class="what">/team/</span><span class="note">Robert, plus eight crew headshots</span><span class="tag mono now">Needs job titles</span></li>
+          <li><span class="what">/reviews/</span><span class="note">Live Google reviews and ten Facebook recommendations</span><span class="tag mono now">Needs a Google key</span></li>
+          <li><span class="what">/areas/</span><span class="note">16 towns across 6 parishes</span><span class="tag mono done">Finished</span></li>
+          <li><span class="what">/financing/</span><span class="note">Financing options and a monthly payment estimator</span><span class="tag mono now">Needs real terms</span></li>
+          <li><span class="what">/contact/</span><span class="note">Assessment request form and booking</span><span class="tag mono now">Needs a form key</span></li>
+          <li><span class="what">/terms/</span><span class="note">Terms of service</span><span class="tag mono now">Needs a lawyer</span></li>
+          <li><span class="what">/privacy/</span><span class="note">Privacy policy</span><span class="tag mono now">Needs a lawyer</span></li>
+          <li><span class="what">/case-studies/</span><span class="note">Built and switched off — the page type is finished, waiting on projects to put in it</span><span class="tag mono now">Needs projects</span></li>
+          <li><span class="what">/careers/</span><span class="note">Built and switched off — application form, questionnaire and résumé upload all working</span><span class="tag mono now">Needs roles</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ── 2 ──────────────────────────────────────────────────────── -->
+    <section>
+      <div class="sec-head">
+        <span class="seam" aria-hidden="true"><i></i><i></i><i></i></span>
+        <h2>What is already real</h2>
+        <p>
+          Not one photograph, name, review or number on this site was
+          invented to fill a hole. Everything below came from CTL.
+        </p>
+      </div>
+
+      <div class="figs">
+        <div><b>40</b><span class="mono">Job photographs</span></div>
+        <div><b>9</b><span class="mono">Real faces, named</span></div>
+        <div><b>10</b><span class="mono">Facebook reviews</span></div>
+        <div><b>16</b><span class="mono">Towns, 6 parishes</span></div>
+      </div>
+
+      <div class="panel">
+        <p>
+          The crew grid is eight of your people, cropped from the headshots
+          you sent, under their own names. No stock photography of strangers
+          in hard hats. Where a job title was missing, the page shows the
+          name and stops there rather than guessing.
+        </p>
+        <p>
+          The Facebook recommendations are reproduced word for word — typos
+          included, because tidying a customer's grammar is editing their
+          testimonial. The 98% figure is dated on the page as a snapshot,
+          since it was read by hand rather than fed from anywhere.
+        </p>
+        <p>
+          Google reviews load live from your listing every time somebody
+          opens the page, so the rating shown is the rating you actually
+          have that morning. That switches on the moment there is an API key.
+        </p>
+      </div>
+    </section>
+
+    <!-- ── 3 ──────────────────────────────────────────────────────── -->
+    <section>
+      <div class="sec-head">
+        <span class="seam" aria-hidden="true"><i></i><i></i><i></i></span>
+        <h2>What we need from you</h2>
+        <p>
+          Sixteen items, grouped by what each one is holding up. Nothing
+          here is difficult; most of it is a file, a number or a decision
+          somebody at CTL already has.
+        </p>
+      </div>
+
+      <div class="group">
+        <h3>Finishes a page</h3>
+        <p>Each of these is the missing half of a page that is otherwise built.</p>
+        <ol class="asks">
+          <li class="ask">
+            <span class="n">01</span>
+            <h4>Job titles for the eight crew</h4>
+            <div class="body">
+              <p>
+                The photographs and names are already on the team page — the
+                roles are what is missing. A single line each in their own
+                words would finish the section properly. Spellings are
+                confirmed.
+              </p>
+            </div>
+          </li>
+          <li class="ask">
+            <span class="n">02</span>
+            <span class="tag mono now">Highest value</span>
+            <h4>Six to eight completed projects, with before and after photos</h4>
+            <div class="body">
+              <p>
+                For each: the town, what the problem turned out to be, and
+                what the job ended up being.
+              </p>
+              <p class="why">
+                <strong>Switches on</strong> the case studies — the last page
+                type that adds real search surface, and also what makes
+                individual town pages worth building. This one item unblocks
+                two sections at once.
+              </p>
+            </div>
+          </li>
+          <li class="ask">
+            <span class="n">03</span>
+            <h4>Whether you are hiring, and for what</h4>
+            <div class="body">
+              <p>
+                Job titles, full time or seasonal, what each role actually
+                does day to day, and the genuine minimum somebody needs to
+                be considered.
+              </p>
+              <p class="why">
+                <strong>Switches on</strong> the openings list on the careers
+                page. Until it arrives the page runs as a general
+                application, which is honest but weaker — it cannot name a
+                job that might not exist.
+              </p>
+            </div>
+          </li>
+          <li class="ask">
+            <span class="n">04</span>
+            <h4>A working export of the second video</h4>
+            <div class="body">
+              <p>
+                The file supplied is a 417&nbsp;KB truncated download — it
+                decodes one frame and stops, so it was left off rather than
+                shipped broken. Captions would help too; the audio is
+                carrying the whole message.
+              </p>
+            </div>
+          </li>
+          <li class="ask">
+            <span class="n">05</span>
+            <h4>One commercial job photograph</h4>
+            <div class="body">
+              <p>
+                A low-slope membrane, a coating going down, or a finished
+                commercial metal roof. The commercial page currently has no
+                picture of commercial work on it.
+              </p>
+            </div>
+          </li>
+        </ol>
+      </div>
+
+      <div class="group">
+        <h3>Switches something on</h3>
+        <p>Built and waiting on a credential or a decision.</p>
+        <ol class="asks">
+          <li class="ask">
+            <span class="n">06</span>
+            <h4>Web3Forms key for the office inbox</h4>
+            <div class="body">
+              <p>
+                Until this exists the contact form refuses to submit and
+                tells the visitor to phone instead.
+              </p>
+              <p class="why">
+                <strong>Why it fails loudly</strong> — the alternative is a
+                form that looks like it worked and quietly loses the lead.
+              </p>
+            </div>
+          </li>
+          <li class="ask">
+            <span class="n">07</span>
+            <h4>Google Cloud API key and place ID</h4>
+            <div class="body">
+              <p>
+                Turns the live Google reviews on. Places API (New), with the
+                key restricted to your domain.
+              </p>
+              <p class="why">
+                <strong>Worth knowing</strong> — it bills per page view, so
+                set a budget alert in the first week. It is the only thing on
+                the site that costs money per visitor.
+              </p>
+            </div>
+          </li>
+          <li class="ask">
+            <span class="n">08</span>
+            <h4>A Cloudflare account to deploy the résumé uploader to</h4>
+            <div class="body">
+              <p>
+                The careers form takes a file, and a file needs somewhere to
+                land. A small upload service is written and tested; it needs
+                deploying to your Cloudflare account, which takes about ten
+                minutes and costs nothing at this volume.
+              </p>
+              <p class="why">
+                <strong>Switches on</strong> the careers page. Until then it
+                stays switched off deliberately — a live &ldquo;apply
+                here&rdquo; form with nothing behind it takes somebody&rsquo;s
+                résumé and drops it, and they never find out.
+              </p>
+            </div>
+          </li>
+          <li class="ask">
+            <span class="n">09</span>
+            <h4>Financing partner, real terms, prequalification link</h4>
+            <div class="body">
+              <p>
+                The payment estimator is built but switched off.
+              </p>
+              <p class="why">
+                <strong>Why it waits</strong> — a monthly figure on a website
+                is a number a customer will hold you to, so it stays dark
+                until the APR and terms are the real ones.
+              </p>
+            </div>
+          </li>
+          <li class="ask">
+            <span class="n">10</span>
+            <h4>Call-tracking provider and per-channel numbers</h4>
+            <div class="body">
+              <p>
+                Optional. Until one is chosen, every phone number on the site
+                is your real one, which is the safe default.
+              </p>
+            </div>
+          </li>
+        </ol>
+      </div>
+
+      <div class="group">
+        <h3>Needs a sign-off</h3>
+        <p>Legal or factual points that should not go live on my judgement alone.</p>
+        <ol class="asks">
+          <li class="ask">
+            <span class="n">11</span>
+            <h4>Louisiana contractor licence number</h4>
+            <div class="body">
+              <p>There is a place for it in the footer and it is currently empty.</p>
+            </div>
+          </li>
+          <li class="ask">
+            <span class="n">12</span>
+            <h4>Whether CTL is actually FORTIFIED-certified</h4>
+            <div class="body">
+              <p>
+                One of the supplied photographs shows a FORTIFIED sign. That
+                is an insurance-discount badge in Louisiana and worth
+                displaying — but the certification is unverified, so the
+                photo was excluded and no badge is claimed anywhere.
+              </p>
+              <p class="why">
+                <strong>Confirm it</strong> and both the photo and the badge
+                go on.
+              </p>
+            </div>
+          </li>
+          <li class="ask">
+            <span class="n">13</span>
+            <h4>The claims language on the storm page</h4>
+            <div class="body">
+              <p>
+                Public adjusting in Louisiana is a licensed activity under
+                La.&nbsp;R.S.&nbsp;22:1691. The copy is written to describe
+                helping with a claim without straying into adjusting it, but
+                somebody who knows how CTL actually works with insurers
+                should read it.
+              </p>
+            </div>
+          </li>
+          <li class="ask">
+            <span class="n">14</span>
+            <h4>An employment attorney&#8217;s read of the hiring questions</h4>
+            <div class="body">
+              <p>
+                The application form asks six questions. They are written
+                carefully — every one is about doing the job, the question
+                about ladders and heat describes the work and asks whether
+                you can do it rather than asking about your health, and
+                nothing touches criminal history, age, family or
+                citizenship.
+              </p>
+              <p class="why">
+                <strong>Careful is not the same as cleared.</strong> What an
+                employer may ask an applicant, and how it must be phrased,
+                is not a design decision. Somebody who does this for a
+                living should read them before the page goes live.
+              </p>
+            </div>
+          </li>
+          <li class="ask">
+            <span class="n">15</span>
+            <h4>An attorney's read of the terms and privacy pages</h4>
+            <div class="body">
+              <p>
+                Both were written from scratch to describe what the site
+                genuinely does. They are honest, but they are not legal
+                advice.
+              </p>
+            </div>
+          </li>
+          <li class="ask">
+            <span class="n">16</span>
+            <h4>The current site's page addresses</h4>
+            <div class="body">
+              <p>
+                Needed to build the redirect map so existing search rankings
+                survive the switch. There has been no access to crawl the
+                live site, so this cannot be worked out from here.
+              </p>
+            </div>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ── 4 ──────────────────────────────────────────────────────── -->
+    <section>
+      <div class="sec-head">
+        <span class="seam" aria-hidden="true"><i></i><i></i><i></i></span>
+        <h2>Things left off on purpose</h2>
+        <p>
+          Seven absences that look like gaps and are not. Each one is a
+          decision, and each one is reversible the moment the underlying
+          fact changes.
+        </p>
+      </div>
+
+      <div class="decisions">
+        <div class="confirm">
+          <h3>No review stars in search markup</h3>
+          <p>
+            Google stopped showing star ratings for businesses that mark up
+            reviews about themselves on their own site back in 2019. Adding
+            the code anyway does not produce stars — it risks a penalty
+            across the whole domain. Your stars in search come from the
+            Google Business Profile, which already works.
+          </p>
+        </div>
+        <div class="confirm">
+          <h3>No monthly payment figures</h3>
+          <p>
+            The estimator exists and is switched off until the financing
+            terms are real ones. A number a customer reads on your site is a
+            number they will expect at signing.
+          </p>
+        </div>
+        <div class="confirm">
+          <h3>No individual town pages</h3>
+          <p>
+            Sixteen towns are listed on one areas page rather than spread
+            across sixteen near-identical pages. Thin town pages with nothing
+            local on them are the pattern search engines demote. They become
+            worth building once there are case studies to put on them.
+          </p>
+        </div>
+        <div class="confirm">
+          <h3>No certification badges</h3>
+          <p>
+            Nothing is claimed that has not been confirmed — no FORTIFIED
+            badge, no manufacturer certifications, no licence number. Empty
+            is recoverable. Wrong is not.
+          </p>
+        </div>
+        <div class="confirm">
+          <h3>No Facebook review feed</h3>
+          <p>
+            Meta shut off the recommendations API entirely in September 2025
+            — there is no longer any way to pull them automatically, and
+            scraping the page breaks their terms. So the ten on the site were
+            copied by hand and are dated as such. Refreshing them stays a
+            manual job.
+          </p>
+        </div>
+        <div class="confirm">
+          <h3>No live careers form yet</h3>
+          <p>
+            The application form is finished and tested, and the page is
+            switched off until the upload service is deployed. A form that
+            accepts a résumé and quietly discards it is worse than no form:
+            the applicant believes they applied, and nobody ever tells them
+            otherwise. The same rule governs the contact form, which refuses
+            to submit rather than losing an enquiry.
+          </p>
+        </div>
+        <div class="confirm">
+          <h3>No cookie tracking</h3>
+          <p>
+            Analytics are cookieless and only load if the visitor agrees.
+            That keeps the consent banner honest and the privacy policy
+            short.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── 5 ──────────────────────────────────────────────────────── -->
+    <section>
+      <div class="sec-head">
+        <span class="seam" aria-hidden="true"><i></i><i></i><i></i></span>
+        <h2>How it runs</h2>
+      </div>
+
+      <div class="panel">
+        <p>
+          The site is a set of static files — no database, nothing to patch
+          on a Tuesday. It is designed to be hosted on Cloudflare Pages,
+          which serves it free at the traffic a regional contractor sees,
+          and it loads fast because there is very little to load.
+        </p>
+        <p>
+          <strong>One exception, and it is worth knowing about.</strong> A
+          file cannot be sent to a set of static files, so the résumé upload
+          on the careers page needs a small piece of software running on
+          Cloudflare. It does one thing — take an application, check it, and
+          put the file in private storage only you can reach — and it is the
+          only moving part on the whole site.
+        </p>
+        <p>
+          Content lives in plain, structured files rather than being buried
+          in the page code, which means the reviews, the town list, the
+          services and the gallery can all be edited without touching the
+          design. If CTL later wants a proper editing interface, that plugs
+          into the same files.
+        </p>
+        <p>
+          <strong>Running cost is close to nothing</strong> — hosting is free
+          at this scale, the form service has a free tier, and the only
+          per-visitor cost is the Google reviews lookup, which is worth
+          watching for the first week and then forgetting about.
+        </p>
+        <p>
+          <strong>The current site is untouched.</strong> Nothing has been
+          deployed, no DNS has been pointed anywhere, and ctlpro.com is
+          running exactly as it was. Going live is a deliberate, scheduled
+          step, and it should not happen before the redirect map in item 13
+          exists.
+        </p>
+      </div>
+    </section>
+
+    <!-- ── 6 ──────────────────────────────────────────────────────── -->
+    <footer class="foot">
+      <p>
+        Prepared by Charles Meyers · 31 August 2026 · Built for CTL Pro
+        Construction LLC, 1605 Eraste Landry Road, Lafayette LA 70506. This
+        document describes work completed on speculation; it is not an
+        invoice, a contract, or an engagement.
+      </p>
+    </footer>
+
+  </div>
+</main>
+</body>
+</html>

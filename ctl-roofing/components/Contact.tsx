@@ -8,12 +8,11 @@
  */
 import { useState, type FormEvent } from "react";
 import { client } from "@/client.config";
-import { contactRoute, submitContact } from "@/lib/submitContact";
+import { contactConfigured, submitContact } from "@/lib/submitContact";
 import { trackEvent } from "@/lib/tracking";
 import { Reveal } from "./Reveal";
 import { SectionHead } from "./SectionHead";
 import { btn } from "./Button";
-import { Turnstile } from "./Turnstile";
 
 type Status = "idle" | "sending" | "sent" | "error";
 
@@ -49,10 +48,6 @@ export function Contact() {
     // A slow network invites a second press, and a double-submitted
     // enquiry is two calls to the same person from two people.
     if (status === "sending") return;
-
-    const turnstileToken = String(
-      new FormData(e.currentTarget).get("cf-turnstile-response") ?? ""
-    );
     const missing = REQUIRED.filter((r) => !form[r.key].trim()).map((r) => r.key);
     setInvalid(missing);
     if (missing.length) {
@@ -71,7 +66,6 @@ export function Contact() {
       urgency: "",
       message: form.message,
       company: form.company,
-      turnstileToken,
     });
     if (result.ok) {
       setStatus("sent");
@@ -204,21 +198,18 @@ export function Contact() {
                 />
               </label>
 
-              <Turnstile className="mt-6" />
-
               <button type="submit" disabled={status === "sending"} className={`mt-6 ${btn("gold")} disabled:cursor-not-allowed disabled:border-line disabled:bg-surface-alt disabled:text-ink-faint`}>
                 {status === "sending" ? "Sending…" : client.copy.contactSubmit}
               </button>
 
-              {process.env.NODE_ENV === "development" &&
-                contactRoute() !== "worker" && (
-                  <p className="mt-3 font-mono text-[12px] uppercase tracking-[0.09em] text-danger">
-                    Dev: leads on the{" "}
-                    {contactRoute() === "direct"
-                      ? "unhardened direct path — the Web3Forms key is in the bundle"
-                      : "nothing configured — the form will refuse"}
-                  </p>
-                )}
+              {process.env.NODE_ENV === "development" && !contactConfigured() && (
+                // Dev only. In production the form still fails loudly
+                // rather than swallowing a lead, but the visitor gets
+                // "call us", not a configuration note.
+                <p className="mt-3 font-mono text-[12px] uppercase tracking-[0.09em] text-danger">
+                  Dev: NEXT_PUBLIC_WEB3FORMS_KEY is unset — this form will refuse
+                </p>
+              )}
 
               {client.bookingUrl && (
                 <p className="mt-4 text-sm text-ink-faint">

@@ -54,8 +54,11 @@ export function Hero() {
           <a href={client.bookingUrl || "#contact"} className={btn("gold")}>
             {client.copy.heroCta}
           </a>
-          <a href={`tel:${client.stormPhoneHref}`} className={btn("lineDeep")}>
-            {client.copy.heroSecondaryCta} {client.stormPhone}
+          {/* The office, not the storm line. This is the generic "call
+              us" button; the storm band directly below carries the
+              around-the-clock number, labelled as such. */}
+          <a href={`tel:${client.phoneHref}`} className={btn("lineDeep")}>
+            {client.copy.heroSecondaryCta} {client.phone}
           </a>
         </motion.div>
 

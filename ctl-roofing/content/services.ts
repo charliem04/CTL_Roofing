@@ -13,9 +13,9 @@ import type { ServicePage } from "./types";
 
 export const servicesHub = {
   meta: {
-    title: "Services — Roofing, Remodeling, Outdoor Living & Commercial",
+    title: "Services — Roofing, Remodeling, Commercial",
     description:
-      "CTL Pro Construction is a full-service roofing and construction company in Acadiana: roof replacement and repair, remodeling and restoration, outdoor living, emergency response and commercial roofing.",
+      "Full-service roofing and construction in Acadiana: roof replacement and repair, remodeling and restoration, outdoor living and commercial roofing.",
     path: "/services/",
   },
   heading: "Not just roofing",
@@ -38,9 +38,9 @@ export const services: ServicePage[] = [
     span: "wide",
     navLabel: "Roofing",
     meta: {
-      title: "Roofing — Shingle, Standing Seam Metal & Flat Roofs",
+      title: "Roofing — Shingle, Standing Seam & Flat Roofs",
       description:
-        "Roof replacement and repair across Acadiana: architectural shingles, concealed-fastener standing seam metal, and flat roofing. Free roof and property assessment, 5-year labor warranty.",
+        "Roof replacement and repair across Acadiana: architectural shingles, concealed-fastener standing seam metal and flat roofing. 5-year labor warranty.",
       path: "/services/roofing/",
     },
     heading: "Roofing",
@@ -121,9 +121,9 @@ export const services: ServicePage[] = [
     span: "narrow",
     navLabel: "Remodeling & Restoration",
     meta: {
-      title: "Remodeling & Restoration — Fire, Flood, Siding, Windows & Interiors",
+      title: "Remodeling & Restoration — Fire, Flood, Siding",
       description:
-        "Fire and flood restoration, James Hardie siding upgrades, window and exterior door replacement, and bathroom and kitchen remodeling across Acadiana and South Louisiana.",
+        "Fire and flood restoration, James Hardie siding upgrades, window and door replacement, and bathroom and kitchen remodeling across Acadiana.",
       path: "/services/remodeling-restoration/",
     },
     heading: "Remodeling & restoration",
@@ -198,9 +198,9 @@ export const services: ServicePage[] = [
     span: "narrow",
     navLabel: "Outdoor Living",
     meta: {
-      title: "Outdoor Living — Patio Covers, Outdoor Kitchens & Screen Rooms",
+      title: "Outdoor Living — Patio Covers & Screen Rooms",
       description:
-        "Aluminum patio covers, screen rooms, outdoor kitchens with fireplace or firepit, concrete slab additions and fences, built across Acadiana by CTL Pro Construction.",
+        "Aluminum patio covers, screen rooms, outdoor kitchens with fireplace or firepit, concrete slab additions and fences, built across Acadiana.",
       path: "/services/outdoor-living/",
     },
     heading: "Outdoor living",
@@ -268,9 +268,9 @@ export const services: ServicePage[] = [
     span: "wide",
     navLabel: "Emergency & Inspections",
     meta: {
-      title: "Emergency Response, Handyman Work & Roof Inspections",
+      title: "Emergency, Handyman Work & Inspections",
       description:
-        "Emergency tarping and leak stop, water damage removal and property dry-out, carpentry and repairs, plus full-scope roof evaluations for code deficiencies, roof age and fair market valuation.",
+        "Emergency tarping and leak stop, water damage removal and dry-out, carpentry and repairs, plus full-scope roof evaluations across Acadiana.",
       path: "/services/emergency-inspections/",
     },
     heading: "Emergency, handyman & inspections",
@@ -345,9 +345,9 @@ export const services: ServicePage[] = [
     span: "full",
     navLabel: "Commercial",
     meta: {
-      title: "Commercial Roofing — TPO, PVC, Modified Bitumen & Coatings",
+      title: "Commercial Roofing — TPO, PVC & Coatings",
       description:
-        "Commercial roofing across Acadiana: modified bitumen, TPO and PVC, standing seam and exposed fastener metal, silicone coatings, plus repairs and maintenance programs.",
+        "Commercial roofing across Acadiana: modified bitumen, TPO and PVC, standing seam and exposed fastener metal, silicone coatings and repairs.",
       path: "/services/commercial/",
     },
     heading: "Commercial",

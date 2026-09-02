@@ -26,6 +26,9 @@ export function StormStrip() {
           href={`tel:${client.stormPhoneHref}`}
           className="whitespace-nowrap border-b-2 border-ink/35 font-mono text-lg font-semibold tabular-nums text-ink no-underline transition-colors duration-150 hover:border-ink active:text-brand"
         >
+          <span className="mr-2 text-[13px] font-medium uppercase tracking-[0.08em] text-ink/70">
+            Storm line
+          </span>
           {client.stormPhone}
         </a>
       </div>

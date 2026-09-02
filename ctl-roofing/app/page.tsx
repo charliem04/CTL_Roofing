@@ -7,7 +7,6 @@ import { Brands } from "@/components/Brands";
 import { About } from "@/components/About";
 import { Testimonials } from "@/components/Testimonials";
 import { Gallery } from "@/components/Gallery";
-import { Booking } from "@/components/Booking";
 import { Contact } from "@/components/Contact";
 import { CtaBand } from "@/components/CtaBand";
 import { client } from "@/client.config";
@@ -21,10 +20,10 @@ import { client } from "@/client.config";
  * service, the storm strip to the claims page — so a visitor never has
  * to go back up to the nav to follow the thread they are already on.
  *
- * Testimonials and Booking are config-gated: testimonials render when
- * real reviews are added, and Booking renders a Cal.com embed if
- * `calLink` is ever set instead of the Calendly link the CTAs use.
- * Both render nothing today.
+ * Testimonials are config-gated and render when real reviews are
+ * added. Booking lives on /contact/ as an iframe, not here: the home
+ * page CTAs link straight out to Calendly, which is one decision fewer
+ * for somebody who already knows they want a time.
  */
 export default function Home() {
   return (
@@ -38,7 +37,6 @@ export default function Home() {
       <About />
       <Testimonials />
       <Gallery />
-      <Booking />
       <Contact />
       <CtaBand
         cta={{

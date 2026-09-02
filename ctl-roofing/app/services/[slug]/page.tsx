@@ -85,7 +85,13 @@ export default function ServiceDetailPage({ params }: Params) {
 
       <OtherServices currentSlug={service.slug} />
 
-      <CtaBand cta={service.cta} />
+      {/* Emergency & inspections is the one service page whose reader
+          may have water coming in right now; the rest are planning a
+          job and belong on the office line. */}
+      <CtaBand
+        cta={service.cta}
+        line={service.slug === "emergency-inspections" ? "storm" : "office"}
+      />
 
       <script
         type="application/ld+json"

@@ -18,9 +18,9 @@ import type { CtaCopy, Faq, PageMeta, Photo } from "./types";
 
 export const storm = {
   meta: {
-    title: "Storm Damage & Insurance Claims — What To Do First",
+    title: "Storm Damage & Insurance Claims — First Steps",
     description:
-      "What to do in the first 48 hours after storm damage in Acadiana, what an adjuster looks for on a roof, what CTL does during a claim, and what policies typically cover and don’t.",
+      "What to do in the first 48 hours after storm damage in Acadiana, what an adjuster looks for on a roof, and what CTL does during an insurance claim.",
     path: "/storm-damage/",
   } satisfies PageMeta,
 
@@ -76,7 +76,7 @@ export const storm = {
       {
         label: "Hail evidence",
         value:
-          "Bruising and granule loss on the shingle mat, and matching strikes on soft metals — vents, gutters, flashing, HVAC fins.",
+          "Bruising and granule loss on the shingle mat, and matching strikes on soft metals: vents, gutters, flashing, HVAC fins.",
       },
       {
         label: "Interior damage",
@@ -112,7 +112,7 @@ export const storm = {
     doesNot: {
       label: "CTL does not",
       items: [
-        "File the claim for you — you open it with your insurer",
+        "File the claim for you; you open it with your insurer",
         "Negotiate or settle the claim on your behalf; in Louisiana that is public adjusting and requires a license",
         "Ask you to sign over your claim or your insurance benefits",
         "Promise what your policy will pay before your insurer says so",

@@ -32,9 +32,9 @@ export const client = {
   // ── Domain / SEO ──────────────────────────────────────────────────
   siteUrl: "https://www.ctlpro.com", // no trailing slash
   metaTitle:
-    "CTL Roofing — Committed to Local | Roofing & Construction in Acadiana",
+    "CTL Roofing — Roofing & Construction in Acadiana",
   metaDescription:
-    "CTL Pro Construction is a Broussard-based roofing and construction company serving Acadiana and South Louisiana since 2019. Roof replacement, storm restoration, remodeling, patio covers and windows. Free roof and property assessment.",
+    "Broussard-based roofing and construction serving Acadiana since 2019. Roof replacement, storm restoration, remodeling and patio covers. Free assessment.",
   ogImagePath: "/ctl/og.jpg",
 
   // ── Contact ───────────────────────────────────────────────────────
@@ -73,12 +73,6 @@ export const client = {
    * back to the on-page request form.
    */
   bookingUrl: "https://calendly.com/d/ct7p-3by-878/free-consultation",
-  /**
-   * Cal.com inline embed ("username/event"). Left empty because this
-   * site books through the Calendly link above.
-   */
-  calLink: "",
-
   /**
    * Call tracking. Dynamic number insertion is the provider’s own
    * script rewriting numbers in the page at runtime, so this is a URL,
@@ -260,7 +254,7 @@ export const client = {
   copy: {
     utilityBar: "Broussard-based · serving Acadiana since 2019",
     heroCta: "Schedule a free assessment",
-    heroSecondaryCta: "Call",
+    heroSecondaryCta: "Call the office",
     heroFacts: [
       { value: "2019", label: "serving Acadiana" },
       { value: "5-year", label: "labor warranty" },

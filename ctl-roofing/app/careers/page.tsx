@@ -151,15 +151,15 @@ export default function CareersPage() {
 
       {/* The one page that does not close on the assessment booking.
           Somebody applying for a job has no use for "schedule a free
-          assessment", and the band’s default second button is the storm
-          line — which would sit directly under copy telling them to call
-          the office. */}
+          assessment", and wants an email address rather than the contact
+          form. The office number matches the band's default; the rest of
+          the buttons do not, which is why this passes its own. */}
       <CtaBand
         cta={page.cta}
         actions={
           <>
             <a href={`tel:${client.phoneHref}`} className={btn("gold")}>
-              Call {client.phone}
+              Call the office {client.phone}
             </a>
             <MoreLink
               href={`mailto:${client.email}`}

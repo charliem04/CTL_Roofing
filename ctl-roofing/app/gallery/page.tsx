@@ -6,9 +6,9 @@ import { GalleryBrowser } from "@/components/GalleryBrowser";
 import { CtaBand } from "@/components/CtaBand";
 
 const meta = {
-  title: "Our Work — Roofing, Metal, Patios & Remodels in Acadiana",
+  title: "Our Work — Roofing & Remodels in Acadiana",
   description:
-    "Photographs of CTL Pro Construction’s own jobs across Acadiana: shingle and standing seam metal roofs, tear-offs, storm response, patio covers and interior remodels.",
+    "Photographs of CTL’s own jobs across Acadiana: shingle and standing seam metal roofs, tear-offs, storm response, patio covers and interior remodels.",
   path: "/gallery/",
 };
 

@@ -6,9 +6,13 @@
   X-Content-Type-Options: nosniff
   # Send the origin to other sites, the full path only to ourselves.
   Referrer-Policy: strict-origin-when-cross-origin
-  # Nothing here should ever be framed by anyone else.
+  # Nothing here should ever be framed by anyone else. The CSP that
+  # scripts/csp.mjs generates carries frame-ancestors too; this stays as
+  # the older-browser equivalent. Two Content-Security-Policy headers on
+  # one path are enforced as an intersection, which is confusing to
+  # reason about, so this file no longer sets one — the generated policy
+  # owns CSP entirely.
   X-Frame-Options: DENY
-  Content-Security-Policy: frame-ancestors 'none'
   # Features this site has no business asking for.
   Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=()
 
@@ -26,8 +30,11 @@
 /icon.png
   Cache-Control: public, max-age=86400, must-revalidate
 
-# A full Content-Security-Policy is deliberately NOT set here. This site
-# loads Calendly in an iframe and Plausible as a script, both only after
-# consent, and a policy written without testing against those would fail
-# closed at the worst moment. Worth adding as its own task, with the
-# embed exercised against it before it ships.
+# The Content-Security-Policy is NOT here — scripts/csp.mjs generates it
+# at build time and appends it to the copy of this file in out/. It has
+# to be generated because some of the origins it allows are only known
+# from the build environment: the careers Worker, the CRM webhook.
+#
+# That script also fails the build if the output references an origin
+# the policy does not cover, so adding an embed forces a decision rather
+# than silently escaping the policy.

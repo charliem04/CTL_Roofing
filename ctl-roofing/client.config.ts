@@ -254,7 +254,7 @@ export const client = {
   copy: {
     utilityBar: "Broussard-based · serving Acadiana since 2019",
     heroCta: "Schedule a free assessment",
-    heroSecondaryCta: "Call",
+    heroSecondaryCta: "Call the office",
     heroFacts: [
       { value: "2019", label: "serving Acadiana" },
       { value: "5-year", label: "labor warranty" },

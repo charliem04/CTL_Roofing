@@ -165,7 +165,8 @@ export default function StormDamagePage() {
         lede={`If water is coming in right now, stop reading and call the storm line at ${client.stormPhone}.`}
       />
 
-      <CtaBand cta={storm.cta} />
+      {/* Water may be coming in while somebody reads this page. */}
+      <CtaBand cta={storm.cta} line="storm" />
     </>
   );
 }

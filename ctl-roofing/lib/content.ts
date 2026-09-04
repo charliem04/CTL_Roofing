@@ -28,12 +28,7 @@ import {
   caseStudiesHub,
 } from "@/content/caseStudies";
 import { pendingContent, posts, reviews, team } from "@/content/pending";
-import type {
-  CaseStudy,
-  GalleryCategory,
-  ServicePage,
-  Town,
-} from "@/content/types";
+import type { CaseStudy, ServicePage, Town } from "@/content/types";
 
 /* ── Services ─────────────────────────────────────────────────────── */
 
@@ -88,18 +83,6 @@ export function getGalleryCategories() {
   return galleryCategories.filter((c) =>
     gallery.some((s) => s.category === c.id)
   );
-}
-
-/** Every shot in one category, in gallery order. */
-export function getGalleryByCategory(category: GalleryCategory) {
-  return gallery.filter((s) => s.category === category);
-}
-
-/** The label the gallery filter uses, e.g. "Metal roofing". */
-export function getGalleryCategoryLabel(
-  category: GalleryCategory
-): string | undefined {
-  return galleryCategories.find((c) => c.id === category)?.label;
 }
 
 /* ── Areas ────────────────────────────────────────────────────────── */

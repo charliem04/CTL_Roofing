@@ -67,13 +67,6 @@ export type ServiceSection = {
   body?: string[];
   /** Tick-list columns; one column reads as a list, two as a spec sheet */
   columns?: { label?: string; items: string[] }[];
-  /**
-   * A photograph for this section, set beside the words rather than
-   * under them. Optional on purpose: a section earns one when there is
-   * a real photo of the thing it describes, and goes without when
-   * there isn’t. Sides alternate down the page — see SectionBlock.
-   */
-  photo?: Photo;
 };
 
 export type ServicePage = {
@@ -92,15 +85,8 @@ export type ServicePage = {
   sections: ServiceSection[];
   faqs: Faq[];
   cta: CtaCopy;
-  /**
-   * The gallery category holding this service’s work, which drives the
-   * related-work strip and the deep link onto the gallery’s filter.
-   *
-   * Left unset when we have no photographs of this service being done —
-   * commercial, today. The strip then renders nothing rather than
-   * borrowing residential work to stand in for it.
-   */
-  galleryCategory?: GalleryCategory;
+  /** Slugs of gallery photos to show as related work */
+  workCaptions?: string[];
 };
 
 export type Town = {

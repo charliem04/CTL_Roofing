@@ -9,17 +9,11 @@
  * beside each filter is there so a visitor knows whether a category is
  * worth opening before they open it.
  *
- * An arriving #hash is the one exception, and it does not undo that
- * reasoning: it is read once, on mount, so a service page can hand
- * someone straight to /gallery/#roofing instead of dropping them in
- * front of forty photos to sort out themselves. Clicking the filters
- * still writes nothing to the URL, so the back history stays clean.
- *
  * Each filtered view carries a link to the service it belongs to, which
  * is the actual point of a gallery on a contractor’s site: someone
  * looking at patio covers should be one click from the patio page.
  */
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
 import { getGallery, getGalleryCategories } from "@/lib/content";
 import type { GalleryCategory } from "@/content/types";
 import { Reveal } from "./Reveal";
@@ -34,31 +28,6 @@ export function GalleryBrowser() {
   const [filter, setFilter] = useState<Filter>("all");
   const [at, setAt] = useState<number | null>(null);
   const opener = useRef<HTMLElement | null>(null);
-
-  // The site is statically exported, so the hash cannot be read while
-  // rendering without the server and the client disagreeing about the
-  // first paint. It is read after mount instead, and only a hash that
-  // names a category we actually have photos in is honoured — a stale
-  // or hand-typed one leaves the default "everything" view alone.
-  //
-  // hashchange matters as well as mount: arriving at /gallery/#outdoor
-  // from /gallery/#roofing changes only the fragment, which the browser
-  // treats as same-document — nothing remounts, so without this the
-  // second link would silently leave the first link's filter up.
-  useEffect(() => {
-    const apply = () => {
-      const wanted = window.location.hash.replace(/^#/, "");
-      if (wanted && categories.some((c) => c.id === wanted)) {
-        setFilter(wanted as GalleryCategory);
-        setAt(null);
-      }
-    };
-    apply();
-    window.addEventListener("hashchange", apply);
-    return () => window.removeEventListener("hashchange", apply);
-    // Categories are static content, so this binds once.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   const shots = useMemo(
     () => (filter === "all" ? all : all.filter((s) => s.category === filter)),

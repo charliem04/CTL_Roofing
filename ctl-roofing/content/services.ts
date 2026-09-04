@@ -76,23 +76,9 @@ export const services: ServicePage[] = [
             ],
           },
         ],
-        photo: {
-          src: "/ctl/service-roofing.jpg",
-          alt: "Aerial view of a brick home mid-roof, one wing finished in dark standing seam metal and the main slopes still in underlayment",
-          width: 820,
-          height: 569,
-          caption: "Metal and shingle, one house",
-        },
       },
       {
         heading: "What goes on before the roof",
-        photo: {
-          src: "/ctl/gallery/tearoff-decking.jpg",
-          alt: "Roof stripped to the decking mid tear-off, underlayment rolls staged ready",
-          width: 1100,
-          height: 508,
-          caption: "Deck first, then underlayment",
-        },
         body: [
           "The visible roof is the last layer. Underneath it sits the decking, the underlayment and the flashing details — and those are what decide whether the roof lasts its rated life or leaks in five years.",
           "A high-temperature self-adhered underlayment goes down first, because the best roofing systems are built from the deck up. If the deck is soft, rotten or under-nailed, that gets fixed before anything goes over it. You see the decking before it’s covered.",
@@ -100,13 +86,6 @@ export const services: ServicePage[] = [
       },
       {
         heading: "Repairs, not just replacements",
-        photo: {
-          src: "/ctl/gallery/shingle-turbine-vents.jpg",
-          alt: "Close view of a shingle roof with turbine vents along the ridge",
-          width: 1100,
-          height: 508,
-          caption: "Ridge, vents and flashing",
-        },
         body: [
           "Not every roof needs replacing. A lifted ridge cap, a failed pipe boot or a section of flashing can be the whole problem, and a repair is the honest answer more often than the industry admits.",
           "The free assessment tells you which one you are looking at. If a repair will hold, we say so.",
@@ -135,7 +114,6 @@ export const services: ServicePage[] = [
       heading: "Get the roof looked at before it decides for you",
       body: "The free assessment covers the roof and the property, and comes with photos of what we found. No obligation attached to it.",
     },
-    galleryCategory: "roofing",
   },
 
   {
@@ -179,23 +157,9 @@ export const services: ServicePage[] = [
             ],
           },
         ],
-        photo: {
-          src: "/ctl/remodel-kitchen.jpg",
-          alt: "A kitchen part-way through a remodel, cabinets in and countertops papered over, tools on a trestle table in the middle of the room",
-          width: 900,
-          height: 506,
-          caption: "Kitchen, mid-remodel",
-        },
       },
       {
         heading: "Restoration runs on a clock",
-        photo: {
-          src: "/ctl/gallery/interior-mid-remodel.jpg",
-          alt: "Living room part-way through a remodel, ceiling fan up and materials still on the floor",
-          width: 1100,
-          height: 618,
-          caption: "Open until it is dry",
-        },
         body: [
           "After fire or flood, the sequence matters more than the finish. Water has to come out, the structure has to dry, and what cannot be dried has to come out before anything is closed back up. Skipping that is how a rebuilt wall grows mold behind new paint.",
           "The same production team that runs a roof replacement runs a restoration, with the same written scope and the same office staff keeping permits, invoices and documents on file — which matters when an insurer asks for them a year later.",
@@ -203,13 +167,6 @@ export const services: ServicePage[] = [
       },
       {
         heading: "While the exterior is open",
-        photo: {
-          src: "/ctl/gallery/new-build-exterior.jpg",
-          alt: "New-build home under construction with the roof on and siding under way",
-          width: 1100,
-          height: 495,
-          caption: "Sheathing still reachable",
-        },
         body: [
           "A siding or window job is the cheapest time to fix what is behind them. Wall sheathing, flashing at windows and doors, and the water management details around them are only accessible once the old material is off.",
           "If you are already replacing the roof, doing the exterior in the same run saves a second mobilization and gets one set of flashing details done consistently.",
@@ -234,7 +191,6 @@ export const services: ServicePage[] = [
       heading: "Start with a walkthrough",
       body: "Whether it is damage or an upgrade, the first step is the same — we come look, document it, and give you a written scope before anyone commits to anything.",
     },
-    galleryCategory: "remodeling",
   },
 
   {
@@ -271,23 +227,9 @@ export const services: ServicePage[] = [
             items: ["Concrete slab additions", "Fences"],
           },
         ],
-        photo: {
-          src: "/ctl/service-outdoor.jpg",
-          alt: "A newly built covered patio across the back of a home, steel posts carrying the roof over a fresh concrete slab",
-          width: 820,
-          height: 615,
-          caption: "Cover over a new slab",
-        },
       },
       {
         heading: "Built by roofers, which shows",
-        photo: {
-          src: "/ctl/gallery/patio-timber-joint.jpg",
-          alt: "Close view of a heavy timber post and beam joint against a clear sky",
-          width: 1100,
-          height: 825,
-          caption: "Post and beam",
-        },
         body: [
           "A patio cover is a roof with fewer excuses. Where it ties into the house is where it will leak, so the flashing at that junction gets treated like any other roof-to-wall detail rather than caulked and hoped over.",
           "Aluminum covers and screen rooms come from Elite Aluminum; heavier timber structures use Simpson Strong-Tie Outdoor Accents hardware where the connection is doing structural work.",
@@ -295,13 +237,6 @@ export const services: ServicePage[] = [
       },
       {
         heading: "Slab first",
-        photo: {
-          src: "/ctl/gallery/patio-frame-going-up.jpg",
-          alt: "Heavy timber patio frame going up over a concrete slab, ladders either side",
-          width: 1100,
-          height: 825,
-          caption: "Framing follows the pour",
-        },
         body: [
           "Most outdoor living projects start below grade. If the slab is new, it gets poured and cured before framing; if it is existing, it gets assessed for whether it can carry what is going on top of it.",
           "Fences, drainage and the path from the back door are worth deciding at the same time — they are cheap while the equipment is already on site and expensive afterwards.",
@@ -326,7 +261,6 @@ export const services: ServicePage[] = [
       heading: "Price the patio before next summer",
       body: "Outdoor projects book out in good weather. A free assessment now gets you a written scope while the calendar still has room in it.",
     },
-    galleryCategory: "outdoor",
   },
 
   {
@@ -365,13 +299,6 @@ export const services: ServicePage[] = [
             items: ["Carpentry, sheetrock, painting, fences"],
           },
         ],
-        photo: {
-          src: "/ctl/gallery/storm-tarps-yard.jpg",
-          alt: "Crew on a roof with blue tarps laid across the driveway and a CTL sign in the yard",
-          width: 1100,
-          height: 508,
-          caption: "Tarps go down first",
-        },
       },
       {
         heading: "Full-scope roof evaluations",
@@ -384,23 +311,9 @@ export const services: ServicePage[] = [
             ],
           },
         ],
-        photo: {
-          src: "/ctl/gallery/storm-tarped-brick.jpg",
-          alt: "Brick home with tarps hung over the roof edge and walls after storm damage",
-          width: 1100,
-          height: 508,
-          caption: "Documented before it moves",
-        },
       },
       {
         heading: "A stain is a symptom, not the problem",
-        photo: {
-          src: "/ctl/water-stain-ceiling.jpg",
-          alt: "Brown water stains spreading across a white ceiling beside the crown moulding",
-          width: 900,
-          height: 405,
-          caption: "What it looks like from inside",
-        },
         body: [
           "By the time water shows up on a ceiling, it has usually been in the assembly for a while. Decking, insulation and framing can all be involved before anything is visible from inside, which is why the cheap moment to act is the moment you first see the spot.",
           "The storm line is answered around the clock for exactly this. Tarping now is not the repair — it is what stops the repair from getting bigger overnight.",
@@ -425,7 +338,6 @@ export const services: ServicePage[] = [
       heading: "Water coming in now?",
       body: "Call the storm line — it is answered around the clock. If it can wait until morning, the free assessment is the cheaper way to find out how bad it is.",
     },
-    galleryCategory: "storm",
   },
 
   {
@@ -465,16 +377,6 @@ export const services: ServicePage[] = [
             ],
           },
         ],
-        /* The shop, not a commercial job — we have none photographed.
-           It is honest here because it is our own metal being formed,
-           which is what the list beside it is about. */
-        photo: {
-          src: "/ctl/metal-copper-hip.jpg",
-          alt: "Copper hip caps formed and stacked mirror-bright on the bench in the CTL shop, timber racks behind",
-          width: 1000,
-          height: 1333,
-          caption: "Copper, formed in the shop",
-        },
       },
       {
         heading: "Coating instead of replacing",

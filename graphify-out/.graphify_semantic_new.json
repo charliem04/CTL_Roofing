@@ -1,0 +1,1804 @@
+{
+  "nodes": [
+    {
+      "id": "app_icon",
+      "label": "App Icon",
+      "file_type": "image",
+      "source_file": "ctl-roofing/app/icon.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Square logo variant used as application icon."
+    },
+    {
+      "id": "public_ctl_crew_two_story",
+      "label": "Roofing Crew on Two-Story House",
+      "file_type": "image",
+      "source_file": "ctl-roofing/public/ctl/crew-two-story.jpg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Depicts a roofing crew working on a blue two-story residential building."
+    },
+    {
+      "id": "public_ctl_emergency_tearoff",
+      "label": "Emergency Roof Tear-off",
+      "file_type": "image",
+      "source_file": "ctl-roofing/public/ctl/emergency-tearoff.jpg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Shows a large crew performing a rapid roof removal with tarps on the ground."
+    },
+    {
+      "id": "public_ctl_hero",
+      "label": "Hero Image",
+      "file_type": "image",
+      "source_file": "ctl-roofing/public/ctl/hero.jpg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Main landing page image showing roofing work on a two-story house."
+    },
+    {
+      "id": "public_ctl_logo",
+      "label": "CTL Roofing Logo",
+      "file_type": "image",
+      "source_file": "ctl-roofing/public/ctl/logo.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Full company logo featuring the state of Louisiana silhouette and 'Committed to Local' slogan."
+    },
+    {
+      "id": "public_ctl_materials",
+      "label": "Roofing Materials",
+      "file_type": "image",
+      "source_file": "ctl-roofing/public/ctl/materials.jpg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Pallets of Atlas Pinnacle Sun shingles and roofing underlayment."
+    },
+    {
+      "id": "public_ctl_metal_copper_hip",
+      "label": "Copper Hip Flashing",
+      "file_type": "image",
+      "source_file": "ctl-roofing/public/ctl/metal-copper-hip.jpg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Custom fabricated copper hip/ridge flashing in a workshop."
+    },
+    {
+      "id": "public_ctl_metal_panel",
+      "label": "Metal Roofing Panel",
+      "file_type": "image",
+      "source_file": "ctl-roofing/public/ctl/metal-panel.jpg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Large sheet of reflective copper or bronze-colored metal roofing material."
+    },
+    {
+      "id": "public_ctl_office",
+      "label": "CTL Office Meeting",
+      "file_type": "image",
+      "source_file": "ctl-roofing/public/ctl/office.jpg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Internal team meeting or training session in the company office."
+    },
+    {
+      "id": "public_ctl_og",
+      "label": "Open Graph Image",
+      "file_type": "image",
+      "source_file": "ctl-roofing/public/ctl/og.jpg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Social media preview image with logo and service list (Roofing, Storm Restoration, Construction)."
+    },
+    {
+      "id": "public_ctl_outdoor_deck",
+      "label": "Outdoor Deck and Ramp",
+      "file_type": "image",
+      "source_file": "ctl-roofing/public/ctl/outdoor-deck.jpg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Newly constructed wooden deck with a long accessibility ramp."
+    },
+    {
+      "id": "public_ctl_outdoor_frame",
+      "label": "Outdoor Patio Framing",
+      "file_type": "image",
+      "source_file": "ctl-roofing/public/ctl/outdoor-frame.jpg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Heavy timber framing for a large outdoor patio cover."
+    },
+    {
+      "id": "public_ctl_owner",
+      "label": "Company Owner/Representative",
+      "file_type": "image",
+      "source_file": "ctl-roofing/public/ctl/owner.jpg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Portrait of a man in a CTL branded polo shirt."
+    },
+    {
+      "id": "public_ctl_remodel_exterior",
+      "label": "Exterior Remodeling Project",
+      "file_type": "image",
+      "source_file": "ctl-roofing/public/ctl/remodel-exterior.jpg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "House under construction showing Zip System sheathing and new siding."
+    },
+    {
+      "id": "public_ctl_remodel_kitchen",
+      "label": "Kitchen Remodel",
+      "file_type": "image",
+      "source_file": "ctl-roofing/public/ctl/remodel-kitchen.jpg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Interior shot of a kitchen undergoing renovation."
+    },
+    {
+      "id": "public_ctl_roofing_metal_aerial",
+      "label": "Aerial View of Metal Roofing",
+      "file_type": "image",
+      "source_file": "ctl-roofing/public/ctl/roofing-metal-aerial.jpg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Drone shot showing a combination of standing seam metal and shingle roofing installation."
+    },
+    {
+      "id": "public_ctl_service_emergency",
+      "label": "Emergency Service",
+      "file_type": "image",
+      "source_file": "ctl-roofing/public/ctl/service-emergency.jpg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Duplicate of emergency-tearoff, used to represent emergency services."
+    },
+    {
+      "id": "public_ctl_service_outdoor",
+      "label": "Outdoor Living Service",
+      "file_type": "image",
+      "source_file": "ctl-roofing/public/ctl/service-outdoor.jpg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Finished outdoor patio cover with white siding and wood-stained posts."
+    },
+    {
+      "id": "public_ctl_service_remodeling",
+      "label": "Remodeling Service",
+      "file_type": "image",
+      "source_file": "ctl-roofing/public/ctl/service-remodeling.jpg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Finished bathroom remodel with marble-style tile and double vanity."
+    },
+    {
+      "id": "public_ctl_service_roofing",
+      "label": "Roofing Service",
+      "file_type": "image",
+      "source_file": "ctl-roofing/public/ctl/service-roofing.jpg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Aerial view of a large residential roofing project in progress."
+    },
+    {
+      "id": "ctl_roofing_public_ctl_shop_metal_stock",
+      "label": "Photo of metal coil stock in shop",
+      "file_type": "image",
+      "source_file": "ctl-roofing/public/ctl/shop-metal-stock.jpg",
+      "rationale": "Depicts Mueller Inc. metal coils stored in a warehouse/shop environment."
+    },
+    {
+      "id": "ctl_roofing_public_ctl_storm_tarped_home",
+      "label": "Photo of storm-damaged home with protective tarping",
+      "file_type": "image",
+      "source_file": "ctl-roofing/public/ctl/storm-tarped-home.jpg",
+      "rationale": "Shows a large residential property with black mesh/tarping for debris or storm protection during roofing work."
+    },
+    {
+      "id": "ctl_roofing_public_ctl_team",
+      "label": "Photo of the CTL Roofing team",
+      "file_type": "image",
+      "source_file": "ctl-roofing/public/ctl/team.jpg",
+      "rationale": "Group photo of staff in front of a CTL Pro logo."
+    },
+    {
+      "id": "ctl_roofing_public_ctl_water_stain_ceiling",
+      "label": "Photo of water stains on an interior ceiling",
+      "file_type": "image",
+      "source_file": "ctl-roofing/public/ctl/water-stain-ceiling.jpg",
+      "rationale": "Visual evidence of roof leak damage requiring repair."
+    },
+    {
+      "id": "ctl_roofing_public_ctl_work_architectural_shingles",
+      "label": "Photo of finished architectural shingle roof",
+      "file_type": "image",
+      "source_file": "ctl-roofing/public/ctl/work-architectural-shingles.jpg",
+      "rationale": "Close-up of high-quality shingle installation and roof vents."
+    },
+    {
+      "id": "ctl_roofing_public_ctl_work_exterior_renovation",
+      "label": "Photo of exterior home renovation in progress",
+      "file_type": "image",
+      "source_file": "ctl-roofing/public/ctl/work-exterior-renovation.jpg",
+      "rationale": "Shows siding and roofing work on a residential structure."
+    },
+    {
+      "id": "ctl_roofing_public_ctl_work_interior_remodel",
+      "label": "Photo of kitchen interior during remodeling",
+      "file_type": "image",
+      "source_file": "ctl-roofing/public/ctl/work-interior-remodel.jpg",
+      "rationale": "Shows a kitchen under construction with tools and protective coverings."
+    },
+    {
+      "id": "ctl_roofing_public_ctl_work_patio_cover",
+      "label": "Photo of a metal patio cover/carport",
+      "file_type": "image",
+      "source_file": "ctl-roofing/public/ctl/work-patio-cover.jpg",
+      "rationale": "Shows a finished metal awning structure attached to a house."
+    },
+    {
+      "id": "ctl_roofing_public_ctl_work_shingle_replacement",
+      "label": "Photo of a completed brick home roof replacement",
+      "file_type": "image",
+      "source_file": "ctl-roofing/public/ctl/work-shingle-replacement.jpg",
+      "rationale": "Shows a clean, finished shingle roof on a brick ranch-style house."
+    },
+    {
+      "id": "ctl_roofing_public_ctl_work_standing_seam",
+      "label": "Aerial photo of standing seam metal roof installation",
+      "file_type": "image",
+      "source_file": "ctl-roofing/public/ctl/work-standing-seam.jpg",
+      "rationale": "Drone shot showing the transition from underlayment to finished metal panels."
+    },
+    {
+      "id": "ctl_roofing_public_ctl_work_tear_off",
+      "label": "Photo of roof tear-off in progress",
+      "file_type": "image",
+      "source_file": "ctl-roofing/public/ctl/work-tear-off.jpg",
+      "rationale": "Shows a large crew removing old shingles from a brick residence."
+    },
+    {
+      "id": "ctl_roofing_public_ctl_work_window_replacement",
+      "label": "Photo of new window installation",
+      "file_type": "image",
+      "source_file": "ctl-roofing/public/ctl/work-window-replacement.jpg",
+      "rationale": "Interior view of newly installed double-hung windows in a sunroom."
+    },
+    {
+      "id": "ctl_roofing_public_ctl_gallery_bath_tiled_shower",
+      "label": "Photo of a newly tiled shower and tub",
+      "file_type": "image",
+      "source_file": "ctl-roofing/public/ctl/gallery/bath-tiled-shower.jpg",
+      "rationale": "Shows marble-patterned tile work in a bathroom remodel."
+    },
+    {
+      "id": "ctl_roofing_public_ctl_gallery_bath_vanity_finished",
+      "label": "Photo of a finished bathroom vanity and mirrors",
+      "file_type": "image",
+      "source_file": "ctl-roofing/public/ctl/gallery/bath-vanity-finished.jpg",
+      "rationale": "Shows a double vanity with marble top and arched mirrors."
+    },
+    {
+      "id": "ctl_roofing_public_ctl_gallery_carport_attached",
+      "label": "Photo of an attached metal carport",
+      "file_type": "image",
+      "source_file": "ctl-roofing/public/ctl/gallery/carport-attached.jpg",
+      "rationale": "Duplicate or similar view of the patio cover/carport project."
+    },
+    {
+      "id": "ctl_roofing_public_ctl_gallery_copper_sheet_shop",
+      "label": "Photo of a polished copper sheet in the shop",
+      "file_type": "image",
+      "source_file": "ctl-roofing/public/ctl/gallery/copper-sheet-shop.jpg",
+      "rationale": "Shows high-end metal fabrication materials."
+    },
+    {
+      "id": "ctl_roofing_public_ctl_gallery_interior_mid_remodel",
+      "label": "Photo of interior room during painting/remodeling",
+      "file_type": "image",
+      "source_file": "ctl-roofing/public/ctl/gallery/interior-mid-remodel.jpg",
+      "rationale": "Shows light blue walls and ceiling fans during a renovation phase."
+    },
+    {
+      "id": "ctl_roofing_public_ctl_gallery_interior_new_windows",
+      "label": "Photo of interior with new windows",
+      "file_type": "image",
+      "source_file": "ctl-roofing/public/ctl/gallery/interior-new-windows.jpg",
+      "rationale": "Shows window installation in a room with brick accents."
+    },
+    {
+      "id": "ctl_roofing_public_ctl_gallery_interior_window_wall",
+      "label": "Photo of a wall of new windows",
+      "file_type": "image",
+      "source_file": "ctl-roofing/public/ctl/gallery/interior-window-wall.jpg",
+      "rationale": "Shows multiple windows installed in a sunroom or porch area."
+    },
+    {
+      "id": "ctl_roofing_public_ctl_gallery_metal_aerial_complete",
+      "label": "Aerial photo of a large metal roof project",
+      "file_type": "image",
+      "source_file": "ctl-roofing/public/ctl/gallery/metal-aerial-complete.jpg",
+      "rationale": "Drone view of a complex residential roof with standing seam metal and underlayment."
+    },
+    {
+      "id": "ctl_roofing_public_ctl_gallery_metal_aerial_progress",
+      "label": "Aerial view of metal roof installation progress",
+      "file_type": "image",
+      "source_file": "ctl-roofing/public/ctl/gallery/metal-aerial-progress.jpg"
+    },
+    {
+      "id": "ctl_roofing_public_ctl_gallery_metal_crew_ridge",
+      "label": "Crew working on metal roof ridge",
+      "file_type": "image",
+      "source_file": "ctl-roofing/public/ctl/gallery/metal-crew-ridge.jpg"
+    },
+    {
+      "id": "ctl_roofing_public_ctl_gallery_metal_panel_setting",
+      "label": "Crew setting metal roof panels over underlayment",
+      "file_type": "image",
+      "source_file": "ctl-roofing/public/ctl/gallery/metal-panel-setting.jpg"
+    },
+    {
+      "id": "ctl_roofing_public_ctl_gallery_metal_panels_underlayment",
+      "label": "Aerial view of metal panels being installed over patterned underlayment",
+      "file_type": "image",
+      "source_file": "ctl-roofing/public/ctl/gallery/metal-panels-underlayment.jpg"
+    },
+    {
+      "id": "ctl_roofing_public_ctl_gallery_metal_valley_crew",
+      "label": "Crew installing metal valley on a shingle-to-metal transition",
+      "file_type": "image",
+      "source_file": "ctl-roofing/public/ctl/gallery/metal-valley-crew.jpg"
+    },
+    {
+      "id": "ctl_roofing_public_ctl_gallery_multi_unit_siding",
+      "label": "Multi-unit residential building with new siding and roofing in progress",
+      "file_type": "image",
+      "source_file": "ctl-roofing/public/ctl/gallery/multi-unit-siding.jpg"
+    },
+    {
+      "id": "ctl_roofing_public_ctl_gallery_new_build_exterior",
+      "label": "New construction exterior with house wrap and roofing materials",
+      "file_type": "image",
+      "source_file": "ctl-roofing/public/ctl/gallery/new-build-exterior.jpg"
+    },
+    {
+      "id": "ctl_roofing_public_ctl_gallery_patio_cover_finished",
+      "label": "Finished patio cover with integrated gutter system",
+      "file_type": "image",
+      "source_file": "ctl-roofing/public/ctl/gallery/patio-cover-finished.jpg"
+    },
+    {
+      "id": "ctl_roofing_public_ctl_gallery_patio_frame_going_up",
+      "label": "Patio cover timber frame construction",
+      "file_type": "image",
+      "source_file": "ctl-roofing/public/ctl/gallery/patio-frame-going-up.jpg"
+    },
+    {
+      "id": "ctl_roofing_public_ctl_gallery_patio_timber_joint",
+      "label": "Close-up of timber joint for patio frame",
+      "file_type": "image",
+      "source_file": "ctl-roofing/public/ctl/gallery/patio-timber-joint.jpg"
+    },
+    {
+      "id": "ctl_roofing_public_ctl_gallery_porch_wood_columns",
+      "label": "Finished porch with stained wood columns",
+      "file_type": "image",
+      "source_file": "ctl-roofing/public/ctl/gallery/porch-wood-columns.jpg"
+    },
+    {
+      "id": "ctl_roofing_public_ctl_gallery_shingle_aerial_finished",
+      "label": "Aerial view of finished shingle roof",
+      "file_type": "image",
+      "source_file": "ctl-roofing/public/ctl/gallery/shingle-aerial-finished.jpg"
+    },
+    {
+      "id": "ctl_roofing_public_ctl_gallery_shingle_brick_ranch",
+      "label": "Finished shingle roof on a brick ranch-style house",
+      "file_type": "image",
+      "source_file": "ctl-roofing/public/ctl/gallery/shingle-brick-ranch.jpg"
+    },
+    {
+      "id": "ctl_roofing_public_ctl_gallery_shingle_bundles",
+      "label": "Pallets of Atlas Pinnacle Sun shingle bundles",
+      "file_type": "image",
+      "source_file": "ctl-roofing/public/ctl/gallery/shingle-bundles.jpg"
+    },
+    {
+      "id": "ctl_roofing_public_ctl_gallery_shingle_close_finished",
+      "label": "Top-down aerial view of finished shingle roof",
+      "file_type": "image",
+      "source_file": "ctl-roofing/public/ctl/gallery/shingle-close-finished.jpg"
+    },
+    {
+      "id": "ctl_roofing_public_ctl_gallery_shingle_crew_install",
+      "label": "Crew installing underlayment on a brick house",
+      "file_type": "image",
+      "source_file": "ctl-roofing/public/ctl/gallery/shingle-crew-install.jpg"
+    },
+    {
+      "id": "ctl_roofing_public_ctl_gallery_shingle_deck_exposed",
+      "label": "Aerial view of roof deck with old shingles removed",
+      "file_type": "image",
+      "source_file": "ctl-roofing/public/ctl/gallery/shingle-deck-exposed.jpg"
+    },
+    {
+      "id": "ctl_roofing_public_ctl_gallery_shingle_turbine_vents",
+      "label": "Close-up of finished shingles and turbine vents",
+      "file_type": "image",
+      "source_file": "ctl-roofing/public/ctl/gallery/shingle-turbine-vents.jpg"
+    },
+    {
+      "id": "ctl_roofing_public_ctl_gallery_shingle_two_story",
+      "label": "Finished shingle roof on a two-story brick home",
+      "file_type": "image",
+      "source_file": "ctl-roofing/public/ctl/gallery/shingle-two-story.jpg"
+    },
+    {
+      "id": "ctl_roofing_public_ctl_gallery_storm_tarped_brick",
+      "label": "Brick house with storm protection netting and CTL Roofing signage",
+      "file_type": "image",
+      "source_file": "ctl-roofing/public/ctl/gallery/storm-tarped-brick.jpg"
+    },
+    {
+      "id": "atlas_pinnacle_sun",
+      "label": "Atlas Pinnacle Sun Shingles",
+      "file_type": "concept"
+    },
+    {
+      "id": "metal_roofing_system",
+      "label": "Metal Roofing System",
+      "file_type": "concept"
+    },
+    {
+      "id": "shingle_roofing_system",
+      "label": "Shingle Roofing System",
+      "file_type": "concept"
+    },
+    {
+      "id": "patio_construction",
+      "label": "Patio and Timber Construction",
+      "file_type": "concept"
+    },
+    {
+      "id": "ctl_roofing_public_ctl_gallery_storm_tarps_yard",
+      "label": "Storm tarps in yard during roofing project",
+      "file_type": "image",
+      "source_file": "ctl-roofing/public/ctl/gallery/storm-tarps-yard.jpg",
+      "rationale": "Depicts a residential roofing site with blue tarps on the lawn and a CTL Roofing banner on a safety net."
+    },
+    {
+      "id": "ctl_roofing_public_ctl_gallery_sunroom_exterior",
+      "label": "Exterior view of sunroom with new windows",
+      "file_type": "image",
+      "source_file": "ctl-roofing/public/ctl/gallery/sunroom-exterior.jpg",
+      "rationale": "Shows white siding and multiple double-hung windows on a sunroom addition."
+    },
+    {
+      "id": "ctl_roofing_public_ctl_gallery_tearoff_crew_tarps",
+      "label": "Roofing crew performing tear-off with protective tarps",
+      "file_type": "image",
+      "source_file": "ctl-roofing/public/ctl/gallery/tearoff-crew-tarps.jpg",
+      "rationale": "Large crew working on a brick house roof with debris falling onto lawn tarps."
+    },
+    {
+      "id": "ctl_roofing_public_ctl_gallery_tearoff_decking",
+      "label": "Roof decking exposed during tear-off process",
+      "file_type": "image",
+      "source_file": "ctl-roofing/public/ctl/gallery/tearoff-decking.jpg",
+      "rationale": "Shows plywood decking and underlayment being applied to a large residential roof."
+    },
+    {
+      "id": "ctl_roofing_public_ctl_gallery_thumb_bath_tiled_shower",
+      "label": "Finished marble-patterned tiled shower",
+      "file_type": "image",
+      "source_file": "ctl-roofing/public/ctl/gallery/thumb/bath-tiled-shower.jpg",
+      "rationale": "Interior remodeling shot showing large format marble-look tiles and shower hardware."
+    },
+    {
+      "id": "ctl_roofing_public_ctl_gallery_thumb_bath_vanity_finished",
+      "label": "Finished bathroom vanity and mirrors",
+      "file_type": "image",
+      "source_file": "ctl-roofing/public/ctl/gallery/thumb/bath-vanity-finished.jpg",
+      "rationale": "Shows arched mirrors and modern lighting in a remodeled bathroom."
+    },
+    {
+      "id": "ctl_roofing_public_ctl_gallery_thumb_carport_attached",
+      "label": "Attached metal carport structure",
+      "file_type": "image",
+      "source_file": "ctl-roofing/public/ctl/gallery/thumb/carport-attached.jpg",
+      "rationale": "Depicts a grey metal carport attached to a blue sided house."
+    },
+    {
+      "id": "ctl_roofing_public_ctl_gallery_thumb_copper_sheet_shop",
+      "label": "Copper sheet metal in fabrication shop",
+      "file_type": "image",
+      "source_file": "ctl-roofing/public/ctl/gallery/thumb/copper-sheet-shop.jpg",
+      "rationale": "Shows a large, reflective copper sheet on a work table, indicating custom metal capabilities."
+    },
+    {
+      "id": "ctl_roofing_public_ctl_gallery_thumb_interior_mid_remodel",
+      "label": "Interior room during remodeling process",
+      "file_type": "image",
+      "source_file": "ctl-roofing/public/ctl/gallery/thumb/interior-mid-remodel.jpg",
+      "rationale": "Shows painted walls, ceiling fans, and construction materials in an indoor space."
+    },
+    {
+      "id": "ctl_roofing_public_ctl_gallery_thumb_interior_new_windows",
+      "label": "Interior view of newly installed windows",
+      "file_type": "image",
+      "source_file": "ctl-roofing/public/ctl/gallery/thumb/interior-new-windows.jpg",
+      "rationale": "Shows the inside of a sunroom or porch with brick accents and new white windows."
+    },
+    {
+      "id": "ctl_roofing_public_ctl_gallery_thumb_interior_window_wall",
+      "label": "Interior wall with multiple windows",
+      "file_type": "image",
+      "source_file": "ctl-roofing/public/ctl/gallery/thumb/interior-window-wall.jpg",
+      "rationale": "Shows a clean interior view of a window wall with brick pillars."
+    },
+    {
+      "id": "ctl_roofing_public_ctl_gallery_thumb_metal_aerial_complete",
+      "label": "Aerial view of completed metal roof",
+      "file_type": "image",
+      "source_file": "ctl-roofing/public/ctl/gallery/thumb/metal-aerial-complete.jpg",
+      "rationale": "Drone shot showing a large residential property with a new dark metal roof."
+    },
+    {
+      "id": "ctl_roofing_public_ctl_gallery_thumb_metal_aerial_progress",
+      "label": "Aerial view of metal roof installation in progress",
+      "file_type": "image",
+      "source_file": "ctl-roofing/public/ctl/gallery/thumb/metal-aerial-progress.jpg",
+      "rationale": "Drone shot showing underlayment and partial metal panel coverage on a complex roof."
+    },
+    {
+      "id": "ctl_roofing_public_ctl_gallery_thumb_metal_crew_ridge",
+      "label": "Roofing crew working on metal roof ridge",
+      "file_type": "image",
+      "source_file": "ctl-roofing/public/ctl/gallery/thumb/metal-crew-ridge.jpg",
+      "rationale": "Shows workers on a roof installing metal panels over Zip System sheathing."
+    },
+    {
+      "id": "ctl_roofing_public_ctl_gallery_thumb_metal_panel_setting",
+      "label": "Worker setting metal roof panel",
+      "file_type": "image",
+      "source_file": "ctl-roofing/public/ctl/gallery/thumb/metal-panel-setting.jpg",
+      "rationale": "Close-up of a roofer aligning a light-colored metal panel over underlayment."
+    },
+    {
+      "id": "ctl_roofing_public_ctl_gallery_thumb_metal_panels_underlayment",
+      "label": "Metal panels being installed over underlayment",
+      "file_type": "image",
+      "source_file": "ctl-roofing/public/ctl/gallery/thumb/metal-panels-underlayment.jpg",
+      "rationale": "Overhead view of workers installing standing seam metal roofing."
+    },
+    {
+      "id": "ctl_roofing_public_ctl_gallery_thumb_metal_valley_crew",
+      "label": "Crew working on metal roof valley",
+      "file_type": "image",
+      "source_file": "ctl-roofing/public/ctl/gallery/thumb/metal-valley-crew.jpg",
+      "rationale": "Shows multiple workers coordinating the installation of metal panels in a roof valley."
+    },
+    {
+      "id": "ctl_roofing_public_ctl_gallery_thumb_multi_unit_siding",
+      "label": "Siding installation on multi-unit or large residential build",
+      "file_type": "image",
+      "source_file": "ctl-roofing/public/ctl/gallery/thumb/multi-unit-siding.jpg",
+      "rationale": "Shows a two-story house with red and yellow siding under construction."
+    },
+    {
+      "id": "ctl_roofing_public_ctl_gallery_thumb_new_build_exterior",
+      "label": "Exterior of new residential construction",
+      "file_type": "image",
+      "source_file": "ctl-roofing/public/ctl/gallery/thumb/new-build-exterior.jpg",
+      "rationale": "Shows a house wrapped in Tyvek with roofing materials and a CTL Roofing sign in the foreground."
+    },
+    {
+      "id": "ctl_roofing_public_ctl_gallery_thumb_patio_cover_finished",
+      "label": "Finished patio cover and concrete slab",
+      "file_type": "image",
+      "source_file": "ctl-roofing/public/ctl/gallery/thumb/patio-cover-finished.jpg",
+      "rationale": "Shows a completed metal patio cover over a fresh concrete pad overlooking a pond."
+    },
+    {
+      "id": "ctl_roofing_public_ctl_gallery_thumb_patio_frame_going_up",
+      "label": "Patio frame construction photo",
+      "file_type": "image",
+      "source_file": "ctl-roofing/public/ctl/gallery/thumb/patio-frame-going-up.jpg"
+    },
+    {
+      "id": "ctl_roofing_public_ctl_gallery_thumb_patio_timber_joint",
+      "label": "Patio timber joint detail photo",
+      "file_type": "image",
+      "source_file": "ctl-roofing/public/ctl/gallery/thumb/patio-timber-joint.jpg"
+    },
+    {
+      "id": "ctl_roofing_public_ctl_gallery_thumb_porch_wood_columns",
+      "label": "Finished porch with wood columns photo",
+      "file_type": "image",
+      "source_file": "ctl-roofing/public/ctl/gallery/thumb/porch-wood-columns.jpg"
+    },
+    {
+      "id": "ctl_roofing_public_ctl_gallery_thumb_shingle_aerial_finished",
+      "label": "Aerial view of finished shingle roof photo",
+      "file_type": "image",
+      "source_file": "ctl-roofing/public/ctl/gallery/thumb/shingle-aerial-finished.jpg"
+    },
+    {
+      "id": "ctl_roofing_public_ctl_gallery_thumb_shingle_brick_ranch",
+      "label": "Shingle roof on brick ranch house photo",
+      "file_type": "image",
+      "source_file": "ctl-roofing/public/ctl/gallery/thumb/shingle-brick-ranch.jpg"
+    },
+    {
+      "id": "ctl_roofing_public_ctl_gallery_thumb_shingle_bundles",
+      "label": "Pallets of Atlas Pinnacle Sun shingles photo",
+      "file_type": "image",
+      "source_file": "ctl-roofing/public/ctl/gallery/thumb/shingle-bundles.jpg"
+    },
+    {
+      "id": "ctl_roofing_public_ctl_gallery_thumb_shingle_close_finished",
+      "label": "Close-up of finished shingle roof photo",
+      "file_type": "image",
+      "source_file": "ctl-roofing/public/ctl/gallery/thumb/shingle-close-finished.jpg"
+    },
+    {
+      "id": "ctl_roofing_public_ctl_gallery_thumb_shingle_crew_install",
+      "label": "Roofing crew installing shingles photo",
+      "file_type": "image",
+      "source_file": "ctl-roofing/public/ctl/gallery/thumb/shingle-crew-install.jpg"
+    },
+    {
+      "id": "ctl_roofing_public_ctl_gallery_thumb_shingle_deck_exposed",
+      "label": "Roof deck exposed during shingle replacement photo",
+      "file_type": "image",
+      "source_file": "ctl-roofing/public/ctl/gallery/thumb/shingle-deck-exposed.jpg"
+    },
+    {
+      "id": "ctl_roofing_public_ctl_gallery_thumb_shingle_turbine_vents",
+      "label": "Shingle roof with turbine vents photo",
+      "file_type": "image",
+      "source_file": "ctl-roofing/public/ctl/gallery/thumb/shingle-turbine-vents.jpg"
+    },
+    {
+      "id": "ctl_roofing_public_ctl_gallery_thumb_shingle_two_story",
+      "label": "Before and after shingle roof on two-story house photo",
+      "file_type": "image",
+      "source_file": "ctl-roofing/public/ctl/gallery/thumb/shingle-two-story.jpg"
+    },
+    {
+      "id": "ctl_roofing_public_ctl_gallery_thumb_storm_tarped_brick",
+      "label": "Storm tarps on brick house photo",
+      "file_type": "image",
+      "source_file": "ctl-roofing/public/ctl/gallery/thumb/storm-tarped-brick.jpg"
+    },
+    {
+      "id": "ctl_roofing_public_ctl_gallery_thumb_storm_tarps_yard",
+      "label": "Roofing crew with tarps and CTL Roofing sign photo",
+      "file_type": "image",
+      "source_file": "ctl-roofing/public/ctl/gallery/thumb/storm-tarps-yard.jpg"
+    },
+    {
+      "id": "ctl_roofing_public_ctl_gallery_thumb_sunroom_exterior",
+      "label": "Sunroom exterior with windows and brick photo",
+      "file_type": "image",
+      "source_file": "ctl-roofing/public/ctl/gallery/thumb/sunroom-exterior.jpg"
+    },
+    {
+      "id": "ctl_roofing_public_ctl_gallery_thumb_tearoff_crew_tarps",
+      "label": "Roofing crew performing tear-off with tarps photo",
+      "file_type": "image",
+      "source_file": "ctl-roofing/public/ctl/gallery/thumb/tearoff-crew-tarps.jpg"
+    },
+    {
+      "id": "ctl_roofing_public_ctl_gallery_thumb_tearoff_decking",
+      "label": "Roof decking exposed during tear-off photo",
+      "file_type": "image",
+      "source_file": "ctl-roofing/public/ctl/gallery/thumb/tearoff-decking.jpg"
+    },
+    {
+      "id": "ctl_roofing_public_ctl_team_alex_alverez",
+      "label": "Alex Alverez team photo",
+      "file_type": "image",
+      "source_file": "ctl-roofing/public/ctl/team/alex-alverez.jpg"
+    },
+    {
+      "id": "ctl_roofing_public_ctl_team_ceci_harper",
+      "label": "Ceci Harper team photo",
+      "file_type": "image",
+      "source_file": "ctl-roofing/public/ctl/team/ceci-harper.jpg"
+    },
+    {
+      "id": "ctl_roofing_public_ctl_team_jody_holliday",
+      "label": "Jody Holliday team photo",
+      "file_type": "image",
+      "source_file": "ctl-roofing/public/ctl/team/jody-holliday.jpg"
+    },
+    {
+      "id": "ctl_roofing_public_ctl_team_jp_bourdreaux",
+      "label": "JP Bourdreaux team photo",
+      "file_type": "image",
+      "source_file": "ctl-roofing/public/ctl/team/jp-bourdreaux.jpg"
+    },
+    {
+      "id": "ctl_roofing_public_ctl_team_megan_chauvin",
+      "label": "Megan Chauvin - Team Member Photo",
+      "file_type": "image",
+      "source_file": "ctl-roofing/public/ctl/team/megan-chauvin.jpg"
+    },
+    {
+      "id": "ctl_roofing_public_ctl_team_paige_thacker",
+      "label": "Paige Thacker - Team Member Photo",
+      "file_type": "image",
+      "source_file": "ctl-roofing/public/ctl/team/paige-thacker.jpg"
+    },
+    {
+      "id": "ctl_roofing_public_ctl_team_peyton_peltier",
+      "label": "Peyton Peltier - Team Member Photo",
+      "file_type": "image",
+      "source_file": "ctl-roofing/public/ctl/team/peyton-peltier.jpg"
+    },
+    {
+      "id": "ctl_roofing_public_ctl_team_scott_toups",
+      "label": "Scott Toups - Team Member Photo",
+      "file_type": "image",
+      "source_file": "ctl-roofing/public/ctl/team/scott-toups.jpg"
+    },
+    {
+      "id": "ctl_roofing_public_ctl_video_job_walkthrough",
+      "label": "Job Walkthrough Video Thumbnail",
+      "file_type": "image",
+      "source_file": "ctl-roofing/public/ctl/video/job-walkthrough.jpg"
+    },
+    {
+      "id": "ctl_pictures_after_1",
+      "label": "Completed Shingle Roof - Aerial View",
+      "file_type": "image",
+      "source_file": "ctl_pictures/after-1.jpg"
+    },
+    {
+      "id": "ctl_pictures_ariel_1",
+      "label": "Metal Roof Installation - Aerial View 1",
+      "file_type": "image",
+      "source_file": "ctl_pictures/ariel-1.jpg"
+    },
+    {
+      "id": "ctl_pictures_ariel_2",
+      "label": "Metal Roof Installation - Aerial View 2",
+      "file_type": "image",
+      "source_file": "ctl_pictures/ariel-2.jpg"
+    },
+    {
+      "id": "ctl_pictures_ariel_3",
+      "label": "Metal Roof Installation - Aerial View 3",
+      "file_type": "image",
+      "source_file": "ctl_pictures/ariel-3.jpg"
+    },
+    {
+      "id": "ctl_pictures_ariel_4",
+      "label": "Roof Underlayment and Metal Panels - Aerial View",
+      "file_type": "image",
+      "source_file": "ctl_pictures/ariel-4.jpg"
+    },
+    {
+      "id": "ctl_pictures_ariel_5",
+      "label": "Roof Tear-off and Decking - Aerial View",
+      "file_type": "image",
+      "source_file": "ctl_pictures/ariel-5.jpg"
+    },
+    {
+      "id": "ctl_pictures_ariel_6",
+      "label": "Completed Shingle Roof - Aerial View 2",
+      "file_type": "image",
+      "source_file": "ctl_pictures/ariel-6.jpg"
+    },
+    {
+      "id": "ctl_pictures_ariel_7",
+      "label": "Completed Shingle Roof - Aerial View 3",
+      "file_type": "image",
+      "source_file": "ctl_pictures/ariel-7.jpg"
+    },
+    {
+      "id": "ctl_pictures_ariel_8",
+      "label": "Fortified Roof Completion - Aerial View",
+      "file_type": "image",
+      "source_file": "ctl_pictures/ariel-8.jpg"
+    },
+    {
+      "id": "ctl_pictures_before_1",
+      "label": "Copper Sheet Material",
+      "file_type": "image",
+      "source_file": "ctl_pictures/before-1.jpg"
+    },
+    {
+      "id": "ctl_pictures_covering_1",
+      "label": "Patio Cover Framing - Construction Site",
+      "file_type": "image",
+      "source_file": "ctl_pictures/covering-1.jpg"
+    },
+    {
+      "id": "ctl_pictures_covering_10",
+      "label": "Completed Patio Cover and Siding",
+      "file_type": "image",
+      "source_file": "ctl_pictures/covering-10.jpg"
+    },
+    {
+      "id": "ctl_pictures_covering_2",
+      "label": "Patio Cover Post and Beam Detail",
+      "file_type": "image",
+      "source_file": "ctl_pictures/covering-2.jpg"
+    },
+    {
+      "id": "ctl_pictures_covering_3",
+      "label": "Patio Cover Rafter Installation",
+      "file_type": "image",
+      "source_file": "ctl_pictures/covering-3.jpg"
+    },
+    {
+      "id": "ctl_pictures_covering_4",
+      "label": "Completed Deck and Ramp Construction",
+      "file_type": "image",
+      "source_file": "ctl_pictures/covering-4.jpg"
+    },
+    {
+      "id": "ctl_pro_brand",
+      "label": "CTL Pro Construction & Roofing",
+      "file_type": "concept"
+    },
+    {
+      "id": "ctl_pictures_covering_5",
+      "label": "Exterior view of a house with white siding and brick accents",
+      "file_type": "image",
+      "source_file": "ctl_pictures/covering-5.jpg"
+    },
+    {
+      "id": "ctl_pictures_covering_6",
+      "label": "Interior view of a sunroom with brick lower walls and white windows",
+      "file_type": "image",
+      "source_file": "ctl_pictures/covering-6.jpg"
+    },
+    {
+      "id": "ctl_pictures_covering_7",
+      "label": "Interior view of a room with large windows and tile flooring",
+      "file_type": "image",
+      "source_file": "ctl_pictures/covering-7.jpg"
+    },
+    {
+      "id": "ctl_pictures_covering_8",
+      "label": "Exterior view of a patio cover attached to a house",
+      "file_type": "image",
+      "source_file": "ctl_pictures/covering-8.jpg"
+    },
+    {
+      "id": "ctl_pictures_covering_9",
+      "label": "Exterior view of a large metal carport attached to a house",
+      "file_type": "image",
+      "source_file": "ctl_pictures/covering-9.jpg"
+    },
+    {
+      "id": "ctl_pictures_leak_1",
+      "label": "Ceiling with water damage stains and CTL Roofing logo",
+      "file_type": "image",
+      "source_file": "ctl_pictures/leak-1.jpg"
+    },
+    {
+      "id": "ctl_pictures_logo",
+      "label": "CTL Pro logo with Louisiana state outline",
+      "file_type": "image",
+      "source_file": "ctl_pictures/logo.jpg"
+    },
+    {
+      "id": "ctl_pictures_materials_1",
+      "label": "Warehouse with rolls of Mueller Inc. metal roofing materials",
+      "file_type": "image",
+      "source_file": "ctl_pictures/materials-1.jpg"
+    },
+    {
+      "id": "ctl_pictures_materials_2",
+      "label": "Pallets of Atlas Pinnacle Sun roofing shingles",
+      "file_type": "image",
+      "source_file": "ctl_pictures/materials-2.jpg"
+    },
+    {
+      "id": "ctl_pictures_reconstruction_1",
+      "label": "Kitchen under renovation with new cabinets and island",
+      "file_type": "image",
+      "source_file": "ctl_pictures/reconstruction-1.jpg"
+    },
+    {
+      "id": "ctl_pictures_reconstruction_2",
+      "label": "Interior room with light blue walls under renovation",
+      "file_type": "image",
+      "source_type": "image",
+      "source_file": "ctl_pictures/reconstruction-2.jpg"
+    },
+    {
+      "id": "ctl_pictures_reconstruction_3",
+      "label": "Newly tiled bathroom shower and tub",
+      "file_type": "image",
+      "source_file": "ctl_pictures/reconstruction-3.jpg"
+    },
+    {
+      "id": "ctl_pictures_reconstruction_4",
+      "label": "Modern bathroom vanity with double sinks and marble top",
+      "file_type": "image",
+      "source_file": "ctl_pictures/reconstruction-4.jpg"
+    },
+    {
+      "id": "ctl_pictures_roof_1",
+      "label": "Large house with CTL Roofing banner and protective netting",
+      "file_type": "image",
+      "source_file": "ctl_pictures/roof-1.jpg"
+    },
+    {
+      "id": "ctl_pictures_roof_10",
+      "label": "House during roof replacement with tarps and netting",
+      "file_type": "image",
+      "source_file": "ctl_pictures/roof-10.jpg"
+    },
+    {
+      "id": "ctl_pictures_roof_11",
+      "label": "New house construction showing ZIP System wall sheathing",
+      "file_type": "image",
+      "source_file": "ctl_pictures/roof-11.jpg"
+    },
+    {
+      "id": "ctl_pictures_roof_12",
+      "label": "Workers installing roofing on a new two-story house",
+      "file_type": "image",
+      "source_file": "ctl_pictures/roof-12.jpg"
+    },
+    {
+      "id": "ctl_pictures_roof_2",
+      "label": "Before and after comparison of a residential roof replacement",
+      "file_type": "image",
+      "source_file": "ctl_pictures/roof-2.jpg"
+    },
+    {
+      "id": "ctl_pictures_roof_3",
+      "label": "Brick house with a newly installed shingle roof",
+      "file_type": "image",
+      "source_file": "ctl_pictures/roof-3.jpg"
+    },
+    {
+      "id": "ctl_pictures_roof_4",
+      "label": "Roofers installing underlayment on a residential roof",
+      "file_type": "image",
+      "source_file": "ctl_pictures/roof-4.jpg"
+    },
+    {
+      "id": "ctl_roofing",
+      "label": "CTL Roofing",
+      "file_type": "concept",
+      "rationale": "Entity identified from logos and banners in multiple images."
+    },
+    {
+      "id": "mueller_inc",
+      "label": "Mueller, Inc.",
+      "file_type": "concept",
+      "rationale": "Supplier identified from material packaging in ctl_pictures/materials-1.jpg."
+    },
+    {
+      "id": "atlas_roofing",
+      "label": "Atlas Roofing Corporation",
+      "file_type": "concept",
+      "rationale": "Supplier identified from shingle packaging in ctl_pictures/materials-2.jpg."
+    },
+    {
+      "id": "ctl_pictures_roof_5",
+      "label": "Photo of a house under construction with Tyvek wrap and roofing materials",
+      "file_type": "image",
+      "source_file": "ctl_pictures/roof-5.jpg"
+    },
+    {
+      "id": "ctl_pictures_roof_6",
+      "label": "Photo of workers installing a metal roof on a building with ZIP System sheathing",
+      "file_type": "image",
+      "source_file": "ctl_pictures/roof-6.jpg"
+    },
+    {
+      "id": "ctl_pictures_roof_7",
+      "label": "Photo of workers on the roof of a blue two-story house with CTL Roofing logo",
+      "file_type": "image",
+      "source_file": "ctl_pictures/roof-7.jpg"
+    },
+    {
+      "id": "ctl_pictures_roof_8",
+      "label": "Photo of workers performing roof repairs on a blue and brick house",
+      "file_type": "image",
+      "source_file": "ctl_pictures/roof-8.jpg"
+    },
+    {
+      "id": "ctl_pictures_roof_9",
+      "label": "High-angle photo of a finished shingle roof with vents",
+      "file_type": "image",
+      "source_file": "ctl_pictures/roof-9.jpg"
+    },
+    {
+      "id": "ctl_pictures_team_1",
+      "label": "Photo of CTL Roofing team members sitting at a conference table with blueprints",
+      "file_type": "image",
+      "source_file": "ctl_pictures/team-1.jpg"
+    },
+    {
+      "id": "ctl_pictures_team_2",
+      "label": "Group photo of CTL Roofing staff standing in an office",
+      "file_type": "image",
+      "source_file": "ctl_pictures/team-2.jpg"
+    },
+    {
+      "id": "ctl_pictures_team_3",
+      "label": "Photo of a large team meeting or training session in an office",
+      "file_type": "image",
+      "source_file": "ctl_pictures/team-3.jpg"
+    },
+    {
+      "id": "ctl_pictures_team_4",
+      "label": "Photo of team members in safety vests and hard hats in front of an Atlas 40 years sign",
+      "file_type": "image",
+      "source_file": "ctl_pictures/team-4.jpg"
+    },
+    {
+      "id": "ctl_pictures_team_5",
+      "label": "Photo of team members in safety gear inside a manufacturing or warehouse facility",
+      "file_type": "image",
+      "source_file": "ctl_pictures/team-5.jpg"
+    },
+    {
+      "id": "ctl_pictures_work_1",
+      "label": "Photo of a worker installing metal roofing panels near a body of water",
+      "file_type": "image",
+      "source_file": "ctl_pictures/work-1.jpg"
+    },
+    {
+      "id": "ctl_pictures_work_2",
+      "label": "Photo of workers installing metal roofing over underlayment",
+      "file_type": "image",
+      "source_file": "ctl_pictures/work-2.jpg"
+    },
+    {
+      "id": "ctl_pictures_work_3",
+      "label": "Photo of workers applying underlayment to a large residential roof",
+      "file_type": "image",
+      "source_file": "ctl_pictures/work-3.jpg"
+    },
+    {
+      "id": "ctl_pictures_work_4",
+      "label": "Photo of a roofing crew working on a house with a CTL Roofing banner",
+      "file_type": "image",
+      "source_file": "ctl_pictures/work-4.jpg"
+    },
+    {
+      "id": "ctl_pictures_work_5",
+      "label": "Photo of a large crew installing shingles on a brick house",
+      "file_type": "image",
+      "source_file": "ctl_pictures/work-5.jpg"
+    },
+    {
+      "id": "ctl_pictures_work_6",
+      "label": "Aerial photo of workers installing a metal roof section on a large house",
+      "file_type": "image",
+      "source_file": "ctl_pictures/work-6.jpg"
+    },
+    {
+      "id": "ctl_pictures_work_7",
+      "label": "Photo of a large crew stripping shingles from a residential roof",
+      "file_type": "image",
+      "source_file": "ctl_pictures/work-7.jpg"
+    },
+    {
+      "id": "ctl_pictures_headshots_alex_alverez",
+      "label": "Headshot of Alex Alverez in a CTL Pro polo shirt",
+      "file_type": "image",
+      "source_file": "ctl_pictures/headshots/alex-alverez.webp"
+    },
+    {
+      "id": "ctl_pictures_headshots_ceci_harper",
+      "label": "Headshot of Ceci Harper wearing a CTL Roofing hat and shirt",
+      "file_type": "image",
+      "source_file": "ctl_pictures/headshots/ceci-harper.jpg"
+    },
+    {
+      "id": "ctl_pictures_headshots_jody_holliday",
+      "label": "Headshot of Jody Holliday in a CTL Pro polo shirt",
+      "file_type": "image",
+      "source_file": "ctl_pictures/headshots/jody-holliday.webp"
+    },
+    {
+      "id": "ctl_pictures_headshots_jp_bourdreaux",
+      "label": "Headshot of JP Bourdreaux",
+      "file_type": "image",
+      "source_file": "ctl_pictures/headshots/jp-bourdreaux.jpg",
+      "rationale": "Professional headshot of an individual in front of a CTL Pro logo."
+    },
+    {
+      "id": "ctl_pictures_headshots_megan_chauvin",
+      "label": "Headshot of Megan Chauvin",
+      "file_type": "image",
+      "source_file": "ctl_pictures/headshots/megan_chauvin.webp",
+      "rationale": "Professional headshot of an individual in front of a CTL Pro logo."
+    },
+    {
+      "id": "ctl_pictures_headshots_owner",
+      "label": "Headshot of Owner",
+      "file_type": "image",
+      "source_file": "ctl_pictures/headshots/owner.jpg",
+      "rationale": "Professional headshot of an individual in front of a CTL Pro logo."
+    },
+    {
+      "id": "ctl_pictures_headshots_paige_thacker",
+      "label": "Photo of Paige Thacker",
+      "file_type": "image",
+      "source_file": "ctl_pictures/headshots/paige-thacker.jpg",
+      "rationale": "Selfie-style photo of an individual on a roof wearing a CTL Pro shirt."
+    },
+    {
+      "id": "ctl_pictures_headshots_peyton_peltier",
+      "label": "Headshot of Peyton Peltier",
+      "file_type": "image",
+      "source_file": "ctl_pictures/headshots/peyton_peltier.jpg",
+      "rationale": "Professional headshot of an individual in front of a CTL Pro logo."
+    },
+    {
+      "id": "ctl_pictures_headshots_scott_toups",
+      "label": "Photo of Scott Toups",
+      "file_type": "image",
+      "source_file": "ctl_pictures/headshots/scott_toups.webp",
+      "rationale": "Professional photo of an individual in an office setting with a CTL Pro logo."
+    },
+    {
+      "id": "ctl_pro_concept",
+      "label": "CTL Pro Roofing & Exterior",
+      "file_type": "concept",
+      "source_file": "ctl_pictures/headshots/owner.jpg",
+      "rationale": "The company branding visible in all provided images."
+    }
+  ],
+  "edges": [
+    {
+      "source": "public_ctl_service_emergency",
+      "target": "public_ctl_emergency_tearoff",
+      "relation": "semantically_similar_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "ctl-roofing/public/ctl/service-emergency.jpg"
+    },
+    {
+      "source": "public_ctl_service_roofing",
+      "target": "public_ctl_roofing_metal_aerial",
+      "relation": "semantically_similar_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "ctl-roofing/public/ctl/service-roofing.jpg"
+    },
+    {
+      "source": "public_ctl_hero",
+      "target": "public_ctl_crew_two_story",
+      "relation": "semantically_similar_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "ctl-roofing/public/ctl/hero.jpg"
+    },
+    {
+      "source": "ctl_roofing_public_ctl_work_standing_seam",
+      "target": "ctl_roofing_public_ctl_gallery_metal_aerial_complete",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "ctl_roofing_public_ctl_work_patio_cover",
+      "target": "ctl_roofing_public_ctl_gallery_carport_attached",
+      "relation": "semantically_similar_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "ctl_roofing_public_ctl_work_window_replacement",
+      "target": "ctl_roofing_public_ctl_gallery_interior_window_wall",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "ctl_roofing_public_ctl_gallery_shingle_bundles",
+      "target": "atlas_pinnacle_sun",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "ctl_roofing_public_ctl_gallery_metal_aerial_progress",
+      "target": "metal_roofing_system",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.9
+    },
+    {
+      "source": "ctl_roofing_public_ctl_gallery_metal_crew_ridge",
+      "target": "metal_roofing_system",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.9
+    },
+    {
+      "source": "ctl_roofing_public_ctl_gallery_metal_panel_setting",
+      "target": "metal_roofing_system",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.9
+    },
+    {
+      "source": "ctl_roofing_public_ctl_gallery_metal_panels_underlayment",
+      "target": "metal_roofing_system",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.9
+    },
+    {
+      "source": "ctl_roofing_public_ctl_gallery_metal_valley_crew",
+      "target": "metal_roofing_system",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.9
+    },
+    {
+      "source": "ctl_roofing_public_ctl_gallery_shingle_aerial_finished",
+      "target": "shingle_roofing_system",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.9
+    },
+    {
+      "source": "ctl_roofing_public_ctl_gallery_shingle_brick_ranch",
+      "target": "shingle_roofing_system",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.9
+    },
+    {
+      "source": "ctl_roofing_public_ctl_gallery_shingle_close_finished",
+      "target": "shingle_roofing_system",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.9
+    },
+    {
+      "source": "ctl_roofing_public_ctl_gallery_shingle_crew_install",
+      "target": "shingle_roofing_system",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.9
+    },
+    {
+      "source": "ctl_roofing_public_ctl_gallery_shingle_deck_exposed",
+      "target": "shingle_roofing_system",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.9
+    },
+    {
+      "source": "ctl_roofing_public_ctl_gallery_shingle_turbine_vents",
+      "target": "shingle_roofing_system",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.9
+    },
+    {
+      "source": "ctl_roofing_public_ctl_gallery_shingle_two_story",
+      "target": "shingle_roofing_system",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.9
+    },
+    {
+      "source": "ctl_roofing_public_ctl_gallery_patio_cover_finished",
+      "target": "patio_construction",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.9
+    },
+    {
+      "source": "ctl_roofing_public_ctl_gallery_patio_frame_going_up",
+      "target": "patio_construction",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.9
+    },
+    {
+      "source": "ctl_roofing_public_ctl_gallery_patio_timber_joint",
+      "target": "patio_construction",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.9
+    },
+    {
+      "source": "ctl_roofing_public_ctl_gallery_storm_tarps_yard",
+      "target": "ctl_roofing_public_ctl_gallery_tearoff_crew_tarps",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "ctl-roofing/public/ctl/gallery/storm-tarps-yard.jpg"
+    },
+    {
+      "source": "ctl_roofing_public_ctl_gallery_thumb_metal_aerial_progress",
+      "target": "ctl_roofing_public_ctl_gallery_thumb_metal_aerial_complete",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.9,
+      "source_file": "ctl-roofing/public/ctl/gallery/thumb/metal-aerial-progress.jpg"
+    },
+    {
+      "source": "ctl_roofing_public_ctl_gallery_thumb_interior_new_windows",
+      "target": "ctl_roofing_public_ctl_gallery_sunroom_exterior",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "ctl-roofing/public/ctl/gallery/thumb/interior-new-windows.jpg"
+    },
+    {
+      "source": "ctl_roofing_public_ctl_gallery_thumb_patio_frame_going_up",
+      "target": "ctl_roofing_public_ctl_gallery_thumb_patio_timber_joint",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.9,
+      "source_file": "ctl-roofing/public/ctl/gallery/thumb/patio-frame-going-up.jpg"
+    },
+    {
+      "source": "ctl_roofing_public_ctl_gallery_thumb_tearoff_crew_tarps",
+      "target": "ctl_roofing_public_ctl_gallery_thumb_tearoff_decking",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.9,
+      "source_file": "ctl-roofing/public/ctl/gallery/thumb/tearoff-crew-tarps.jpg"
+    },
+    {
+      "source": "ctl_roofing_public_ctl_team_megan_chauvin",
+      "target": "ctl_pro_brand",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "ctl_roofing_public_ctl_team_paige_thacker",
+      "target": "ctl_pro_brand",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "ctl_roofing_public_ctl_team_peyton_peltier",
+      "target": "ctl_pro_brand",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "ctl_roofing_public_ctl_team_scott_toups",
+      "target": "ctl_pro_brand",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "ctl_roofing_public_ctl_video_job_walkthrough",
+      "target": "ctl_pro_brand",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "ctl_pictures_ariel_8",
+      "target": "ctl_pro_brand",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "ctl_pictures_leak_1",
+      "target": "ctl_roofing",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "ctl_pictures_logo",
+      "target": "ctl_roofing",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "ctl_pictures_roof_1",
+      "target": "ctl_roofing",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "ctl_pictures_materials_1",
+      "target": "mueller_inc",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "ctl_pictures_materials_2",
+      "target": "atlas_roofing",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "ctl_pictures_roof_4",
+      "target": "ctl_roofing",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.9,
+      "rationale": "Depicts roofing work consistent with the services advertised by CTL Roofing."
+    },
+    {
+      "source": "ctl_pictures_team_1",
+      "target": "ctl_pictures_headshots_jody_holliday",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "ctl_pictures_team_1",
+      "target": "ctl_pictures_headshots_ceci_harper",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "ctl_pictures_team_2",
+      "target": "ctl_pictures_headshots_alex_alverez",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "ctl_pictures_team_2",
+      "target": "ctl_pictures_headshots_jody_holliday",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "ctl_pictures_team_4",
+      "target": "ctl_pictures_headshots_jody_holliday",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "ctl_pictures_headshots_jp_bourdreaux",
+      "target": "ctl_pro_concept",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "ctl_pictures/headshots/jp-bourdreaux.jpg"
+    },
+    {
+      "source": "ctl_pictures_headshots_megan_chauvin",
+      "target": "ctl_pro_concept",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "ctl_pictures/headshots/megan_chauvin.webp"
+    },
+    {
+      "source": "ctl_pictures_headshots_owner",
+      "target": "ctl_pro_concept",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "ctl_pictures/headshots/owner.jpg"
+    },
+    {
+      "source": "ctl_pictures_headshots_paige_thacker",
+      "target": "ctl_pro_concept",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "ctl_pictures/headshots/paige-thacker.jpg"
+    },
+    {
+      "source": "ctl_pictures_headshots_peyton_peltier",
+      "target": "ctl_pro_concept",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "ctl_pictures/headshots/peyton_peltier.jpg"
+    },
+    {
+      "source": "ctl_pictures_headshots_scott_toups",
+      "target": "ctl_pro_concept",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "ctl_pictures/headshots/scott_toups.webp"
+    }
+  ],
+  "hyperedges": [
+    {
+      "id": "ctl_service_portfolio",
+      "label": "CTL Service Portfolio",
+      "nodes": [
+        "public_ctl_service_emergency",
+        "public_ctl_service_outdoor",
+        "public_ctl_service_remodeling",
+        "public_ctl_service_roofing"
+      ],
+      "relation": "participate_in",
+      "confidence": "INFERRED",
+      "confidence_score": 0.9,
+      "source_file": "ctl-roofing/public/ctl/"
+    },
+    {
+      "id": "roofing_services_flow",
+      "label": "Roofing Service Lifecycle",
+      "nodes": [
+        "ctl_roofing_public_ctl_water_stain_ceiling",
+        "ctl_roofing_public_ctl_storm_tarped_home",
+        "ctl_roofing_public_ctl_work_tear_off",
+        "ctl_roofing_public_ctl_work_architectural_shingles"
+      ],
+      "relation": "participate_in",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8
+    },
+    {
+      "id": "metal_roofing_workflow",
+      "label": "Metal Roofing Installation Workflow",
+      "nodes": [
+        "ctl_roofing_public_ctl_gallery_metal_panels_underlayment",
+        "ctl_roofing_public_ctl_gallery_metal_panel_setting",
+        "ctl_roofing_public_ctl_gallery_metal_aerial_progress"
+      ],
+      "relation": "participate_in",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85
+    },
+    {
+      "id": "shingle_roofing_workflow",
+      "label": "Shingle Roofing Installation Workflow",
+      "nodes": [
+        "ctl_roofing_public_ctl_gallery_shingle_deck_exposed",
+        "ctl_roofing_public_ctl_gallery_shingle_crew_install",
+        "ctl_roofing_public_ctl_gallery_shingle_aerial_finished"
+      ],
+      "relation": "participate_in",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85
+    },
+    {
+      "id": "patio_timber_workflow",
+      "label": "Patio Timber Framing Workflow",
+      "nodes": [
+        "ctl_roofing_public_ctl_gallery_patio_frame_going_up",
+        "ctl_roofing_public_ctl_gallery_patio_timber_joint",
+        "ctl_roofing_public_ctl_gallery_patio_cover_finished"
+      ],
+      "relation": "participate_in",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85
+    },
+    {
+      "id": "metal_roofing_workflow",
+      "label": "Metal Roofing Installation Workflow",
+      "nodes": [
+        "ctl_roofing_public_ctl_gallery_thumb_metal_crew_ridge",
+        "ctl_roofing_public_ctl_gallery_thumb_metal_panel_setting",
+        "ctl_roofing_public_ctl_gallery_thumb_metal_panels_underlayment",
+        "ctl_roofing_public_ctl_gallery_thumb_metal_valley_crew"
+      ],
+      "relation": "participate_in",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.95,
+      "source_file": "ctl-roofing/public/ctl/gallery/"
+    },
+    {
+      "id": "interior_remodeling_project",
+      "label": "Bathroom and Interior Remodeling",
+      "nodes": [
+        "ctl_roofing_public_ctl_gallery_thumb_bath_tiled_shower",
+        "ctl_roofing_public_ctl_gallery_thumb_bath_vanity_finished",
+        "ctl_roofing_public_ctl_gallery_thumb_interior_mid_remodel"
+      ],
+      "relation": "participate_in",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "ctl-roofing/public/ctl/gallery/"
+    },
+    {
+      "id": "shingle_roofing_process",
+      "label": "Shingle Roofing Workflow",
+      "nodes": [
+        "ctl_roofing_public_ctl_gallery_thumb_shingle_bundles",
+        "ctl_roofing_public_ctl_gallery_thumb_shingle_crew_install",
+        "ctl_roofing_public_ctl_gallery_thumb_shingle_deck_exposed",
+        "ctl_roofing_public_ctl_gallery_thumb_shingle_aerial_finished"
+      ],
+      "relation": "participate_in",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.95,
+      "source_file": "ctl-roofing/public/ctl/gallery/thumb/"
+    },
+    {
+      "id": "ctl_roofing_team",
+      "label": "CTL Roofing Team Members",
+      "nodes": [
+        "ctl_roofing_public_ctl_team_alex_alverez",
+        "ctl_roofing_public_ctl_team_ceci_harper",
+        "ctl_roofing_public_ctl_team_jody_holliday",
+        "ctl_roofing_public_ctl_team_jp_bourdreaux"
+      ],
+      "relation": "form",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "ctl-roofing/public/ctl/team/"
+    },
+    {
+      "id": "ctl_team_members",
+      "label": "CTL Team Members",
+      "nodes": [
+        "ctl_roofing_public_ctl_team_megan_chauvin",
+        "ctl_roofing_public_ctl_team_paige_thacker",
+        "ctl_roofing_public_ctl_team_peyton_peltier",
+        "ctl_roofing_public_ctl_team_scott_toups"
+      ],
+      "relation": "participate_in",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "id": "roofing_project_lifecycle",
+      "label": "Roofing Project Lifecycle",
+      "nodes": [
+        "ctl_pictures_ariel_5",
+        "ctl_pictures_ariel_4",
+        "ctl_pictures_ariel_1",
+        "ctl_pictures_after_1"
+      ],
+      "relation": "form",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8
+    },
+    {
+      "id": "residential_reconstruction_flow",
+      "label": "Residential Reconstruction and Renovation",
+      "nodes": [
+        "ctl_pictures_reconstruction_1",
+        "ctl_pictures_reconstruction_2",
+        "ctl_pictures_reconstruction_3",
+        "ctl_pictures_reconstruction_4"
+      ],
+      "relation": "participate_in",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.9
+    },
+    {
+      "id": "roofing_service_lifecycle",
+      "label": "Roofing Service Lifecycle",
+      "nodes": [
+        "ctl_pictures_leak_1",
+        "ctl_pictures_materials_2",
+        "ctl_pictures_roof_4",
+        "ctl_pictures_roof_2"
+      ],
+      "relation": "form",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "rationale": "Represents the progression from damage (leak) to materials to installation to finished product."
+    },
+    {
+      "id": "ctl_roofing_staff",
+      "label": "CTL Roofing Staff Members",
+      "nodes": [
+        "ctl_pictures_headshots_alex_alverez",
+        "ctl_pictures_headshots_ceci_harper",
+        "ctl_pictures_headshots_jody_holliday"
+      ],
+      "relation": "participate_in",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "id": "roofing_projects",
+      "label": "Roofing Installation and Repair Projects",
+      "nodes": [
+        "ctl_pictures_roof_6",
+        "ctl_pictures_roof_7",
+        "ctl_pictures_work_1",
+        "ctl_pictures_work_5",
+        "ctl_pictures_work_7"
+      ],
+      "relation": "form",
+      "confidence": "INFERRED",
+      "confidence_score": 0.9
+    },
+    {
+      "id": "ctl_pro_team",
+      "label": "CTL Pro Team Members",
+      "nodes": [
+        "ctl_pictures_headshots_jp_bourdreaux",
+        "ctl_pictures_headshots_megan_chauvin",
+        "ctl_pictures_headshots_owner",
+        "ctl_pictures_headshots_paige_thacker",
+        "ctl_pictures_headshots_peyton_peltier",
+        "ctl_pictures_headshots_scott_toups"
+      ],
+      "relation": "participate_in",
+      "confidence": "INFERRED",
+      "confidence_score": 0.9,
+      "source_file": "ctl_pictures/headshots/"
+    }
+  ],
+  "input_tokens": 190667,
+  "output_tokens": 18405,
+  "failed_chunks": 0,
+  "out_of_scope_dropped": 0,
+  "uncovered_files": []
+}

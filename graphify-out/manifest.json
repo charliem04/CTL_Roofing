@@ -640,5 +640,1001 @@
     "seen": 1788485286.6108584,
     "ast_hash": "64565ec01673d68d6bb70bf0d43fbf28",
     "semantic_hash": "64565ec01673d68d6bb70bf0d43fbf28"
+  },
+  "ctl-roofing/app/icon.png": {
+    "mtime": 1788115225.686582,
+    "seen": 1788488548.7172403,
+    "ast_hash": "91237af6c61b91155ed90a951b252e97",
+    "semantic_hash": "91237af6c61b91155ed90a951b252e97"
+  },
+  "ctl-roofing/public/ctl/crew-two-story.jpg": {
+    "mtime": 1788115225.7973616,
+    "seen": 1788488548.7172446,
+    "ast_hash": "a63be7221c50f5c28243ff91e93248d8",
+    "semantic_hash": "a63be7221c50f5c28243ff91e93248d8"
+  },
+  "ctl-roofing/public/ctl/emergency-tearoff.jpg": {
+    "mtime": 1788115225.8020732,
+    "seen": 1788488548.717247,
+    "ast_hash": "0487fc2ec749ab78ed3db05c23a38cca",
+    "semantic_hash": "0487fc2ec749ab78ed3db05c23a38cca"
+  },
+  "ctl-roofing/public/ctl/gallery/bath-tiled-shower.jpg": {
+    "mtime": 1788135311.2427366,
+    "seen": 1788488548.717249,
+    "ast_hash": "ec56233bad1268bcf722c65b0723e993",
+    "semantic_hash": "ec56233bad1268bcf722c65b0723e993"
+  },
+  "ctl-roofing/public/ctl/gallery/bath-vanity-finished.jpg": {
+    "mtime": 1788135311.2427366,
+    "seen": 1788488548.7172515,
+    "ast_hash": "596d4d4827820ca6f00c1a9c8f889123",
+    "semantic_hash": "596d4d4827820ca6f00c1a9c8f889123"
+  },
+  "ctl-roofing/public/ctl/gallery/carport-attached.jpg": {
+    "mtime": 1788135311.2427366,
+    "seen": 1788488548.7172542,
+    "ast_hash": "0da5f2386e4ce22b59768de684ff9a8d",
+    "semantic_hash": "0da5f2386e4ce22b59768de684ff9a8d"
+  },
+  "ctl-roofing/public/ctl/gallery/copper-sheet-shop.jpg": {
+    "mtime": 1788135311.2427366,
+    "seen": 1788488548.7172563,
+    "ast_hash": "d25e14b439a136fcc6eada5f255277db",
+    "semantic_hash": "d25e14b439a136fcc6eada5f255277db"
+  },
+  "ctl-roofing/public/ctl/gallery/interior-mid-remodel.jpg": {
+    "mtime": 1788135311.2427366,
+    "seen": 1788488548.7172585,
+    "ast_hash": "c0f5575af349b8da5e356d203572ed38",
+    "semantic_hash": "c0f5575af349b8da5e356d203572ed38"
+  },
+  "ctl-roofing/public/ctl/gallery/interior-new-windows.jpg": {
+    "mtime": 1788135311.2427366,
+    "seen": 1788488548.7172608,
+    "ast_hash": "149c6770f608ba528a61877f359a646d",
+    "semantic_hash": "149c6770f608ba528a61877f359a646d"
+  },
+  "ctl-roofing/public/ctl/gallery/interior-window-wall.jpg": {
+    "mtime": 1788135311.2607684,
+    "seen": 1788488548.7172625,
+    "ast_hash": "2dd8b572490068a814fd786e43ff51e1",
+    "semantic_hash": "2dd8b572490068a814fd786e43ff51e1"
+  },
+  "ctl-roofing/public/ctl/gallery/metal-aerial-complete.jpg": {
+    "mtime": 1788135311.2635002,
+    "seen": 1788488548.717265,
+    "ast_hash": "86263b35f3dc0f0aca36f8db11d092f8",
+    "semantic_hash": "86263b35f3dc0f0aca36f8db11d092f8"
+  },
+  "ctl-roofing/public/ctl/gallery/metal-aerial-progress.jpg": {
+    "mtime": 1788135311.266781,
+    "seen": 1788488548.717267,
+    "ast_hash": "664d950fbb6a963b4d72d1a9adeac5ad",
+    "semantic_hash": "664d950fbb6a963b4d72d1a9adeac5ad"
+  },
+  "ctl-roofing/public/ctl/gallery/metal-crew-ridge.jpg": {
+    "mtime": 1788135311.2680569,
+    "seen": 1788488548.717269,
+    "ast_hash": "52091207ea973a306776a68f9eb80f94",
+    "semantic_hash": "52091207ea973a306776a68f9eb80f94"
+  },
+  "ctl-roofing/public/ctl/gallery/metal-panel-setting.jpg": {
+    "mtime": 1788135311.269099,
+    "seen": 1788488548.7172713,
+    "ast_hash": "d6a7e6566bc3a56bcaa9bd80eb8ce4ca",
+    "semantic_hash": "d6a7e6566bc3a56bcaa9bd80eb8ce4ca"
+  },
+  "ctl-roofing/public/ctl/gallery/metal-panels-underlayment.jpg": {
+    "mtime": 1788135311.2716618,
+    "seen": 1788488548.717274,
+    "ast_hash": "03aa798f50a91dd009e11c4dbb507084",
+    "semantic_hash": "03aa798f50a91dd009e11c4dbb507084"
+  },
+  "ctl-roofing/public/ctl/gallery/metal-valley-crew.jpg": {
+    "mtime": 1788135311.2742214,
+    "seen": 1788488548.7172759,
+    "ast_hash": "619f5601505f034fbee44f6c790ad45b",
+    "semantic_hash": "619f5601505f034fbee44f6c790ad45b"
+  },
+  "ctl-roofing/public/ctl/gallery/multi-unit-siding.jpg": {
+    "mtime": 1788135311.2749343,
+    "seen": 1788488548.717278,
+    "ast_hash": "cfab8208c673075c304b2cff361d70a5",
+    "semantic_hash": "cfab8208c673075c304b2cff361d70a5"
+  },
+  "ctl-roofing/public/ctl/gallery/new-build-exterior.jpg": {
+    "mtime": 1788135311.2749343,
+    "seen": 1788488548.71728,
+    "ast_hash": "2a234ff6f8d69d8a1305da9f42672d7e",
+    "semantic_hash": "2a234ff6f8d69d8a1305da9f42672d7e"
+  },
+  "ctl-roofing/public/ctl/gallery/patio-cover-finished.jpg": {
+    "mtime": 1788135311.2749343,
+    "seen": 1788488548.717282,
+    "ast_hash": "af16972aecde74f91170cf58524f71cc",
+    "semantic_hash": "af16972aecde74f91170cf58524f71cc"
+  },
+  "ctl-roofing/public/ctl/gallery/patio-frame-going-up.jpg": {
+    "mtime": 1788135311.2749343,
+    "seen": 1788488548.7172842,
+    "ast_hash": "6388f298f6c937bae44f570d06daaba2",
+    "semantic_hash": "6388f298f6c937bae44f570d06daaba2"
+  },
+  "ctl-roofing/public/ctl/gallery/patio-timber-joint.jpg": {
+    "mtime": 1788135311.2749343,
+    "seen": 1788488548.717286,
+    "ast_hash": "9ec7bd11dfac6ced3006060a144bf656",
+    "semantic_hash": "9ec7bd11dfac6ced3006060a144bf656"
+  },
+  "ctl-roofing/public/ctl/gallery/porch-wood-columns.jpg": {
+    "mtime": 1788135311.2749343,
+    "seen": 1788488548.7172883,
+    "ast_hash": "ce3c4a38c5228a866090190a173edeb7",
+    "semantic_hash": "ce3c4a38c5228a866090190a173edeb7"
+  },
+  "ctl-roofing/public/ctl/gallery/shingle-aerial-finished.jpg": {
+    "mtime": 1788135311.2749343,
+    "seen": 1788488548.7172902,
+    "ast_hash": "b211f3e29547b40ca1654ea9f49bc9e1",
+    "semantic_hash": "b211f3e29547b40ca1654ea9f49bc9e1"
+  },
+  "ctl-roofing/public/ctl/gallery/shingle-brick-ranch.jpg": {
+    "mtime": 1788135311.2749343,
+    "seen": 1788488548.7172923,
+    "ast_hash": "969e33c4a4a16401e1a30355226e579f",
+    "semantic_hash": "969e33c4a4a16401e1a30355226e579f"
+  },
+  "ctl-roofing/public/ctl/gallery/shingle-bundles.jpg": {
+    "mtime": 1788135311.2900836,
+    "seen": 1788488548.7172947,
+    "ast_hash": "ee92be8d556eeec8e31133f924d3acce",
+    "semantic_hash": "ee92be8d556eeec8e31133f924d3acce"
+  },
+  "ctl-roofing/public/ctl/gallery/shingle-close-finished.jpg": {
+    "mtime": 1788135311.2900836,
+    "seen": 1788488548.7172968,
+    "ast_hash": "9bf284ee68c26fe9a56a56ef10544650",
+    "semantic_hash": "9bf284ee68c26fe9a56a56ef10544650"
+  },
+  "ctl-roofing/public/ctl/gallery/shingle-crew-install.jpg": {
+    "mtime": 1788135311.2900836,
+    "seen": 1788488548.717299,
+    "ast_hash": "9c9c55e48d0c6aa2ce3f79b4006a7b8a",
+    "semantic_hash": "9c9c55e48d0c6aa2ce3f79b4006a7b8a"
+  },
+  "ctl-roofing/public/ctl/gallery/shingle-deck-exposed.jpg": {
+    "mtime": 1788135311.2900836,
+    "seen": 1788488548.717301,
+    "ast_hash": "e7d00cd3b9ffaabea295a6b9e5bdb713",
+    "semantic_hash": "e7d00cd3b9ffaabea295a6b9e5bdb713"
+  },
+  "ctl-roofing/public/ctl/gallery/shingle-turbine-vents.jpg": {
+    "mtime": 1788135311.2900836,
+    "seen": 1788488548.7173033,
+    "ast_hash": "c5a46748a053cf8b29d35e6c8f021376",
+    "semantic_hash": "c5a46748a053cf8b29d35e6c8f021376"
+  },
+  "ctl-roofing/public/ctl/gallery/shingle-two-story.jpg": {
+    "mtime": 1788135311.2900836,
+    "seen": 1788488548.7173052,
+    "ast_hash": "ececeab02082866b4ff4030f92d8c35e",
+    "semantic_hash": "ececeab02082866b4ff4030f92d8c35e"
+  },
+  "ctl-roofing/public/ctl/gallery/storm-tarped-brick.jpg": {
+    "mtime": 1788135311.2900836,
+    "seen": 1788488548.7173073,
+    "ast_hash": "1957c4e0876e51ed8eeb6285d322f610",
+    "semantic_hash": "1957c4e0876e51ed8eeb6285d322f610"
+  },
+  "ctl-roofing/public/ctl/gallery/storm-tarps-yard.jpg": {
+    "mtime": 1788135311.2900836,
+    "seen": 1788488548.7173095,
+    "ast_hash": "437fbe7a40267cd07573b028b3137a82",
+    "semantic_hash": "437fbe7a40267cd07573b028b3137a82"
+  },
+  "ctl-roofing/public/ctl/gallery/sunroom-exterior.jpg": {
+    "mtime": 1788135311.2900836,
+    "seen": 1788488548.7173114,
+    "ast_hash": "a5b64074634421e16e6a4d29ae8763c1",
+    "semantic_hash": "a5b64074634421e16e6a4d29ae8763c1"
+  },
+  "ctl-roofing/public/ctl/gallery/tearoff-crew-tarps.jpg": {
+    "mtime": 1788135311.2900836,
+    "seen": 1788488548.7173135,
+    "ast_hash": "758dbc7a91484dce8411d256a0007534",
+    "semantic_hash": "758dbc7a91484dce8411d256a0007534"
+  },
+  "ctl-roofing/public/ctl/gallery/tearoff-decking.jpg": {
+    "mtime": 1788135311.3057246,
+    "seen": 1788488548.7173157,
+    "ast_hash": "c357fda31a18fecff719b0393b437657",
+    "semantic_hash": "c357fda31a18fecff719b0393b437657"
+  },
+  "ctl-roofing/public/ctl/gallery/thumb/bath-tiled-shower.jpg": {
+    "mtime": 1788225211.4091992,
+    "seen": 1788488548.7173176,
+    "ast_hash": "ae2d29d5b2d86af0e822bdf000f7f9c9",
+    "semantic_hash": "ae2d29d5b2d86af0e822bdf000f7f9c9"
+  },
+  "ctl-roofing/public/ctl/gallery/thumb/bath-vanity-finished.jpg": {
+    "mtime": 1788225211.4091992,
+    "seen": 1788488548.7173195,
+    "ast_hash": "1ccd513a1f280239be91d069d3886bac",
+    "semantic_hash": "1ccd513a1f280239be91d069d3886bac"
+  },
+  "ctl-roofing/public/ctl/gallery/thumb/carport-attached.jpg": {
+    "mtime": 1788225211.4091992,
+    "seen": 1788488548.7173214,
+    "ast_hash": "84193305612aa3919b0652470e663ec8",
+    "semantic_hash": "84193305612aa3919b0652470e663ec8"
+  },
+  "ctl-roofing/public/ctl/gallery/thumb/copper-sheet-shop.jpg": {
+    "mtime": 1788225211.4091992,
+    "seen": 1788488548.7173235,
+    "ast_hash": "cac7029a5ca1c0e20d9077d4812fce4d",
+    "semantic_hash": "cac7029a5ca1c0e20d9077d4812fce4d"
+  },
+  "ctl-roofing/public/ctl/gallery/thumb/interior-mid-remodel.jpg": {
+    "mtime": 1788225211.4091992,
+    "seen": 1788488548.717326,
+    "ast_hash": "b8db6e6cbef7473c0a83cd387ce1e98e",
+    "semantic_hash": "b8db6e6cbef7473c0a83cd387ce1e98e"
+  },
+  "ctl-roofing/public/ctl/gallery/thumb/interior-new-windows.jpg": {
+    "mtime": 1788225211.4091992,
+    "seen": 1788488548.7173278,
+    "ast_hash": "5b583ef1dd3df46f556eeaf46fe88907",
+    "semantic_hash": "5b583ef1dd3df46f556eeaf46fe88907"
+  },
+  "ctl-roofing/public/ctl/gallery/thumb/interior-window-wall.jpg": {
+    "mtime": 1788225211.4091992,
+    "seen": 1788488548.7173302,
+    "ast_hash": "9d0532ee8a50f1ea1b4cd342e9726b14",
+    "semantic_hash": "9d0532ee8a50f1ea1b4cd342e9726b14"
+  },
+  "ctl-roofing/public/ctl/gallery/thumb/metal-aerial-complete.jpg": {
+    "mtime": 1788225211.4091992,
+    "seen": 1788488548.7173321,
+    "ast_hash": "f48ecd610cccac49320728dc0e4ecee4",
+    "semantic_hash": "f48ecd610cccac49320728dc0e4ecee4"
+  },
+  "ctl-roofing/public/ctl/gallery/thumb/metal-aerial-progress.jpg": {
+    "mtime": 1788225211.4091992,
+    "seen": 1788488548.7173345,
+    "ast_hash": "45975d959454b200d56891bd38a39399",
+    "semantic_hash": "45975d959454b200d56891bd38a39399"
+  },
+  "ctl-roofing/public/ctl/gallery/thumb/metal-crew-ridge.jpg": {
+    "mtime": 1788225211.4091992,
+    "seen": 1788488548.7173367,
+    "ast_hash": "377b2428a904eaa5bf3822ba8c94fe87",
+    "semantic_hash": "377b2428a904eaa5bf3822ba8c94fe87"
+  },
+  "ctl-roofing/public/ctl/gallery/thumb/metal-panel-setting.jpg": {
+    "mtime": 1788225211.4091992,
+    "seen": 1788488548.7173383,
+    "ast_hash": "bc03e41fe956962e4a007ef9048c3a51",
+    "semantic_hash": "bc03e41fe956962e4a007ef9048c3a51"
+  },
+  "ctl-roofing/public/ctl/gallery/thumb/metal-panels-underlayment.jpg": {
+    "mtime": 1788225211.4091992,
+    "seen": 1788488548.7173407,
+    "ast_hash": "b7260e8451ac2fb5adefec5ce5aa2af4",
+    "semantic_hash": "b7260e8451ac2fb5adefec5ce5aa2af4"
+  },
+  "ctl-roofing/public/ctl/gallery/thumb/metal-valley-crew.jpg": {
+    "mtime": 1788225211.4091992,
+    "seen": 1788488548.717343,
+    "ast_hash": "7c10ee4cf92acac3c9cf1cdbd5bdd3d2",
+    "semantic_hash": "7c10ee4cf92acac3c9cf1cdbd5bdd3d2"
+  },
+  "ctl-roofing/public/ctl/gallery/thumb/multi-unit-siding.jpg": {
+    "mtime": 1788225211.4091992,
+    "seen": 1788488548.7173452,
+    "ast_hash": "1736c39e8553143db5d0595b920fbc71",
+    "semantic_hash": "1736c39e8553143db5d0595b920fbc71"
+  },
+  "ctl-roofing/public/ctl/gallery/thumb/new-build-exterior.jpg": {
+    "mtime": 1788225211.4251027,
+    "seen": 1788488548.7173474,
+    "ast_hash": "ed541e6523b21d78f0125100431a6733",
+    "semantic_hash": "ed541e6523b21d78f0125100431a6733"
+  },
+  "ctl-roofing/public/ctl/gallery/thumb/patio-cover-finished.jpg": {
+    "mtime": 1788225211.4251027,
+    "seen": 1788488548.7173495,
+    "ast_hash": "91b4e36e05dd69b9191e51b3f93a82ed",
+    "semantic_hash": "91b4e36e05dd69b9191e51b3f93a82ed"
+  },
+  "ctl-roofing/public/ctl/gallery/thumb/patio-frame-going-up.jpg": {
+    "mtime": 1788225211.4251027,
+    "seen": 1788488548.7173517,
+    "ast_hash": "5a443acc5d325f1b048d26d4cb608c52",
+    "semantic_hash": "5a443acc5d325f1b048d26d4cb608c52"
+  },
+  "ctl-roofing/public/ctl/gallery/thumb/patio-timber-joint.jpg": {
+    "mtime": 1788225211.4251027,
+    "seen": 1788488548.7173538,
+    "ast_hash": "60ef95c3790ea28e9d9bc4974ddb4be9",
+    "semantic_hash": "60ef95c3790ea28e9d9bc4974ddb4be9"
+  },
+  "ctl-roofing/public/ctl/gallery/thumb/porch-wood-columns.jpg": {
+    "mtime": 1788225211.4251027,
+    "seen": 1788488548.717356,
+    "ast_hash": "08cf9e41f651cd73c4478815c0ece9ef",
+    "semantic_hash": "08cf9e41f651cd73c4478815c0ece9ef"
+  },
+  "ctl-roofing/public/ctl/gallery/thumb/shingle-aerial-finished.jpg": {
+    "mtime": 1788225211.4251027,
+    "seen": 1788488548.717358,
+    "ast_hash": "c28258e3d19c44f9481abb8287375746",
+    "semantic_hash": "c28258e3d19c44f9481abb8287375746"
+  },
+  "ctl-roofing/public/ctl/gallery/thumb/shingle-brick-ranch.jpg": {
+    "mtime": 1788225211.4251027,
+    "seen": 1788488548.7173605,
+    "ast_hash": "ed738b59cc3352adeca65c83213a3fbc",
+    "semantic_hash": "ed738b59cc3352adeca65c83213a3fbc"
+  },
+  "ctl-roofing/public/ctl/gallery/thumb/shingle-bundles.jpg": {
+    "mtime": 1788225211.4251027,
+    "seen": 1788488548.7173626,
+    "ast_hash": "e0905793077a5ff610f7a3c0b75032f7",
+    "semantic_hash": "e0905793077a5ff610f7a3c0b75032f7"
+  },
+  "ctl-roofing/public/ctl/gallery/thumb/shingle-close-finished.jpg": {
+    "mtime": 1788225211.4251027,
+    "seen": 1788488548.717365,
+    "ast_hash": "4882e89489c455f5d78e42de07678319",
+    "semantic_hash": "4882e89489c455f5d78e42de07678319"
+  },
+  "ctl-roofing/public/ctl/gallery/thumb/shingle-crew-install.jpg": {
+    "mtime": 1788225211.4251027,
+    "seen": 1788488548.717367,
+    "ast_hash": "b62f8cea37a56e7ee1fe1e8875bc03db",
+    "semantic_hash": "b62f8cea37a56e7ee1fe1e8875bc03db"
+  },
+  "ctl-roofing/public/ctl/gallery/thumb/shingle-deck-exposed.jpg": {
+    "mtime": 1788225211.4251027,
+    "seen": 1788488548.717369,
+    "ast_hash": "09cea2fef2380655da79b603c2fa9279",
+    "semantic_hash": "09cea2fef2380655da79b603c2fa9279"
+  },
+  "ctl-roofing/public/ctl/gallery/thumb/shingle-turbine-vents.jpg": {
+    "mtime": 1788225211.4251027,
+    "seen": 1788488548.7173712,
+    "ast_hash": "a0a93c1fecb1c654084204e65ea776f9",
+    "semantic_hash": "a0a93c1fecb1c654084204e65ea776f9"
+  },
+  "ctl-roofing/public/ctl/gallery/thumb/shingle-two-story.jpg": {
+    "mtime": 1788225211.4251027,
+    "seen": 1788488548.7173731,
+    "ast_hash": "89ec7db7653ccad3677f5c4395f28b43",
+    "semantic_hash": "89ec7db7653ccad3677f5c4395f28b43"
+  },
+  "ctl-roofing/public/ctl/gallery/thumb/storm-tarped-brick.jpg": {
+    "mtime": 1788225211.4251027,
+    "seen": 1788488548.7173755,
+    "ast_hash": "71c014cc1dd676c74b01850a3c4da2d4",
+    "semantic_hash": "71c014cc1dd676c74b01850a3c4da2d4"
+  },
+  "ctl-roofing/public/ctl/gallery/thumb/storm-tarps-yard.jpg": {
+    "mtime": 1788225211.4251027,
+    "seen": 1788488548.7173774,
+    "ast_hash": "bda4c7bef323e5bea831147bd3d1a735",
+    "semantic_hash": "bda4c7bef323e5bea831147bd3d1a735"
+  },
+  "ctl-roofing/public/ctl/gallery/thumb/sunroom-exterior.jpg": {
+    "mtime": 1788225211.4251027,
+    "seen": 1788488548.7173843,
+    "ast_hash": "f443bbfd4703ed61455a873bedff55c4",
+    "semantic_hash": "f443bbfd4703ed61455a873bedff55c4"
+  },
+  "ctl-roofing/public/ctl/gallery/thumb/tearoff-crew-tarps.jpg": {
+    "mtime": 1788225211.4412193,
+    "seen": 1788488548.717387,
+    "ast_hash": "3d32faf05a43fb77c2e89178c51f3ca4",
+    "semantic_hash": "3d32faf05a43fb77c2e89178c51f3ca4"
+  },
+  "ctl-roofing/public/ctl/gallery/thumb/tearoff-decking.jpg": {
+    "mtime": 1788225211.4412193,
+    "seen": 1788488548.7173893,
+    "ast_hash": "4118fa89a4c82daa3df31290976c8e4c",
+    "semantic_hash": "4118fa89a4c82daa3df31290976c8e4c"
+  },
+  "ctl-roofing/public/ctl/hero.jpg": {
+    "mtime": 1788046759.1954064,
+    "seen": 1788488548.7173913,
+    "ast_hash": "f9ef422f077af20646bef51a3743b5a5",
+    "semantic_hash": "f9ef422f077af20646bef51a3743b5a5"
+  },
+  "ctl-roofing/public/ctl/logo.png": {
+    "mtime": 1788046759.1954064,
+    "seen": 1788488548.7173939,
+    "ast_hash": "c24759ef6aa6ede45aa50d09aa2e95f6",
+    "semantic_hash": "c24759ef6aa6ede45aa50d09aa2e95f6"
+  },
+  "ctl-roofing/public/ctl/materials.jpg": {
+    "mtime": 1788046759.1954064,
+    "seen": 1788488548.717396,
+    "ast_hash": "c415f29289cbca2440aa7d2cbcd2bace",
+    "semantic_hash": "c415f29289cbca2440aa7d2cbcd2bace"
+  },
+  "ctl-roofing/public/ctl/metal-copper-hip.jpg": {
+    "mtime": 1788115225.8057644,
+    "seen": 1788488548.717398,
+    "ast_hash": "4b377a119e051bc657764437b6c51478",
+    "semantic_hash": "4b377a119e051bc657764437b6c51478"
+  },
+  "ctl-roofing/public/ctl/metal-panel.jpg": {
+    "mtime": 1788046759.206526,
+    "seen": 1788488548.7174,
+    "ast_hash": "5ca623b593423483912b32c862b9dbdb",
+    "semantic_hash": "5ca623b593423483912b32c862b9dbdb"
+  },
+  "ctl-roofing/public/ctl/office.jpg": {
+    "mtime": 1788115225.811933,
+    "seen": 1788488548.7174022,
+    "ast_hash": "c8774244c5ffe82a02694133c41f7440",
+    "semantic_hash": "c8774244c5ffe82a02694133c41f7440"
+  },
+  "ctl-roofing/public/ctl/og.jpg": {
+    "mtime": 1788046759.2087722,
+    "seen": 1788488548.7174044,
+    "ast_hash": "70e163dfb071505ccb7d54163932b531",
+    "semantic_hash": "70e163dfb071505ccb7d54163932b531"
+  },
+  "ctl-roofing/public/ctl/outdoor-deck.jpg": {
+    "mtime": 1788115225.816408,
+    "seen": 1788488548.7174065,
+    "ast_hash": "4593b27adef0e9afbe7e0f39d9fc0616",
+    "semantic_hash": "4593b27adef0e9afbe7e0f39d9fc0616"
+  },
+  "ctl-roofing/public/ctl/outdoor-frame.jpg": {
+    "mtime": 1788115225.8182662,
+    "seen": 1788488548.7174087,
+    "ast_hash": "842507acb9cefc3f5b253de5036ae44a",
+    "semantic_hash": "842507acb9cefc3f5b253de5036ae44a"
+  },
+  "ctl-roofing/public/ctl/owner.jpg": {
+    "mtime": 1788046759.2087722,
+    "seen": 1788488548.7174108,
+    "ast_hash": "41d57bb21abfe403e9f4311ba1ff6a82",
+    "semantic_hash": "41d57bb21abfe403e9f4311ba1ff6a82"
+  },
+  "ctl-roofing/public/ctl/remodel-exterior.jpg": {
+    "mtime": 1788115225.8217037,
+    "seen": 1788488548.7174132,
+    "ast_hash": "b43ae6e346799f270dd87120f46acfee",
+    "semantic_hash": "b43ae6e346799f270dd87120f46acfee"
+  },
+  "ctl-roofing/public/ctl/remodel-kitchen.jpg": {
+    "mtime": 1788115225.822538,
+    "seen": 1788488548.7174153,
+    "ast_hash": "74b7fe1e92a59e85ff651ff7cf3351fc",
+    "semantic_hash": "74b7fe1e92a59e85ff651ff7cf3351fc"
+  },
+  "ctl-roofing/public/ctl/roofing-metal-aerial.jpg": {
+    "mtime": 1788115225.8266513,
+    "seen": 1788488548.7174177,
+    "ast_hash": "36ed0ddac28d74f13660d2d9f4881c96",
+    "semantic_hash": "36ed0ddac28d74f13660d2d9f4881c96"
+  },
+  "ctl-roofing/public/ctl/service-emergency.jpg": {
+    "mtime": 1788046759.2087722,
+    "seen": 1788488548.71742,
+    "ast_hash": "0951abd17fcd23eb90fc80efee31828d",
+    "semantic_hash": "0951abd17fcd23eb90fc80efee31828d"
+  },
+  "ctl-roofing/public/ctl/service-outdoor.jpg": {
+    "mtime": 1788046759.2087722,
+    "seen": 1788488548.717422,
+    "ast_hash": "a09080d8005c05cd46f040aecf5381da",
+    "semantic_hash": "a09080d8005c05cd46f040aecf5381da"
+  },
+  "ctl-roofing/public/ctl/service-remodeling.jpg": {
+    "mtime": 1788046759.2087722,
+    "seen": 1788488548.7174244,
+    "ast_hash": "b8fa9051606743b95c2860739e4df2fd",
+    "semantic_hash": "b8fa9051606743b95c2860739e4df2fd"
+  },
+  "ctl-roofing/public/ctl/service-roofing.jpg": {
+    "mtime": 1788046759.2187245,
+    "seen": 1788488548.7174265,
+    "ast_hash": "270430e3e3e54d85b1c1ed7efcbf5c1a",
+    "semantic_hash": "270430e3e3e54d85b1c1ed7efcbf5c1a"
+  },
+  "ctl-roofing/public/ctl/shop-metal-stock.jpg": {
+    "mtime": 1788115225.8312175,
+    "seen": 1788488548.7174284,
+    "ast_hash": "458b1bd4c880510a32837084e5aa98ae",
+    "semantic_hash": "458b1bd4c880510a32837084e5aa98ae"
+  },
+  "ctl-roofing/public/ctl/storm-tarped-home.jpg": {
+    "mtime": 1788115225.8324907,
+    "seen": 1788488548.7174306,
+    "ast_hash": "ca9d12c39b7989a3abdddeeec85d30da",
+    "semantic_hash": "ca9d12c39b7989a3abdddeeec85d30da"
+  },
+  "ctl-roofing/public/ctl/team.jpg": {
+    "mtime": 1788046759.220733,
+    "seen": 1788488548.7174325,
+    "ast_hash": "b2a4d6fd22138a28ee1fbfe7d610c3dd",
+    "semantic_hash": "b2a4d6fd22138a28ee1fbfe7d610c3dd"
+  },
+  "ctl-roofing/public/ctl/team/alex-alverez.jpg": {
+    "mtime": 1788158866.48233,
+    "seen": 1788488548.717435,
+    "ast_hash": "a9c83ae18c6bca669154adc191e232a7",
+    "semantic_hash": "a9c83ae18c6bca669154adc191e232a7"
+  },
+  "ctl-roofing/public/ctl/team/ceci-harper.jpg": {
+    "mtime": 1788158866.4861712,
+    "seen": 1788488548.7174373,
+    "ast_hash": "040fda60a47d713801be3428b71d332b",
+    "semantic_hash": "040fda60a47d713801be3428b71d332b"
+  },
+  "ctl-roofing/public/ctl/team/jody-holliday.jpg": {
+    "mtime": 1788158866.48919,
+    "seen": 1788488548.7174392,
+    "ast_hash": "b20b325e2eafbb229dea129212cc03ed",
+    "semantic_hash": "b20b325e2eafbb229dea129212cc03ed"
+  },
+  "ctl-roofing/public/ctl/team/jp-bourdreaux.jpg": {
+    "mtime": 1788158866.490666,
+    "seen": 1788488548.7174413,
+    "ast_hash": "31ee44797984df403a5673c52fea1863",
+    "semantic_hash": "31ee44797984df403a5673c52fea1863"
+  },
+  "ctl-roofing/public/ctl/team/megan-chauvin.jpg": {
+    "mtime": 1788158866.4942925,
+    "seen": 1788488548.7174435,
+    "ast_hash": "4bab14b244a1506504449ce49e26e2d6",
+    "semantic_hash": "4bab14b244a1506504449ce49e26e2d6"
+  },
+  "ctl-roofing/public/ctl/team/paige-thacker.jpg": {
+    "mtime": 1788158866.495478,
+    "seen": 1788488548.7174454,
+    "ast_hash": "06f6875ec62dbcf8263c761f681c706b",
+    "semantic_hash": "06f6875ec62dbcf8263c761f681c706b"
+  },
+  "ctl-roofing/public/ctl/team/peyton-peltier.jpg": {
+    "mtime": 1788158866.498234,
+    "seen": 1788488548.7174475,
+    "ast_hash": "f697fcb3dd80bfc5e5e130e02c17cb93",
+    "semantic_hash": "f697fcb3dd80bfc5e5e130e02c17cb93"
+  },
+  "ctl-roofing/public/ctl/team/scott-toups.jpg": {
+    "mtime": 1788158866.498234,
+    "seen": 1788488548.7174494,
+    "ast_hash": "fe3ec1844e2fc2f759f10bab877fd2f1",
+    "semantic_hash": "fe3ec1844e2fc2f759f10bab877fd2f1"
+  },
+  "ctl-roofing/public/ctl/video/job-walkthrough.jpg": {
+    "mtime": 1788155061.7590306,
+    "seen": 1788488548.7174516,
+    "ast_hash": "74620f6f074335ffaf4d49d62ce275ec",
+    "semantic_hash": "74620f6f074335ffaf4d49d62ce275ec"
+  },
+  "ctl-roofing/public/ctl/water-stain-ceiling.jpg": {
+    "mtime": 1788115225.8345,
+    "seen": 1788488548.7174535,
+    "ast_hash": "a881c8cd9d81ead69507f15c20200ce5",
+    "semantic_hash": "a881c8cd9d81ead69507f15c20200ce5"
+  },
+  "ctl-roofing/public/ctl/work-architectural-shingles.jpg": {
+    "mtime": 1788046759.2244928,
+    "seen": 1788488548.7174556,
+    "ast_hash": "38042e0d3f38ebb109aa995484bab02d",
+    "semantic_hash": "38042e0d3f38ebb109aa995484bab02d"
+  },
+  "ctl-roofing/public/ctl/work-exterior-renovation.jpg": {
+    "mtime": 1788046759.2259254,
+    "seen": 1788488548.7174578,
+    "ast_hash": "97572ee1d14a00b4275b62906907e65d",
+    "semantic_hash": "97572ee1d14a00b4275b62906907e65d"
+  },
+  "ctl-roofing/public/ctl/work-interior-remodel.jpg": {
+    "mtime": 1788046759.2259254,
+    "seen": 1788488548.7174594,
+    "ast_hash": "a6e153a89c795bd70f466435e45aa73e",
+    "semantic_hash": "a6e153a89c795bd70f466435e45aa73e"
+  },
+  "ctl-roofing/public/ctl/work-patio-cover.jpg": {
+    "mtime": 1788046759.2259254,
+    "seen": 1788488548.7174618,
+    "ast_hash": "33b15298b9f90d6db87ab1250a5e3acb",
+    "semantic_hash": "33b15298b9f90d6db87ab1250a5e3acb"
+  },
+  "ctl-roofing/public/ctl/work-shingle-replacement.jpg": {
+    "mtime": 1788046759.2259254,
+    "seen": 1788488548.7174637,
+    "ast_hash": "85267f96233c11c2fcc173c1d6a2bf00",
+    "semantic_hash": "85267f96233c11c2fcc173c1d6a2bf00"
+  },
+  "ctl-roofing/public/ctl/work-standing-seam.jpg": {
+    "mtime": 1788046759.2259254,
+    "seen": 1788488548.7174659,
+    "ast_hash": "9d5a1a67191acbac17c1e39d49849cea",
+    "semantic_hash": "9d5a1a67191acbac17c1e39d49849cea"
+  },
+  "ctl-roofing/public/ctl/work-tear-off.jpg": {
+    "mtime": 1788046759.2259254,
+    "seen": 1788488548.7174683,
+    "ast_hash": "b55387c59656ef0d3762b1a43fd8a6da",
+    "semantic_hash": "b55387c59656ef0d3762b1a43fd8a6da"
+  },
+  "ctl-roofing/public/ctl/work-window-replacement.jpg": {
+    "mtime": 1788046759.2259254,
+    "seen": 1788488548.7174702,
+    "ast_hash": "d626922e542c0e1acf7c09eb373a93c4",
+    "semantic_hash": "d626922e542c0e1acf7c09eb373a93c4"
+  },
+  "ctl_pictures/after-1.jpg": {
+    "mtime": 1788039527.4752214,
+    "seen": 1788488548.7174726,
+    "ast_hash": "4cc95e59261457b3221ffaaf96ec4264",
+    "semantic_hash": "4cc95e59261457b3221ffaaf96ec4264"
+  },
+  "ctl_pictures/ariel-1.jpg": {
+    "mtime": 1788039602.5462992,
+    "seen": 1788488548.7174745,
+    "ast_hash": "7a2f99d596d25a83b3d8b4fdcb8745e5",
+    "semantic_hash": "7a2f99d596d25a83b3d8b4fdcb8745e5"
+  },
+  "ctl_pictures/ariel-2.jpg": {
+    "mtime": 1788039614.2393079,
+    "seen": 1788488548.7174766,
+    "ast_hash": "a91a907d6a9a261aa82ff0ff5567b287",
+    "semantic_hash": "a91a907d6a9a261aa82ff0ff5567b287"
+  },
+  "ctl_pictures/ariel-3.jpg": {
+    "mtime": 1788039631.7687688,
+    "seen": 1788488548.717479,
+    "ast_hash": "70b40e273afb43dc6e681d15b8683088",
+    "semantic_hash": "70b40e273afb43dc6e681d15b8683088"
+  },
+  "ctl_pictures/ariel-4.jpg": {
+    "mtime": 1788039785.568426,
+    "seen": 1788488548.717481,
+    "ast_hash": "bbd50668c650105f49513b9c3ea8c5bb",
+    "semantic_hash": "bbd50668c650105f49513b9c3ea8c5bb"
+  },
+  "ctl_pictures/ariel-5.jpg": {
+    "mtime": 1788039824.8332677,
+    "seen": 1788488548.717483,
+    "ast_hash": "c2a66d1138fbb17929a3cbf4f350f300",
+    "semantic_hash": "c2a66d1138fbb17929a3cbf4f350f300"
+  },
+  "ctl_pictures/ariel-6.jpg": {
+    "mtime": 1788040679.9523075,
+    "seen": 1788488548.7174847,
+    "ast_hash": "7d5ca0d79e0791e8d6cda3942f237069",
+    "semantic_hash": "7d5ca0d79e0791e8d6cda3942f237069"
+  },
+  "ctl_pictures/ariel-7.jpg": {
+    "mtime": 1788040709.6433027,
+    "seen": 1788488548.717487,
+    "ast_hash": "938a6c5563d514997604c5e4a6eca0e4",
+    "semantic_hash": "938a6c5563d514997604c5e4a6eca0e4"
+  },
+  "ctl_pictures/ariel-8.jpg": {
+    "mtime": 1788040918.4782045,
+    "seen": 1788488548.7174895,
+    "ast_hash": "5bca6705dc7c4451fdffeb351ec2a579",
+    "semantic_hash": "5bca6705dc7c4451fdffeb351ec2a579"
+  },
+  "ctl_pictures/before-1.jpg": {
+    "mtime": 1788039393.1634526,
+    "seen": 1788488548.7174914,
+    "ast_hash": "5805030368c169257ce9351e44161382",
+    "semantic_hash": "5805030368c169257ce9351e44161382"
+  },
+  "ctl_pictures/covering-1.jpg": {
+    "mtime": 1788039845.8120267,
+    "seen": 1788488548.7174935,
+    "ast_hash": "c6cfdb195d4de1d0eb2e7717df02594b",
+    "semantic_hash": "c6cfdb195d4de1d0eb2e7717df02594b"
+  },
+  "ctl_pictures/covering-10.jpg": {
+    "mtime": 1788042336.4315867,
+    "seen": 1788488548.7174954,
+    "ast_hash": "bb52db1a86ce2f36e09148eb4e159a06",
+    "semantic_hash": "bb52db1a86ce2f36e09148eb4e159a06"
+  },
+  "ctl_pictures/covering-2.jpg": {
+    "mtime": 1788039860.1174664,
+    "seen": 1788488548.7174976,
+    "ast_hash": "319ea7f17459b253467da12262271426",
+    "semantic_hash": "319ea7f17459b253467da12262271426"
+  },
+  "ctl_pictures/covering-3.jpg": {
+    "mtime": 1788039870.1734228,
+    "seen": 1788488548.7174997,
+    "ast_hash": "78d8f6438e9c19929907db0cf9a4a3d7",
+    "semantic_hash": "78d8f6438e9c19929907db0cf9a4a3d7"
+  },
+  "ctl_pictures/covering-4.jpg": {
+    "mtime": 1788041231.7794409,
+    "seen": 1788488548.7175019,
+    "ast_hash": "455a25d8aeb648adda66af11cc8f5006",
+    "semantic_hash": "455a25d8aeb648adda66af11cc8f5006"
+  },
+  "ctl_pictures/covering-5.jpg": {
+    "mtime": 1788041915.3839574,
+    "seen": 1788488548.717504,
+    "ast_hash": "441e41734520ac96946f646db4e0c093",
+    "semantic_hash": "441e41734520ac96946f646db4e0c093"
+  },
+  "ctl_pictures/covering-6.jpg": {
+    "mtime": 1788042100.8662372,
+    "seen": 1788488548.717506,
+    "ast_hash": "d7dff3202aeb3cfdcfd7ed11b85f3dc8",
+    "semantic_hash": "d7dff3202aeb3cfdcfd7ed11b85f3dc8"
+  },
+  "ctl_pictures/covering-7.jpg": {
+    "mtime": 1788042117.4114957,
+    "seen": 1788488548.7175083,
+    "ast_hash": "d756becbe925ba160aeedb6bf591536e",
+    "semantic_hash": "d756becbe925ba160aeedb6bf591536e"
+  },
+  "ctl_pictures/covering-8.jpg": {
+    "mtime": 1788042300.8936968,
+    "seen": 1788488548.7175107,
+    "ast_hash": "5843bb6b6c741db91f3d56f2fbfc7e49",
+    "semantic_hash": "5843bb6b6c741db91f3d56f2fbfc7e49"
+  },
+  "ctl_pictures/covering-9.jpg": {
+    "mtime": 1788042314.685537,
+    "seen": 1788488548.7175126,
+    "ast_hash": "dd73fee8e840c07723d1dd8adf0a2ffa",
+    "semantic_hash": "dd73fee8e840c07723d1dd8adf0a2ffa"
+  },
+  "ctl_pictures/headshots/alex-alverez.webp": {
+    "mtime": 1788158866.498234,
+    "seen": 1788488548.7175148,
+    "ast_hash": "f5ec25e6af183bd3d281b295d5b5b491",
+    "semantic_hash": "f5ec25e6af183bd3d281b295d5b5b491"
+  },
+  "ctl_pictures/headshots/ceci-harper.jpg": {
+    "mtime": 1788158866.5089407,
+    "seen": 1788488548.7175176,
+    "ast_hash": "52ad0e08f412a62a8f7477fa12a9d526",
+    "semantic_hash": "52ad0e08f412a62a8f7477fa12a9d526"
+  },
+  "ctl_pictures/headshots/jody-holliday.webp": {
+    "mtime": 1788158866.5126898,
+    "seen": 1788488548.7175198,
+    "ast_hash": "472dc88541c4398d2f2b951f18d01ceb",
+    "semantic_hash": "472dc88541c4398d2f2b951f18d01ceb"
+  },
+  "ctl_pictures/headshots/jp-bourdreaux.jpg": {
+    "mtime": 1788158866.5140011,
+    "seen": 1788488548.717522,
+    "ast_hash": "ab2ea6766d79c48be985d7293991edf9",
+    "semantic_hash": "ab2ea6766d79c48be985d7293991edf9"
+  },
+  "ctl_pictures/headshots/megan_chauvin.webp": {
+    "mtime": 1788158866.516526,
+    "seen": 1788488548.717524,
+    "ast_hash": "bfcef0e4767ca8ae7cc7db04b5a15874",
+    "semantic_hash": "bfcef0e4767ca8ae7cc7db04b5a15874"
+  },
+  "ctl_pictures/headshots/owner.jpg": {
+    "mtime": 1788158866.5201535,
+    "seen": 1788488548.7175262,
+    "ast_hash": "ee300a5024b54c3949fce7a6c683d417",
+    "semantic_hash": "ee300a5024b54c3949fce7a6c683d417"
+  },
+  "ctl_pictures/headshots/paige-thacker.jpg": {
+    "mtime": 1788158866.5276563,
+    "seen": 1788488548.7175283,
+    "ast_hash": "7651f49da9ca76beef4767c09cfd4239",
+    "semantic_hash": "7651f49da9ca76beef4767c09cfd4239"
+  },
+  "ctl_pictures/headshots/peyton_peltier.jpg": {
+    "mtime": 1788158866.531087,
+    "seen": 1788488548.7175307,
+    "ast_hash": "4e6d4f3a95f2053ee96e4282d9c068df",
+    "semantic_hash": "4e6d4f3a95f2053ee96e4282d9c068df"
+  },
+  "ctl_pictures/headshots/scott_toups.webp": {
+    "mtime": 1788158866.5332997,
+    "seen": 1788488548.7175324,
+    "ast_hash": "670a66b735372409af8ea4d04dfdc00d",
+    "semantic_hash": "670a66b735372409af8ea4d04dfdc00d"
+  },
+  "ctl_pictures/leak-1.jpg": {
+    "mtime": 1788040355.227834,
+    "seen": 1788488548.7175348,
+    "ast_hash": "310ec4787db3b466e78535fcc9f853cf",
+    "semantic_hash": "310ec4787db3b466e78535fcc9f853cf"
+  },
+  "ctl_pictures/logo.jpg": {
+    "mtime": 1788042586.6372447,
+    "seen": 1788488548.7175367,
+    "ast_hash": "4454b2eb9dd6300ddb5785aa1a7f8a90",
+    "semantic_hash": "4454b2eb9dd6300ddb5785aa1a7f8a90"
+  },
+  "ctl_pictures/materials-1.jpg": {
+    "mtime": 1788040754.0150433,
+    "seen": 1788488548.7175388,
+    "ast_hash": "4fb046d49ac70849a3ef8f831a96fdd3",
+    "semantic_hash": "4fb046d49ac70849a3ef8f831a96fdd3"
+  },
+  "ctl_pictures/materials-2.jpg": {
+    "mtime": 1788040771.5818222,
+    "seen": 1788488548.7175412,
+    "ast_hash": "df1e908b619d1ac9574ee53523d0fcda",
+    "semantic_hash": "df1e908b619d1ac9574ee53523d0fcda"
+  },
+  "ctl_pictures/reconstruction-1.jpg": {
+    "mtime": 1788040602.3352213,
+    "seen": 1788488548.7175431,
+    "ast_hash": "eefb884302db02d63ee3775b08868f36",
+    "semantic_hash": "eefb884302db02d63ee3775b08868f36"
+  },
+  "ctl_pictures/reconstruction-2.jpg": {
+    "mtime": 1788040611.004718,
+    "seen": 1788488548.7175453,
+    "ast_hash": "8f8c25bb84e3737ecc9a369a32a47d6d",
+    "semantic_hash": "8f8c25bb84e3737ecc9a369a32a47d6d"
+  },
+  "ctl_pictures/reconstruction-3.jpg": {
+    "mtime": 1788042187.4084,
+    "seen": 1788488548.7175474,
+    "ast_hash": "4e10663d5e5b439fa8e8f0bd78cf1ffb",
+    "semantic_hash": "4e10663d5e5b439fa8e8f0bd78cf1ffb"
+  },
+  "ctl_pictures/reconstruction-4.jpg": {
+    "mtime": 1788042222.8140044,
+    "seen": 1788488548.7175496,
+    "ast_hash": "ffcda89fb6487fd83c509a544505736e",
+    "semantic_hash": "ffcda89fb6487fd83c509a544505736e"
+  },
+  "ctl_pictures/roof-1.jpg": {
+    "mtime": 1788039553.6162548,
+    "seen": 1788488548.7175517,
+    "ast_hash": "b604004080f11e7ecc75a82b71192a46",
+    "semantic_hash": "b604004080f11e7ecc75a82b71192a46"
+  },
+  "ctl_pictures/roof-10.jpg": {
+    "mtime": 1788041088.6832287,
+    "seen": 1788488548.7175536,
+    "ast_hash": "38079f960fba454f4d488429d349d02c",
+    "semantic_hash": "38079f960fba454f4d488429d349d02c"
+  },
+  "ctl_pictures/roof-11.jpg": {
+    "mtime": 1788041143.671898,
+    "seen": 1788488548.717556,
+    "ast_hash": "d6272d6d65b6fe8cd807393f93ac8fa1",
+    "semantic_hash": "d6272d6d65b6fe8cd807393f93ac8fa1"
+  },
+  "ctl_pictures/roof-12.jpg": {
+    "mtime": 1788041168.7400038,
+    "seen": 1788488548.717558,
+    "ast_hash": "265bfa44624d5912f7851ca0073e2923",
+    "semantic_hash": "265bfa44624d5912f7851ca0073e2923"
+  },
+  "ctl_pictures/roof-2.jpg": {
+    "mtime": 1788039567.827896,
+    "seen": 1788488548.71756,
+    "ast_hash": "b83775b77c3de691b7445383c5b22100",
+    "semantic_hash": "b83775b77c3de691b7445383c5b22100"
+  },
+  "ctl_pictures/roof-3.jpg": {
+    "mtime": 1788039650.8877795,
+    "seen": 1788488548.7175624,
+    "ast_hash": "5aae9dc09a8ac651b0ab3ebebe6d5cdf",
+    "semantic_hash": "5aae9dc09a8ac651b0ab3ebebe6d5cdf"
+  },
+  "ctl_pictures/roof-4.jpg": {
+    "mtime": 1788039686.284191,
+    "seen": 1788488548.7175643,
+    "ast_hash": "a5f11238ef0ad1cfc15526b0f60b6533",
+    "semantic_hash": "a5f11238ef0ad1cfc15526b0f60b6533"
+  },
+  "ctl_pictures/roof-5.jpg": {
+    "mtime": 1788040133.8144383,
+    "seen": 1788488548.7175667,
+    "ast_hash": "7510e92143fac91a2bb537d51aa51ec2",
+    "semantic_hash": "7510e92143fac91a2bb537d51aa51ec2"
+  },
+  "ctl_pictures/roof-6.jpg": {
+    "mtime": 1788040156.5656662,
+    "seen": 1788488548.7175689,
+    "ast_hash": "905917d9d1ffce29bc7c85406beb7274",
+    "semantic_hash": "905917d9d1ffce29bc7c85406beb7274"
+  },
+  "ctl_pictures/roof-7.jpg": {
+    "mtime": 1788040216.3650851,
+    "seen": 1788488548.717571,
+    "ast_hash": "cdded631deabbfb3f5b16aa1264bc5f2",
+    "semantic_hash": "cdded631deabbfb3f5b16aa1264bc5f2"
+  },
+  "ctl_pictures/roof-8.jpg": {
+    "mtime": 1788040230.2226226,
+    "seen": 1788488548.7175732,
+    "ast_hash": "f03d0615d45987eca3ba8d8c1a5acfb2",
+    "semantic_hash": "f03d0615d45987eca3ba8d8c1a5acfb2"
+  },
+  "ctl_pictures/roof-9.jpg": {
+    "mtime": 1788040645.2748947,
+    "seen": 1788488548.7175753,
+    "ast_hash": "9834fc78be7645c1a8a8e34f79e34e7d",
+    "semantic_hash": "9834fc78be7645c1a8a8e34f79e34e7d"
+  },
+  "ctl_pictures/team-1.jpg": {
+    "mtime": 1788040276.849493,
+    "seen": 1788488548.7175775,
+    "ast_hash": "15593e0c856e12e5a0bb00eac04fa134",
+    "semantic_hash": "15593e0c856e12e5a0bb00eac04fa134"
+  },
+  "ctl_pictures/team-2.jpg": {
+    "mtime": 1788040285.1783059,
+    "seen": 1788488548.7175796,
+    "ast_hash": "7dad7a040192608cdfad05cf8fc17b35",
+    "semantic_hash": "7dad7a040192608cdfad05cf8fc17b35"
+  },
+  "ctl_pictures/team-3.jpg": {
+    "mtime": 1788040317.2526438,
+    "seen": 1788488548.717582,
+    "ast_hash": "46768e91a192452cfe8836bb8fdcc8a0",
+    "semantic_hash": "46768e91a192452cfe8836bb8fdcc8a0"
+  },
+  "ctl_pictures/team-4.jpg": {
+    "mtime": 1788040963.6296375,
+    "seen": 1788488548.7175841,
+    "ast_hash": "a38bc0ab5b72a6eebacc20cc9131b2d3",
+    "semantic_hash": "a38bc0ab5b72a6eebacc20cc9131b2d3"
+  },
+  "ctl_pictures/team-5.jpg": {
+    "mtime": 1788041002.775532,
+    "seen": 1788488548.7175863,
+    "ast_hash": "523ae567e4b4aeea8a25e7ad7331e3f0",
+    "semantic_hash": "523ae567e4b4aeea8a25e7ad7331e3f0"
+  },
+  "ctl_pictures/work-1.jpg": {
+    "mtime": 1788039748.6609,
+    "seen": 1788488548.7175884,
+    "ast_hash": "75a07d2e510edf6f0d513900936412c5",
+    "semantic_hash": "75a07d2e510edf6f0d513900936412c5"
+  },
+  "ctl_pictures/work-2.jpg": {
+    "mtime": 1788040171.5448265,
+    "seen": 1788488548.7175906,
+    "ast_hash": "67ef050d992e04965e39938a422dfcb8",
+    "semantic_hash": "67ef050d992e04965e39938a422dfcb8"
+  },
+  "ctl_pictures/work-3.jpg": {
+    "mtime": 1788040728.2865708,
+    "seen": 1788488548.7175927,
+    "ast_hash": "bf1be30f81ee2ecdf9d93fc5d56d3aa7",
+    "semantic_hash": "bf1be30f81ee2ecdf9d93fc5d56d3aa7"
+  },
+  "ctl_pictures/work-4.jpg": {
+    "mtime": 1788040854.4282553,
+    "seen": 1788488548.717595,
+    "ast_hash": "4d2433822a8de1c907759a7ce21beb5f",
+    "semantic_hash": "4d2433822a8de1c907759a7ce21beb5f"
+  },
+  "ctl_pictures/work-5.jpg": {
+    "mtime": 1788040934.4794738,
+    "seen": 1788488548.7175972,
+    "ast_hash": "da755769d85ba325686bdce9f8467058",
+    "semantic_hash": "da755769d85ba325686bdce9f8467058"
+  },
+  "ctl_pictures/work-6.jpg": {
+    "mtime": 1788041033.785713,
+    "seen": 1788488548.7175992,
+    "ast_hash": "79ea9f5579cf5bb8a18345b0ea4da7d5",
+    "semantic_hash": "79ea9f5579cf5bb8a18345b0ea4da7d5"
+  },
+  "ctl_pictures/work-7.jpg": {
+    "mtime": 1788041062.7727866,
+    "seen": 1788488548.7176015,
+    "ast_hash": "5aaf814521581b7b164e840d297513cc",
+    "semantic_hash": "5aaf814521581b7b164e840d297513cc"
   }
 }

@@ -1,4 +1,11 @@
-import type { CtaCopy, Faq, FinanceOffer, PageMeta, Photo } from "./types";
+import type {
+  CtaCopy,
+  Faq,
+  FinanceOffer,
+  FinanceProduct,
+  PageMeta,
+  Photo,
+} from "./types";
 
 /**
  * ════════════════════════════════════════════════════════════════════
@@ -31,17 +38,87 @@ export const financing = {
     height: 1333,
   } satisfies Photo,
 
-  /** Lender name, once CTL confirms it. Empty string hides the line. */
-  lender: "",
-  /** Prequalification link. Empty string falls back to the contact CTA. */
-  prequalifyUrl: "",
+  /** Lender name. EnerBank USA is Regions Bank's home improvement arm. */
+  lender: "Regions Bank",
+  /**
+   * Prequalification link. CTL's own contractor number and sponsor
+   * details are in the query string — it is the same link behind all
+   * three product cards, which is how the lender's portal works: you
+   * land on product selection and choose there.
+   */
+  prequalifyUrl:
+    "https://prequalification.enerbank.com/apply/loanproduct?sponsorPhoneNumber=8007747598&contractorNumber=198295&loanCode=DEL2674&contractorEmail=rob@ctlpro.com",
 
   /**
-   * Real terms only. Each offer drives one row of the estimator.
-   * Example of the shape, for whoever fills this in:
-   *   { label: "60 months", apr: 9.99, months: 60, note: "subject to credit approval" }
+   * The three packages as the lender advertises them, in the order they
+   * appear on CTL's existing financing page.
+   *
+   * ⚠️ TO CONFIRM WITH CTL / THE LENDER BEFORE THIS GOES LIVE:
+   *   · the term on the 8.99% installment loan. The card says only "as
+   *     low as 8.99% APR" with no term. 120 months is taken from CTL's
+   *     own enquiry form, which offers "8.99% for 10 years" as its
+   *     example — a reasonable read, not a confirmed one.
+   *   · the exact footnote each asterisk on those cards points to. The
+   *     `disclosure` block below says what is known to be true and no
+   *     more; the lender's own wording should replace it verbatim.
    */
-  offers: [] as FinanceOffer[],
+  products_heading: "Popular loan packages",
+  products_lede:
+    "Prequalifying takes a couple of minutes and does not affect your credit score. It tells you what you would be offered before you decide anything.",
+
+  products: [
+    {
+      headline: "9.99% APR",
+      name: "5 year loan",
+      detail: "Fixed rate over 60 months.",
+      estimated: true,
+    },
+    {
+      headline: "12 months",
+      name: "Same-as-cash",
+      detail:
+        "No payments and no interest for 12 months. Interest accrues from the day funds are disbursed and is waived only if the loan is repaid in full within the same-as-cash period.",
+    },
+    {
+      headline: "As low as 8.99% APR",
+      name: "Traditional installment loan",
+      detail: "The lowest rate offered on this product. Yours depends on credit.",
+      estimated: true,
+    },
+  ] satisfies FinanceProduct[],
+
+  /**
+   * Rows the estimator amortises. These are real advertised rates, which
+   * is the condition the warning at the top of this file sets.
+   *
+   * Same-as-cash is deliberately NOT here. It has no monthly payment
+   * during its promotional window, so there is no honest figure to put
+   * in a "per month" column for it — running deferred interest through
+   * an amortising formula would print a number that describes no
+   * product anyone is being sold. It stays in `products` above, where
+   * its actual terms are stated in words.
+   */
+  offers: [
+    {
+      label: "60 months",
+      apr: 9.99,
+      months: 60,
+      note: "subject to credit approval",
+    },
+    {
+      label: "120 months",
+      apr: 8.99,
+      months: 120,
+      note: "lowest advertised rate — subject to credit approval",
+    },
+  ] satisfies FinanceOffer[],
+
+  /**
+   * Sits under the estimator and the product cards. Every asterisk on
+   * this page points here.
+   */
+  disclosure:
+    "Rates shown are the lender’s advertised rates and are subject to credit approval; the rate and term you are offered may differ. Estimated payments are illustrations produced by this page from the rates above, not offers of credit, and do not include taxes, insurance or any fees the lender may charge. Financing is provided by Regions Bank, Member FDIC, Equal Housing Lender. Prequalification does not affect your credit score.",
 
   /** Estimator slider bounds, in dollars. */
   estimator: {
@@ -67,6 +144,43 @@ export const financing = {
         body: "Roof, siding and windows in one mobilization costs less than three visits, and gets one consistent set of flashing details.",
       },
     ],
+  },
+
+  /**
+   * ── ON THE SOURCE COPY ──────────────────────────────────────────
+   * CTL's existing page has a "Why finance?" section. It is not used
+   * here, and that is a judgement rather than an oversight: it is
+   * written to fit any contractor in the country ("upgrade their living
+   * space", "in many cases", "worthwhile both now and in the future"),
+   * and the `points` above already make the same argument about the
+   * actual purchase — a roof that failed on its own schedule.
+   *
+   * Its secured-versus-unsecured section is the opposite. That is real
+   * information a homeowner comparing a HELOC cannot get from a rate
+   * table, and nothing on this site said it. Kept for that reason, and
+   * rewritten: the original spends its first clause hedging the
+   * downside, and buries the strongest point — no lien on the house —
+   * in a subordinate clause at the very end. Leading with the drawback
+   * is what makes the rest of it credible.
+   * ────────────────────────────────────────────────────────────────
+   */
+  secured: {
+    heading: "Secured or unsecured",
+    body: [
+      "The rates on this page are unsecured, which means they are higher than a HELOC or a cash-out refinance. That is the honest part, and it is the first thing worth saying.",
+      "What you are not paying is closing costs, an appraisal, title work, and the weeks it takes to get all three. On a job this size those charges routinely cost more than the rate difference, and an unsecured loan funds in hours rather than months — which matters when the roof is already open.",
+      "The other difference only shows up if something goes wrong later: an unsecured loan does not put your house up as collateral.",
+    ],
+  },
+
+  /**
+   * For the homeowner the portal turns down, or prices badly. Routed to
+   * the existing contact form rather than a second submission pipeline
+   * of its own — see the note in app/financing/page.tsx.
+   */
+  fallback: {
+    heading: "Didn’t prequalify, or don’t like the offer?",
+    body: "The portal is one lender's answer on one day, and it is not the only one available. Tell us the monthly figure you actually want to land on and we will work back from it.",
   },
 
   prepare: {

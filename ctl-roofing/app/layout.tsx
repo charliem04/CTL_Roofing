@@ -20,6 +20,7 @@ import { StickyCTA } from "@/components/StickyCTA";
 import { CookieConsent } from "@/components/CookieConsent";
 import { Analytics } from "@/components/Analytics";
 import { InteractionTracking } from "@/components/InteractionTracking";
+import { SmoothScroll } from "@/components/SmoothScroll";
 
 // Site-level metadata. Individual pages override title/description via
 // their own `metadata` export, built from lib/meta.ts.
@@ -54,6 +55,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
+        {/* Renders nothing; owns the wheel-momentum scrolling for every
+            route. Mounted first so it is running before anything below
+            can be scrolled to. */}
+        <SmoothScroll />
         <PreviewBanner />
         <UtilityBar />
         <Nav />

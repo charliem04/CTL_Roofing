@@ -55,6 +55,19 @@ html {
   scroll-behavior: smooth;
 }
 
+/* The header is sticky, so an element jumped to by its id would come to
+   rest underneath it — you land on the section you asked for with its
+   heading hidden behind the bar. :target rather than [id] so this only
+   applies to the element actually being navigated to, and costs nothing
+   anywhere else.
+
+   This is the native-scroll half. Lenis does not read scroll-margin, so
+   it is told the same offset directly in components/SmoothScroll.tsx —
+   change one and change the other. */
+:target {
+  scroll-margin-top: 96px;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;

@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import type { Photo } from "@/content/types";
 import { stagger } from "@/lib/motion";
 import { Breadcrumbs } from "./Breadcrumbs";
@@ -7,11 +8,18 @@ import { Reveal } from "./Reveal";
 import { Parallax } from "./Parallax";
 
 /**
- * Interior page opener. Deliberately shorter than the home hero and
- * without its own call to action — the home page’s job is to stop you,
- * an interior page’s job is to answer the question you arrived with.
- * The photo sits beside the words rather than under them, so the fold
- * still carries copy on a phone.
+ * Interior page opener. Deliberately shorter than the home hero, and
+ * normally without its own call to action — the home page’s job is to
+ * stop you, an interior page’s job is to answer the question you
+ * arrived with. The photo sits beside the words rather than under them,
+ * so the fold still carries copy on a phone.
+ *
+ * `actions` is the exception to that, and it is narrow. It exists for
+ * the page where the question somebody arrived with IS the action —
+ * careers, where every visitor is there to apply and the form is a
+ * screen and a half further down. That is the rule holding rather than
+ * bending: put the button where the arriving question already points.
+ * A page that merely *has* a call to action does not qualify.
  */
 export function PageHero({
   path,
@@ -19,6 +27,7 @@ export function PageHero({
   lede,
   photo,
   crumbLabel,
+  actions,
 }: {
   path: string;
   heading: string;
@@ -26,6 +35,8 @@ export function PageHero({
   photo?: Photo;
   /** For a page the route registry cannot name — see trailFor(). */
   crumbLabel?: string;
+  /** See the note above before adding this to another page. */
+  actions?: ReactNode;
 }) {
   return (
     <section className="on-deep bg-surface-deep text-ink-invert-soft">
@@ -47,6 +58,13 @@ export function PageHero({
             <Reveal delay={stagger.loose * 2}>
               <p className="mt-4 max-w-[52ch] text-lg">{lede}</p>
             </Reveal>
+            {actions && (
+              <Reveal delay={stagger.loose * 3}>
+                <div className="mt-7 flex flex-wrap items-center gap-x-6 gap-y-3">
+                  {actions}
+                </div>
+              </Reveal>
+            )}
           </div>
           {photo && (
             /* The frame already had a fixed height, which is what

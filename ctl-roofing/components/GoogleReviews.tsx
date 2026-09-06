@@ -8,6 +8,7 @@ import {
 } from "@/lib/googleReviews";
 import { client } from "@/client.config";
 import { Stars } from "./Stars";
+import { btn } from "./Button";
 
 /**
  * The live Google band.
@@ -63,17 +64,52 @@ export function GoogleReviews({ limit = 3 }: { limit?: number } = {}) {
   }
 
   if (!place || place.reviews.length === 0) {
+    /**
+     * ── THE PLACEHOLDER, AND THE TWO THINGS IT IS NOT ───────────────
+     * A panel that says what will be here, not a grid of cards.
+     *
+     * It is not invented reviews. That is the obvious way to make this
+     * band look busy and it is not available: fabricated testimonials
+     * for a real business are what the FTC's 2024 rule on consumer
+     * reviews exists to punish, and presenting them as Google's adds a
+     * Places policy violation on top. The same reasoning is written out
+     * at length in Testimonials.tsx.
+     *
+     * It is also not the Facebook reviews. That was tried — real,
+     * attributed, honestly labelled, and still wrong, because on
+     * /reviews/ the Facebook section directly below shows all ten of
+     * them. Five of the same quotes twice on one page reads as padding
+     * and makes the page look thinner rather than fuller. There is no
+     * honest way to fill a second review grid on a page that already
+     * shows every review there is.
+     *
+     * So the band states plainly what it is waiting for and sends
+     * people to the listing. It is the one thing here that is true,
+     * useful, and does not repeat the page below it.
+     *
+     * Nothing needs removing when the key lands. Real Google data makes
+     * `place` truthy and this branch stops running.
+     * ────────────────────────────────────────────────────────────────
+     */
     return (
-      <div className="mt-10 max-w-[58ch] border-t border-line pt-8">
-        <p className="text-lg">
-          Customers leave reviews on our Google listing, where they can be
-          read in full and in their own words.
-        </p>
-        <p className="mt-5">
-          <a href={listing} className="border-b-2 border-accent text-ink no-underline transition-colors duration-150 hover:text-brand active:text-brand-strong">
-            Read the reviews on Google
-          </a>
-        </p>
+      <div className="mt-10 border-t border-line pt-8">
+        <div className="rounded border border-line border-l-[3px] border-l-accent bg-surface-alt p-7 md:p-9">
+          <p className="u-label">Live feed pending</p>
+          <p className="mt-3 max-w-[58ch] text-lg text-ink">
+            CTL’s Google reviews will load into this band automatically once
+            the listing is connected — the rating, the count and the newest
+            reviews, straight off the listing rather than copied here by hand.
+          </p>
+          <p className="mt-4 max-w-[58ch]">
+            Until then they are all one click away, and the Facebook
+            recommendations below are reproduced word for word.
+          </p>
+          <p className="mt-7">
+            <a href={listing} className={btn("gold")} rel="noopener" target="_blank">
+              Read the reviews on Google
+            </a>
+          </p>
+        </div>
       </div>
     );
   }

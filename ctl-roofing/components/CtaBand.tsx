@@ -1,8 +1,10 @@
 import type { ReactNode } from "react";
 import { client } from "@/client.config";
 import type { CtaCopy } from "@/content/types";
+import { stagger } from "@/lib/motion";
 import { btn } from "./Button";
 import { Reveal } from "./Reveal";
+import { RevealText } from "./RevealText";
 import { MoreLink } from "./MoreLink";
 
 /**
@@ -42,13 +44,20 @@ export function CtaBand({
   return (
     <section className="on-deep band bg-brand text-ink-invert">
       <div className="section flex flex-wrap items-end justify-between gap-x-[42px] gap-y-8">
-        <Reveal className="max-w-[46ch]">
-          <h2 className="max-w-[16ch] text-display-2 text-ink-invert">
-            {cta.heading}
-          </h2>
-          <p className="mt-4 text-ink-invert/85">{cta.body}</p>
-        </Reveal>
-        <Reveal delay={0.08} className="flex flex-wrap gap-2.5">
+        <div className="max-w-[46ch]">
+          {/* The closing ask is the last display type on the page, so it
+              gets the same masked rise the band openings get rather
+              than fading in as a paragraph would. */}
+          <RevealText
+            as="h2"
+            lines={[cta.heading]}
+            className="max-w-[16ch] text-display-2 text-ink-invert"
+          />
+          <Reveal delay={stagger.loose}>
+            <p className="mt-4 text-ink-invert/85">{cta.body}</p>
+          </Reveal>
+        </div>
+        <Reveal delay={stagger.loose * 2} className="flex flex-wrap gap-2.5">
           {actions ?? (
             <>
               <a href={client.bookingUrl || "/contact/"} className={btn("gold")}>

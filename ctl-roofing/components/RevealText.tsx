@@ -33,8 +33,12 @@ export function RevealText({
   delay = 0,
   as: Tag = "h2",
 }: {
-  /** Each entry is one masked line, revealed `stagger.line` after the one above. */
-  lines: ReactNode[];
+  /**
+   * Each entry is one masked line, revealed `stagger.line` after the
+   * one above. Readonly because the headings in client.config are
+   * `as const` tuples and this only ever maps over them.
+   */
+  lines: readonly ReactNode[];
   className?: string;
   delay?: number;
   as?: TextAs;

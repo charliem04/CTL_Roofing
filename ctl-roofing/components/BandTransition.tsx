@@ -68,18 +68,20 @@ export function BandTransition({
   });
   const opacity = useTransform(scrollYProgress, [0, 1], [0, 1]);
 
-  if (!enabled) {
-    return (
-      <section id={id} className={`${tones.from} ${className ?? ""}`}>
-        {children}
-      </section>
-    );
-  }
-
+  // The ref is attached in both branches on purpose — see the note in
+  // Parallax. A useScroll whose target is null does not fail; it starts
+  // reporting progress through the whole document instead, and the
+  // effect still animates, just against the wrong measurement.
   return (
-    <section ref={ref} id={id} className={`relative ${tones.from} ${className ?? ""}`}>
-      <motion.span aria-hidden className={`absolute inset-0 ${tones.to}`} style={{ opacity }} />
-      <div className="relative">{children}</div>
+    <section
+      ref={ref}
+      id={id}
+      className={enabled ? `relative ${tones.from} ${className ?? ""}` : `${tones.from} ${className ?? ""}`}
+    >
+      {enabled && (
+        <motion.span aria-hidden className={`absolute inset-0 ${tones.to}`} style={{ opacity }} />
+      )}
+      {enabled ? <div className="relative">{children}</div> : children}
     </section>
   );
 }

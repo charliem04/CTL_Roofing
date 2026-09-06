@@ -122,9 +122,22 @@ export const client = {
       { label: "Built for", value: "South Louisiana heat, rain and wind" },
     ],
     cta: "Talk through a metal roof",
+    /**
+     * The band's figure is a two-stage before/after: flat copper stock
+     * on the shop bench, then copper folded into hip flashing. The
+     * pairing is the argument the band is making — that the metal is
+     * formed here rather than ordered in.
+     *
+     * They are two separate photographs of two stages, not one camera
+     * position shot twice, so the wipe shows a change of stage rather
+     * than a morph. The labels stay on screen for that reason.
+     */
     image: "/ctl/metal-panel.jpg",
-    imageAlt: "A copper metal panel being formed in the CTL shop",
-    imageCaption: "Copper panel, formed in our shop.",
+    imageAlt: "A flat copper sheet on the bench in the CTL shop before forming",
+    imageAfter: "/ctl/metal-copper-hip.jpg",
+    imageAfterAlt:
+      "The same copper folded into hip flashing, stacked and mirror-bright on the shop bench",
+    imageCaption: "Flat stock to formed hip — drag to see it, both in our shop.",
   },
 
   // ── Process ───────────────────────────────────────────────────────

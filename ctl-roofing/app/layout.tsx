@@ -55,6 +55,42 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
+        {/*
+          Framer serializes an animation's starting state into the HTML,
+          so every element waiting to be revealed ships as
+          `style="opacity:0"` — 36 of them on the home page alone. With
+          JavaScript running that is invisible for a few hundred
+          milliseconds and then correct. With JavaScript off or failed,
+          it is a permanently blank page on a site whose entire job is
+          to be found and phoned.
+
+          Crawlers execute JavaScript and are not the reason this is
+          here. The reason is the visitor on hotel wifi whose bundle
+          request times out, who currently sees nothing at all and has
+          no way to know there was ever anything to see.
+
+          This is deliberately a blunt attribute selector rather than a
+          class the primitives opt into: the point is to catch every
+          animated element, including any added later by someone who
+          never reads this file.
+        */}
+        <noscript>
+          {/*
+            dangerouslySetInnerHTML, not a string child. <style> is a
+            raw-text element: React would escape the selector's quotes
+            to &quot;, and the CSS parser does not decode entities, so
+            the rule silently never matches. The content is a literal
+            in this file with nothing interpolated into it.
+
+            style-src allows 'unsafe-inline' (scripts/csp.mjs:114), so
+            this is not blocked when JavaScript is off.
+          */}
+          <style
+            dangerouslySetInnerHTML={{
+              __html: `[style*="opacity:0"]{opacity:1!important;transform:none!important}`,
+            }}
+          />
+        </noscript>
         {/* Renders nothing; owns the wheel-momentum scrolling for every
             route. Mounted first so it is running before anything below
             can be scrolled to. */}

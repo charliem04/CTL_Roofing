@@ -31,9 +31,13 @@
  *
  *  What it does not buy: protection against injected inline script.
  *  That is acceptable here because nothing renders user-supplied HTML —
- *  React escapes every string, and the one dangerouslySetInnerHTML is
- *  our own JSON-LD built from our own content. If that ever stops being
- *  true, this comment is the thing to come back to.
+ *  React escapes every string, and both uses of dangerouslySetInnerHTML
+ *  are our own content with nothing interpolated from outside: the
+ *  JSON-LD built from client.config, and the <noscript> stylesheet in
+ *  app/layout.tsx that un-hides scroll-reveal content when JavaScript
+ *  never arrives. If that ever stops being true — if either one starts
+ *  taking a value from a URL, a form or an API — this comment is the
+ *  thing to come back to.
  * ════════════════════════════════════════════════════════════════════
  */
 import { appendFileSync, existsSync, readFileSync, readdirSync, statSync } from "node:fs";

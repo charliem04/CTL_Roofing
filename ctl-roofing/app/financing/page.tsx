@@ -208,7 +208,7 @@ export default function FinancingPage() {
           <SectionHead heading={financing.points.heading} />
           <dl className="mt-10 grid gap-px border border-line bg-line md:grid-cols-3">
             {financing.points.items.map((p) => (
-              <div key={p.title} className="bg-surface p-6">
+              <div key={p.title} className="border-t-[3px] border-accent bg-surface p-6">
                 <dt className="font-display text-[19px] font-bold uppercase text-ink">
                   {p.title}
                 </dt>

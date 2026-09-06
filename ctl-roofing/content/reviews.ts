@@ -46,7 +46,16 @@ export const reviewsPage = {
   } satisfies PageMeta,
 
   heading: "What the neighbors say",
-  lede: "The Google reviews below come straight off our listing as you load the page — not a screenshot, not a selection we curated. The Facebook recommendations are reproduced word for word from our page.",
+  /**
+   * "Google reviews load straight off our listing", not "the Google
+   * reviews below come straight off our listing as you load the page".
+   * The second is a claim about what is on the screen right now, and
+   * until the Places key exists there is nothing below it — the
+   * sentence describes reviews that are not there. The first states how
+   * the page works, which is true before and after the feed connects
+   * and needs no branching to stay true.
+   */
+  lede: "Google reviews load straight off our listing — not a screenshot, not a selection we curated. The Facebook recommendations are reproduced word for word from our page.",
 
   /**
    * Facebook's own recommendation figure. Read off the page by hand, so

@@ -5,6 +5,7 @@ import { PageHero } from "@/components/PageHero";
 import { SectionHead } from "@/components/SectionHead";
 import { CtaBand } from "@/components/CtaBand";
 import { GoogleReviews } from "@/components/GoogleReviews";
+import { googleFeedConfigured } from "@/lib/googleReviews";
 import { ReviewColumns, capturedMonth } from "@/components/ReviewColumns";
 import { Pending } from "@/components/Pending";
 import { btn } from "@/components/Button";
@@ -53,9 +54,20 @@ export default function ReviewsPage() {
       {/* ── Live from Google ───────────────────────────────────────── */}
       <section className="band bg-surface">
         <div className="section">
+          {/* The lede has to agree with the band under it. Promising
+              "Google shows the five it considers most useful" directly
+              above a panel saying the feed is not connected is the kind
+              of small contradiction a visitor notices and a client
+              definitely does. googleFeedConfigured() reads env vars
+              that Next inlines at build, so it is safe to branch on
+              here in a server component. */}
           <SectionHead
             heading="On Google"
-            lede="Google shows the five it considers most useful. The rest are one click away."
+            lede={
+              googleFeedConfigured()
+                ? "Google shows the five it considers most useful. The rest are one click away."
+                : "Loaded straight off our listing as soon as it is connected. In the meantime, they are one click away."
+            }
           />
           {/* Every review the API returns — Google caps it at five. */}
           <GoogleReviews limit={5} />

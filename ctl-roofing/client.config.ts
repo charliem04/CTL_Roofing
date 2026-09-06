@@ -137,7 +137,7 @@ export const client = {
     imageAfter: "/ctl/metal-copper-hip.jpg",
     imageAfterAlt:
       "The same copper folded into hip flashing, stacked and mirror-bright on the shop bench",
-    imageCaption: "Flat stock to formed hip — drag to see it, both in our shop.",
+    imageCaption: "Flat stock to formed hip, both in our shop — scroll, or drag the seam.",
   },
 
   // ── Process ───────────────────────────────────────────────────────

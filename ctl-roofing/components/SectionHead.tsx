@@ -1,10 +1,11 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { motion, useReducedMotion } from "framer-motion";
+import { motion } from "framer-motion";
 import { RevealText } from "./RevealText";
 import { Reveal } from "./Reveal";
 import { dur, ease, stagger, viewport } from "@/lib/motion";
+import { useStillness } from "@/lib/useScrollMotion";
 
 /**
  * The three ascending ribs are the site’s one repeated mark: a standing
@@ -19,7 +20,7 @@ import { dur, ease, stagger, viewport } from "@/lib/motion";
 const RIBS = [14, 22, 30];
 
 export function SeamMark({ className }: { className?: string }) {
-  const reduce = useReducedMotion();
+  const reduce = useStillness();
 
   return (
     <span aria-hidden className={`flex h-[30px] items-end gap-[5px] ${className ?? ""}`}>

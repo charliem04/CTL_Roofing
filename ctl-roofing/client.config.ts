@@ -196,8 +196,24 @@ export const client = {
 
   // ── About / local ─────────────────────────────────────────────────
   about: {
-    heading: "Committed to local isn’t a slogan",
-    lede: "It’s the core value the company runs on. We invest in the communities we serve, support local businesses, and do business with integrity and accountability. Being local means more than having a local address — it means being committed to the people who call Acadiana home.",
+    /**
+     * "Committed to local" belongs to the hero and the logo. Repeating
+     * it here spent this band's one headline restating a line the
+     * visitor has already scrolled past twice, and left the band with
+     * nothing of its own to say.
+     *
+     * It also sets up what sits directly beneath it better than a
+     * restated slogan did — the crew photograph, the owner, and the
+     * sixteen towns are all the proof of this sentence, in that order.
+     */
+    heading: "Serving our community",
+    /**
+     * Opens "That's", not "It's". The old pronoun pointed back at a
+     * heading that named the value outright; against a heading that
+     * makes a statement instead, "That's" is the one that still has an
+     * antecedent. One word, and the rest of the lede is untouched.
+     */
+    lede: "That’s the core value the company runs on. We invest in the communities we serve, support local businesses, and do business with integrity and accountability. Being local means more than having a local address — it means being committed to the people who call Acadiana home.",
     photoPath: "/ctl/team.jpg",
     photoAlt: "The CTL Pro Construction team at their Lafayette office",
     owner: {

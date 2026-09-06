@@ -25,9 +25,10 @@
  * same "settling into focus" read for the price of a transform.
  * ────────────────────────────────────────────────────────────────────
  */
-import { motion, useReducedMotion } from "framer-motion";
+import { motion } from "framer-motion";
 import type { ReactNode } from "react";
 import { dur, ease, stagger, travel, viewport } from "@/lib/motion";
+import { useStillness } from "@/lib/useScrollMotion";
 
 type RevealAs = "div" | "li" | "figure";
 
@@ -70,7 +71,7 @@ export function Reveal({
   /** Use the later trigger for tall elements that would otherwise fire off-screen. */
   deep?: boolean;
 }) {
-  const reduce = useReducedMotion();
+  const reduce = useStillness();
   const Motion = motion[as];
   const Plain = as;
 

@@ -14,8 +14,9 @@
  * Purely decorative, so it is aria-hidden. Do not use it to convey
  * progress or state — it carries no meaning a reader would miss.
  */
-import { motion, useReducedMotion } from "framer-motion";
+import { motion } from "framer-motion";
 import { dur, ease, viewport } from "@/lib/motion";
+import { useStillness } from "@/lib/useScrollMotion";
 
 export function DrawRule({
   className = "h-px bg-line",
@@ -25,7 +26,7 @@ export function DrawRule({
   className?: string;
   delay?: number;
 }) {
-  const reduce = useReducedMotion();
+  const reduce = useStillness();
 
   if (reduce) return <span aria-hidden className={`block w-full ${className}`} />;
 

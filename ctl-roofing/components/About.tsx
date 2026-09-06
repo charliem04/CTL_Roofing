@@ -8,17 +8,31 @@ import { MoreLink } from "./MoreLink";
 
 /**
  * "Committed to local" is the company’s stated value and the line on
- * the logo, so it gets stated plainly and then evidenced: the crew, the
- * owner, and the sixteen towns actually worked.
+ * the logo — and it is said in the hero and on the logo itself, which
+ * is why this band no longer repeats it. It goes straight to the
+ * evidence instead: the crew, the owner, and the sixteen towns actually
+ * worked.
+ *
+ * Two columns that behave differently on the way past. The left one is
+ * the evidence and it scrolls: photo, then towns. The right one is the
+ * person making the claim, and on desktop he stays put while the
+ * evidence goes by underneath.
  */
 export function About() {
   const { about } = client;
+  // The band's vertical padding sits on the GRID below, not on the
+  // section as it does everywhere else on the site. A sticky child can
+  // only travel inside its containing block, which is that grid's
+  // padding box — so with the padding one level up, the 126px at the
+  // bottom of this band was distance Robert was not allowed to use.
+  // Moving it in buys that back. Visually identical either way: the
+  // ground is painted by the section, and padding is padding.
   return (
     <section
       id="about"
-      className="on-deep band bg-surface-deep text-ink-invert-soft"
+      className="on-deep bg-surface-deep text-ink-invert-soft"
     >
-      <div className="section grid items-start gap-[clamp(28px,4.5vw,64px)] md:grid-cols-[1.25fr_0.75fr]">
+      <div className="section band grid items-start gap-[clamp(28px,4.5vw,64px)] md:grid-cols-[1.25fr_0.75fr]">
         <div>
           {/* The band opening is the shared one now — mark, heading,
               lede — rather than this component's own copy of it. */}
@@ -61,7 +75,20 @@ export function About() {
           </ul>
         </div>
 
-        <Reveal delay={0.1}>
+        {/* Robert rides down the side of the band on desktop while the
+            crew photo and the sixteen towns scroll past him.
+
+            The sticky lives on this wrapper, not on the Reveal inside
+            it: framer leaves a transform on the element it animates, and
+            an element that is both the sticky one and a transformed one
+            is a fight not worth having. This div is a plain grid item
+            that does nothing but hold the position.
+
+            top-24 clears the sticky header, which is 78px at this width.
+            Below md the band is a single column and there is nothing to
+            track alongside, so the whole thing is md-and-up. */}
+        <div className="md:sticky md:top-24 md:self-start">
+        <Reveal delay={stagger.loose}>
           <figure className="m-0 grid grid-cols-[130px_1fr] items-center gap-6">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
@@ -100,6 +127,7 @@ export function About() {
             </a>
           )}
         </Reveal>
+        </div>
       </div>
     </section>
   );

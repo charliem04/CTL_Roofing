@@ -21,9 +21,10 @@
  * block, which is the correct behaviour and needs no special case.
  * ────────────────────────────────────────────────────────────────────
  */
-import { motion, useReducedMotion } from "framer-motion";
+import { motion } from "framer-motion";
 import type { ReactNode } from "react";
 import { dur, ease, stagger, viewport } from "@/lib/motion";
+import { useStillness } from "@/lib/useScrollMotion";
 
 type TextAs = "h1" | "h2" | "h3" | "p";
 
@@ -43,7 +44,7 @@ export function RevealText({
   delay?: number;
   as?: TextAs;
 }) {
-  const reduce = useReducedMotion();
+  const reduce = useStillness();
 
   if (reduce) {
     return (

@@ -1,16 +1,16 @@
 "use client";
 
 import { useRef } from "react";
-import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { client } from "@/client.config";
 import { btn } from "./Button";
 import { Parallax } from "./Parallax";
 import { RevealText } from "./RevealText";
-import { useScrollMotion } from "@/lib/useScrollMotion";
+import { useScrollMotion, useStillness } from "@/lib/useScrollMotion";
 import { cascade, dur, ease, stagger, travel } from "@/lib/motion";
 
 export function Hero() {
-  const reduce = useReducedMotion();
+  const reduce = useStillness();
   const scrollMotion = useScrollMotion();
   const ref = useRef<HTMLElement>(null);
 

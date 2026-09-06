@@ -8,8 +8,10 @@ import { MoreLink } from "./MoreLink";
 
 /**
  * "Committed to local" is the company’s stated value and the line on
- * the logo, so it gets stated plainly and then evidenced: the crew, the
- * owner, and the sixteen towns actually worked.
+ * the logo — and it is said in the hero and on the logo itself, which
+ * is why this band no longer repeats it. It goes straight to the
+ * evidence instead: the crew, the owner, and the sixteen towns actually
+ * worked.
  *
  * Two columns that behave differently on the way past. The left one is
  * the evidence and it scrolls: photo, then towns. The right one is the

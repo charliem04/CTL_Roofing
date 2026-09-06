@@ -197,14 +197,25 @@ export const client = {
   // ── About / local ─────────────────────────────────────────────────
   about: {
     /**
-     * Three words, not five. At display-2 the old line wrapped to two
-     * rows and spent the first of them on "Committed to", which the
-     * logo directly above already says. Cutting to the claim itself
-     * lands harder and hands straight off to the lede: "Local isn't a
-     * slogan. It's the core value the company runs on."
+     * "Committed to local" belongs to the hero and the logo. Repeating
+     * it here spent this band's one headline restating a line the
+     * visitor has already scrolled past twice, and left the band with
+     * nothing of its own to say.
+     *
+     * This says the same thing as evidence rather than as a value: the
+     * claim a roofer's neighbours can check. It also sets up what sits
+     * directly beneath it better than a restated slogan did — the crew
+     * photograph, the owner, and the sixteen towns are all the proof of
+     * this sentence, in that order.
      */
-    heading: "Local isn’t a slogan",
-    lede: "It’s the core value the company runs on. We invest in the communities we serve, support local businesses, and do business with integrity and accountability. Being local means more than having a local address — it means being committed to the people who call Acadiana home.",
+    heading: "We live here too",
+    /**
+     * Opens "That's", not "It's". The old pronoun pointed back at a
+     * heading that named the value outright; against a heading that
+     * makes a statement instead, "That's" is the one that still has an
+     * antecedent. One word, and the rest of the lede is untouched.
+     */
+    lede: "That’s the core value the company runs on. We invest in the communities we serve, support local businesses, and do business with integrity and accountability. Being local means more than having a local address — it means being committed to the people who call Acadiana home.",
     photoPath: "/ctl/team.jpg",
     photoAlt: "The CTL Pro Construction team at their Lafayette office",
     owner: {

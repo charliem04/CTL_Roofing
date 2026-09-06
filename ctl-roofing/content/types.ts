@@ -161,3 +161,27 @@ export type FinanceOffer = {
   /** Optional note, e.g. "subject to credit approval" */
   note?: string;
 };
+
+/**
+ * One of the lender's advertised packages, as printed on the card a
+ * homeowner clicks.
+ *
+ * Separate from FinanceOffer on purpose. An offer is something the
+ * estimator can do arithmetic on — a principal, a rate and a term that
+ * amortise. A product is a thing the lender sells, and not all of them
+ * amortise: a same-as-cash package has no monthly payment at all during
+ * its promotional window, so there is no honest figure for the
+ * estimator to print for it. Keeping the two lists apart is what stops
+ * a deferred-interest product being run through a monthly-payment
+ * formula that does not describe it.
+ */
+export type FinanceProduct = {
+  /** The rate or term the card leads with, e.g. "9.99% APR". */
+  headline: string;
+  /** What kind of loan it is, e.g. "5 year loan". */
+  name: string;
+  /** The condition that materially changes the deal. Shown, not buried. */
+  detail?: string;
+  /** True when the estimator has a matching entry in `offers`. */
+  estimated?: boolean;
+};

@@ -1,0 +1,65 @@
+import type { FinanceProduct } from "@/content/types";
+import { cascade } from "@/lib/motion";
+import { Reveal } from "./Reveal";
+import { btn } from "./Button";
+
+/**
+ * The lender's three packages, each opening the prequalification portal.
+ *
+ * ── ON NOT USING THE LENDER'S ARTWORK ───────────────────────────────
+ * These arrive from CTL as three green JPEGs carrying the Regions
+ * wordmark, the FDIC mark and a "Start My Project Today!" button baked
+ * into the pixels. They are not used, for four reasons that all point
+ * the same way: text in an image is invisible to search and to a screen
+ * reader; it cannot reflow on a phone; it goes stale the day a rate
+ * changes and nobody can edit it; and dropping another firm's green and
+ * wordmark into the middle of this page reads as co-branding rather
+ * than as "here is who lends the money".
+ *
+ * So the terms are set in our own type on our own ground, and the
+ * lender is credited in words underneath. The rate is now a string in
+ * content/financing.ts that anyone can change in ten seconds.
+ * ────────────────────────────────────────────────────────────────────
+ *
+ * Every card leads to the same URL, which is correct rather than lazy:
+ * the portal opens on product selection, so the choice is made there.
+ */
+export function FinanceProducts({
+  products,
+  url,
+}: {
+  products: readonly FinanceProduct[];
+  url: string;
+}) {
+  return (
+    <ul className="mt-10 grid list-none gap-5 p-0 md:grid-cols-3">
+      {products.map((p, i) => (
+        <Reveal
+          as="li"
+          key={p.name}
+          delay={cascade(i)}
+          className="flex flex-col rounded border border-line-dark/20 bg-surface-deep-alt p-7"
+        >
+          <p className="font-display text-[clamp(26px,3vw,34px)] font-extrabold uppercase leading-none text-accent">
+            {p.headline}
+            {/* Points at the disclosure under the cards, the same way the
+                lender's own artwork points at its footnote. */}
+            <sup className="ml-0.5 text-[0.6em]">*</sup>
+          </p>
+          <h3 className="mt-2 text-display-4 text-ink-invert">{p.name}</h3>
+          {p.detail && (
+            <p className="mt-4 flex-1 text-[15px] text-ink-invert-soft">{p.detail}</p>
+          )}
+          <a
+            href={url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={`mt-7 ${btn("gold")}`}
+          >
+            Check if I prequalify
+          </a>
+        </Reveal>
+      ))}
+    </ul>
+  );
+}

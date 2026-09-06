@@ -18,6 +18,7 @@
  */
 import { useMemo, useState } from "react";
 import type { FinanceOffer } from "@/content/types";
+import { Mark } from "./Mark";
 
 const dollars = (n: number) =>
   n.toLocaleString("en-US", {
@@ -126,11 +127,18 @@ export function PaymentEstimator({
         </tbody>
       </table>
 
-      <p className="mt-5 text-sm text-ink-faint">
-        An estimate, not an offer. The figures use the terms shown and assume
-        the full project cost is financed with nothing down. What you are
-        actually offered depends on the lender’s decision.
-      </p>
+      {/* Brand indigo, not gold: this sits on white, where gold is
+          around 1.5:1 and unreadable. See the note in Mark. */}
+      <Mark
+        className="mt-5 text-sm text-ink-faint"
+        tone="light"
+        text="An estimate, not an offer. The figures use the terms shown and assume the full project cost is financed with nothing down. What you are actually offered depends on the lender’s decision."
+        phrases={[
+          "An estimate, not an offer",
+          "assume the full project cost is financed with nothing down",
+          "depends on the lender’s decision",
+        ]}
+      />
     </div>
   );
 }

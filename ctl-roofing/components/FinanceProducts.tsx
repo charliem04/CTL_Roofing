@@ -21,15 +21,15 @@ import { btn } from "./Button";
  * content/financing.ts that anyone can change in ten seconds.
  * ────────────────────────────────────────────────────────────────────
  *
- * Every card leads to the same URL, which is correct rather than lazy:
- * the portal opens on product selection, so the choice is made there.
+ * Each card carries its own portal link. The three packages have three
+ * different loanCodes, and only the code differs between them — which
+ * means a wrong one does not error, it silently opens the application
+ * for a product the visitor did not choose.
  */
 export function FinanceProducts({
   products,
-  url,
 }: {
   products: readonly FinanceProduct[];
-  url: string;
 }) {
   return (
     <ul className="mt-10 grid list-none gap-5 p-0 md:grid-cols-3">
@@ -51,7 +51,7 @@ export function FinanceProducts({
             <p className="mt-4 flex-1 text-[15px] text-ink-invert-soft">{p.detail}</p>
           )}
           <a
-            href={url}
+            href={p.url}
             target="_blank"
             rel="noopener noreferrer"
             className={`mt-7 ${btn("gold")}`}

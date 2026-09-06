@@ -65,7 +65,16 @@ export function SmoothScroll() {
       // Lenis drives its own requestAnimationFrame loop.
       autoRaf: true,
       // In-page # links ease to their target through Lenis.
-      anchors: true,
+      //
+      // The offset is the sticky header. Without it every anchor on the
+      // site lands with the top of its target tucked underneath the nav
+      // — the heading you jumped to is the part you cannot see. 96px
+      // clears the 70-78px bar and leaves a little air.
+      //
+      // Lenis does not read CSS scroll-margin, so this has to be told
+      // to it here; the matching rule in globals.css covers the native
+      // path for when Lenis is not running.
+      anchors: { offset: -96 },
     });
 
     return () => {

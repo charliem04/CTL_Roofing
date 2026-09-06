@@ -65,10 +65,27 @@ export default function CareersPage() {
 
   return (
     <>
-      <PageHero path={page.meta.path} heading={page.heading} lede={page.lede} />
+      {/* Everyone who opens this page is here to apply, and the form is
+          a screen and a half down past the roles. The button skips the
+          reading for the people who have already decided. */}
+      <PageHero
+        path={page.meta.path}
+        heading={page.heading}
+        lede={page.lede}
+        actions={
+          <>
+            <a href="#apply" className={btn("gold")}>
+              Apply now
+            </a>
+            <MoreLink href="#roles" tone="deep">
+              Or see what we hire for
+            </MoreLink>
+          </>
+        }
+      />
 
       {/* ── Openings, or the honest absence of them ────────────────── */}
-      <section className="band bg-surface">
+      <section id="roles" className="band bg-surface">
         <div className="section">
           {roles.length === 0 ? (
             <div className="max-w-[58ch]">
@@ -128,7 +145,7 @@ export default function CareersPage() {
       </section>
 
       {/* ── The application ────────────────────────────────────────── */}
-      <section className="band bg-surface-alt">
+      <section id="apply" className="band bg-surface-alt">
         <div className="section">
           <SectionHead
             heading="Send it over"

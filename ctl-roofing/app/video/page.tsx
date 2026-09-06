@@ -32,15 +32,29 @@ export default function VideoPage() {
 
   return (
     <>
+      {/*
+        The hero photo is not the first clip's poster, which is what it
+        used to be. That frame is 540x960 — a phone held upright — and
+        the hero frame is a 1.4:1 landscape band, so object-cover threw
+        away everything except a strip across the speaker's chest: no
+        face, no roof, no job. It also carries a burned-in "MUSIC BY"
+        credit along its bottom edge, which is fine on a video tile and
+        looks like a mistake on a page header.
+
+        This one is 1100x619, near enough the frame's own ratio to
+        survive the crop intact, and it shows the page's subject rather
+        than a still of it — a full crew mid tear-off. The poster still
+        does its real job on the clip below.
+      */}
       <PageHero
         path={page.meta.path}
         heading={page.heading}
         lede={page.lede}
         photo={{
-          src: clips[0].poster,
-          alt: clips[0].description,
-          width: clips[0].width,
-          height: clips[0].height,
+          src: "/ctl/gallery/tearoff-crew-tarps.jpg",
+          alt: "Crew on a roof mid tear-off with tarps spread over the landscaping below",
+          width: 1100,
+          height: 619,
         }}
       />
 

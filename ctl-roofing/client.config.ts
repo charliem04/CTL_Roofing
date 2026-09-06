@@ -196,7 +196,14 @@ export const client = {
 
   // ── About / local ─────────────────────────────────────────────────
   about: {
-    heading: "Committed to local isn’t a slogan",
+    /**
+     * Three words, not five. At display-2 the old line wrapped to two
+     * rows and spent the first of them on "Committed to", which the
+     * logo directly above already says. Cutting to the claim itself
+     * lands harder and hands straight off to the lede: "Local isn't a
+     * slogan. It's the core value the company runs on."
+     */
+    heading: "Local isn’t a slogan",
     lede: "It’s the core value the company runs on. We invest in the communities we serve, support local businesses, and do business with integrity and accountability. Being local means more than having a local address — it means being committed to the people who call Acadiana home.",
     photoPath: "/ctl/team.jpg",
     photoAlt: "The CTL Pro Construction team at their Lafayette office",

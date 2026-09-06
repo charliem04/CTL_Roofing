@@ -13,22 +13,47 @@ import { MoreLink } from "./MoreLink";
  * 1. The live Google feed, when a Places key is configured. Whatever
  *    three Google returns first is what a visitor sees, and the number
  *    beside them is today’s number.
- * 2. Otherwise the first three Facebook recommendations, which are real
- *    and already in the content — better than a bare link, and the
- *    reviews page below carries all ten.
+ * 2. Otherwise two Facebook recommendations, which are real and already
+ *    in the content — better than a bare link, and the reviews page
+ *    below carries all ten.
  * 3. Otherwise the link to the Google listing.
  *
- * The three shown are the first three as stored, never the three that
- * flatter most. Reordering reviews by how good they make us look is the
- * behaviour the FTC’s 2024 rule on testimonials exists to stop, and it
- * is a bad trade anyway: a live rating with a count out-argues three
- * hand-picked paragraphs.
+ * ── ON CHOOSING WHICH TWO ───────────────────────────────────────────
+ * This band used to take the first three as stored, and said so, on the
+ * grounds that picking reviews by how well they flatter is the behaviour
+ * the FTC’s 2024 rule on testimonials exists to stop.
+ *
+ * It now names two. The criterion is length, not sentiment: both run to
+ * four rendered lines in their box, so the pair sits level instead of
+ * one running to five lines while its neighbour runs to two. Matching
+ * character counts is not the same as matching line counts — the first
+ * pair tried here were eight characters apart and still came out four
+ * lines against three, because where a line breaks depends on the words.
+ * That distinction is worth keeping straight, so: every entry in
+ * facebookPicks is already a positive review, this choice suppresses no
+ * criticism, and it changes nothing about the rating a visitor sees —
+ * the live count and average still come from Google, and the reviews
+ * page one link below still carries all ten in stored order.
+ *
+ * If a critical review is ever added to that list, this selection is the
+ * thing to revisit before it silently becomes the other kind of picking.
+ * ────────────────────────────────────────────────────────────────────
  *
  * `client.testimonials` stays supported for a client with neither.
  */
+const HOME_PICKS = ["Bryce Godwin", "Ji Daily"];
 export function Testimonials() {
   const legacy = client.testimonials;
   const facebook = getReviewsPage().facebookPicks;
+
+  // Named rather than sliced, so an edit to the stored order cannot
+  // silently change what the home page shows. If a name ever stops
+  // matching — a review withdrawn, a spelling corrected — this falls
+  // back to the stored order rather than rendering an empty band.
+  const picked = HOME_PICKS.map((name) =>
+    facebook.find((r) => r.name === name)
+  ).filter((r): r is (typeof facebook)[number] => Boolean(r));
+  const featured = picked.length === HOME_PICKS.length ? picked : facebook.slice(0, 2);
 
   return (
     <section id="testimonials" className="band bg-surface">
@@ -52,7 +77,7 @@ export function Testimonials() {
         ) : googleFeedConfigured() || facebook.length === 0 ? (
           <GoogleReviews />
         ) : (
-          <ReviewColumns reviews={facebook.slice(0, 3)} layout="grid" />
+          <ReviewColumns reviews={featured} layout="feature" />
         )}
 
         {isLive("/reviews/") && (

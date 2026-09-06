@@ -1,5 +1,6 @@
 import { getFinancing, getPending, hasFinanceTerms } from "@/lib/content";
 import { pageMetadata } from "@/lib/meta";
+import { client } from "@/client.config";
 import { PageHero } from "@/components/PageHero";
 import { SectionHead } from "@/components/SectionHead";
 import { Reveal } from "@/components/Reveal";
@@ -158,8 +159,21 @@ export default function FinancingPage() {
               </div>
             </Reveal>
 
+            <Reveal delay={0.2}>
+              <div className="rounded border border-line bg-surface p-6">
+                <h2 className="text-display-3">{financing.talk.heading}</h2>
+                <p className="mt-4 text-[15px]">{financing.talk.body}</p>
+                <a
+                  href={`tel:${client.phoneHref}`}
+                  className={`mt-5 w-full ${btn("line")}`}
+                >
+                  Call the office {client.phone}
+                </a>
+              </div>
+            </Reveal>
+
             {financing.lender && (
-              <Reveal delay={0.2}>
+              <Reveal delay={0.24}>
                 <p className="text-sm text-ink-faint">
                   Financing provided by {financing.lender}, Member FDIC, Equal
                   Housing Lender. CTL arranges the introduction and does not

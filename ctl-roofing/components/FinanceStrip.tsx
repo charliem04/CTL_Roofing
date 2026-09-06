@@ -41,13 +41,17 @@ export function FinanceStrip({
             up here would have to choose one on the visitor's behalf —
             which is the exact failure the per-package links exist to
             avoid. */}
-        <a
-          href={href}
-          // active:text-brand matches the storm strip's link, which is
-          // the same control on the same gold ground. A press needs a
-          // receipt, and the checker is right to insist on one.
-          className={`${btn("lineDeep")} whitespace-nowrap border-ink/35 text-ink hover:border-ink active:text-brand`}
-        >
+        {/* The `ink` variant, rather than an outline with overrides
+            bolted onto it: a navy fill with white text reads as a button
+            against gold, and it already hovers to brand blue and presses
+            to brand-strong, so both states come with the variant instead
+            of being hand-written here.
+
+            White was the other option and only works on this ground as a
+            fill behind dark text — white *text* on gold is about 1.5:1
+            and unreadable. Navy keeps it in the site's palette rather
+            than borrowing the lender's white pill. */}
+        <a href={href} className={`${btn("ink")} whitespace-nowrap`}>
           See the packages
         </a>
       </div>

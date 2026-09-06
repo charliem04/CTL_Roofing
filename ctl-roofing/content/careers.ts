@@ -149,6 +149,29 @@ export const careersPage = {
       ],
     },
     {
+      // Added when a fourteenth was wanted to square the grid, which is
+      // the wrong reason on its own — see the note above about not
+      // inventing jobs for layout. This one survives the test on its
+      // own evidence: the openBody further down this file already names
+      // "a good roofer, carpenter or estimator" as the three worth
+      // making room for, the form's own hint lists framing, and
+      // remodeling and outdoor living are two of the five services.
+      // Roofer and estimator were already here; carpenter was the gap.
+      slug: "carpenter",
+      title: "Carpenter",
+      summary:
+        "Framing, decking, siding and trim — the work that holds up everything the roof sits on, and most of what a renovation actually is.",
+      does: [
+        "Framing and structural repair, including rotten decking and rafters",
+        "Decks, patio covers and exterior carpentry on outdoor living jobs",
+        "Siding, soffit, fascia and interior trim on renovation work",
+      ],
+      needs: [
+        "Carpentry experience across framing and finish work",
+        "Your own hand tools, and knowing which one the job wants",
+      ],
+    },
+    {
       slug: "construction-manager",
       title: "Construction manager",
       summary:

@@ -72,10 +72,26 @@ export const nav: RouteNode[] = [
     children: [
       { href: "/areas/", label: "Areas we serve", live: true, priority: 0.8 },
       { href: "/reviews/", label: "Reviews", live: true, priority: 0.7 },
-      { href: "/careers/", label: "Careers", live: false },
     ],
   },
-  { href: "/contact/", label: "Contact", live: true, priority: 0.9 },
+  {
+    href: "/contact/",
+    label: "Contact",
+    live: true,
+    priority: 0.9,
+    // Careers moved here from under About, and switched on. Contact is
+    // where someone goes to reach CTL, and applying for a job is the
+    // second reason anybody does — under About it sat behind a menu
+    // about the company rather than one about getting in touch.
+    //
+    // Going live does more than reveal the nav item: metadata reads
+    // isLive() to decide noindex, so the page becomes indexable and
+    // enters the sitemap from this one flag. That is intended. What
+    // stays off is content/careers.ts `postingsAreLive`, so the page is
+    // findable as a general "work here" page without publishing
+    // JobPosting schema for vacancies nobody has confirmed.
+    children: [{ href: "/careers/", label: "Careers", live: true, priority: 0.5 }],
+  },
 ];
 
 /** Routes that exist but are not top-level nav items. */

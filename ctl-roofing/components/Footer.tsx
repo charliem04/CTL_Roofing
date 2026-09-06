@@ -21,6 +21,13 @@ export function Footer() {
     { href: "/financing/", label: "Financing" },
     { href: "/#about", label: "About us" },
     { href: "/gallery/", label: "Our work" },
+    // Careers is hand-added here because this column is a curated list
+    // rather than a projection of the registry, despite what the note
+    // above it says. Flipping `live` in lib/routes.ts reveals the nav
+    // item and the sitemap entry but never reaches this array — worth
+    // knowing before the next route goes live and quietly misses the
+    // footer the same way.
+    { href: "/careers/", label: "Careers" },
   ];
 
   const reach = [

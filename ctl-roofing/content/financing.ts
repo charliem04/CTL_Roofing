@@ -151,6 +151,19 @@ export const financing = {
     body: "Prequalifying takes a couple of minutes, shows you the rate and term you would actually be offered, and does not affect your credit score.",
   },
 
+  /**
+   * Third box beside the estimator. A page that hands somebody a slider
+   * and a portal and nothing else assumes they want to do this alone,
+   * and the ones who do not are exactly the ones with a complication —
+   * an insurance claim half-settled, a scope that grew, a number they
+   * cannot make work. The phone belongs next to the self-serve tools,
+   * not three sections below them.
+   */
+  talk: {
+    heading: "Rather talk it through?",
+    body: "Bring the number you want to land on and we will work back from it. There is no application to fill in first, and nothing said on the phone commits you to anything.",
+  },
+
   /** Sits under "What to have ready", beside the estimator. */
   how: {
     heading: "How prequalifying works",

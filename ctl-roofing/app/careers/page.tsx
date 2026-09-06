@@ -32,7 +32,16 @@ export const metadata = pageMetadata(page.meta, {
 export default function CareersPage() {
   const roles = page.roles;
 
-  const jsonLd = roles.map((r) => ({
+  /**
+   * JobPosting structured data only when these are real, currently-open
+   * vacancies. Google's JobPosting guidelines require a specific open
+   * role behind every posting; emitting it for "the kinds of work we
+   * hire for" is a policy violation that risks a manual action, and it
+   * puts listings into Google Jobs that nobody can apply to. The list
+   * still renders either way — this gates the machine-readable claim,
+   * not the page.
+   */
+  const jsonLd = (page.postingsAreLive ? roles : []).map((r) => ({
     "@context": "https://schema.org",
     "@type": "JobPosting",
     title: r.title,
@@ -69,14 +78,22 @@ export default function CareersPage() {
             </div>
           ) : (
             <>
-              <SectionHead heading="What’s open" />
+              <SectionHead
+                heading={page.postingsAreLive ? "What’s open" : page.rolesHeading}
+                lede={page.postingsAreLive ? undefined : page.rolesLede}
+              />
               <ul className="mt-10 grid list-none gap-px border border-line bg-line p-0 md:grid-cols-2">
                 {roles.map((r, i) => (
                   <Reveal as="li" key={r.slug} delay={cascade(i)} className="bg-surface p-7">
-                    <p className="u-label">
-                      {r.basis}
-                      {r.location && ` · ${r.location}`}
-                    </p>
+                    {/* Omitted rather than guessed — see the note on
+                        `basis` in content/careers.ts. */}
+                    {(r.basis || r.location) && (
+                      <p className="u-label">
+                        {r.basis}
+                        {r.basis && r.location && " · "}
+                        {r.location}
+                      </p>
+                    )}
                     <h3 className="mt-2 font-display text-[23px] font-bold uppercase text-ink">
                       {r.title}
                     </h3>

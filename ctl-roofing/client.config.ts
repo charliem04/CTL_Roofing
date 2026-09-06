@@ -202,13 +202,11 @@ export const client = {
      * visitor has already scrolled past twice, and left the band with
      * nothing of its own to say.
      *
-     * This says the same thing as evidence rather than as a value: the
-     * claim a roofer's neighbours can check. It also sets up what sits
-     * directly beneath it better than a restated slogan did — the crew
-     * photograph, the owner, and the sixteen towns are all the proof of
-     * this sentence, in that order.
+     * It also sets up what sits directly beneath it better than a
+     * restated slogan did — the crew photograph, the owner, and the
+     * sixteen towns are all the proof of this sentence, in that order.
      */
-    heading: "We live here too",
+    heading: "Serving our community",
     /**
      * Opens "That's", not "It's". The old pronoun pointed back at a
      * heading that named the value outright; against a heading that

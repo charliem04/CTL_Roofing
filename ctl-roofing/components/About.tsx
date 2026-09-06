@@ -20,12 +20,19 @@ import { MoreLink } from "./MoreLink";
  */
 export function About() {
   const { about } = client;
+  // The band's vertical padding sits on the GRID below, not on the
+  // section as it does everywhere else on the site. A sticky child can
+  // only travel inside its containing block, which is that grid's
+  // padding box — so with the padding one level up, the 126px at the
+  // bottom of this band was distance Robert was not allowed to use.
+  // Moving it in buys that back. Visually identical either way: the
+  // ground is painted by the section, and padding is padding.
   return (
     <section
       id="about"
-      className="on-deep band bg-surface-deep text-ink-invert-soft"
+      className="on-deep bg-surface-deep text-ink-invert-soft"
     >
-      <div className="section grid items-start gap-[clamp(28px,4.5vw,64px)] md:grid-cols-[1.25fr_0.75fr]">
+      <div className="section band grid items-start gap-[clamp(28px,4.5vw,64px)] md:grid-cols-[1.25fr_0.75fr]">
         <div>
           {/* The band opening is the shared one now — mark, heading,
               lede — rather than this component's own copy of it. */}

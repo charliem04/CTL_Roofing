@@ -74,6 +74,15 @@ html {
     opacity: 1 !important;
     transform: none !important;
   }
+
+  /* A masked headline line has no opacity to neutralise — it is parked
+     below its clip by a transform alone, so the rule above never
+     matched it and the heading stayed invisible. Marked explicitly
+     rather than matched on "translateY", which would also catch
+     transforms doing real layout work elsewhere. */
+  [data-mask-line] {
+    transform: none !important;
+  }
 }
 
 body {

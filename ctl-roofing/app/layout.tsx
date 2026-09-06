@@ -87,7 +87,7 @@ export default function RootLayout({
           */}
           <style
             dangerouslySetInnerHTML={{
-              __html: `[style*="opacity:0"]{opacity:1!important;transform:none!important}`,
+              __html: `[style*="opacity:0"]{opacity:1!important;transform:none!important}[data-mask-line]{transform:none!important}`,
             }}
           />
         </noscript>

@@ -20,6 +20,31 @@
  * A line that wraps on a narrow screen simply rises as one taller
  * block, which is the correct behaviour and needs no special case.
  * ────────────────────────────────────────────────────────────────────
+ *
+ * ── WHY THE TRIGGER IS ON THE MASK, NOT THE LINE ────────────────────
+ * whileInView used to sit on the inner span, and headings across the
+ * site silently never appeared — twelve of thirteen routes had at least
+ * one.
+ *
+ * The starting position is the whole problem: the line is translated
+ * 112% down, which puts it completely outside the overflow-hidden
+ * wrapper. IntersectionObserver intersects against ancestor clips, so a
+ * fully-clipped element has no intersecting area, never counts as in
+ * view, and never gets told to animate. It stays parked below the mask
+ * for good. Whether a given heading escaped came down to whether the
+ * wrapper's 0.16em descender padding left a sliver of it showing —
+ * which is why the failure looked random rather than total.
+ *
+ * The observer now watches the wrapper, which is never transformed and
+ * therefore always intersects honestly. The wrapper carries the variant
+ * label; framer passes it down to the line, which owns the movement.
+ *
+ * The trap generalises: never hang whileInView on an element whose
+ * initial state is "outside the thing that clips it". It also hides
+ * from the obvious checks — innerText still returns the words and
+ * opacity is still 1, so the text is invisible while every cheap assert
+ * passes. Verify with the painted position, not the text content.
+ * ────────────────────────────────────────────────────────────────────
  */
 import { motion } from "framer-motion";
 import type { ReactNode } from "react";
@@ -65,12 +90,17 @@ export function RevealText({
         // box, so the clip box is pushed 0.16em lower and the same
         // amount is pulled back off the bottom margin — without this,
         // overflow-hidden shears the tail off every g, y and p.
-        <span key={i} className="block overflow-hidden pb-[0.16em] mb-[-0.16em]">
+        <motion.span
+          key={i}
+          className="block overflow-hidden pb-[0.16em] mb-[-0.16em]"
+          initial="hidden"
+          whileInView="visible"
+          viewport={viewport.standard}
+        >
           <motion.span
+            data-mask-line
             className="block"
-            initial={{ y: "112%" }}
-            whileInView={{ y: "0%" }}
-            viewport={viewport.standard}
+            variants={{ hidden: { y: "112%" }, visible: { y: "0%" } }}
             transition={{
               duration: dur.slow,
               delay: delay + i * stagger.line,
@@ -79,7 +109,7 @@ export function RevealText({
           >
             {line}
           </motion.span>
-        </span>
+        </motion.span>
       ))}
     </Tag>
   );

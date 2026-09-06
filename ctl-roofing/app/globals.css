@@ -59,6 +59,21 @@ html {
   html {
     scroll-behavior: auto;
   }
+
+  /* Framer writes an entrance's starting state into the markup as an
+     inline style, and the export is built once with no visitor, so that
+     happens whatever this browser prefers. The components do stop
+     animating — see useStillness in lib/useScrollMotion.ts — but only
+     from their second render, because the first has to match the HTML
+     it is hydrating or React throws the whole tree away.
+
+     This covers the frame in between. Same selector as the <noscript>
+     rule in app/layout.tsx, for the same reason: catch every animated
+     element, including ones added by someone who never read this. */
+  [style*="opacity:0"] {
+    opacity: 1 !important;
+    transform: none !important;
+  }
 }
 
 body {

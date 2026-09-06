@@ -1,11 +1,12 @@
 import { getFinancing, getPending, hasFinanceTerms } from "@/lib/content";
 import { pageMetadata } from "@/lib/meta";
-import { client } from "@/client.config";
 import { PageHero } from "@/components/PageHero";
 import { SectionHead } from "@/components/SectionHead";
 import { Reveal } from "@/components/Reveal";
 import { PaymentEstimator } from "@/components/PaymentEstimator";
 import { FinanceProducts } from "@/components/FinanceProducts";
+import { FinanceStrip } from "@/components/FinanceStrip";
+import { Mark } from "@/components/Mark";
 import { Pending } from "@/components/Pending";
 import { FaqList } from "@/components/FaqList";
 import { CtaBand } from "@/components/CtaBand";
@@ -34,22 +35,27 @@ export default function FinancingPage() {
           what it costs a month and whether they qualify. Prequalifying
           answers the second question in a couple of minutes without
           touching their credit score, so nothing is put in front of it. */}
-      <section className="on-deep band bg-surface-deep text-ink-invert-soft">
+      <FinanceStrip
+        label={financing.strip.label}
+        body={financing.strip.body}
+        href="#packages"
+      />
+
+      <section id="packages" className="on-deep band bg-surface-deep text-ink-invert-soft">
         <div className="section">
           <SectionHead
             heading={financing.products_heading}
             lede={financing.products_lede}
             tone="deep"
           />
-          <FinanceProducts
-            products={financing.products}
-            url={financing.prequalifyUrl}
-          />
+          <FinanceProducts products={financing.products} />
           <Reveal delay={0.16}>
-            <p className="mt-8 max-w-[70ch] text-[13px] leading-relaxed text-ink-invert-soft/75">
-              <span aria-hidden>* </span>
-              {financing.disclosure}
-            </p>
+            <Mark
+              text={financing.disclosure}
+              phrases={financing.disclosureEmphasis}
+              tone="deep"
+              className="mt-8 max-w-[70ch] text-[13px] leading-relaxed text-ink-invert-soft/75"
+            />
           </Reveal>
         </div>
       </section>
@@ -98,32 +104,28 @@ export default function FinancingPage() {
             </Reveal>
 
             <Reveal delay={0.1}>
+              {/* Back up to the packages rather than out to the portal.
+                  The estimator prices two different terms, so a single
+                  "prequalify" button here would have to pick one of them
+                  on the visitor's behalf — and each package now has its
+                  own loanCode, so picking wrong opens the wrong
+                  application. Let them choose. */}
               <div className="mt-8 flex flex-wrap items-center gap-x-8 gap-y-4">
-                {financing.prequalifyUrl ? (
-                  <a
-                    href={financing.prequalifyUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={btn("gold")}
-                  >
-                    Check if you prequalify
-                  </a>
-                ) : (
-                  <a href={client.bookingUrl || "/contact/"} className={btn("gold")}>
-                    {client.copy.heroCta}
-                  </a>
-                )}
+                <a href="#packages" className={btn("gold")}>
+                  Choose a package
+                </a>
                 <MoreLink href="/services/">See what we build</MoreLink>
               </div>
-              {financing.lender && (
-                <p className="mt-4 text-sm text-ink-faint">
-                  Financing provided by {financing.lender}.
-                </p>
-              )}
             </Reveal>
           </div>
 
-          <div>
+          {/* The right column used to hold one short box and then a lot
+              of nothing, which read as a column that had run out rather
+              than one that was finished. The steps underneath answer the
+              question the estimator raises next — "what do I actually
+              have to do?" — and the lender credit belongs at the foot of
+              the column that talks about money. */}
+          <div className="space-y-5">
             <Reveal delay={0.12}>
               <div className="rounded border border-line bg-surface p-6">
                 <h2 className="text-display-3">{financing.prepare.heading}</h2>
@@ -134,6 +136,37 @@ export default function FinancingPage() {
                 </ul>
               </div>
             </Reveal>
+
+            <Reveal delay={0.16}>
+              <div className="rounded border border-line bg-surface p-6">
+                <h2 className="text-display-3">{financing.how.heading}</h2>
+                <ol className="mt-5 list-none space-y-5 p-0">
+                  {financing.how.steps.map((s, i) => (
+                    <li key={s.title} className="grid grid-cols-[auto_1fr] gap-x-4">
+                      <span className="font-mono text-[13px] font-medium tracking-[0.08em] text-brand-soft">
+                        {String(i + 1).padStart(2, "0")}
+                      </span>
+                      <div>
+                        <h3 className="font-display text-[19px] font-bold uppercase text-ink">
+                          {s.title}
+                        </h3>
+                        <p className="m-0 mt-1.5 text-[15px]">{s.body}</p>
+                      </div>
+                    </li>
+                  ))}
+                </ol>
+              </div>
+            </Reveal>
+
+            {financing.lender && (
+              <Reveal delay={0.2}>
+                <p className="text-sm text-ink-faint">
+                  Financing provided by {financing.lender}, Member FDIC, Equal
+                  Housing Lender. CTL arranges the introduction and does not
+                  lend, set rates, or make the credit decision.
+                </p>
+              </Reveal>
+            )}
           </div>
         </div>
       </section>

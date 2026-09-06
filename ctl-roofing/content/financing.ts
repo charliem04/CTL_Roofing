@@ -20,6 +20,16 @@ import type {
  * ════════════════════════════════════════════════════════════════════
  */
 
+/**
+ * The lender's portal takes CTL's sponsor and contractor identifiers on
+ * every link; only the loanCode changes between packages. Split so the
+ * shared half is written once — a typo in the contractor number would
+ * hand someone else's portal the application, and it would look fine.
+ */
+const PORTAL =
+  "https://prequalification.enerbank.com/apply/loanproduct?sponsorPhoneNumber=8007747598&contractorNumber=198295&loanCode=";
+const PORTAL_TAIL = "&contractorEmail=rob@ctlpro.com";
+
 export const financing = {
   meta: {
     title: "Financing — Pay For The Project Over Time",
@@ -41,13 +51,11 @@ export const financing = {
   /** Lender name. EnerBank USA is Regions Bank's home improvement arm. */
   lender: "Regions Bank",
   /**
-   * Prequalification link. CTL's own contractor number and sponsor
-   * details are in the query string — it is the same link behind all
-   * three product cards, which is how the lender's portal works: you
-   * land on product selection and choose there.
+   * There is deliberately no single `prequalifyUrl` any more. Each
+   * package carries its own link, because each has its own loanCode and
+   * only the code differs between them — a shared link would silently
+   * open the wrong application rather than fail visibly.
    */
-  prequalifyUrl:
-    "https://prequalification.enerbank.com/apply/loanproduct?sponsorPhoneNumber=8007747598&contractorNumber=198295&loanCode=DEL2674&contractorEmail=rob@ctlpro.com",
 
   /**
    * The three packages as the lender advertises them, in the order they
@@ -72,18 +80,21 @@ export const financing = {
       name: "5 year loan",
       detail: "Fixed rate over 60 months.",
       estimated: true,
+      url: `${PORTAL}DEL2674${PORTAL_TAIL}`,
     },
     {
       headline: "12 months",
       name: "Same-as-cash",
       detail:
         "No payments and no interest for 12 months. Interest accrues from the day funds are disbursed and is waived only if the loan is repaid in full within the same-as-cash period.",
+      url: `${PORTAL}DEL2625${PORTAL_TAIL}`,
     },
     {
       headline: "As low as 8.99% APR",
       name: "Traditional installment loan",
       detail: "The lowest rate offered on this product. Yours depends on credit.",
       estimated: true,
+      url: `${PORTAL}DEL2622${PORTAL_TAIL}`,
     },
   ] satisfies FinanceProduct[],
 
@@ -119,6 +130,45 @@ export const financing = {
    */
   disclosure:
     "Rates shown are the lender’s advertised rates and are subject to credit approval; the rate and term you are offered may differ. Estimated payments are illustrations produced by this page from the rates above, not offers of credit, and do not include taxes, insurance or any fees the lender may charge. Financing is provided by Regions Bank, Member FDIC, Equal Housing Lender. Prequalification does not affect your credit score.",
+
+  /**
+   * The clauses lifted out of the disclosure above. Every one is a
+   * qualification rather than an inducement — what might not apply to
+   * you, and the one reassurance that is unambiguously good news.
+   * Emphasis that lifted the rates instead would be doing the opposite
+   * job to the one small print exists for.
+   */
+  disclosureEmphasis: [
+    "subject to credit approval",
+    "the rate and term you are offered may differ",
+    "not offers of credit",
+    "Prequalification does not affect your credit score",
+  ],
+
+  /** The band between the hero and the packages. */
+  strip: {
+    label: "Before you decide anything",
+    body: "Prequalifying takes a couple of minutes, shows you the rate and term you would actually be offered, and does not affect your credit score.",
+  },
+
+  /** Sits under "What to have ready", beside the estimator. */
+  how: {
+    heading: "How prequalifying works",
+    steps: [
+      {
+        title: "Check where you stand",
+        body: "A few minutes online with the lender. A soft enquiry, so your credit score is untouched.",
+      },
+      {
+        title: "See real numbers",
+        body: "The rate and term you qualify for, rather than the advertised best case.",
+      },
+      {
+        title: "Decide with the scope in hand",
+        body: "Put the offer next to the written estimate from your assessment. Nothing is committed until you sign.",
+      },
+    ],
+  },
 
   /** Estimator slider bounds, in dollars. */
   estimator: {

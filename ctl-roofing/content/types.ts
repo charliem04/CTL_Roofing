@@ -184,4 +184,11 @@ export type FinanceProduct = {
   detail?: string;
   /** True when the estimator has a matching entry in `offers`. */
   estimated?: boolean;
+  /**
+   * This product's own entry point into the lender's portal. Each
+   * package has its own loanCode, so these are three different links
+   * and not one link repeated — sending someone to the wrong code lands
+   * them on the wrong application.
+   */
+  url: string;
 };

@@ -19,6 +19,7 @@ import type { GalleryCategory } from "@/content/types";
 import { Reveal } from "./Reveal";
 import { MoreLink } from "./MoreLink";
 import { GalleryTile, Lightbox } from "./Lightbox";
+import { cascade } from "@/lib/motion";
 
 type Filter = GalleryCategory | "all";
 
@@ -110,7 +111,9 @@ export function GalleryBrowser() {
 
       <ul className="mt-4 grid list-none grid-cols-2 gap-3 p-0 md:grid-cols-3 lg:grid-cols-4">
         {shots.map((s, i) => (
-          <Reveal as="li" key={s.src} delay={Math.min(i, 7) * 0.03}>
+          // Same treatment as the home page's recent-work band: photos
+          // settle into focus, everything else rises.
+          <Reveal as="li" key={s.src} variant="scale" delay={cascade(i)}>
             <GalleryTile shot={s} onOpen={() => open(i)} />
           </Reveal>
         ))}

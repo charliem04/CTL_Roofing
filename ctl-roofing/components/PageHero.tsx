@@ -1,6 +1,10 @@
 import type { Photo } from "@/content/types";
+import { stagger } from "@/lib/motion";
 import { Breadcrumbs } from "./Breadcrumbs";
 import { SeamMark } from "./SectionHead";
+import { RevealText } from "./RevealText";
+import { Reveal } from "./Reveal";
+import { Parallax } from "./Parallax";
 
 /**
  * Interior page opener. Deliberately shorter than the home hero and
@@ -30,18 +34,37 @@ export function PageHero({
         <div className="mt-8 grid items-end gap-8 md:grid-cols-[1.15fr_0.85fr]">
           <div>
             <SeamMark className="mb-4" />
-            <h1 className="text-display-2 text-ink-invert">{heading}</h1>
-            <p className="mt-4 max-w-[52ch] text-lg">{lede}</p>
+            {/* Same opening as a home page band — mark, then the
+                heading rising out of its mask — so arriving on an
+                interior page from search feels like the same site
+                rather than a plainer one. */}
+            <RevealText
+              as="h1"
+              lines={[heading]}
+              delay={stagger.loose}
+              className="text-display-2 text-ink-invert"
+            />
+            <Reveal delay={stagger.loose * 2}>
+              <p className="mt-4 max-w-[52ch] text-lg">{lede}</p>
+            </Reveal>
           </div>
           {photo && (
-            /* eslint-disable-next-line @next/next/no-img-element */
-            <img
-              src={photo.src}
-              alt={photo.alt}
-              width={photo.width}
-              height={photo.height}
-              className="h-[220px] w-full rounded object-cover md:h-[280px]"
-            />
+            /* The frame already had a fixed height, which is what
+               Parallax needs — its drifting layer is absolutely
+               positioned and contributes none of its own. */
+            <Parallax
+              className="h-[220px] w-full rounded md:h-[280px]"
+              distance={40}
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={photo.src}
+                alt={photo.alt}
+                width={photo.width}
+                height={photo.height}
+                className="h-full w-full object-cover"
+              />
+            </Parallax>
           )}
         </div>
       </div>

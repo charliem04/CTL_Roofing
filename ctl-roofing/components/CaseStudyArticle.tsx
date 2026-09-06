@@ -1,6 +1,7 @@
 import { client } from "@/client.config";
 import { getCaseStudiesHub } from "@/lib/content";
 import type { CaseStudy } from "@/content/types";
+import { cascade } from "@/lib/motion";
 import { PageHero } from "./PageHero";
 import { SectionHead } from "./SectionHead";
 import { Reveal } from "./Reveal";
@@ -150,8 +151,8 @@ export function CaseStudyArticle({ study }: { study: CaseStudy }) {
           <div className="section">
             <SectionHead heading="On site" />
             <ul className="mt-10 grid list-none gap-6 p-0 md:grid-cols-3">
-              {study.photos.map((photo) => (
-                <Reveal as="li" key={photo.src}>
+              {study.photos.map((photo, i) => (
+                <Reveal as="li" key={photo.src} variant="scale" delay={cascade(i)}>
                   <figure className="m-0">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img

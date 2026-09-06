@@ -7,6 +7,7 @@ import { Reveal } from "@/components/Reveal";
 import { CtaBand } from "@/components/CtaBand";
 import { MoreLink } from "@/components/MoreLink";
 import { btn } from "@/components/Button";
+import { cascade } from "@/lib/motion";
 
 const areas = getAreas();
 
@@ -88,7 +89,7 @@ export default function AreasPage() {
           </Reveal>
           <dl className="mt-10 grid gap-x-10 md:grid-cols-3">
             {areas.points.map((p, i) => (
-              <Reveal key={p.title} delay={i * 0.06} className="border-t border-line-dark/20 py-5">
+              <Reveal key={p.title} delay={cascade(i)} className="border-t border-line-dark/20 py-5">
                   <dt className="font-display text-[21px] font-bold uppercase text-ink-invert">
                     {p.title}
                   </dt>

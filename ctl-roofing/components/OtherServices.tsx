@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { getServices } from "@/lib/content";
+import { cascade, TONES } from "@/lib/motion";
+import { BandTransition } from "./BandTransition";
 import { SectionHead } from "./SectionHead";
 import { Reveal } from "./Reveal";
 
@@ -15,12 +17,14 @@ export function OtherServices({ currentSlug }: { currentSlug: string }) {
   if (others.length === 0) return null;
 
   return (
-    <section className="band bg-surface-alt">
+    <BandTransition tones={TONES.light} className="band">
       <div className="section">
         <SectionHead heading="Also from CTL" />
         <ul className="mt-10 list-none border-t border-line p-0">
           {others.map((s, i) => (
-            <Reveal as="li" key={s.slug} delay={i * 0.05}>
+            // Ruled entries arriving in order, on the shared cascade
+            // step rather than this component's own 0.05.
+            <Reveal as="li" key={s.slug} variant="riseSm" delay={cascade(i)}>
               <Link
                 href={s.meta.path}
                 className="group grid gap-2 border-b border-line py-6 no-underline transition-colors duration-200 hover:bg-surface active:bg-line/40 sm:grid-cols-[minmax(0,1fr)_minmax(0,1.5fr)] sm:gap-8"
@@ -40,6 +44,6 @@ export function OtherServices({ currentSlug }: { currentSlug: string }) {
           ))}
         </ul>
       </div>
-    </section>
+    </BandTransition>
   );
 }

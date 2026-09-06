@@ -29,22 +29,15 @@ import { useRef } from "react";
 import type { ReactNode } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useScrollMotion } from "@/lib/useScrollMotion";
+import type { TonePair } from "@/lib/motion";
 
 /**
- * Both tones of a pair, as Tailwind background utilities. Keep them in
- * the same family — see the note above.
+ * TONES itself lives in lib/motion.ts, not here. Every export of a
+ * "use client" module becomes a client reference, so a server component
+ * importing the constant from this file gets an unserializable proxy
+ * and the build dies at prerender. The reasoning is written out in full
+ * beside the constant.
  */
-type TonePair = {
-  /** The ground the band starts on. Applied to the container. */
-  from: string;
-  /** The ground it arrives at. Applied to the overlay that fades in. */
-  to: string;
-};
-
-export const TONES = {
-  light: { from: "bg-surface", to: "bg-surface-alt" },
-  deep: { from: "bg-surface-deep", to: "bg-surface-deep-alt" },
-} satisfies Record<string, TonePair>;
 
 export function BandTransition({
   children,

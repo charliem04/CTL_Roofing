@@ -10,6 +10,7 @@ import { CareersForm } from "@/components/CareersForm";
 import { Pending } from "@/components/Pending";
 import { MoreLink } from "@/components/MoreLink";
 import { btn } from "@/components/Button";
+import { cascade } from "@/lib/motion";
 
 const page = getCareersPage();
 
@@ -71,7 +72,7 @@ export default function CareersPage() {
               <SectionHead heading="What’s open" />
               <ul className="mt-10 grid list-none gap-px border border-line bg-line p-0 md:grid-cols-2">
                 {roles.map((r, i) => (
-                  <Reveal as="li" key={r.slug} delay={Math.min(i, 4) * 0.05} className="bg-surface p-7">
+                  <Reveal as="li" key={r.slug} delay={cascade(i)} className="bg-surface p-7">
                     <p className="u-label">
                       {r.basis}
                       {r.location && ` · ${r.location}`}
@@ -136,7 +137,7 @@ export default function CareersPage() {
               <Reveal
                 as="li"
                 key={step}
-                delay={i * 0.06}
+                delay={cascade(i)}
                 className="border-t-[3px] border-accent pt-5"
               >
                 <span className="mb-2.5 block font-mono text-[13px] tracking-[0.08em] text-brand-soft">

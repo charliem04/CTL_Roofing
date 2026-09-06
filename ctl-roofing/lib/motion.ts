@@ -135,3 +135,35 @@ export function cascade(index: number, step: number = stagger.tight): number {
  * screens get entrances only, and lose nothing they would notice.
  */
 export const PIN_MIN_WIDTH = 1024;
+
+/**
+ * Ground tones for BandTransition, as Tailwind background utilities.
+ *
+ * These live here, in a plain module, rather than beside the component
+ * that consumes them — and that placement is load-bearing, not tidiness.
+ * BandTransition is a "use client" module, and Next turns EVERY export
+ * of a client module into a client reference. A server component like
+ * Services or OtherServices importing the constant from there does not
+ * receive an object at all; it receives a proxy that cannot be
+ * serialized, and the build fails at prerender with "Could not find the
+ * module … #TONES#light in the React Client Manifest".
+ *
+ * Values, types and pure functions shared across the boundary belong in
+ * a module with no "use client" at the top. Only components need to be
+ * over there.
+ *
+ * Keep both tones of a pair in the same family: the shift has to hold
+ * its contrast against the copy at every point of the interpolation.
+ * See the note in components/BandTransition.tsx.
+ */
+export type TonePair = {
+  /** The ground the band starts on. Applied to the container. */
+  from: string;
+  /** The ground it arrives at. Applied to the overlay that fades in. */
+  to: string;
+};
+
+export const TONES = {
+  light: { from: "bg-surface", to: "bg-surface-alt" },
+  deep: { from: "bg-surface-deep", to: "bg-surface-deep-alt" },
+} satisfies Record<string, TonePair>;

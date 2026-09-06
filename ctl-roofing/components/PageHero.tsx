@@ -69,9 +69,20 @@ export function PageHero({
           {photo && (
             /* The frame already had a fixed height, which is what
                Parallax needs — its drifting layer is absolutely
-               positioned and contributes none of its own. */
+               positioned and contributes none of its own.
+
+               The gold edge is 3px because that is the weight gold
+               already carries as a rule everywhere else on the site —
+               the ruled tops in Process and Brands, the leading edge on
+               the review boxes and the financing panel. A fourth
+               thickness for the same mark would just be a fourth thing
+               to keep in step.
+
+               Only interior heroes get it. The home hero is a separate
+               component with the photograph as its full-bleed ground,
+               and a frame around a ground is a contradiction. */
             <Parallax
-              className="h-[220px] w-full rounded md:h-[280px]"
+              className="h-[220px] w-full rounded border-[3px] border-accent md:h-[280px]"
               distance={40}
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}

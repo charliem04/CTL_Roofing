@@ -8,6 +8,7 @@
 import { useCallback, useRef, useState } from "react";
 import { client } from "@/client.config";
 import { getFeaturedGallery } from "@/lib/content";
+import { cascade } from "@/lib/motion";
 import { Reveal } from "./Reveal";
 import { SectionHead } from "./SectionHead";
 import { MoreLink } from "./MoreLink";
@@ -40,15 +41,18 @@ export function Gallery() {
           lede={client.copy.galleryLede}
         />
 
-        <Reveal>
-          <ul className="mt-10 grid list-none grid-cols-2 gap-3 p-0 lg:grid-cols-4">
-            {shots.map((s, i) => (
-              <li key={s.src}>
-                <GalleryTile shot={s} onOpen={() => open(i)} />
-              </li>
-            ))}
-          </ul>
-        </Reveal>
+        {/* Each tile settles from 1.06 to rest rather than the whole
+            grid fading as one block. Photographs are the only content
+            on this site that gets the scale variant: it reads as an
+            image coming into focus, which is a thing photographs do
+            and a thing paragraphs do not. */}
+        <ul className="mt-10 grid list-none grid-cols-2 gap-3 p-0 lg:grid-cols-4">
+          {shots.map((s, i) => (
+            <Reveal as="li" key={s.src} variant="scale" delay={cascade(i)}>
+              <GalleryTile shot={s} onOpen={() => open(i)} />
+            </Reveal>
+          ))}
+        </ul>
 
         <p className="mt-10">
           <MoreLink href="/gallery/">The full gallery</MoreLink>

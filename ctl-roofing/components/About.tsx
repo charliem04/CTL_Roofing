@@ -1,6 +1,8 @@
 import { client } from "@/client.config";
+import { cascade, stagger } from "@/lib/motion";
 import { Reveal } from "./Reveal";
-import { SeamMark } from "./SectionHead";
+import { Parallax } from "./Parallax";
+import { SectionHead } from "./SectionHead";
 import { btn } from "./Button";
 import { MoreLink } from "./MoreLink";
 
@@ -17,35 +19,47 @@ export function About() {
       className="on-deep band bg-surface-deep text-ink-invert-soft"
     >
       <div className="section grid items-start gap-[clamp(28px,4.5vw,64px)] md:grid-cols-[1.25fr_0.75fr]">
-        <Reveal>
-          <SeamMark className="mb-4" />
-          <h2 className="text-display-2 text-ink-invert">{about.heading}</h2>
-          <p className="mt-4 max-w-[58ch] text-lg">{about.lede}</p>
+        <div>
+          {/* The band opening is the shared one now — mark, heading,
+              lede — rather than this component's own copy of it. */}
+          <SectionHead heading={about.heading} lede={about.lede} tone="deep" />
 
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={about.photoPath}
-            width={1200}
-            height={800}
-            alt={about.photoAlt}
-            loading="lazy"
-            className="mt-10 w-full rounded"
-          />
+          <Reveal delay={stagger.loose * 3}>
+            <Parallax className="mt-10 aspect-[1200/800] w-full rounded" distance={64}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={about.photoPath}
+                width={1200}
+                height={800}
+                alt={about.photoAlt}
+                loading="lazy"
+                className="h-full w-full object-cover"
+              />
+            </Parallax>
+          </Reveal>
 
-          <p className="mt-6">
-            <MoreLink href="/areas/" tone="deep">Every town we serve</MoreLink>
-          </p>
+          <Reveal delay={stagger.loose * 3.5}>
+            <p className="mt-6">
+              <MoreLink href="/areas/" tone="deep">Every town we serve</MoreLink>
+            </p>
+          </Reveal>
+          {/* Sixteen towns, arriving in reading order. The cascade is
+              capped inside `cascade()`, so the last chip does not land
+              a full second after the first. */}
           <ul className="mt-6 flex list-none flex-wrap gap-2 p-0">
-            {about.towns.map((town) => (
-              <li
+            {about.towns.map((town, i) => (
+              <Reveal
+                as="li"
                 key={town}
+                variant="riseSm"
+                delay={cascade(i)}
                 className="rounded border border-line-dark/20 px-2.5 py-1.5 font-mono text-[12px] uppercase tracking-[0.06em] text-ink-invert-soft"
               >
                 {town}
-              </li>
+              </Reveal>
             ))}
           </ul>
-        </Reveal>
+        </div>
 
         <Reveal delay={0.1}>
           <figure className="m-0 grid grid-cols-[130px_1fr] items-center gap-6">

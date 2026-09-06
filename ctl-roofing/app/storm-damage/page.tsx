@@ -7,6 +7,7 @@ import { Reveal } from "@/components/Reveal";
 import { FaqList } from "@/components/FaqList";
 import { CtaBand } from "@/components/CtaBand";
 import { MoreLink } from "@/components/MoreLink";
+import { cascade } from "@/lib/motion";
 
 const storm = getStorm();
 
@@ -38,7 +39,7 @@ export default function StormDamagePage() {
           />
           <ol className="mt-10 grid list-none gap-x-8 gap-y-10 p-0 sm:grid-cols-2">
             {storm.firstHours.steps.map((step, i) => (
-              <Reveal as="li" key={step.title} delay={i * 0.06} className="grid grid-cols-[auto_1fr] items-start gap-5">
+              <Reveal as="li" key={step.title} delay={cascade(i)} className="grid grid-cols-[auto_1fr] items-start gap-5">
                 <span
                   aria-hidden
                   className="font-display text-[52px] font-extrabold leading-none text-accent"
@@ -77,7 +78,7 @@ export default function StormDamagePage() {
             {storm.adjuster.items.map((item, i) => (
               <Reveal
                 key={item.label}
-                delay={i * 0.05}
+                delay={cascade(i)}
                 className="border-t border-line-dark/20 py-5"
               >
                   <dt className="font-mono text-[12px] font-medium uppercase tracking-[0.09em] text-accent">

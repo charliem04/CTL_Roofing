@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { getServices } from "@/lib/content";
+import { cascade } from "@/lib/motion";
 import { Reveal } from "./Reveal";
 
 /**
@@ -32,10 +33,13 @@ export function ServiceCards({ className,
 
   return (
     <div className={`grid gap-6 md:grid-cols-12 ${className ?? ""}`}>
-      {services.map((s) => {
+      {services.map((s, i) => {
         const columns = s.sections[0]?.columns ?? [];
         return (
-          <Reveal key={s.slug} className={spanClass[s.span]}>
+          // Cards arrive in board order rather than as one block, so the
+          // alternating 7/5 rhythm is something you watch being dealt
+          // out instead of something you have to notice afterwards.
+          <Reveal key={s.slug} className={spanClass[s.span]} delay={cascade(i)}>
             <Link
               href={s.meta.path}
               className="group flex h-full flex-col overflow-hidden rounded border border-line bg-surface no-underline transition-colors duration-200 hover:border-brand-soft active:border-brand"

@@ -2,6 +2,7 @@ import { client } from "@/client.config";
 import { Reveal } from "./Reveal";
 import { SectionHead } from "./SectionHead";
 import { btn } from "./Button";
+import { cascade } from "@/lib/motion";
 
 /**
  * Manufacturers set as typographic entries under gold rules — no logo
@@ -16,7 +17,7 @@ export function Brands() {
 
         <dl className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {client.brands.items.map((b, i) => (
-            <Reveal key={b.name} delay={i * 0.06} className="border-t-[3px] border-accent pt-4">
+            <Reveal key={b.name} delay={cascade(i)} className="border-t-[3px] border-accent pt-4">
                 <dt className="mb-1.5 font-display text-[23px] font-bold uppercase leading-none text-ink">
                   {b.name}
                 </dt>

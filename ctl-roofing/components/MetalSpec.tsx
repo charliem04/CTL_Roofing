@@ -1,5 +1,8 @@
 import { client } from "@/client.config";
+import { stagger } from "@/lib/motion";
 import { Reveal } from "./Reveal";
+import { RevealText } from "./RevealText";
+import { Parallax } from "./Parallax";
 import { SeamMark } from "./SectionHead";
 import { btn } from "./Button";
 import { MoreLink } from "./MoreLink";
@@ -25,34 +28,44 @@ export function MetalSpec({ moreHref }: { moreHref?: string }) {
       <div className="section relative grid items-center gap-[clamp(28px,5vw,72px)] md:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)]">
         <Reveal>
           <figure className="m-0">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={metal.image}
-              width={820}
-              height={880}
-              alt={metal.imageAlt}
-              loading="lazy"
-              className="w-full rounded"
-            />
+            {/* The frame carries the source image's own 820x880 ratio.
+                Parallax's drifting layer is absolutely positioned and
+                contributes no height, so a frame sized by the <img>
+                would collapse to nothing. */}
+            <Parallax className="aspect-[820/880] w-full rounded" distance={56}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={metal.image}
+                width={820}
+                height={880}
+                alt={metal.imageAlt}
+                loading="lazy"
+                className="h-full w-full object-cover"
+              />
+            </Parallax>
             <figcaption className="mt-2.5 text-[13px] text-ink-invert-soft/70">
               {metal.imageCaption}
             </figcaption>
           </figure>
         </Reveal>
 
-        <Reveal delay={0.08}>
+        {/* The heading is not wrapped in the column's Reveal: a masked
+            line rising inside a block that is itself rising reads as
+            neither, so the mark and the lines carry the entrance and
+            everything under them follows as one. */}
+        <div>
           <SeamMark className="mb-4" />
-          <h2 className="text-display-2 text-ink-invert">
-            {metal.heading.map((line) => (
-              <span key={line} className="block">
-                {line}
-              </span>
-            ))}
-          </h2>
+          <RevealText
+            as="h2"
+            lines={metal.heading}
+            delay={stagger.loose}
+            className="text-display-2 text-ink-invert"
+          />
 
-          <p className="my-6 max-w-[24ch] font-display text-display-4 font-bold uppercase text-accent">
-            {metal.pull}
-          </p>
+          <Reveal delay={stagger.loose * 2}>
+            <p className="my-6 max-w-[24ch] font-display text-display-4 font-bold uppercase text-accent">
+              {metal.pull}
+            </p>
 
           <div className="space-y-4">
             {metal.body.map((p) => (
@@ -83,8 +96,9 @@ export function MetalSpec({ moreHref }: { moreHref?: string }) {
                 All roofing services
               </MoreLink>
             )}
-          </div>
-        </Reveal>
+            </div>
+          </Reveal>
+        </div>
       </div>
     </section>
   );

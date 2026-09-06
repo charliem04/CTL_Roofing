@@ -6,6 +6,7 @@ import { SectionHead } from "@/components/SectionHead";
 import { Reveal } from "@/components/Reveal";
 import { CtaBand } from "@/components/CtaBand";
 import { MoreLink } from "@/components/MoreLink";
+import { cascade } from "@/lib/motion";
 
 const page = getTeamPage();
 
@@ -61,7 +62,7 @@ export default function TeamPage() {
           <SectionHead heading="The crew" lede={page.crewNote} />
           <ul className="mt-10 grid list-none grid-cols-2 gap-x-3 gap-y-6 p-0 sm:grid-cols-3 lg:grid-cols-4">
             {page.crew.map((person, i) => (
-              <Reveal as="li" key={person.photo} delay={Math.min(i, 6) * 0.04}>
+              <Reveal as="li" key={person.photo} variant="scale" delay={cascade(i)}>
                 <figure className="m-0">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img

@@ -7,6 +7,7 @@ import { Reveal } from "@/components/Reveal";
 import { CtaBand } from "@/components/CtaBand";
 import { MoreLink } from "@/components/MoreLink";
 import { Pending } from "@/components/Pending";
+import { cascade } from "@/lib/motion";
 
 const hub = getCaseStudiesHub();
 
@@ -43,7 +44,7 @@ export default function CaseStudiesPage() {
           ) : (
             <ul className="grid list-none gap-x-8 gap-y-12 p-0 md:grid-cols-2">
               {studies.map((study, i) => (
-                <Reveal as="li" key={study.slug} delay={Math.min(i, 5) * 0.05}>
+                <Reveal as="li" key={study.slug} delay={cascade(i)}>
                   <a
                     href={`/case-studies/${study.slug}/`}
                     className="group block no-underline"

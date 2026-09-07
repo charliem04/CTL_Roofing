@@ -40,7 +40,34 @@ export function Process() {
           <div className="section w-full">
             <SectionHead heading={process.heading} lede={process.lede} />
 
-            <ol className="mt-10 grid list-none gap-6 p-0 sm:grid-cols-2 lg:grid-cols-4">
+            {/*
+              Flex rather than a four-column grid, because the current
+              step has to be able to take more of the row than the
+              others and a grid column cannot be talked out of its
+              share.
+
+              Below lg every card is basis-full or basis-half and the
+              growth below is 1 across the board, so this is the same
+              stacked and two-up layout it always was. At lg the basis
+              drops to 0 and width becomes entirely a question of
+              flex-grow, which is what the animation drives.
+            */}
+            {/*
+              The min-height is what stops the push jolting vertically.
+              Cards stretch to the row, and the row takes the height of
+              whichever card wraps to the most lines — which changes as
+              they widen. Step four has the longest body: at 234px it
+              runs seven lines, at 339px it runs five, so the row
+              collapsed 49px at the exact moment that step expanded.
+              Measured, not guessed: 391px in three of the four states
+              and 342px in the fourth.
+
+              Holding a floor above the tallest state means the row
+              keeps one height and the only thing that moves is what is
+              supposed to move. It applies at lg and up, which is
+              exactly where the pinning that drives all this happens.
+            */}
+            <ol className="mt-10 flex list-none flex-wrap gap-6 p-0 lg:min-h-[420px]">
               {process.steps.map((step, i) => {
                 // -1 is the un-pinned rendering — a phone, or a
                 // reduced-motion visitor. That is not "every step is
@@ -61,8 +88,27 @@ export function Process() {
                     // ground and the current step lifts to white with a
                     // brand edge — the box gains weight by coming
                     // forward, not by being outlined harder.
-                    className="flex h-full flex-col rounded border p-7"
+                    className="flex min-w-0 basis-full flex-col rounded border p-7 sm:basis-[calc(50%-12px)] lg:basis-0"
                     animate={{
+                      // The push. At lg the basis is 0, so the row is
+                      // divided purely by these numbers: the current
+                      // step takes 1.6 shares against 1 each for the
+                      // other three, which is 35% of the row against
+                      // 21.7%, and the neighbours slide aside to pay
+                      // for it.
+                      //
+                      // Grow rather than width. Animating width reflows
+                      // the row on every frame and is the thing
+                      // check.mjs flags as layout-animation by name;
+                      // flex-grow hands the distribution to the flex
+                      // algorithm and moves all four in one pass.
+                      //
+                      // 1.6 is deliberately short of dramatic. Past
+                      // about 2 the other three narrow enough to gain a
+                      // line of wrapped text, which makes the whole row
+                      // taller and turns a sideways push into a
+                      // vertical jolt.
+                      flexGrow: unpinned ? 1 : current ? 1.6 : 1,
                       opacity: dimmed ? 0.32 : 1,
                       backgroundColor: current
                         ? "rgb(var(--surface))"
@@ -71,7 +117,10 @@ export function Process() {
                         ? "rgb(var(--brand))"
                         : "rgb(var(--line))",
                     }}
-                    transition={{ duration: dur.quick, ease: ease.out }}
+                    // One duration for the whole card, so the widening,
+                    // the brightening and the border arrive together
+                    // rather than as three separate events.
+                    transition={{ duration: dur.base, ease: ease.out }}
                   >
                     {/* The ruled top is the existing mark, not a new
                         one: while pinned it turns gold as its step

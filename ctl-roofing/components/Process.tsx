@@ -24,6 +24,13 @@ import { dur, ease } from "@/lib/motion";
  * them one at a time would read better as a slideshow and worse as
  * information: a homeowner wants to see that the whole process is four
  * steps long before being walked through them.
+ *
+ * Below 1024 the band cannot be pinned, but the sequence survives it.
+ * The steps stack, the page scrolls normally, and the emphasis follows
+ * the reader down the column instead of along the row — same four
+ * steps, same walking highlight, no scroll held hostage. What the
+ * narrow band drops is the current card's extra padding, which is
+ * weight the pinned band can spend and a scrolling page cannot.
  * ────────────────────────────────────────────────────────────────────
  *
  * This is a client component, which the rest of the page's bands are
@@ -36,7 +43,7 @@ export function Process() {
   return (
     <section id="process" className="band bg-surface">
       <PinnedSteps count={process.steps.length}>
-        {(active) => (
+        {(active, pinned) => (
           <div className="section w-full">
             <SectionHead heading={process.heading} lede={process.lede} />
 
@@ -62,19 +69,28 @@ export function Process() {
             */}
             <ol className="mt-10 flex list-none flex-wrap gap-6 p-0 lg:min-h-[420px] lg:flex-nowrap lg:justify-center lg:gap-4">
               {process.steps.map((step, i) => {
-                // -1 is the un-pinned rendering — a phone, or a
-                // reduced-motion visitor. That is not "every step is
-                // current": it is the band exactly as it was before any
-                // of this, where the FIRST rule is gold because that is
-                // where the job starts, and the other three are brand.
-                // Treating -1 as all-current turned every rule gold and
-                // quietly threw that decision away.
-                const unpinned = active === -1;
-                const current = unpinned ? i === 0 : active === i;
-                const dimmed = !unpinned && active !== i;
+                // -1 is the still rendering — a reduced-motion visitor,
+                // at any width. That is not "every step is current": it
+                // is the band exactly as it was before any of this,
+                // where the FIRST rule is gold because that is where the
+                // job starts, and the other three are brand. Treating -1
+                // as all-current turned every rule gold and quietly
+                // threw that decision away.
+                //
+                // Everything else — pinned or not — has a real current
+                // step and dims the rest. A phone used to land here on
+                // the -1 branch, so it showed step one lit and the other
+                // three grey for the whole band: the emphasis of a
+                // sequence with none of the sequence.
+                const still = active === -1;
+                const current = still ? i === 0 : active === i;
+                const dimmed = !still && active !== i;
                 return (
                   <motion.li
                     key={step.title}
+                    // How PinnedSteps finds the steps when there is no
+                    // scroll track to measure. See its contract note.
+                    data-step
                     // Each step is a box now rather than a column of
                     // loose text. On a white band a white card has no
                     // edge to speak of, so the resting state is the pale
@@ -103,10 +119,21 @@ export function Process() {
                       // The neighbours are pushed rather than squeezed:
                       // their own width is untouched, so their text
                       // holds still while they slide.
-                      paddingLeft: !unpinned && current ? 56 : 28,
-                      paddingRight: !unpinned && current ? 56 : 28,
-                      paddingTop: !unpinned && current ? 44 : 28,
-                      paddingBottom: !unpinned && current ? 44 : 28,
+                      //
+                      // WHY ONLY WHEN PINNED. Growing the current card
+                      // costs nothing while the band is held still —
+                      // there is nothing below it to move. Unpinned the
+                      // cards are stacked in the ordinary flow of a page
+                      // the reader is actively scrolling, and a card
+                      // that gains 32px as it reaches the middle of the
+                      // screen pushes everything under it down by 32px
+                      // mid-scroll. The emphasis is worth having; the
+                      // shove is not, so the unpinned band keeps the
+                      // colour change and drops the geometry.
+                      paddingLeft: pinned && current ? 56 : 28,
+                      paddingRight: pinned && current ? 56 : 28,
+                      paddingTop: pinned && current ? 44 : 28,
+                      paddingBottom: pinned && current ? 44 : 28,
                       opacity: dimmed ? 0.32 : 1,
                       backgroundColor: current
                         ? "rgb(var(--surface))"
@@ -121,14 +148,16 @@ export function Process() {
                     transition={{ duration: dur.base, ease: ease.out }}
                   >
                     {/* The ruled top is the existing mark, not a new
-                        one: while pinned it turns gold as its step
-                        becomes current, so the row reads as a progress
-                        bar made of the rules that were always there. */}
+                        one: it turns gold as its step becomes current,
+                        so the row reads as a progress bar made of the
+                        rules that were always there. Stacked on a phone
+                        it is the same mark doing the same job down a
+                        column instead of along a row. */}
                     <motion.span
                       aria-hidden
                       className="mb-7 block h-[4px] w-full origin-left"
                       animate={{
-                        scaleX: unpinned || active === i ? 1 : 0.4,
+                        scaleX: still || current ? 1 : 0.4,
                         backgroundColor: current
                           ? "rgb(var(--accent))"
                           : "rgb(var(--brand))",

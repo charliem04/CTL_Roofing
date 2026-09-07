@@ -70,3 +70,53 @@ export function useScrollMotion(): boolean {
 
   return wide && !reduce;
 }
+
+/**
+ * Which of the three step renderings a visitor gets.
+ *
+ * ── WHY THIS EXISTS ALONGSIDE useScrollMotion ───────────────────────
+ * useScrollMotion answers one question with a boolean, and that boolean
+ * is really two facts glued together: the screen is too narrow to pin,
+ * and the visitor asked for no motion. Parallax and BandTransition are
+ * right not to care which — both mean "do not run". A sequence of steps
+ * is the case where it matters, because the two want opposite things:
+ *
+ *   pinned  wide enough to hold the band still and walk the steps under
+ *           the scroll — the desktop treatment
+ *   flow    too narrow to pin, but motion is welcome. The page scrolls
+ *           normally and the current step follows the reader down the
+ *           stack. Nothing is held, nothing is hijacked.
+ *   still   the visitor asked for no motion, at any width. No sequence
+ *           at all; the band renders once and stays there.
+ *
+ * Collapsing flow into still is what left phones showing step one lit
+ * and the other three grey for the entire section — a sequence with the
+ * sequence taken out, which reads as four steps of which only the first
+ * matters rather than as four steps in order.
+ * ────────────────────────────────────────────────────────────────────
+ *
+ * Like the hooks above, this reports `still` on the server and on the
+ * first client render, so the tree being hydrated is the one the static
+ * HTML contains. See the note on useStillness for why that matters.
+ */
+export type StepMode = "pinned" | "flow" | "still";
+
+export function useStepMode(): StepMode {
+  const reduce = useReducedMotion();
+  const [wide, setWide] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+    const mq = window.matchMedia(`(min-width: ${PIN_MIN_WIDTH}px)`);
+    const sync = () => setWide(mq.matches);
+    sync();
+    // Rotating a tablet crosses the threshold, so this stays subscribed
+    // rather than sampling once on mount.
+    mq.addEventListener("change", sync);
+    return () => mq.removeEventListener("change", sync);
+  }, []);
+
+  if (!mounted || reduce) return "still";
+  return wide ? "pinned" : "flow";
+}

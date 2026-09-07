@@ -17,7 +17,11 @@ export function Footer() {
   const serviceLinks = servicesNode ? liveChildren(servicesNode) : [];
   const companyLinks = [
     { href: "/services/", label: "All services" },
-    { href: "/storm-damage/", label: "Storm damage & insurance" },
+    // Storm damage is not listed here any more. It became a child of
+    // Services in the registry, and the Services column above is
+    // generated from liveChildren(), so it was appearing twice in the
+    // footer — once automatically and once by hand. This column is the
+    // curated one, so this is the copy that goes.
     { href: "/financing/", label: "Financing" },
     { href: "/#about", label: "About us" },
     { href: "/gallery/", label: "Our work" },

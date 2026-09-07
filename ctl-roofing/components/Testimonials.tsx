@@ -66,7 +66,7 @@ export function Testimonials() {
   const featured = picked.length === HOME_PICKS.length ? picked : facebook.slice(0, 2);
 
   return (
-    <section id="testimonials" className="band bg-surface">
+    <section id="testimonials" className="band band-seam bg-surface">
       <div className="section">
         <SectionHead heading={client.copy.testimonialsHeading} />
 

@@ -6,22 +6,22 @@
     "semantic_hash": "607be7c189863324f13255d4885d127c"
   },
   "ctl-roofing/app/areas/page.tsx": {
-    "mtime": 1788225211.3462474,
-    "seen": 1788485286.6107235,
-    "ast_hash": "03a39ff44973044126946e1917497415",
-    "semantic_hash": "03a39ff44973044126946e1917497415"
+    "mtime": 1788808969.0018442,
+    "seen": 1788819972.1230676,
+    "ast_hash": "e897f54e05ce6d7c0d0ea8b9d63a2676",
+    "semantic_hash": "e897f54e05ce6d7c0d0ea8b9d63a2676"
   },
   "ctl-roofing/app/careers/page.tsx": {
-    "mtime": 1788360940.0034766,
-    "seen": 1788485286.6107268,
-    "ast_hash": "3c973edfa9958040842ded9852413edd",
-    "semantic_hash": "3c973edfa9958040842ded9852413edd"
+    "mtime": 1788804615.9181738,
+    "seen": 1788819972.1230707,
+    "ast_hash": "f2d46a6a3a073e974ffb4feb84bc5955",
+    "semantic_hash": "f2d46a6a3a073e974ffb4feb84bc5955"
   },
   "ctl-roofing/app/case-studies/page.tsx": {
-    "mtime": 1788225211.3638473,
-    "seen": 1788485286.6107285,
-    "ast_hash": "95de48f8fdc9f0eed7dd079b2cf85a1b",
-    "semantic_hash": "95de48f8fdc9f0eed7dd079b2cf85a1b"
+    "mtime": 1788676737.0603976,
+    "seen": 1788819972.1230729,
+    "ast_hash": "42613f599e8df76d8d2069a5b9ef5064",
+    "semantic_hash": "42613f599e8df76d8d2069a5b9ef5064"
   },
   "ctl-roofing/app/contact/page.tsx": {
     "mtime": 1788115225.6672537,
@@ -30,10 +30,10 @@
     "semantic_hash": "4678d0f59555bb0acd20e5ce957e73f0"
   },
   "ctl-roofing/app/financing/page.tsx": {
-    "mtime": 1788234719.4842205,
-    "seen": 1788485286.6107318,
-    "ast_hash": "e8aefd1d10aeb5df027645b1c4c4c0f5",
-    "semantic_hash": "e8aefd1d10aeb5df027645b1c4c4c0f5"
+    "mtime": 1788747464.4776182,
+    "seen": 1788819972.1230776,
+    "ast_hash": "682c9845d75b349d8c584862cfbfa636",
+    "semantic_hash": "682c9845d75b349d8c584862cfbfa636"
   },
   "ctl-roofing/app/gallery/page.tsx": {
     "mtime": 1788360940.0051594,
@@ -42,10 +42,10 @@
     "semantic_hash": "fc488e2245e6f0f4ae80d507191cac5e"
   },
   "ctl-roofing/app/layout.tsx": {
-    "mtime": 1788298565.4184463,
-    "seen": 1788485286.6107342,
-    "ast_hash": "3cea5f540eda51c30b8d7fd774730fec",
-    "semantic_hash": "3cea5f540eda51c30b8d7fd774730fec"
+    "mtime": 1788747464.4784956,
+    "seen": 1788819972.123082,
+    "ast_hash": "5ece67760b4475b3fefa322e3decd940",
+    "semantic_hash": "5ece67760b4475b3fefa322e3decd940"
   },
   "ctl-roofing/app/legal.tsx": {
     "mtime": 1788046757.3894851,
@@ -72,10 +72,10 @@
     "semantic_hash": "b215b381b161e153895d7e639bef1799"
   },
   "ctl-roofing/app/reviews/page.tsx": {
-    "mtime": 1788234719.4842205,
-    "seen": 1788485286.6107411,
-    "ast_hash": "642d8b58c06dadec13bcb8a9d7724f4e",
-    "semantic_hash": "642d8b58c06dadec13bcb8a9d7724f4e"
+    "mtime": 1788747464.4796152,
+    "seen": 1788819972.1230886,
+    "ast_hash": "0d5c89b9885642f422e4aa7a62867825",
+    "semantic_hash": "0d5c89b9885642f422e4aa7a62867825"
   },
   "ctl-roofing/app/robots.ts": {
     "mtime": 1788298565.428583,
@@ -84,8 +84,8 @@
     "semantic_hash": "25277ffbe8712179b5bbbcdc090879df"
   },
   "ctl-roofing/app/services/[slug]/page.tsx": {
-    "mtime": 1788360940.0081499,
-    "seen": 1788485286.6107438,
+    "mtime": 1788563222.4933727,
+    "seen": 1788819972.1230915,
     "ast_hash": "043f2cd99f687b7ed6de3daec54ad17d",
     "semantic_hash": "043f2cd99f687b7ed6de3daec54ad17d"
   },
@@ -102,16 +102,16 @@
     "semantic_hash": "0201dd38d53ed2bfa7b15c064f92bbdd"
   },
   "ctl-roofing/app/storm-damage/page.tsx": {
-    "mtime": 1788360940.009323,
-    "seen": 1788485286.6107473,
-    "ast_hash": "e26403397bc51fabdbb63b3d42548599",
-    "semantic_hash": "e26403397bc51fabdbb63b3d42548599"
+    "mtime": 1788676737.0633962,
+    "seen": 1788819972.1230953,
+    "ast_hash": "fd6df7d7a48f4b09edd5dc9a123b7b6e",
+    "semantic_hash": "fd6df7d7a48f4b09edd5dc9a123b7b6e"
   },
   "ctl-roofing/app/team/page.tsx": {
-    "mtime": 1788225211.3713136,
-    "seen": 1788485286.6107488,
-    "ast_hash": "d9594825afc7bb2bcd8e662dabbc574f",
-    "semantic_hash": "d9594825afc7bb2bcd8e662dabbc574f"
+    "mtime": 1788676737.0633962,
+    "seen": 1788819972.1230962,
+    "ast_hash": "01760648a4a3a1dd75176fe5e0cd12b4",
+    "semantic_hash": "01760648a4a3a1dd75176fe5e0cd12b4"
   },
   "ctl-roofing/app/terms/page.tsx": {
     "mtime": 1788298565.428583,
@@ -120,22 +120,22 @@
     "semantic_hash": "6a12f7fac8dd6d8c6e4f297a4d073fd5"
   },
   "ctl-roofing/app/video/page.tsx": {
-    "mtime": 1788234719.4842205,
-    "seen": 1788485286.6107512,
-    "ast_hash": "516f06b7060e1546fbaea3db6c4d8252",
-    "semantic_hash": "516f06b7060e1546fbaea3db6c4d8252"
+    "mtime": 1788733737.656615,
+    "seen": 1788819972.1230984,
+    "ast_hash": "b15872555c116362692be82d956e8169",
+    "semantic_hash": "b15872555c116362692be82d956e8169"
   },
   "ctl-roofing/client.config.ts": {
-    "mtime": 1788360940.0105433,
-    "seen": 1788485286.6107526,
-    "ast_hash": "b70d8fecb8ff6f11f2397bd6c954268a",
-    "semantic_hash": "b70d8fecb8ff6f11f2397bd6c954268a"
+    "mtime": 1788713642.2827425,
+    "seen": 1788819972.1230993,
+    "ast_hash": "e28e23b3db0a0f6cfeb333fcbe813b19",
+    "semantic_hash": "e28e23b3db0a0f6cfeb333fcbe813b19"
   },
   "ctl-roofing/components/About.tsx": {
-    "mtime": 1788234719.4842205,
-    "seen": 1788485286.610754,
-    "ast_hash": "24c95cdf5dd97ad9378b4d142dadf786",
-    "semantic_hash": "24c95cdf5dd97ad9378b4d142dadf786"
+    "mtime": 1788677890.1534355,
+    "seen": 1788819972.1231005,
+    "ast_hash": "892533ad544f88a816b1e4af2256b8bb",
+    "semantic_hash": "892533ad544f88a816b1e4af2256b8bb"
   },
   "ctl-roofing/components/Analytics.tsx": {
     "mtime": 1788115225.707721,
@@ -156,10 +156,10 @@
     "semantic_hash": "70afcd6f945d52cb0998686cfc09a106"
   },
   "ctl-roofing/components/Brands.tsx": {
-    "mtime": 1788225211.3755596,
-    "seen": 1788485286.610759,
-    "ast_hash": "b4570fd440adc1a83bfdec27b930829b",
-    "semantic_hash": "b4570fd440adc1a83bfdec27b930829b"
+    "mtime": 1788676737.067398,
+    "seen": 1788819972.123109,
+    "ast_hash": "441b03ca1f48cb83b912c53e2ad670e2",
+    "semantic_hash": "441b03ca1f48cb83b912c53e2ad670e2"
   },
   "ctl-roofing/components/Breadcrumbs.tsx": {
     "mtime": 1788225211.3781962,
@@ -180,10 +180,10 @@
     "semantic_hash": "66428c39308ef843f2890f8462aca660"
   },
   "ctl-roofing/components/CaseStudyArticle.tsx": {
-    "mtime": 1788225211.3821936,
-    "seen": 1788485286.6107635,
-    "ast_hash": "902c6fa4ab3f727923154f48eb2ecbd1",
-    "semantic_hash": "902c6fa4ab3f727923154f48eb2ecbd1"
+    "mtime": 1788676737.0683954,
+    "seen": 1788819972.1231146,
+    "ast_hash": "9b9f9c0e6ff6f7a93d8ecab43d12cbd5",
+    "semantic_hash": "9b9f9c0e6ff6f7a93d8ecab43d12cbd5"
   },
   "ctl-roofing/components/Contact.tsx": {
     "mtime": 1788234719.5002563,
@@ -198,10 +198,10 @@
     "semantic_hash": "7f2e4c4910b1d2d624a28af8009d097d"
   },
   "ctl-roofing/components/CtaBand.tsx": {
-    "mtime": 1788360940.0115535,
-    "seen": 1788485286.6107671,
-    "ast_hash": "f9d6f4244a8e2eeca55261ed37ddb529",
-    "semantic_hash": "f9d6f4244a8e2eeca55261ed37ddb529"
+    "mtime": 1788676737.0694165,
+    "seen": 1788819972.123118,
+    "ast_hash": "2ef8af7b33ece9272852d2e1942e6c86",
+    "semantic_hash": "2ef8af7b33ece9272852d2e1942e6c86"
   },
   "ctl-roofing/components/FaqList.tsx": {
     "mtime": 1788234719.5002563,
@@ -210,34 +210,34 @@
     "semantic_hash": "fa5e98f54915208d59cd147e8e2575a6"
   },
   "ctl-roofing/components/Footer.tsx": {
-    "mtime": 1788135311.2273965,
-    "seen": 1788485286.6107695,
-    "ast_hash": "e84890099b7335a1b934cdbb125cb820",
-    "semantic_hash": "e84890099b7335a1b934cdbb125cb820"
+    "mtime": 1788763225.9210446,
+    "seen": 1788819972.1231234,
+    "ast_hash": "dd0bcc53448044294ccdd5a337f5046e",
+    "semantic_hash": "dd0bcc53448044294ccdd5a337f5046e"
   },
   "ctl-roofing/components/Gallery.tsx": {
-    "mtime": 1788234719.5002563,
-    "seen": 1788485286.610771,
-    "ast_hash": "4203c9d3fb7dc52db7514ba9cd7f5441",
-    "semantic_hash": "4203c9d3fb7dc52db7514ba9cd7f5441"
+    "mtime": 1788676737.0717866,
+    "seen": 1788819972.1231244,
+    "ast_hash": "902e83efd99bf9004a5191d94f2abcc0",
+    "semantic_hash": "902e83efd99bf9004a5191d94f2abcc0"
   },
   "ctl-roofing/components/GalleryBrowser.tsx": {
-    "mtime": 1788234719.5002563,
-    "seen": 1788485286.6107721,
-    "ast_hash": "b24432fd3a9f35d682be3c663f401822",
-    "semantic_hash": "b24432fd3a9f35d682be3c663f401822"
+    "mtime": 1788676737.0727868,
+    "seen": 1788819972.1231256,
+    "ast_hash": "8563ab1d23dc4099599d11e58443bb31",
+    "semantic_hash": "8563ab1d23dc4099599d11e58443bb31"
   },
   "ctl-roofing/components/GoogleReviews.tsx": {
-    "mtime": 1788234719.5002563,
-    "seen": 1788485286.6107736,
-    "ast_hash": "f7d91d702f0de3cdf777633d33d70d52",
-    "semantic_hash": "f7d91d702f0de3cdf777633d33d70d52"
+    "mtime": 1788731522.1704378,
+    "seen": 1788819972.123127,
+    "ast_hash": "69257c88310501e72edb33a481ec4b7a",
+    "semantic_hash": "69257c88310501e72edb33a481ec4b7a"
   },
   "ctl-roofing/components/Hero.tsx": {
-    "mtime": 1788360940.0135632,
-    "seen": 1788485286.6107745,
-    "ast_hash": "d68fcbc3da2ced8d380a951c47678056",
-    "semantic_hash": "d68fcbc3da2ced8d380a951c47678056"
+    "mtime": 1788677890.1564467,
+    "seen": 1788819972.1231282,
+    "ast_hash": "8e89084595409c2eee872ceb4559c32e",
+    "semantic_hash": "8e89084595409c2eee872ceb4559c32e"
   },
   "ctl-roofing/components/InteractionTracking.tsx": {
     "mtime": 1788115225.7252877,
@@ -258,10 +258,10 @@
     "semantic_hash": "a41afc2161470500d7041475ecd046cd"
   },
   "ctl-roofing/components/MetalSpec.tsx": {
-    "mtime": 1788234719.5002563,
-    "seen": 1788485286.6107802,
-    "ast_hash": "a9d237acc63525a4529c9c2a6e298efc",
-    "semantic_hash": "a9d237acc63525a4529c9c2a6e298efc"
+    "mtime": 1788712973.787572,
+    "seen": 1788819972.1231337,
+    "ast_hash": "5de1520c0bfabf0dc3eb8fb2c9b0636e",
+    "semantic_hash": "5de1520c0bfabf0dc3eb8fb2c9b0636e"
   },
   "ctl-roofing/components/MoreLink.tsx": {
     "mtime": 1788234719.5002563,
@@ -276,22 +276,22 @@
     "semantic_hash": "d2ffb09511ddc2a1f223025dc3c49200"
   },
   "ctl-roofing/components/OtherServices.tsx": {
-    "mtime": 1788225211.3861942,
-    "seen": 1788485286.6107838,
-    "ast_hash": "b04e52adb5aa78b6d85129b45f8deb79",
-    "semantic_hash": "b04e52adb5aa78b6d85129b45f8deb79"
+    "mtime": 1788676737.0747914,
+    "seen": 1788819972.1231375,
+    "ast_hash": "553664c7747f28a1602959356145eea9",
+    "semantic_hash": "553664c7747f28a1602959356145eea9"
   },
   "ctl-roofing/components/PageHero.tsx": {
-    "mtime": 1788234719.5002563,
-    "seen": 1788485286.610785,
-    "ast_hash": "ebe2e58cedf43ad2b758bf4c217059af",
-    "semantic_hash": "ebe2e58cedf43ad2b758bf4c217059af"
+    "mtime": 1788732635.6276379,
+    "seen": 1788819972.1231387,
+    "ast_hash": "0e5a58c298d94e6564391670baa46ddf",
+    "semantic_hash": "0e5a58c298d94e6564391670baa46ddf"
   },
   "ctl-roofing/components/PaymentEstimator.tsx": {
-    "mtime": 1788234719.5002563,
-    "seen": 1788485286.610786,
-    "ast_hash": "32d0c2ef24745d9e3834669a5743d50d",
-    "semantic_hash": "32d0c2ef24745d9e3834669a5743d50d"
+    "mtime": 1788727184.63933,
+    "seen": 1788819972.1231413,
+    "ast_hash": "a23ad569757c25969fd664b7a6d298cf",
+    "semantic_hash": "a23ad569757c25969fd664b7a6d298cf"
   },
   "ctl-roofing/components/Pending.tsx": {
     "mtime": 1788153038.0316281,
@@ -306,40 +306,40 @@
     "semantic_hash": "00db679815834c1bdefcb2175a1f4e79"
   },
   "ctl-roofing/components/Process.tsx": {
-    "mtime": 1788225211.3887596,
-    "seen": 1788485286.6107898,
-    "ast_hash": "15e978dd00854d943bf9b610fb3802ca",
-    "semantic_hash": "15e978dd00854d943bf9b610fb3802ca"
+    "mtime": 1788759160.0291243,
+    "seen": 1788819972.1231463,
+    "ast_hash": "922b5fdd99266e8c6e109a787aea1b68",
+    "semantic_hash": "922b5fdd99266e8c6e109a787aea1b68"
   },
   "ctl-roofing/components/Reveal.tsx": {
-    "mtime": 1788225211.3887596,
-    "seen": 1788485286.6107912,
-    "ast_hash": "7c989d16d882f27ced67949a0e979f66",
-    "semantic_hash": "7c989d16d882f27ced67949a0e979f66"
+    "mtime": 1788677890.157839,
+    "seen": 1788819972.123147,
+    "ast_hash": "b38f0922b510f0ef9050709bdff9e5af",
+    "semantic_hash": "b38f0922b510f0ef9050709bdff9e5af"
   },
   "ctl-roofing/components/ReviewColumns.tsx": {
-    "mtime": 1788234719.5002563,
-    "seen": 1788485286.6107924,
-    "ast_hash": "a9557277975aeb0c50adbb9595833969",
-    "semantic_hash": "a9557277975aeb0c50adbb9595833969"
+    "mtime": 1788677890.1628487,
+    "seen": 1788819972.12315,
+    "ast_hash": "7726477005baf4ac2eab6ba0c51bd47b",
+    "semantic_hash": "7726477005baf4ac2eab6ba0c51bd47b"
   },
   "ctl-roofing/components/SectionHead.tsx": {
-    "mtime": 1788234719.51592,
-    "seen": 1788485286.6107936,
-    "ast_hash": "7c452de5765942d96fa6764c10d867d0",
-    "semantic_hash": "7c452de5765942d96fa6764c10d867d0"
+    "mtime": 1788677890.1638505,
+    "seen": 1788819972.1231518,
+    "ast_hash": "024b8911f84cc246be27250b806ea0de",
+    "semantic_hash": "024b8911f84cc246be27250b806ea0de"
   },
   "ctl-roofing/components/ServiceCards.tsx": {
-    "mtime": 1788234719.51592,
-    "seen": 1788485286.6107948,
-    "ast_hash": "86f6e554b22a1010aa9a2d20691657fa",
-    "semantic_hash": "86f6e554b22a1010aa9a2d20691657fa"
+    "mtime": 1788809125.107579,
+    "seen": 1788819972.123153,
+    "ast_hash": "78c9f21f2922c078561dfcc94ac2427b",
+    "semantic_hash": "78c9f21f2922c078561dfcc94ac2427b"
   },
   "ctl-roofing/components/Services.tsx": {
-    "mtime": 1788234719.51592,
-    "seen": 1788485286.610796,
-    "ast_hash": "ad3785bcc2a053e8203341d4d1800183",
-    "semantic_hash": "ad3785bcc2a053e8203341d4d1800183"
+    "mtime": 1788676737.0853844,
+    "seen": 1788819972.123154,
+    "ast_hash": "1b5bcf42132b6f1fadb690334c55db57",
+    "semantic_hash": "1b5bcf42132b6f1fadb690334c55db57"
   },
   "ctl-roofing/components/SocialIcons.tsx": {
     "mtime": 1788115225.749019,
@@ -366,10 +366,10 @@
     "semantic_hash": "57019f489b1947493436d4516d0ef547"
   },
   "ctl-roofing/components/Testimonials.tsx": {
-    "mtime": 1788234719.51592,
-    "seen": 1788485286.6108022,
-    "ast_hash": "0254f530a9b8cb2521b6909d9c4312ca",
-    "semantic_hash": "0254f530a9b8cb2521b6909d9c4312ca"
+    "mtime": 1788763225.9220417,
+    "seen": 1788819972.1231604,
+    "ast_hash": "e8b5da2f063867b83f9994859a17c2b4",
+    "semantic_hash": "e8b5da2f063867b83f9994859a17c2b4"
   },
   "ctl-roofing/components/Turnstile.tsx": {
     "mtime": 1788234719.51592,
@@ -390,10 +390,10 @@
     "semantic_hash": "d56f7fe7bdb8b8ac5c9d09361b1354e6"
   },
   "ctl-roofing/content/careers.ts": {
-    "mtime": 1788234719.51592,
-    "seen": 1788485286.6108067,
-    "ast_hash": "a6928c4ef7c2e067acce51efb113a014",
-    "semantic_hash": "a6928c4ef7c2e067acce51efb113a014"
+    "mtime": 1788804615.9237077,
+    "seen": 1788819972.1231647,
+    "ast_hash": "b6d682511d45a5c9aba769d6015894dc",
+    "semantic_hash": "b6d682511d45a5c9aba769d6015894dc"
   },
   "ctl-roofing/content/caseStudies.ts": {
     "mtime": 1788225211.400891,
@@ -408,10 +408,10 @@
     "semantic_hash": "70fce915bd593444a77b77a59f1240b1"
   },
   "ctl-roofing/content/financing.ts": {
-    "mtime": 1788234719.51592,
-    "seen": 1788485286.6108105,
-    "ast_hash": "b4006ce3dfe2abf3b1190e910d018202",
-    "semantic_hash": "b4006ce3dfe2abf3b1190e910d018202"
+    "mtime": 1788728120.9573932,
+    "seen": 1788819972.1231685,
+    "ast_hash": "9372b64c104e2e49d721ba8035f316ea",
+    "semantic_hash": "9372b64c104e2e49d721ba8035f316ea"
   },
   "ctl-roofing/content/gallery.ts": {
     "mtime": 1788234719.51592,
@@ -426,22 +426,22 @@
     "semantic_hash": "ea60e3ec7bcb1fda8b0960a9f58a2727"
   },
   "ctl-roofing/content/reviews.ts": {
-    "mtime": 1788234719.51592,
-    "seen": 1788485286.6108148,
-    "ast_hash": "baf9a3f520bb966b56bf195fbb483f41",
-    "semantic_hash": "baf9a3f520bb966b56bf195fbb483f41"
+    "mtime": 1788731522.1755688,
+    "seen": 1788819972.1231718,
+    "ast_hash": "d77d7d9e624877a9d173408786a05239",
+    "semantic_hash": "d77d7d9e624877a9d173408786a05239"
   },
   "ctl-roofing/content/services.ts": {
-    "mtime": 1788360940.01902,
-    "seen": 1788485286.6108158,
-    "ast_hash": "4b478f6b9561c0b5135e156f890e9452",
-    "semantic_hash": "4b478f6b9561c0b5135e156f890e9452"
+    "mtime": 1788809125.1110911,
+    "seen": 1788819972.1231725,
+    "ast_hash": "cc8376b3e5fca54077ea55630a117077",
+    "semantic_hash": "cc8376b3e5fca54077ea55630a117077"
   },
   "ctl-roofing/content/storm.ts": {
-    "mtime": 1788360940.019883,
-    "seen": 1788485286.610817,
-    "ast_hash": "628359d8d8f193b2842907c14995a852",
-    "semantic_hash": "628359d8d8f193b2842907c14995a852"
+    "mtime": 1788809125.1126356,
+    "seen": 1788819972.1231737,
+    "ast_hash": "b0f788992a7a1b5af725fe4bfada4dda",
+    "semantic_hash": "b0f788992a7a1b5af725fe4bfada4dda"
   },
   "ctl-roofing/content/team.ts": {
     "mtime": 1788234719.531685,
@@ -456,10 +456,10 @@
     "semantic_hash": "ef095390100414b2d5702ceaee3c120a"
   },
   "ctl-roofing/content/types.ts": {
-    "mtime": 1788234719.531685,
-    "seen": 1788485286.6108205,
-    "ast_hash": "4d2ce05c2e8b0dfa465bf5a7b7f603cc",
-    "semantic_hash": "4d2ce05c2e8b0dfa465bf5a7b7f603cc"
+    "mtime": 1788727184.6438656,
+    "seen": 1788819972.1231768,
+    "ast_hash": "2aff811fdc03593a3ce0d29657403f09",
+    "semantic_hash": "2aff811fdc03593a3ce0d29657403f09"
   },
   "ctl-roofing/content/video.ts": {
     "mtime": 1788234719.531685,
@@ -474,8 +474,8 @@
     "semantic_hash": "4fa45dbdb7974508ae8e80756bb3ccdf"
   },
   "ctl-roofing/lib/content.ts": {
-    "mtime": 1788225211.4081914,
-    "seen": 1788485286.6108243,
+    "mtime": 1788563222.501868,
+    "seen": 1788819972.1231797,
     "ast_hash": "58f332a4ab482226a897fdf8544be409",
     "semantic_hash": "58f332a4ab482226a897fdf8544be409"
   },
@@ -498,10 +498,10 @@
     "semantic_hash": "5b82c1b6d100bfa928a4c5f98af1a42a"
   },
   "ctl-roofing/lib/routes.ts": {
-    "mtime": 1788298565.4347036,
-    "seen": 1788485286.6108294,
-    "ast_hash": "bbc8483eb14b91b7a2b3fdf522558b91",
-    "semantic_hash": "bbc8483eb14b91b7a2b3fdf522558b91"
+    "mtime": 1788763225.9240422,
+    "seen": 1788819972.1231859,
+    "ast_hash": "72cd0edcab2dee05822ef18f1372718d",
+    "semantic_hash": "72cd0edcab2dee05822ef18f1372718d"
   },
   "ctl-roofing/lib/submitApplication.ts": {
     "mtime": 1788225211.4091992,
@@ -528,10 +528,10 @@
     "semantic_hash": "16b5b810baf515ef20c99c031a768d20"
   },
   "ctl-roofing/package.json": {
-    "mtime": 1788360940.019883,
-    "seen": 1788485286.610837,
-    "ast_hash": "c914c78d289b62df1fdf8e51df87dc69",
-    "semantic_hash": "c914c78d289b62df1fdf8e51df87dc69"
+    "mtime": 1788676686.7064986,
+    "seen": 1788819972.123192,
+    "ast_hash": "6394ac1d0b96f3c2e7b456e2f095e40a",
+    "semantic_hash": "6394ac1d0b96f3c2e7b456e2f095e40a"
   },
   "ctl-roofing/postcss.config.mjs": {
     "mtime": 1788046757.410129,
@@ -546,10 +546,10 @@
     "semantic_hash": "d388770b75ea2d301aa5f58ea065ea23"
   },
   "ctl-roofing/scripts/csp.mjs": {
-    "mtime": 1788360940.019883,
-    "seen": 1788485286.6108406,
-    "ast_hash": "e214995f0a2024befefa2c34626fb936",
-    "semantic_hash": "e214995f0a2024befefa2c34626fb936"
+    "mtime": 1788676737.0893865,
+    "seen": 1788819972.123195,
+    "ast_hash": "dad83ff3526a0d2398b32850c57634b0",
+    "semantic_hash": "dad83ff3526a0d2398b32850c57634b0"
   },
   "ctl-roofing/scripts/preview-build.mjs": {
     "mtime": 1788360940.019883,
@@ -570,10 +570,10 @@
     "semantic_hash": "35a93cf624151b3da0b87a250517db98"
   },
   "ctl-roofing/tailwind.config.ts": {
-    "mtime": 1788046759.2397957,
-    "seen": 1788485286.6108453,
-    "ast_hash": "2abbf601c8c6834e781d462a6cc6f980",
-    "semantic_hash": "2abbf601c8c6834e781d462a6cc6f980"
+    "mtime": 1788804615.92422,
+    "seen": 1788819972.123199,
+    "ast_hash": "2a7c60095849e3c45832759adf8c7ad4",
+    "semantic_hash": "2a7c60095849e3c45832759adf8c7ad4"
   },
   "ctl-roofing/tsconfig.json": {
     "mtime": 1788046757.414142,
@@ -1636,5 +1636,107 @@
     "seen": 1788488548.7176015,
     "ast_hash": "5aaf814521581b7b164e840d297513cc",
     "semantic_hash": "5aaf814521581b7b164e840d297513cc"
+  },
+  "ctl-roofing/components/BandTransition.tsx": {
+    "mtime": 1788676737.0664155,
+    "seen": 1788819972.1231031,
+    "ast_hash": "128afe715ef7c8f8660a2b47b2d07ee9",
+    "semantic_hash": "128afe715ef7c8f8660a2b47b2d07ee9"
+  },
+  "ctl-roofing/components/BeforeAfterSlider.tsx": {
+    "mtime": 1788713642.2877617,
+    "seen": 1788819972.1231062,
+    "ast_hash": "c4a69376816c23ef23e0f90e46a7e995",
+    "semantic_hash": "c4a69376816c23ef23e0f90e46a7e995"
+  },
+  "ctl-roofing/components/DrawRule.tsx": {
+    "mtime": 1788677890.155445,
+    "seen": 1788819972.1231186,
+    "ast_hash": "0d1cffe0ff982c19d03890c219954c0f",
+    "semantic_hash": "0d1cffe0ff982c19d03890c219954c0f"
+  },
+  "ctl-roofing/components/FinanceProducts.tsx": {
+    "mtime": 1788728120.9550593,
+    "seen": 1788819972.1231208,
+    "ast_hash": "bfdd61a0f1fccdabbc4a139eb91a23c3",
+    "semantic_hash": "bfdd61a0f1fccdabbc4a139eb91a23c3"
+  },
+  "ctl-roofing/components/FinanceStrip.tsx": {
+    "mtime": 1788728120.9563866,
+    "seen": 1788819972.1231227,
+    "ast_hash": "23b66b9399a197cae7065b8a8d2d26dd",
+    "semantic_hash": "23b66b9399a197cae7065b8a8d2d26dd"
+  },
+  "ctl-roofing/components/Mark.tsx": {
+    "mtime": 1788727184.6373296,
+    "seen": 1788819972.1231325,
+    "ast_hash": "5b79a749bc064721b700b26be3364660",
+    "semantic_hash": "5b79a749bc064721b700b26be3364660"
+  },
+  "ctl-roofing/components/PageTransition.tsx": {
+    "mtime": 1788749033.3030357,
+    "seen": 1788819972.1231394,
+    "ast_hash": "8b6db58090d4f2aafc88239d396c7f40",
+    "semantic_hash": "8b6db58090d4f2aafc88239d396c7f40"
+  },
+  "ctl-roofing/components/Parallax.tsx": {
+    "mtime": 1788676737.0767875,
+    "seen": 1788819972.1231403,
+    "ast_hash": "8335491d1088f5be1203300c20fd3f72",
+    "semantic_hash": "8335491d1088f5be1203300c20fd3f72"
+  },
+  "ctl-roofing/components/PinnedSteps.tsx": {
+    "mtime": 1788676737.077788,
+    "seen": 1788819972.1231437,
+    "ast_hash": "f8db09fa2aa4f400ba7021f6e723cbdd",
+    "semantic_hash": "f8db09fa2aa4f400ba7021f6e723cbdd"
+  },
+  "ctl-roofing/components/RevealText.tsx": {
+    "mtime": 1788711984.8516705,
+    "seen": 1788819972.1231482,
+    "ast_hash": "1c68f5c808920c775aca9ba04b64c4ab",
+    "semantic_hash": "1c68f5c808920c775aca9ba04b64c4ab"
+  },
+  "ctl-roofing/components/RoleCards.tsx": {
+    "mtime": 1788804615.919175,
+    "seen": 1788819972.1231508,
+    "ast_hash": "05243199a43b46a520228c4aa8600438",
+    "semantic_hash": "05243199a43b46a520228c4aa8600438"
+  },
+  "ctl-roofing/components/SmoothScroll.tsx": {
+    "mtime": 1788730676.0753953,
+    "seen": 1788819972.1231546,
+    "ast_hash": "a10537ff07869723cb00d93100b712b1",
+    "semantic_hash": "a10537ff07869723cb00d93100b712b1"
+  },
+  "ctl-roofing/lib/motion.ts": {
+    "mtime": 1788676737.0873933,
+    "seen": 1788819972.1231837,
+    "ast_hash": "d4f91d89909490f146eadf4dbbca9461",
+    "semantic_hash": "d4f91d89909490f146eadf4dbbca9461"
+  },
+  "ctl-roofing/lib/useScrollMotion.ts": {
+    "mtime": 1788677890.1671615,
+    "seen": 1788819972.12319,
+    "ast_hash": "84af50169bfeeba7f763b66b1d79803d",
+    "semantic_hash": "84af50169bfeeba7f763b66b1d79803d"
+  },
+  "ctl-roofing/public/ctl/video/job-walkthrough.mp4": {
+    "mtime": 1788155061.8466742,
+    "seen": 1788819972.1234014,
+    "ast_hash": "bf759aa2546c6f3c86512496406bd4ff",
+    "semantic_hash": "bf759aa2546c6f3c86512496406bd4ff"
+  },
+  "ctl_pictures/1788041318580.publer.com.mp4": {
+    "mtime": 1788041319.3931208,
+    "seen": 1788819972.1234028,
+    "ast_hash": "472ae3441375d7b22aef8d1af077f435",
+    "semantic_hash": "472ae3441375d7b22aef8d1af077f435"
+  },
+  "ctl_pictures/AQNdFam25qVBnECx6H_PLNjT8VuoWzdYCmqJ4mxQ9P5DPjmxNjgP2EoD7VFY70GgBYlzzGHslZHZtF9kezv0_X3XItj3WGPqgEB6lWYBy_K-AA.mp4": {
+    "mtime": 1788040073.2916045,
+    "seen": 1788819972.1234035,
+    "ast_hash": "bca6bf1c0a4243dea756180da4c40615",
+    "semantic_hash": "bca6bf1c0a4243dea756180da4c40615"
   }
 }

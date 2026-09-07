@@ -9,9 +9,9 @@ import { PinnedSteps } from "./PinnedSteps";
 import { dur, ease } from "@/lib/motion";
 
 /**
- * Four steps under ruled tops — the first rule gold so the eye starts
- * where the job starts — then the four promises that hold for every
- * job, set as one boxed register rather than four floating cards.
+ * Four boxed steps under ruled tops — the first rule gold so the eye
+ * starts where the job starts — then the four promises that hold for
+ * every job, set as one boxed register rather than four floating cards.
  *
  * ── WHY THIS BAND IS THE PINNED ONE ─────────────────────────────────
  * Everywhere else on this page, "below" only means "printed after".
@@ -55,7 +55,22 @@ export function Process() {
                 return (
                   <motion.li
                     key={step.title}
-                    animate={{ opacity: dimmed ? 0.32 : 1 }}
+                    // Each step is a box now rather than a column of
+                    // loose text. On a white band a white card has no
+                    // edge to speak of, so the resting state is the pale
+                    // ground and the current step lifts to white with a
+                    // brand edge — the box gains weight by coming
+                    // forward, not by being outlined harder.
+                    className="flex h-full flex-col rounded border p-7"
+                    animate={{
+                      opacity: dimmed ? 0.32 : 1,
+                      backgroundColor: current
+                        ? "rgb(var(--surface))"
+                        : "rgb(var(--surface-alt))",
+                      borderColor: current
+                        ? "rgb(var(--brand))"
+                        : "rgb(var(--line))",
+                    }}
                     transition={{ duration: dur.quick, ease: ease.out }}
                   >
                     {/* The ruled top is the existing mark, not a new
@@ -64,7 +79,7 @@ export function Process() {
                         bar made of the rules that were always there. */}
                     <motion.span
                       aria-hidden
-                      className="mb-6 block h-[3px] w-full origin-left"
+                      className="mb-7 block h-[4px] w-full origin-left"
                       animate={{
                         scaleX: unpinned || active === i ? 1 : 0.4,
                         backgroundColor: current
@@ -73,11 +88,17 @@ export function Process() {
                       }}
                       transition={{ duration: dur.base, ease: ease.out }}
                     />
-                    <span className="mb-2.5 block font-mono text-[13px] tracking-[0.08em] text-brand-soft">
+                    {/* The number carries the size. It is the one thing
+                        in the card that can grow without wrapping, and
+                        a step count set large is what makes four narrow
+                        columns read as four substantial things. */}
+                    <span className="block font-display text-[clamp(34px,3.4vw,52px)] font-extrabold leading-none text-brand-soft">
                       {String(i + 1).padStart(2, "0")}
                     </span>
-                    <h3 className="mb-2.5 text-display-3">{step.title}</h3>
-                    <p className="text-base">{step.body}</p>
+                    <h3 className="mt-4 font-display text-[clamp(20px,1.9vw,26px)] font-bold uppercase leading-none text-ink">
+                      {step.title}
+                    </h3>
+                    <p className="mt-3.5 text-[15px]">{step.body}</p>
                   </motion.li>
                 );
               })}

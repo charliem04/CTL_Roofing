@@ -1,9 +1,9 @@
 "use client";
 
 /**
- * The wipe between pages. Five deep panels lying across the screen,
- * sweeping off to the right one after the other, each with a gold seam
- * on its lower edge.
+ * The wipe between pages. Five gold panels lying across the screen,
+ * each a slightly different shade, sweeping off to the right one after
+ * the other with a deep ink seam along every lower edge.
  *
  * The panels are the point: horizontal bands with a bright seam between
  * them are a standing seam roof going on, which is the thing this
@@ -45,8 +45,27 @@ import { motion } from "framer-motion";
 import { ease } from "@/lib/motion";
 import { useStillness } from "@/lib/useScrollMotion";
 
-/** Five, as in the reference. Enough to read as a sequence, few enough to stay quick. */
-const PANELS = [0, 1, 2, 3, 4];
+/**
+ * Five, as in the reference. Enough to read as a sequence, few enough
+ * to stay quick.
+ *
+ * Each panel is its own shade, lightest at the top and darkest at the
+ * bottom — light falling across a roof plane rather than five identical
+ * stripes. The ends are the palette's own accent-lift and accent-press;
+ * the three between them are steps along that ramp.
+ *
+ * They are written out here rather than added to globals.css as brand
+ * tokens. Two intermediate golds that exist only for one animation are
+ * not part of the brand, and putting them in the palette would invite
+ * their use somewhere they have never been contrast-checked.
+ */
+const PANELS = [
+  "rgb(248 220 124)", // accent-lift
+  "rgb(245 212 98)",
+  "rgb(241 204 71)", // accent
+  "rgb(226 186 51)",
+  "rgb(212 168 31)", // accent-press
+];
 
 export function PageTransition() {
   const pathname = usePathname();
@@ -79,13 +98,16 @@ export function PageTransition() {
       data-page-wipe
       className="pointer-events-none fixed inset-0 z-[60] overflow-hidden"
     >
-      {PANELS.map((i) => (
+      {PANELS.map((shade, i) => (
         <motion.span
           // The run number is in the key so every navigation remounts
           // the panels and replays them from covering.
           key={`${run}-${i}`}
-          className="absolute left-0 w-full origin-right border-b-[3px] border-accent bg-surface-deep"
-          style={{ top: `${i * 20}%`, height: "20.2%" }}
+          // The seam is deep ink now that the panels are gold. It was
+          // the other way round when they were blue — a gold seam on a
+          // gold panel is no seam at all.
+          className="absolute left-0 w-full origin-right border-b-[3px] border-surface-deep"
+          style={{ top: `${i * 20}%`, height: "20.2%", backgroundColor: shade }}
           initial={{ scaleX: 1 }}
           animate={{ scaleX: 0 }}
           transition={{ duration: 0.5, delay: i * 0.07, ease: ease.out }}

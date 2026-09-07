@@ -21,6 +21,7 @@ import { CookieConsent } from "@/components/CookieConsent";
 import { Analytics } from "@/components/Analytics";
 import { InteractionTracking } from "@/components/InteractionTracking";
 import { SmoothScroll } from "@/components/SmoothScroll";
+import { PageTransition } from "@/components/PageTransition";
 
 // Site-level metadata. Individual pages override title/description via
 // their own `metadata` export, built from lib/meta.ts.
@@ -95,6 +96,8 @@ export default function RootLayout({
             route. Mounted first so it is running before anything below
             can be scrolled to. */}
         <SmoothScroll />
+        {/* Renders nothing until the first client-side navigation. */}
+        <PageTransition />
         <PreviewBanner />
         <UtilityBar />
         <Nav />

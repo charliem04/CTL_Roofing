@@ -120,7 +120,7 @@ export default function ReviewsPage() {
           <SectionHead heading="Read them at the source" />
           <ul className="mt-10 grid list-none gap-px border border-line bg-line p-0 md:grid-cols-2">
             {page.platforms.map((p) => (
-              <li key={p.name} className="bg-surface p-7">
+              <li key={p.name} className="border-t-[3px] border-accent bg-surface p-7">
                 <h3 className="font-display text-[21px] font-bold uppercase text-ink">
                   {p.name}
                 </h3>

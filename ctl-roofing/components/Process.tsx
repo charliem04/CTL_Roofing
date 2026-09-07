@@ -92,7 +92,7 @@ export function Process() {
               by one hairline in every layout, with no doubled rules */}
           <dl className="mt-10 grid gap-px rounded border border-line bg-line sm:grid-cols-2 lg:grid-cols-4">
             {process.promises.map((p) => (
-              <div key={p.title} className="bg-surface p-6">
+              <div key={p.title} className="border-t-[3px] border-brand bg-surface p-6">
                 <dt className="mb-2.5 font-display text-[19px] font-bold uppercase text-ink">
                   {p.title}
                 </dt>

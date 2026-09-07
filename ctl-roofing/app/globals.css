@@ -173,6 +173,24 @@ html {
   @apply py-[clamp(74px,9vw,126px)];
 }
 
+/* ── THE SAME-GROUND SEAM ────────────────────────────────────────────
+   Nearly every band on this site is separated from its neighbour by a
+   change of ground, so the two paddings either side of a seam read as
+   the edge of a colour rather than as space. Where two bands share a
+   ground — the proof band running into recent work on the home page —
+   there is no colour doing that work and the two paddings simply add
+   up to a quarter of the viewport in white, which reads as a section
+   that failed to load. `band-seam` goes on the first of such a pair
+   and halves both sides of the join: still a clear beat between two
+   headings, without the hole. */
+.band-seam {
+  @apply pb-[clamp(36px,4.5vw,62px)];
+}
+
+.band-seam + .band {
+  @apply pt-[clamp(36px,4.5vw,62px)];
+}
+
 /* Mono utility labels — the register CTL's own paperwork uses for
    field names, hours and spec keys. Never a decorative kicker. */
 /* In @layer components on purpose. Unlayered, this rule is emitted

@@ -67,7 +67,7 @@ export default function AreasPage() {
                   {g.towns.map((t) => (
                     <li
                       key={t.slug}
-                      className="rounded border border-line px-2.5 py-1.5 font-mono text-[12px] uppercase tracking-[0.06em] text-ink"
+                      className="rounded border border-brand/20 bg-surface-alt px-2.5 py-1.5 font-mono text-[12px] uppercase tracking-[0.06em] text-brand-strong"
                     >
                       {t.name}
                     </li>

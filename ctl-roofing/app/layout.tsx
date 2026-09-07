@@ -101,8 +101,12 @@ export default function RootLayout({
         <PreviewBanner />
         <UtilityBar />
         <Nav />
-        {/* Bottom padding clears the mobile Call | Text | Book bar. */}
-        <main className="pb-16 lg:pb-0">{children}</main>
+        {/* Clearance for the mobile Call | Text | Book bar lives on the
+            footer, not here. main is not the last thing on the page, so
+            padding here is a 64px stripe of white body ground between
+            the closing CTA band and the dark footer — and it still
+            leaves the footer's own last row behind the bar. */}
+        <main>{children}</main>
         <Footer />
         <StickyCTA />
         <CookieConsent />

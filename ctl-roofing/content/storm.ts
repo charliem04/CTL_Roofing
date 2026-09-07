@@ -34,6 +34,29 @@ export const storm = {
     height: 554,
   } satisfies Photo,
 
+  /**
+   * The card that points here from the services grid. Storm work is not
+   * a /services/ child page — it has its own top-level page — so its
+   * card is described here rather than in the services array, which
+   * generates those child pages.
+   *
+   * Items are the short form of `role.does` below; nothing is claimed
+   * here that is not claimed there.
+   */
+  card: {
+    label: "Storm Damage & Insurance",
+    columns: [
+      {
+        items: [
+          "Emergency tarping and leak stop",
+          "Full-scope damage assessment, with photos",
+          "We meet your adjuster at the property",
+          "Written repair scope and estimate",
+        ],
+      },
+    ],
+  },
+
   /** The first 48 hours, in the order they actually matter. */
   firstHours: {
     heading: "The first 48 hours",

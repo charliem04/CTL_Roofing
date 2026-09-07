@@ -342,7 +342,7 @@ export const services: ServicePage[] = [
 
   {
     slug: "commercial",
-    span: "full",
+    span: "wide",
     navLabel: "Commercial",
     meta: {
       title: "Commercial Roofing — TPO, PVC & Coatings",

@@ -45,7 +45,31 @@ export const nav: RouteNode[] = [
     label: "Services",
     live: true,
     priority: 0.9,
-    children: serviceChildren,
+    children: [
+      ...serviceChildren,
+      /*
+       * Storm damage lived in auxRoutes, which meant priority 0.9 — the
+       * joint-highest on the site, level with Services and Contact — on
+       * a page reachable only from the home band, the footer, and one
+       * link on /areas/. Land on any other page after a hurricane and
+       * there was no way to it but scrolling to the footer.
+       *
+       * Here rather than as a sixth top-level item, because the Nav
+       * spec is five items and a CTA, and this is where somebody looks
+       * for "what do you do about X". It sits next to Emergency &
+       * Inspections, which is the nearest neighbour it has.
+       *
+       * It keeps its own priority: livePaths walks children, so the
+       * sitemap is unchanged. trailFor walks them too, so the
+       * breadcrumb gains a Services step, which it should have had.
+       */
+      {
+        href: "/storm-damage/",
+        label: "Storm damage & insurance",
+        live: true,
+        priority: 0.9,
+      },
+    ],
   },
   {
     // The gallery is the hub for now, so this points at a real page
@@ -96,7 +120,6 @@ export const nav: RouteNode[] = [
 
 /** Routes that exist but are not top-level nav items. */
 export const auxRoutes: RouteNode[] = [
-  { href: "/storm-damage/", label: "Storm damage & insurance", live: true, priority: 0.9 },
   { href: "/terms/", label: "Terms of service", live: true, noindex: true },
   { href: "/privacy/", label: "Privacy policy", live: true, noindex: true },
 ];

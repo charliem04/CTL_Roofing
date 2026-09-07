@@ -47,7 +47,13 @@ export function Footer() {
     "block py-1.5 text-ink-invert-soft no-underline transition-colors duration-150 hover:text-accent active:text-accent-press";
 
   return (
-    <footer className="on-deep bg-surface-deep pb-6 pt-[42px] text-ink-invert-soft">
+    // The footer is the last element on the page, so it is what the
+    // fixed mobile Call | Text | Book bar overlaps. Its 64px is added to
+    // the footer's own 24px here rather than padding <main>, which would
+    // only open a white gap above the footer and leave the row below
+    // still covered. Overshooting is harmless — the extra is dark
+    // footer ground sitting behind an opaque bar.
+    <footer className="on-deep bg-surface-deep pb-[88px] pt-[42px] text-ink-invert-soft lg:pb-6">
       <div className="section">
         <div className="grid gap-[42px] md:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1fr]">
           <div>

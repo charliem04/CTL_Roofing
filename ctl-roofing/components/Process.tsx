@@ -44,30 +44,23 @@ export function Process() {
               Flex rather than a four-column grid, because the current
               step has to be able to take more of the row than the
               others and a grid column cannot be talked out of its
-              share.
+              share. At lg the cards size to their own content and
+              padding and the row centres them; below lg they are
+              basis-full or basis-half, the same stacked and two-up
+              layout it always was.
 
-              Below lg every card is basis-full or basis-half and the
-              growth below is 1 across the board, so this is the same
-              stacked and two-up layout it always was. At lg the basis
-              drops to 0 and width becomes entirely a question of
-              flex-grow, which is what the animation drives.
+              The min-height stops the row changing height as the
+              current card takes its extra vertical padding. It mattered
+              more in the version before this one, where the cards
+              shared the row by flex-grow: step four wrapped to seven
+              lines at its narrow width and five at its wide one, and
+              the row collapsed 49px at the moment that step expanded —
+              391px in three states against 342px in the fourth. With a
+              fixed measure the text no longer wraps differently, so
+              this is now a floor rather than a fix, and it keeps the
+              padding change from nudging the row.
             */}
-            {/*
-              The min-height is what stops the push jolting vertically.
-              Cards stretch to the row, and the row takes the height of
-              whichever card wraps to the most lines — which changes as
-              they widen. Step four has the longest body: at 234px it
-              runs seven lines, at 339px it runs five, so the row
-              collapsed 49px at the exact moment that step expanded.
-              Measured, not guessed: 391px in three of the four states
-              and 342px in the fourth.
-
-              Holding a floor above the tallest state means the row
-              keeps one height and the only thing that moves is what is
-              supposed to move. It applies at lg and up, which is
-              exactly where the pinning that drives all this happens.
-            */}
-            <ol className="mt-10 flex list-none flex-wrap gap-6 p-0 lg:min-h-[420px]">
+            <ol className="mt-10 flex list-none flex-wrap gap-6 p-0 lg:min-h-[420px] lg:flex-nowrap lg:justify-center lg:gap-4">
               {process.steps.map((step, i) => {
                 // -1 is the un-pinned rendering — a phone, or a
                 // reduced-motion visitor. That is not "every step is
@@ -88,27 +81,32 @@ export function Process() {
                     // ground and the current step lifts to white with a
                     // brand edge — the box gains weight by coming
                     // forward, not by being outlined harder.
-                    className="flex min-w-0 basis-full flex-col rounded border p-7 sm:basis-[calc(50%-12px)] lg:basis-0"
+                    className="flex basis-full flex-col rounded border p-7 sm:basis-[calc(50%-12px)] lg:basis-auto lg:p-0"
                     animate={{
-                      // The push. At lg the basis is 0, so the row is
-                      // divided purely by these numbers: the current
-                      // step takes 1.6 shares against 1 each for the
-                      // other three, which is 35% of the row against
-                      // 21.7%, and the neighbours slide aside to pay
-                      // for it.
+                      // ── WHY THE CARD GROWS BY PADDING ─────────────
+                      // The first version of this divided the row with
+                      // flex-grow, so the current card took a bigger
+                      // share and the others took less. It pushed
+                      // correctly and it re-wrapped every paragraph on
+                      // the way: four columns all changing width means
+                      // four blocks of text re-flowing line by line
+                      // through the whole transition, which is the
+                      // cascade that had to go.
                       //
-                      // Grow rather than width. Animating width reflows
-                      // the row on every frame and is the thing
-                      // check.mjs flags as layout-animation by name;
-                      // flex-grow hands the distribution to the flex
-                      // algorithm and moves all four in one pass.
+                      // Nothing about the widening was wrong — the text
+                      // being downstream of it was. So the content
+                      // column below is a fixed width that no card can
+                      // change, and the card grows around it by taking
+                      // more padding. Wrap points cannot move, because
+                      // the measure the text is set to never does.
                       //
-                      // 1.6 is deliberately short of dramatic. Past
-                      // about 2 the other three narrow enough to gain a
-                      // line of wrapped text, which makes the whole row
-                      // taller and turns a sideways push into a
-                      // vertical jolt.
-                      flexGrow: unpinned ? 1 : current ? 1.6 : 1,
+                      // The neighbours are pushed rather than squeezed:
+                      // their own width is untouched, so their text
+                      // holds still while they slide.
+                      paddingLeft: !unpinned && current ? 56 : 28,
+                      paddingRight: !unpinned && current ? 56 : 28,
+                      paddingTop: !unpinned && current ? 44 : 28,
+                      paddingBottom: !unpinned && current ? 44 : 28,
                       opacity: dimmed ? 0.32 : 1,
                       backgroundColor: current
                         ? "rgb(var(--surface))"
@@ -141,13 +139,33 @@ export function Process() {
                         in the card that can grow without wrapping, and
                         a step count set large is what makes four narrow
                         columns read as four substantial things. */}
-                    <span className="block font-display text-[clamp(34px,3.4vw,52px)] font-extrabold leading-none text-brand-soft">
-                      {String(i + 1).padStart(2, "0")}
-                    </span>
-                    <h3 className="mt-4 font-display text-[clamp(20px,1.9vw,26px)] font-bold uppercase leading-none text-ink">
-                      {step.title}
-                    </h3>
-                    <p className="mt-3.5 text-[15px]">{step.body}</p>
+                    {/*
+                      The measure, and the whole point of the change.
+                      This width is set here and nothing above can move
+                      it, so every paragraph keeps its line breaks
+                      through the entire sequence. The card grows around
+                      it; the words do not notice.
+
+                      The numbers are sized so the row fits. Four cards
+                      plus the expanded card's extra padding plus the
+                      gaps has to stay inside the 1112px the section
+                      allows at 1440 and the 942px it allows at 1024 —
+                      the first attempt used a 196px measure and came to
+                      1144, so step four wrapped onto a second line.
+                      This comes to 1032 and 888. lg:flex-nowrap is the
+                      backstop: if a future edit overruns again it will
+                      show as a squeeze rather than silently dropping a
+                      card below the row.
+                    */}
+                    <div className="w-full lg:w-[clamp(140px,12.5vw,176px)]">
+                      <span className="block font-display text-[clamp(34px,3.4vw,52px)] font-extrabold leading-none text-brand-soft">
+                        {String(i + 1).padStart(2, "0")}
+                      </span>
+                      <h3 className="mt-4 font-display text-[clamp(20px,1.9vw,26px)] font-bold uppercase leading-none text-ink">
+                        {step.title}
+                      </h3>
+                      <p className="mt-3.5 text-[15px]">{step.body}</p>
+                    </div>
                   </motion.li>
                 );
               })}

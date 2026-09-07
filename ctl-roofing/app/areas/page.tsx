@@ -56,9 +56,9 @@ export default function AreasPage() {
             lede="Grouped by parish, which is how people here describe where they live."
           />
 
-          <div className="mt-10 grid gap-px border border-line bg-line md:grid-cols-2">
+          <div className="mt-10 grid gap-px border-x border-b border-line bg-line md:grid-cols-2">
             {groups.map((g) => (
-              <div key={g.parish} className="bg-surface p-6">
+              <div key={g.parish} className="border-t-[3px] border-accent bg-surface p-6">
                 <h3 className="text-display-3">{g.parish}</h3>
                 <p className="u-label mt-2">
                   {g.towns.length} {g.towns.length === 1 ? "town" : "towns"}

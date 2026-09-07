@@ -39,14 +39,14 @@
  * turn off.
  *
  * It never takes a pointer event. The panels are decorative and gone in
- * under a second; a visitor who clicks where one used to be should hit
- * the page, not an invisible sheet.
+ * about 1.2 seconds; a visitor who clicks where one used to be should
+ * hit the page, not an invisible sheet.
  * ────────────────────────────────────────────────────────────────────
  */
 import { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
-import { ease } from "@/lib/motion";
+import { dur, ease, stagger } from "@/lib/motion";
 import { useStillness } from "@/lib/useScrollMotion";
 
 /**
@@ -75,19 +75,29 @@ export function PageTransition() {
   const pathname = usePathname();
   const still = useStillness();
   /**
-   * Counts navigations rather than tracking the path, so returning to a
-   * page you have already been on still plays. Starts at 0 and the
-   * first render is skipped, which is what keeps it off the initial
-   * load.
+   * `run` counts navigations, so returning to a page you have already
+   * been on still replays. `seen` is what keeps it off the first load.
+   *
+   * ── WHY THIS COMPARES PATHS AND DOES NOT COUNT MOUNTS ───────────────
+   * This was a `first` boolean ref: true on mount, set false, skip.
+   * That is defeated by React Strict Mode, which `next dev` turns on by
+   * default — it mounts, runs effects, cleans up and runs them again.
+   * The first pass spent the flag, the second pass saw it already false
+   * and fired, and the wipe played across the hero on every fresh load
+   * of the dev server.
+   *
+   * Holding the last path instead is immune to how many times the
+   * effect runs: on mount it equals the current path and nothing
+   * happens, however often that is re-checked. Only an actual change
+   * of route gets through.
+   * ────────────────────────────────────────────────────────────────────
    */
   const [run, setRun] = useState(0);
-  const first = useRef(true);
+  const seen = useRef(pathname);
 
   useEffect(() => {
-    if (first.current) {
-      first.current = false;
-      return;
-    }
+    if (seen.current === pathname) return;
+    seen.current = pathname;
     setRun((n) => n + 1);
   }, [pathname]);
 
@@ -116,7 +126,12 @@ export function PageTransition() {
           style={{ top: `${i * 20}%`, height: "20.2%", backgroundColor: shade }}
           initial={{ scaleX: 1 }}
           animate={{ scaleX: 0 }}
-          transition={{ duration: 0.5, delay: i * 0.07, ease: ease.out }}
+          // dur.base and stagger.loose rather than numbers of its own:
+          // 0.7s a panel, 120ms apart, so the whole wipe runs about
+          // 1.18s against the 0.78s it did before. Slow enough to watch
+          // the panels leave in sequence, still short of the point where
+          // somebody who just wanted the phone number starts waiting.
+          transition={{ duration: dur.base, delay: i * stagger.loose, ease: ease.out }}
         />
       ))}
     </div>

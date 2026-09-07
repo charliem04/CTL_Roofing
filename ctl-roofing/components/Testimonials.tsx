@@ -23,12 +23,12 @@ import { MoreLink } from "./MoreLink";
  * grounds that picking reviews by how well they flatter is the behaviour
  * the FTC’s 2024 rule on testimonials exists to stop.
  *
- * It now names two. The criterion is length, not sentiment: both run to
- * four rendered lines in their box, so the pair sits level instead of
+ * It now names four, in two rows of two. The criterion is length, not
+ * sentiment: each row is matched so its two boxes sit level instead of
  * one running to five lines while its neighbour runs to two. Matching
- * character counts is not the same as matching line counts — the first
- * pair tried here were eight characters apart and still came out four
- * lines against three, because where a line breaks depends on the words.
+ * character counts is not the same as matching line counts — an early
+ * pair here were eight characters apart and still came out four lines
+ * against three, because where a line breaks depends on the words.
  * That distinction is worth keeping straight, so: every entry in
  * facebookPicks is already a positive review, this choice suppresses no
  * criticism, and it changes nothing about the rating a visitor sees —
@@ -41,7 +41,17 @@ import { MoreLink } from "./MoreLink";
  *
  * `client.testimonials` stays supported for a client with neither.
  */
-const HOME_PICKS = ["Bryce Godwin", "Ji Daily"];
+const HOME_PICKS = [
+  // Row one, already level at four lines each.
+  "Bryce Godwin",
+  "Ji Daily",
+  // Row two. 181 and 180 characters — a character apart, which is as
+  // matched as this set gets — and they say different things from the
+  // pair above: how fast the crew was and how clean they left it, then
+  // what happened with the insurance company.
+  "Mitch Romero",
+  "Edward DeMahy",
+];
 export function Testimonials() {
   const legacy = client.testimonials;
   const facebook = getReviewsPage().facebookPicks;

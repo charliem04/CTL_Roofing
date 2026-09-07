@@ -20,6 +20,7 @@ import { StickyCTA } from "@/components/StickyCTA";
 import { CookieConsent } from "@/components/CookieConsent";
 import { Analytics } from "@/components/Analytics";
 import { InteractionTracking } from "@/components/InteractionTracking";
+import { CallCard } from "@/components/CallCard";
 import { SmoothScroll } from "@/components/SmoothScroll";
 import { PageTransition } from "@/components/PageTransition";
 
@@ -112,6 +113,8 @@ export default function RootLayout({
         <CookieConsent />
         <Analytics />
         <InteractionTracking />
+        {/* Renders nothing on a phone, where tel: already works. */}
+        <CallCard />
         <JsonLd />
       </body>
     </html>

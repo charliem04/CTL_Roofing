@@ -194,14 +194,25 @@ export function CallCard() {
       role="dialog"
       aria-modal="true"
       aria-label={`${line.label} — ${line.number}`}
-      className="fixed inset-0 z-50 flex items-center justify-center bg-surface-deep/80 p-[clamp(14px,4vw,48px)]"
+      className="on-deep fixed inset-0 z-50 flex items-center justify-center bg-surface-deep/85 p-[clamp(14px,4vw,48px)]"
       onClick={(e) => {
         if (e.target === e.currentTarget) close();
       }}
     >
-      <div className="w-full max-w-[420px] rounded border border-line bg-surface p-7">
+      {/*
+        The card sits on the deep ground the rest of the site's bands
+        use, and the gold does the pointing: a rule across the top, the
+        number itself, the action, the links. It is the storm shelf's
+        gold-on-navy pairing at card scale.
+
+        surface-deep-alt rather than surface-deep, because the scrim
+        behind it is surface-deep: the raised tone is what stops the
+        card dissolving into its own backdrop. That is the token's
+        stated job — "raised dark surface" (app/globals.css).
+      */}
+      <div className="w-full max-w-[420px] rounded border border-line-dark/20 border-t-4 border-t-accent bg-surface-deep-alt p-7">
         <div className="flex items-start justify-between gap-4">
-          <h2 className="font-mono text-[12px] font-medium uppercase tracking-[0.09em] text-ink-soft">
+          <h2 className="font-mono text-[12px] font-medium uppercase tracking-[0.09em] text-accent">
             {line.label}
           </h2>
           <button
@@ -209,7 +220,7 @@ export function CallCard() {
             type="button"
             onClick={close}
             aria-label="Close"
-            className="-mr-2 -mt-2 rounded border border-transparent px-2 py-1 text-ink-soft transition-colors duration-150 hover:border-line hover:text-ink active:bg-surface-alt"
+            className="-mr-2 -mt-2 rounded border border-transparent px-2 py-1 text-ink-invert-soft transition-colors duration-150 hover:border-line-dark/25 hover:text-ink-invert active:bg-ink-invert/10"
           >
             <svg
               viewBox="0 0 24 24"
@@ -226,15 +237,17 @@ export function CallCard() {
         </div>
 
         {/* The number is the reason the card exists, so it is the
-            largest thing in it — set in the mono tabular register every
-            other figure on the site uses, and selectable. */}
+            largest thing in it and the one thing wearing the action
+            colour — set in the mono tabular register every other figure
+            on the site uses, and selectable. Gold on this ground
+            measures about 10:1, so carrying meaning on it is safe. */}
         <p
           ref={numberRef}
-          className="mt-3 select-all font-mono text-[clamp(28px,3.4vw,34px)] font-semibold tabular-nums text-ink"
+          className="mt-3 select-all font-mono text-[clamp(28px,3.4vw,34px)] font-semibold tabular-nums text-accent"
         >
           {line.number}
         </p>
-        <p className="mt-1.5 text-[15px] text-ink-soft">{line.hours}</p>
+        <p className="mt-1.5 text-[15px] text-ink-invert-soft">{line.hours}</p>
 
         <div className="mt-6 flex flex-wrap gap-2.5">
           <button
@@ -249,7 +262,7 @@ export function CallCard() {
           <a
             ref={bookRef}
             href={client.bookingUrl || "/contact/"}
-            className="inline-flex items-center justify-center gap-2 rounded border border-line bg-transparent px-[26px] py-[15px] text-base font-semibold text-ink no-underline transition-colors duration-150 hover:border-brand hover:bg-brand/5 active:translate-y-px active:bg-brand/10"
+            className="inline-flex items-center justify-center gap-2 rounded border border-line-dark/20 bg-transparent px-[26px] py-[15px] text-base font-semibold text-ink-invert no-underline transition-colors duration-150 hover:border-accent hover:bg-accent/10 hover:text-accent active:translate-y-px active:bg-accent/20"
           >
             Book a time
           </a>
@@ -261,18 +274,18 @@ export function CallCard() {
             the desktop that does have a dialer after all. `data-dial`
             is what stops the listener above from catching its own link
             and reopening the card. */}
-        <div className="mt-6 border-t border-line pt-4 text-[15px] text-ink-soft">
+        <div className="mt-6 border-t border-line-dark/20 pt-4 text-[15px] text-ink-invert-soft">
           <p>
             <a
               href={`mailto:${client.email}`}
-              className="text-brand no-underline underline-offset-2 transition-colors duration-150 hover:underline active:text-brand-strong"
+              className="text-accent no-underline underline-offset-2 transition-colors duration-150 hover:underline active:text-accent-press"
             >
               {client.email}
             </a>
-            <span className="px-2 text-line">·</span>
+            <span className="px-2 text-line-dark/35">·</span>
             <a
               href="/contact/"
-              className="text-brand no-underline underline-offset-2 transition-colors duration-150 hover:underline active:text-brand-strong"
+              className="text-accent no-underline underline-offset-2 transition-colors duration-150 hover:underline active:text-accent-press"
             >
               Send us the details
             </a>
@@ -281,7 +294,7 @@ export function CallCard() {
             <a
               href={`tel:${line.href}`}
               data-dial="true"
-              className="text-[13px] text-ink-faint no-underline underline-offset-2 transition-colors duration-150 hover:text-ink-soft hover:underline active:text-brand"
+              className="text-[13px] text-ink-invert-soft/70 no-underline underline-offset-2 transition-colors duration-150 hover:text-ink-invert-soft hover:underline active:text-accent"
             >
               Dial from this computer
             </a>

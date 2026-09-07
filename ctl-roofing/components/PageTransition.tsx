@@ -1,14 +1,18 @@
 "use client";
 
 /**
- * The wipe between pages. Five deep panels lying across the screen,
- * sweeping off to the right one after the other, each with a gold seam
- * on its lower edge.
+ * The wipe between pages. Five gold panels lying across the screen,
+ * each a slightly different shade, sweeping off to the right one after
+ * the other.
  *
- * The panels are the point: horizontal bands with a bright seam between
- * them are a standing seam roof going on, which is the thing this
- * company sells and the same mark the seam logo makes. A generic fade
- * would have cost the same and said nothing.
+ * The panels are the point: horizontal bands laid one below the next
+ * are a metal roof going on, which is the thing this company sells. A
+ * generic fade would have cost the same and said nothing.
+ *
+ * They used to carry a rule between them, on the reasoning that a seam
+ * is what makes bands read as standing seam. In gold it did the
+ * opposite — five hard lines across the screen read as five stripes
+ * rather than one surface, and the shade step already separates them.
  *
  * ── WHY IT REVEALS RATHER THAN COVERS ───────────────────────────────
  * The reference this came from covers the screen on click, holds, then
@@ -45,8 +49,27 @@ import { motion } from "framer-motion";
 import { ease } from "@/lib/motion";
 import { useStillness } from "@/lib/useScrollMotion";
 
-/** Five, as in the reference. Enough to read as a sequence, few enough to stay quick. */
-const PANELS = [0, 1, 2, 3, 4];
+/**
+ * Five, as in the reference. Enough to read as a sequence, few enough
+ * to stay quick.
+ *
+ * Each panel is its own shade, lightest at the top and darkest at the
+ * bottom — light falling across a roof plane rather than five identical
+ * stripes. The ends are the palette's own accent-lift and accent-press;
+ * the three between them are steps along that ramp.
+ *
+ * They are written out here rather than added to globals.css as brand
+ * tokens. Two intermediate golds that exist only for one animation are
+ * not part of the brand, and putting them in the palette would invite
+ * their use somewhere they have never been contrast-checked.
+ */
+const PANELS = [
+  "rgb(248 220 124)", // accent-lift
+  "rgb(245 212 98)",
+  "rgb(241 204 71)", // accent
+  "rgb(226 186 51)",
+  "rgb(212 168 31)", // accent-press
+];
 
 export function PageTransition() {
   const pathname = usePathname();
@@ -79,13 +102,18 @@ export function PageTransition() {
       data-page-wipe
       className="pointer-events-none fixed inset-0 z-[60] overflow-hidden"
     >
-      {PANELS.map((i) => (
+      {PANELS.map((shade, i) => (
         <motion.span
           // The run number is in the key so every navigation remounts
           // the panels and replays them from covering.
           key={`${run}-${i}`}
-          className="absolute left-0 w-full origin-right border-b-[3px] border-accent bg-surface-deep"
-          style={{ top: `${i * 20}%`, height: "20.2%" }}
+          // No divider between panels. The shade step does the
+          // separating on its own, and a hard rule across every band
+          // read as five stripes rather than one surface. The 20.2%
+          // height against 20% spacing is deliberate overlap, so no
+          // sub-pixel seam of the page shows through between them.
+          className="absolute left-0 w-full origin-right"
+          style={{ top: `${i * 20}%`, height: "20.2%", backgroundColor: shade }}
           initial={{ scaleX: 1 }}
           animate={{ scaleX: 0 }}
           transition={{ duration: 0.5, delay: i * 0.07, ease: ease.out }}

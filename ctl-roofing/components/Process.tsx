@@ -9,6 +9,71 @@ import { PinnedSteps } from "./PinnedSteps";
 import { dur, ease } from "@/lib/motion";
 
 /**
+ * The four promise glyphs. Drawn here rather than pulled from an icon
+ * set because there are four of them and the site ships no icon
+ * dependency; SocialIcons makes the same call. One 24 box, one stroke
+ * weight, currentColor throughout, so the chip below can recolour a
+ * glyph by changing text colour alone.
+ *
+ * Decorative: the promise title says the same thing in words two lines
+ * under the chip, so the chip is aria-hidden and these carry no title.
+ */
+const promiseIcons = {
+  // A shield, checked — the warranty.
+  warranty: (
+    <>
+      <path d="M12 3.2 19 6v5.3c0 4.3-2.8 7.5-7 8.7-4.2-1.2-7-4.4-7-8.7V6z" />
+      <path d="M8.9 12.1l2.3 2.3 4-4.4" />
+    </>
+  ),
+  // A storefront under its awning — the Lafayette showroom.
+  showroom: (
+    <>
+      <path d="M3.2 8.3 4.9 4.1h14.2l1.7 4.2z" />
+      <path d="M5.1 8.3v11.6h13.8V8.3" />
+      <path d="M9.7 19.9v-5.5h4.6v5.5" />
+    </>
+  ),
+  // A filed document — the paperwork somebody else is keeping.
+  paperwork: (
+    <>
+      <path d="M6.2 3.4h7L18 8.2v12.4H6.2z" />
+      <path d="M13.2 3.4v4.8H18" />
+      <path d="M9.3 12.6h5.6M9.3 16.1h5.6" />
+    </>
+  ),
+  // A note, paid over time — financing.
+  financing: (
+    <>
+      <path d="M3.2 6.4h17.6v11.2H3.2z" />
+      <circle cx="12" cy="12" r="2.6" />
+      <path d="M6.4 9.6v4.8M17.6 9.6v4.8" />
+    </>
+  ),
+} as const;
+
+function PromiseIcon({ name }: { name?: string }) {
+  const glyph = promiseIcons[name as keyof typeof promiseIcons];
+  if (!glyph) return null;
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      width="24"
+      height="24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.6"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+      focusable="false"
+    >
+      {glyph}
+    </svg>
+  );
+}
+
+/**
  * Four boxed steps under ruled tops — the first rule gold so the eye
  * starts where the job starts — then the four promises that hold for
  * every job, set as one boxed register rather than four floating cards.
@@ -205,18 +270,58 @@ export function Process() {
 
       <div className="section">
         <Reveal delay={0.1}>
-          {/* gap-px over a line-colored ground: the cells are separated
-              by one hairline in every layout, with no doubled rules */}
-          <dl className="mt-10 grid gap-px rounded border border-line bg-line sm:grid-cols-2 lg:grid-cols-4">
-            {process.promises.map((p) => (
-              <div key={p.title} className="border-t-[3px] border-brand bg-surface p-6">
-                <dt className="mb-2.5 font-display text-[19px] font-bold uppercase text-ink">
-                  {p.title}
-                </dt>
-                <dd className="m-0 text-[15px]">{p.body}</dd>
-              </div>
-            ))}
-          </dl>
+          {/*
+            ── WHY THIS ROW IS DARK ─────────────────────────────────────
+            These four are not a fifth, sixth, seventh and eighth step.
+            They are what holds regardless of which step you are on, and
+            the version before this said so with four white boxes on a
+            white band, hairlined, which on a scroll-through read as
+            nothing at all, the same ground continuing past the steps.
+
+            So the promises take the deep ground the site already uses
+            for the hero, the metal band and the footer, and take it as
+            one contained panel rather than a full band: a scroller sees
+            a solid object arrive in the white, which is exactly what
+            the row is. The gold top rule is the CallCard device, and
+            gold is doing the same job here it does everywhere else,
+            marking the thing you are meant to act on the strength of.
+            ─────────────────────────────────────────────────────────────
+          */}
+          <div className="on-deep mt-14 overflow-hidden rounded border-t-[3px] border-accent bg-surface-deep">
+            <p className="u-label m-0 border-b border-line-dark/15 px-7 py-5">
+              {process.promisesLabel}
+            </p>
+            {/* gap-px over a line-colored ground: the cells are separated
+                by one hairline in every layout, with no doubled rules */}
+            <dl className="grid gap-px bg-line-dark/15 sm:grid-cols-2 lg:grid-cols-4">
+              {process.promises.map((p) => (
+                <div
+                  key={p.title}
+                  className="group bg-surface-deep p-7 transition-colors duration-200 ease-brand hover:bg-surface-deep-alt active:bg-surface-deep-alt"
+                >
+                  {/* The chip is the colour. At rest it is a gold glyph
+                      in a gold-ruled square, ruled and not filled:
+                      gold at 10% over this navy goes olive rather than
+                      gold, and a solid gold square that is not a button
+                      reads as one. Under the pointer it does fill and
+                      the glyph goes to ink, which is a colour change
+                      and not a lift, same as every other hover on the
+                      site. A finger gets the same answer on touch, one
+                      shade down, rather than nothing. */}
+                  <span
+                    aria-hidden
+                    className="mb-6 flex h-12 w-12 items-center justify-center rounded border border-accent/55 text-accent transition-colors duration-200 ease-brand group-hover:bg-accent group-hover:text-ink group-active:bg-accent-press group-active:text-ink"
+                  >
+                    <PromiseIcon name={p.icon} />
+                  </span>
+                  <dt className="mb-2.5 font-display text-[19px] font-bold uppercase text-ink-invert">
+                    {p.title}
+                  </dt>
+                  <dd className="m-0 text-[15px] text-ink-invert-soft">{p.body}</dd>
+                </div>
+              ))}
+            </dl>
+          </div>
         </Reveal>
 
         <Reveal delay={0.14}>

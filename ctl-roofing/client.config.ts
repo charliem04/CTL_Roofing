@@ -162,20 +162,31 @@ export const client = {
         body: "We walk the finished job with you and don’t close it out until you’re satisfied. Office staff keeps every payment, permit and document on file.",
       },
     ],
+    /** Sits above the promises panel as a mono label, not a heading. */
+    promisesLabel: "Included on every job",
+    /**
+     * `icon` picks one of the four glyphs drawn in components/Process.tsx.
+     * A promise with no icon, or an icon name that file does not know,
+     * renders without one rather than breaking the row.
+     */
     promises: [
       {
+        icon: "warranty",
         title: "5-year labor warranty",
         body: "On top of the manufacturer warranty that already comes with your materials.",
       },
       {
+        icon: "showroom",
         title: "A real showroom",
         body: "Come see shingles, metal, siding and doors in person before you choose.",
       },
       {
+        icon: "paperwork",
         title: "Paperwork handled",
         body: "Payments, invoices, estimates and permits tracked and logged by our office staff.",
       },
       {
+        icon: "financing",
         title: "Financing available",
         body: "Options that let you get the project done now and pay over time.",
       },

@@ -72,6 +72,14 @@ const config: Config = {
         // One radius for the whole site: 2px. Paperwork, not cards.
         DEFAULT: "2px",
       },
+      transitionTimingFunction: {
+        // The same curve framer-motion uses for every entrance on the
+        // site — ease.out in lib/motion.ts. A CSS hover transition and a
+        // scroll reveal that land on the same card should decelerate the
+        // same way, and the only way to guarantee that is to write the
+        // number once. Change it here and in lib/motion.ts together.
+        brand: "cubic-bezier(0.21, 0.65, 0.36, 1)",
+      },
       maxWidth: {
         content: "75rem",
       },

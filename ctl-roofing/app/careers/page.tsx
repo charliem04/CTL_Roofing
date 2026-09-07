@@ -7,6 +7,7 @@ import { SectionHead } from "@/components/SectionHead";
 import { Reveal } from "@/components/Reveal";
 import { CtaBand } from "@/components/CtaBand";
 import { CareersForm } from "@/components/CareersForm";
+import { RoleCards } from "@/components/RoleCards";
 import { Pending } from "@/components/Pending";
 import { MoreLink } from "@/components/MoreLink";
 import { btn } from "@/components/Button";
@@ -72,6 +73,7 @@ export default function CareersPage() {
         path={page.meta.path}
         heading={page.heading}
         lede={page.lede}
+        photo={page.photo}
         actions={
           <>
             <a href="#apply" className={btn("gold")}>
@@ -85,7 +87,11 @@ export default function CareersPage() {
       />
 
       {/* ── Openings, or the honest absence of them ────────────────── */}
-      <section id="roles" className="band bg-surface">
+      {/* Grey ground so the fourteen cards read as objects on it rather
+          than as cells cut out of it. The band below flips to white for
+          the same reason in reverse: the form panel is bg-surface-alt,
+          so on a grey band it was a panel you could not see. */}
+      <section id="roles" className="band bg-surface-alt">
         <div className="section">
           {roles.length === 0 ? (
             <div className="max-w-[58ch]">
@@ -99,53 +105,14 @@ export default function CareersPage() {
                 heading={page.postingsAreLive ? "What’s open" : page.rolesHeading}
                 lede={page.postingsAreLive ? undefined : page.rolesLede}
               />
-              <ul className="mt-10 grid list-none gap-px border border-line bg-line p-0 md:grid-cols-2">
-                {roles.map((r, i) => (
-                  <Reveal as="li" key={r.slug} delay={cascade(i)} className="bg-surface p-7">
-                    {/* Omitted rather than guessed — see the note on
-                        `basis` in content/careers.ts. */}
-                    {(r.basis || r.location) && (
-                      <p className="u-label">
-                        {r.basis}
-                        {r.basis && r.location && " · "}
-                        {r.location}
-                      </p>
-                    )}
-                    <h3 className="mt-2 font-display text-[23px] font-bold uppercase text-ink">
-                      {r.title}
-                    </h3>
-                    <p className="mt-3 max-w-[46ch] text-[15px]">{r.summary}</p>
-
-                    {r.does.length > 0 && (
-                      <>
-                        <p className="u-label mt-6">The work</p>
-                        <ul className="ticks mt-2.5 list-none text-[15px]">
-                          {r.does.map((d) => (
-                            <li key={d}>{d}</li>
-                          ))}
-                        </ul>
-                      </>
-                    )}
-                    {r.needs.length > 0 && (
-                      <>
-                        <p className="u-label mt-5">What you need</p>
-                        <ul className="ticks mt-2.5 list-none text-[15px]">
-                          {r.needs.map((n) => (
-                            <li key={n}>{n}</li>
-                          ))}
-                        </ul>
-                      </>
-                    )}
-                  </Reveal>
-                ))}
-              </ul>
+              <RoleCards roles={roles} />
             </>
           )}
         </div>
       </section>
 
       {/* ── The application ────────────────────────────────────────── */}
-      <section id="apply" className="band bg-surface-alt">
+      <section id="apply" className="band bg-surface">
         <div className="section">
           <SectionHead
             heading="Send it over"
@@ -163,21 +130,28 @@ export default function CareersPage() {
       </section>
 
       {/* ── What happens next ──────────────────────────────────────── */}
-      <section className="band bg-surface">
+      {/* Three filled navy blocks rather than three ruled paragraphs.
+          A dark band would have done the same job, but this sits one
+          band above the navy CtaBand and the navy footer, and stacking
+          three dark grounds in a row makes the foot of the page a
+          single mass. Cards keep the colour and keep the ground light,
+          and the numerals get to be gold on navy — a pairing that
+          measures fine, where gold on white never can. */}
+      <section className="band bg-surface-alt">
         <div className="section">
           <SectionHead heading={page.afterHeading} />
-          <ol className="mt-10 grid list-none gap-6 p-0 md:grid-cols-3">
+          <ol className="mt-10 grid list-none gap-5 p-0 md:grid-cols-3">
             {page.after.map((step, i) => (
               <Reveal
                 as="li"
                 key={step}
                 delay={cascade(i)}
-                className="border-t-[3px] border-accent pt-5"
+                className="on-deep rounded bg-surface-deep p-7"
               >
-                <span className="mb-2.5 block font-mono text-[13px] tracking-[0.08em] text-brand-soft">
+                <span className="mb-3 block font-display text-[38px] font-extrabold leading-none text-accent">
                   {String(i + 1).padStart(2, "0")}
                 </span>
-                <p className="text-[15px]">{step}</p>
+                <p className="text-[15px] text-ink-invert-soft">{step}</p>
               </Reveal>
             ))}
           </ol>

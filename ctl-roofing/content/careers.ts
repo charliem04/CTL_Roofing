@@ -1,4 +1,4 @@
-import type { CtaCopy, PageMeta } from "./types";
+import type { CtaCopy, PageMeta, Photo } from "./types";
 
 /**
  * ════════════════════════════════════════════════════════════════════
@@ -82,6 +82,20 @@ export const careersPage = {
 
   heading: "Work here",
   lede: "We hire local and we keep people. If you can do the work and show up when you said you would, we would rather hear from you than not.",
+
+  /**
+   * Careers was the one interior page opening on bare navy while every
+   * other one carried a photograph. A crew on a ridge is the honest
+   * image for it: it is CTL's own work, it shows the job rather than the
+   * finished building, and the people in it are the people this page is
+   * trying to hire more of.
+   */
+  photo: {
+    src: "/ctl/gallery/metal-crew-ridge.jpg",
+    alt: "Crew setting metal roof panels on the ridge of a brick building under construction",
+    width: 1100,
+    height: 508,
+  } satisfies Photo,
 
   /**
    * ⚠️ Empty until Robert says what CTL hires for and whether they are

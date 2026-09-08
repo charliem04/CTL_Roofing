@@ -41,11 +41,17 @@ export const financing = {
   heading: "Financing",
   lede: "A roof rarely fails at a convenient moment. Financing exists so the timing of the repair is decided by the roof, not by what happens to be in the account this month.",
 
+  /**
+   * A finished shingle roof on an ordinary brick ranch — the thing the
+   * money buys, on the kind of house whose owner is reading this page.
+   * The shop-stock coils that were here before were inventory: true of
+   * CTL, but nothing to do with paying for a roof over time.
+   */
   photo: {
-    src: "/ctl/shop-metal-stock.jpg",
-    alt: "Coils of metal roofing stock on pallets in the CTL shop",
-    width: 1000,
-    height: 1333,
+    src: "/ctl/gallery/shingle-brick-ranch.jpg",
+    alt: "Brick ranch home with a completed shingle roof and mature landscaping out front",
+    width: 1100,
+    height: 825,
   } satisfies Photo,
 
   /** Lender name. EnerBank USA is Regions Bank's home improvement arm. */

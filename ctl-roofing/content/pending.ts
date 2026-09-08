@@ -48,7 +48,7 @@ export const pendingContent = {
   },
   commercialProject: {
     needs:
-      "A photo from a commercial job — a low-slope membrane, a coating in progress or a finished commercial metal roof — plus one or two reference properties if the owners are happy to be named.",
+      "More photos from commercial jobs. The Milton Water System metal roof now opens the page, but it is one building and one system — a low-slope membrane and a coating in progress are still missing, and those are two of the three things the page sells. Also: whether Milton Water System and one or two other owners are happy to be named, which is what turns a photo into a reference.",
     from: "Robert",
   },
   videoDetail: {

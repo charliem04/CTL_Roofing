@@ -354,11 +354,22 @@ export const services: ServicePage[] = [
     lede: "Low-slope and metal roofing for property managers and business owners — including the coating route, when the roof does not need replacing yet.",
     summary:
       "Modified bitumen, TPO and PVC, metal systems, silicone coatings, repairs and maintenance.",
+    /**
+     * The one commercial job photograph CTL has supplied: a municipal
+     * water system building, still in its ZIP sheathing, with the crew
+     * setting standing seam over it. It replaces the shop-stock coils
+     * that stood in here before — a shelf of material is not a
+     * commercial job, and this page is read by people deciding whether
+     * CTL has done work like theirs.
+     *
+     * The owner is not named in the alt text. Naming a client is their
+     * call, not ours; see `commercialProject` in content/pending.ts.
+     */
     photo: {
-      src: "/ctl/shop-metal-stock.jpg",
-      alt: "Coils of metal roofing stock on pallets in the CTL shop, beside the roll former",
-      width: 1000,
-      height: 1333,
+      src: "/ctl/gallery/metal-crew-ridge.jpg",
+      alt: "Crew setting standing seam metal panels over a commercial building still in its ZIP sheathing",
+      width: 1100,
+      height: 508,
     },
     sections: [
       {

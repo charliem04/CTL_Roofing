@@ -103,7 +103,7 @@ export default function ReviewsPage() {
               {capturedMonth(page.facebookStat.capturedOn)} ·{" "}
               <a
                 href={client.socials.facebookReviews}
-                className="text-ink-faint underline decoration-line underline-offset-4 transition-colors duration-150 hover:text-brand active:text-brand-strong"
+                className="text-accent underline decoration-accent/50 underline-offset-4 transition-colors duration-150 hover:text-accent-press hover:decoration-accent-press active:text-accent-press"
                 rel="noopener"
                 target="_blank"
               >

@@ -120,12 +120,15 @@ export default function ReviewsPage() {
           <SectionHead heading="Read them at the source" />
           <ul className="mt-10 grid list-none gap-px border border-line bg-line p-0 md:grid-cols-2">
             {page.platforms.map((p) => (
-              <li key={p.name} className="border-t-[3px] border-accent bg-surface p-7">
+              <li
+                key={p.name}
+                className="flex flex-col border-t-[3px] border-accent bg-surface p-7"
+              >
                 <h3 className="font-display text-[21px] font-bold uppercase text-ink">
                   {p.name}
                 </h3>
                 <p className="mt-2.5 max-w-[42ch] text-[15px]">{p.body}</p>
-                <p className="mt-6">
+                <p className="mt-auto pt-6">
                   <a
                     href={links[p.hrefKey]}
                     className={btn("gold", "sm")}

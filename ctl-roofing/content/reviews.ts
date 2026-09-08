@@ -135,6 +135,18 @@ export const reviewsPage = {
       name: "Michael Corry",
       source: "Facebook",
     },
+    {
+      quote:
+          "They were great! They did a great job on my roof and I highly recommend them. The office and employees were so nice and helpful. They made sure I had everything I needed for my insurance company.",
+      name: "Leslie Maheu Salminen",
+      source: "Facebook",
+    },
+    {
+      quote:
+          "Great experience. Very professional group. I would highly recommend them.",
+      name: "Michael Corry",
+      source: "Facebook",
+    },
   ] satisfies Review[],
 
   /** Where to go to read or leave one. */

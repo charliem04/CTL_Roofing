@@ -23,6 +23,11 @@ export function Footer() {
     // footer — once automatically and once by hand. This column is the
     // curated one, so this is the copy that goes.
     { href: "/financing/", label: "Financing" },
+    // Insurance is a child of Financing in the registry, and only the
+    // Services column is generated from liveChildren() — so it would
+    // otherwise be the next route to go live and quietly miss the
+    // footer, exactly as the note below warns.
+    { href: "/insurance/", label: "Insurance claims" },
     { href: "/#about", label: "About us" },
     { href: "/gallery/", label: "Our work" },
     // Careers is hand-added here because this column is a curated list

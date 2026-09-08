@@ -2,30 +2,31 @@ import type { CtaCopy, Faq, PageMeta, Photo } from "./types";
 
 /**
  * ════════════════════════════════════════════════════════════════════
- *  STORM DAMAGE & INSURANCE CLAIMS
+ *  STORM DAMAGE PREVENTION & RESTORATION
  *
- *  ⚠️ LEGAL CHECK BEFORE LAUNCH — in Louisiana, negotiating or settling
- *  a claim on a homeowner’s behalf is public adjusting and requires a
- *  licence (La. R.S. 22:1691 et seq.). This page is deliberately
- *  written so CTL documents, meets the adjuster on site, and scopes the
- *  repair, while the homeowner files and decides. Robert should confirm
- *  the language matches how they actually operate before this ships.
+ *  The claim half of this page moved to content/insurance.ts. The two
+ *  jobs run on different clocks — the tarp is tonight, the claim is the
+ *  next six weeks — and were fighting each other for the top of one
+ *  page. This one is about the building: what to do before the season,
+ *  what to do in the first 48 hours, and how the repair actually runs.
+ *  It links to /insurance/ at the point where the paperwork starts
+ *  rather than restating it.
  *
- *  Everything here about policies is general and points the reader back
- *  at their own declarations page. No coverage promise is made.
+ *  Nothing here promises what a policy will pay. Coverage language
+ *  lives on the insurance page, where the licence caveat lives with it.
  * ════════════════════════════════════════════════════════════════════
  */
 
 export const storm = {
   meta: {
-    title: "Storm Damage & Insurance Claims — First Steps",
+    title: "Storm Damage Prevention & Restoration",
     description:
-      "What to do in the first 48 hours after storm damage in Acadiana, what an adjuster looks for on a roof, and what CTL does during an insurance claim.",
+      "How to get a roof ready before hurricane season in Acadiana, what to do in the first 48 hours after storm damage, and how CTL runs the restoration from tarp to final walkthrough.",
     path: "/storm-damage/",
   } satisfies PageMeta,
 
-  heading: "Storm damage & insurance claims",
-  lede: "After weather, the roof is only half the problem. This is how the other half — the claim — actually runs, and where we fit in it.",
+  heading: "Storm damage prevention & restoration",
+  lede: "Two jobs, in this order: keep the next storm from finding a way in, and get the water stopped and the house rebuilt when one does.",
 
   photo: {
     src: "/ctl/storm-tarped-home.jpg",
@@ -40,19 +41,58 @@ export const storm = {
    * card is described here rather than in the services array, which
    * generates those child pages.
    *
-   * Items are the short form of `role.does` below; nothing is claimed
-   * here that is not claimed there.
+   * Items are the short form of `restoration` below; nothing is claimed
+   * here that is not claimed there. The label is shorter than the page
+   * heading because it sits in a card and a nav dropdown, both of which
+   * are narrower than a headline.
    */
   card: {
-    label: "Storm Damage & Insurance",
+    label: "Storm Damage & Restoration",
     columns: [
       {
         items: [
           "Emergency tarping and leak stop",
+          "Water removal and property dry-out",
           "Full-scope damage assessment, with photos",
-          "We meet your adjuster at the property",
-          "Written repair scope and estimate",
+          "Repair and rebuild, roof through interior",
         ],
+      },
+    ],
+  },
+
+  /**
+   * Prevention. First on the page because it is the only part a reader
+   * can act on when nothing has happened yet, and because the last item
+   * — photographing an undamaged roof — is worth more to a future claim
+   * than anything they can do after the fact.
+   */
+  prevention: {
+    heading: "Before the season",
+    lede: "Most of what fails in a hurricane was already loose in June. None of this takes a contractor except the first one.",
+    items: [
+      {
+        title: "Have the roof looked at while it is dry",
+        body: "Lifted or unsealed shingles, tired flashing at the walls and chimney, soft decking, ridge vents that were never fastened properly. These are cheap to fix in fair weather and are exactly where wind starts.",
+      },
+      {
+        title: "Clear the water’s way off the roof",
+        body: "Blocked gutters and valleys back water up under the shingles in a heavy band of rain, which is a leak with no wind involved at all. Downspouts should discharge away from the slab, not beside it.",
+      },
+      {
+        title: "Cut back what can reach the house",
+        body: "Overhanging limbs are the most common source of puncture damage in this part of the state, and dead limbs come down in far less wind than people expect.",
+      },
+      {
+        title: "Tie down or bring in what can fly",
+        body: "Patio furniture, trampolines, loose sheet metal, unsecured panels on a shed. Debris damage is usually your own yard arriving at your own roof.",
+      },
+      {
+        title: "Photograph the roof now, while it is intact",
+        body: "A dated set of photographs of an undamaged roof is the single best answer to “this was pre-existing”, and it costs you twenty minutes on a clear day.",
+      },
+      {
+        title: "Know the two numbers before you need them",
+        body: "Your named-storm deductible and the storm line. Neither is a thing to be looking up at 2am with water coming through a ceiling.",
       },
     ],
   },
@@ -68,7 +108,7 @@ export const storm = {
       },
       {
         title: "Document before you clean up",
-        body: "Photos and video of everything, inside and out, before anything is moved, swept or thrown away. Wide shots that establish the property, then close-ups. This is the single highest-value hour you will spend on the claim, and it cannot be recreated later.",
+        body: "Photos and video of everything, inside and out, before anything is moved, swept or thrown away. Wide shots that establish the property, then close-ups. This is the single highest-value hour you will spend, and it cannot be recreated later.",
       },
       {
         title: "Stop the water",
@@ -76,127 +116,77 @@ export const storm = {
       },
       {
         title: "Open the claim yourself",
-        body: "Call your insurer or use their app, and write down the claim number, the adjuster’s name and the date of loss. You open it, not a contractor — and be careful about signing anything that assigns your claim or your benefits to someone else.",
+        body: "Call your insurer or use their app, and write down the claim number, the adjuster’s name and the date of loss. You open it, not a contractor. The insurance page has the rest of that sequence.",
       },
     ],
   },
 
-  /** What the adjuster is actually looking at when they get on the roof. */
-  adjuster: {
-    heading: "What an adjuster looks for",
-    lede: "Knowing this is not gaming the system. It is the difference between a walkthrough that finds the damage and one that misses it.",
-    items: [
+  /**
+   * The restoration sequence. This is the half of the old page that was
+   * only ever implied — the role list said CTL does the work, and then
+   * the page went back to talking about adjusters. Somebody with a
+   * tarped roof wants to know what the next six weeks look like.
+   */
+  restoration: {
+    heading: "How the restoration runs",
+    lede: "From the call to the last walkthrough. Steps two and three usually overlap; nothing else in this list does.",
+    steps: [
       {
-        label: "Date of loss",
-        value:
-          "Whether the damage is consistent with a specific storm on a specific date, rather than accumulated weather.",
+        title: "Make safe and stop the water",
+        body: "Tarping and leak stop, around the clock. This is not the repair — it is what keeps the repair from getting bigger overnight, and it is what most policies expect of you.",
       },
       {
-        label: "Wind evidence",
-        value:
-          "Creased, lifted or missing shingles, unsealed tabs, and damage patterns that follow the wind direction across the slopes.",
+        title: "Dry the building out",
+        body: "Standing water out, saturated insulation and unsalvageable material removed, and the assembly dried before anything is closed back up. Wet framing shut behind new sheetrock is a mould problem you will meet again next year.",
       },
       {
-        label: "Hail evidence",
-        value:
-          "Bruising and granule loss on the shingle mat, and matching strikes on soft metals: vents, gutters, flashing, HVAC fins.",
+        title: "Full-scope assessment, photographed",
+        body: "Roof, envelope and interior, with the photographs that support it. You get a written scope of what we found and what it takes to put right — the document every other conversation about this house will run on.",
       },
       {
-        label: "Interior damage",
-        value:
-          "Staining, wet insulation and anything that traces back to the same opening in the roof.",
+        title: "Scope agreed, work scheduled",
+        body: "Once the scope and the money are settled — insurer, financing, or straight out of pocket — the job goes on the calendar with a written estimate against it. After a wide-area storm this is the step where the honest answer is a queue position rather than a date.",
       },
       {
-        label: "Pre-existing condition",
-        value:
-          "Wear, age and prior repairs, which is what gets a claim reduced or denied. Photographic history helps you here.",
+        title: "Repair and rebuild",
+        body: "Roof system first, because nothing inside is worth doing twice. Then the envelope and the interior: decking, framing and carpentry, sheetrock, paint, and whatever else the water reached.",
       },
       {
-        label: "Code upgrades",
-        value:
-          "What current code requires that the old roof did not have. Whether that is payable depends on your policy’s ordinance-or-law coverage.",
+        title: "Walkthrough, and the file stays on file",
+        body: "We walk it with you at the end, and the photographs, scope and invoices stay on record afterwards — which is what you need if the claim reopens or the house sells.",
       },
     ],
-  },
-
-  /** The role boundary, stated plainly. */
-  role: {
-    heading: "What we do — and what we don’t",
-    does: {
-      label: "CTL does",
-      items: [
-        "Emergency tarping and leak stop, around the clock",
-        "A full-scope assessment with photographs of what we found",
-        "Meet your adjuster at the property and walk the roof with them",
-        "Provide a written repair scope and estimate",
-        "Do the work, and keep the documents on file afterwards",
-      ],
-    },
-    doesNot: {
-      label: "CTL does not",
-      items: [
-        "File the claim for you; you open it with your insurer",
-        "Negotiate or settle the claim on your behalf; in Louisiana that is public adjusting and requires a license",
-        "Ask you to sign over your claim or your insurance benefits",
-        "Promise what your policy will pay before your insurer says so",
-      ],
-    },
-  },
-
-  /** Coverage generalities — always deferring to the policy itself. */
-  coverage: {
-    heading: "Typically covered, typically not",
-    lede: "Your declarations page decides, not this website. But the pattern is consistent enough to be worth knowing before you call.",
-    covered: {
-      label: "Usually covered",
-      items: [
-        "Sudden damage from a named storm, straight-line wind or hail",
-        "Falling limbs and wind-driven debris",
-        "Interior damage that resulted from the opening in the roof",
-        "Emergency mitigation, like tarping, done to stop the loss growing",
-      ],
-    },
-    notCovered: {
-      label: "Usually not",
-      items: [
-        "Wear, age and deferred maintenance",
-        "Damage that predates the storm you are claiming for",
-        "Work done before the adjuster saw it, with no documentation",
-        "Cosmetic-only marks, where the policy excludes them",
-      ],
-    },
-    note: "Louisiana policies commonly carry a separate named-storm or hurricane deductible calculated as a percentage of your dwelling coverage rather than a flat amount — which can be a much larger number than the deductible you are used to. Check your declarations page before you assume a claim is worth filing.",
   },
 
   faqs: [
     {
-      q: "Should I file a claim at all?",
-      a: "Not always. If the repair is likely to cost less than your deductible — and in Louisiana a named-storm deductible is often a percentage of dwelling coverage, not a flat figure — filing may cost you more than it returns. A free assessment gives you a written scope to compare against your deductible before you decide.",
+      q: "How fast can you get out after a storm?",
+      a: "Emergency tarping and leak stop is around the clock on the storm line, and active water gets triaged first. After a wide-area event everyone in Acadiana is calling at once — we would rather give you a real place in the queue than a date we cannot keep.",
     },
     {
-      q: "Can you tell me what my insurance will pay?",
-      a: "No, and be wary of anyone who does. We can document the damage thoroughly and give you a written scope. What that is worth under your policy is between you, your policy and your insurer.",
+      q: "Will a tarp hold until the repair?",
+      a: "A properly installed tarp buys time, not a season. It is there to stop the loss growing while the scope, the claim or the materials get sorted out.",
     },
     {
-      q: "The adjuster is coming — should someone from CTL be there?",
-      a: "Usually yes, and it costs you nothing. Two people looking at the same roof at the same time resolves far more than two reports written a week apart.",
+      q: "Should I tarp before the adjuster has seen it?",
+      a: "Yes. Photograph everything thoroughly first, then stop the water — most policies expect you to prevent the loss growing, and the photographs are what preserve the evidence you covered up.",
     },
     {
-      q: "My claim was denied or underpaid. Now what?",
-      a: "You can ask your insurer to re-inspect, and you can engage a licensed public adjuster or an attorney to act for you — those are the people licensed to negotiate a claim in Louisiana. We can supply our documentation and scope to whoever you engage.",
+      q: "Do you handle the inside as well as the roof?",
+      a: "Yes. Water removal and dry-out, then decking, framing, sheetrock, paint and carpentry. The roof is the cause; the ceiling is usually what the homeowner actually has to live with.",
     },
     {
-      q: "How long do I have?",
-      a: "Policies carry notice deadlines and Louisiana sets prescriptive periods for property-damage claims, and both can be shorter than people expect. Do not sit on it. Your policy and your insurer are the authority on your specific deadline.",
+      q: "Is there anything worth doing before hurricane season?",
+      a: "An assessment while the roof is dry, gutters and valleys cleared, limbs cut back, loose items secured, and a dated set of photographs of the roof while it is undamaged. The last one costs nothing and is the best answer there is to a “pre-existing damage” argument later.",
     },
     {
-      q: "Do I have to use the contractor my insurer suggests?",
-      a: "No. You choose who does the work on your property.",
+      q: "Is the assessment free after a storm?",
+      a: "Yes. The free roof and property assessment gives you photographs and a written scope, whether or not the work goes through a claim and whether or not you use us for the repair.",
     },
   ] satisfies Faq[],
 
   cta: {
     heading: "Get the damage documented",
-    body: "The free roof and property assessment gives you photographs and a written scope — the two things every claim conversation runs on. If water is coming in now, call the storm line instead.",
+    body: "The free roof and property assessment gives you photographs and a written scope — the two things every conversation about this house will run on, whether that is with an insurer, a lender or a buyer. If water is coming in now, call the storm line instead.",
   } satisfies CtaCopy,
 };

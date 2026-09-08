@@ -13,6 +13,7 @@
  */
 import { services, servicesHub } from "@/content/services";
 import { storm } from "@/content/storm";
+import { insurance } from "@/content/insurance";
 import { financing } from "@/content/financing";
 import { contactPage } from "@/content/contact";
 import { towns } from "@/content/towns";
@@ -52,6 +53,10 @@ export function getServiceSlugs(): string[] {
 
 export function getStorm() {
   return storm;
+}
+
+export function getInsurance() {
+  return insurance;
 }
 
 export function getContactPage() {

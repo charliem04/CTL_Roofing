@@ -19,7 +19,7 @@ export function StormStrip() {
           </h2>
           <p className="mt-1 max-w-[70ch] font-semibold text-ink">{client.storm.body}</p>
           <p className="mt-2">
-            <MoreLink href="/storm-damage/">How storm claims actually work</MoreLink>
+            <MoreLink href="/storm-damage/">What to do after storm damage</MoreLink>
           </p>
         </div>
         <a

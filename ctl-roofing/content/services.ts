@@ -107,7 +107,7 @@ export const services: ServicePage[] = [
       },
       {
         q: "My roof was damaged in a storm. Is that different?",
-        a: "The work is the same; the paperwork is not. Storm damage usually runs through an insurance claim, which has its own sequence and its own deadlines. Start on the storm damage and insurance claims page.",
+        a: "The work is the same; the paperwork is not. The storm damage prevention and restoration page covers the roof side — tarping, dry-out and the rebuild — and the insurance page covers the claim, which has its own sequence and its own deadlines.",
       },
     ],
     cta: {
@@ -176,7 +176,7 @@ export const services: ServicePage[] = [
     faqs: [
       {
         q: "Do you work with insurance on fire and flood claims?",
-        a: "We document the damage, provide a written scope with photos, and do the repair. Filing and negotiating the claim stays with you and your insurer — see the storm damage and insurance claims page for how that sequence runs.",
+        a: "We document the damage, provide a written scope with photos, and do the repair. Filing and negotiating the claim stays with you and your insurer — see the insurance page for how that sequence runs.",
       },
       {
         q: "Can you do a bathroom or kitchen without a whole restoration?",

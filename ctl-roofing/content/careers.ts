@@ -142,9 +142,9 @@ export const careersPage = {
    * shop, which is somebody's actual job.
    * Estimator: step two of the process band is "scope and estimate",
    * and the openBody on this very page already names the role.
-   * Insurance claims specialist: the storm-damage page is built around
-   * claims, and a Facebook review thanks a named person for "fighting
-   * to get our roof replaced".
+   * Insurance claims specialist: the site has a whole page on claims,
+   * and a Facebook review thanks a named person for "fighting to get
+   * our roof replaced".
    * Consumer financing specialist: CTL's own financing page offers to
    * put applicants in touch with one by name.
    *

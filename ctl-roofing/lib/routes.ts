@@ -65,7 +65,7 @@ export const nav: RouteNode[] = [
        */
       {
         href: "/storm-damage/",
-        label: "Storm damage & insurance",
+        label: "Storm damage & restoration",
         live: true,
         priority: 0.9,
       },
@@ -84,7 +84,29 @@ export const nav: RouteNode[] = [
       { href: "/video/", label: "Video", live: true, priority: 0.6 },
     ],
   },
-  { href: "/financing/", label: "Financing", live: true, priority: 0.7 },
+  {
+    href: "/financing/",
+    label: "Financing",
+    live: true,
+    priority: 0.7,
+    /*
+     * Insurance is here rather than under Services, where the storm
+     * page sits. Both were one page until the claim half outgrew it,
+     * and the reason they part company in the nav is the question each
+     * one answers: /storm-damage/ is "what do you do about my roof",
+     * which is a services question; /insurance/ is "who pays for it",
+     * which is the same question Financing answers by another route.
+     * Somebody weighing a deductible against a payment plan is one
+     * menu away from both.
+     *
+     * This gives Financing its first child, so the item stops being a
+     * plain link and grows a dropdown — that is the registry working as
+     * designed, not a side effect to undo.
+     */
+    children: [
+      { href: "/insurance/", label: "Insurance", live: true, priority: 0.8 },
+    ],
+  },
   {
     // Meet the team is the hub here, the same way the gallery is for
     // Our Work: the parent is the page itself, so it is never listed

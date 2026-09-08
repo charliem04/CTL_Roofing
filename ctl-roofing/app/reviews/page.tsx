@@ -128,7 +128,7 @@ export default function ReviewsPage() {
                 <p className="mt-6">
                   <a
                     href={links[p.hrefKey]}
-                    className={btn("line", "sm")}
+                    className={btn("gold", "sm")}
                     rel="noopener"
                     target="_blank"
                   >

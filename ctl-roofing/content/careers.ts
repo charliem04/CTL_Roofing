@@ -85,14 +85,20 @@ export const careersPage = {
 
   /**
    * Careers was the one interior page opening on bare navy while every
-   * other one carried a photograph. A crew on a ridge is the honest
-   * image for it: it is CTL's own work, it shows the job rather than the
+   * other one carried a photograph. A crew mid-job is the honest image
+   * for it: it is CTL's own work, it shows the job rather than the
    * finished building, and the people in it are the people this page is
    * trying to hire more of.
+   *
+   * It was the metal ridge shot until that photograph became the
+   * commercial service hero. Two pages opening on the same frame reads
+   * as a site short of pictures, and of the two the commercial page is
+   * the one that needs that particular building; this one only needs a
+   * crew working, which the shingle slope gives it.
    */
   photo: {
-    src: "/ctl/gallery/metal-crew-ridge.jpg",
-    alt: "Crew setting metal roof panels on the ridge of a brick building under construction",
+    src: "/ctl/gallery/shingle-crew-install.jpg",
+    alt: "Crew laying shingles across the front slope of a single-story brick home",
     width: 1100,
     height: 508,
   } satisfies Photo,

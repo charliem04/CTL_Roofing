@@ -64,11 +64,12 @@ export default function ServiceDetailPage({ params }: Params) {
       {/* Roofing carries the metal band the home page points at. */}
       {service.slug === "roofing" && <MetalSpec />}
 
-      {/* Commercial has no commercial-job photography yet, and a
-          residential photo standing in for one would be a lie. The page
-          reads fine without a gallery strip, so it simply doesn’t have
-          one — this is only a reminder to us while the gap is open, and
-          the whole section is compiled out of the built site. */}
+      {/* Commercial now opens on a real commercial job, but one metal
+          roof is not a gallery strip — and a residential photo standing
+          in for the membrane and coating work would be a lie. The page
+          reads fine without a strip, so it still doesn’t have one; this
+          is only a reminder to us while the gap is open, and the whole
+          section is compiled out of the built site. */}
       {service.slug === "commercial" &&
         process.env.NODE_ENV === "development" && (
           <section className="band bg-surface">

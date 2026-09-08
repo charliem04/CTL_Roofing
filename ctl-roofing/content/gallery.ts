@@ -73,7 +73,7 @@ export const gallery: GalleryShot[] = [
   },
   {
     src: "/ctl/gallery/metal-crew-ridge.jpg",
-    alt: "Crew setting metal roof panels on the ridge of a brick building under construction",
+    alt: "Crew setting metal roof panels on a commercial building still in its ZIP sheathing",
     caption: "Setting the ridge",
     width: 1100,
     height: 508,

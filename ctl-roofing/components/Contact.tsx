@@ -323,8 +323,8 @@ export function Contact() {
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={client.contactPhoto.src}
-            width={820}
-            height={379}
+            width={client.contactPhoto.width}
+            height={client.contactPhoto.height}
             alt={client.contactPhoto.alt}
             loading="lazy"
             className="mt-10 w-full rounded"

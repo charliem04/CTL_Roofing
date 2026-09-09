@@ -37,10 +37,73 @@ const RADAR =
 const ALERTS = "https://api.weather.gov/alerts/active";
 
 /** How far back the loop reaches. The service holds about two hours. */
-export const LOOP_MINUTES = 50;
+export const LOOP_MINUTES = 60;
 
-/** Frames in that window. Six is a legible sweep without a megabyte. */
-export const FRAME_COUNT = 6;
+/**
+ * Frames in that window, and the reason there are this many.
+ *
+ * MRMS publishes a new mosaic roughly every two minutes. Sampling that
+ * at 13 frames across an hour is a scan every five minutes, which is
+ * dense enough that a squall line moves rather than teleports — six
+ * frames across the same hour is a slideshow, and a slideshow reads as
+ * a stock graphic instead of a live instrument. This is the number that
+ * makes the loop look like the radar loop on the news, because it is
+ * sampled at about the same rate.
+ *
+ * The cost is bytes, and they are real: against a sky full of storms a
+ * desktop frame is about 145kB. That is why the loading is progressive
+ * (the newest frame is shown the moment it decodes) and why the count
+ * drops on a small screen or a connection that says it cannot afford
+ * them — see `frameBudget`, which is where the arithmetic is written
+ * down.
+ */
+export const FRAME_COUNT = 13;
+
+/** The phone loop. Still the same hour, sampled every seven minutes. */
+export const FRAME_COUNT_PHONE = 9;
+
+/** The short loop, for a metered or slow connection. */
+export const FRAME_COUNT_LIGHT = 6;
+
+/**
+ * How many frames to ask for, given the box and the connection.
+ *
+ * ── WHY THIS IS NOT ONE NUMBER ──────────────────────────────────────
+ *
+ * The frames are sized to the box they are drawn in, so a phone's are
+ * about a third the bytes of a desktop's — but a phone is also a 2×
+ * or 3× display, which claws most of that back, and it is the device
+ * most likely to be on cellular in a parish that has just lost power.
+ * Measured against a sky full of storms, thirteen desktop frames is
+ * ~1.9MB and thirteen phone frames is ~1.2MB, which is not a saving
+ * worth having on the connection that can least afford it.
+ *
+ * So the phone keeps the full hour and gives up density: nine frames
+ * is a scan every seven minutes, which still moves. The desktop, where
+ * the map is twice the size and the connection is usually not metered,
+ * gets the five-minute sampling that makes it read like a television
+ * loop rather than a slideshow.
+ *
+ * The connection check on top of that is an opt-out, not a gate. The
+ * Network Information API is Chromium-only and absent on iOS, so the
+ * default has to be the good loop; only a browser that actively says
+ * "save data" or "this is 2g" is taken at its word.
+ */
+export function frameBudget(boxWidth: number): number {
+  if (typeof navigator !== "undefined") {
+    const conn = (navigator as Navigator & {
+      connection?: { saveData?: boolean; effectiveType?: string };
+    }).connection;
+    if (conn?.saveData) return FRAME_COUNT_LIGHT;
+    if (conn?.effectiveType === "slow-2g" || conn?.effectiveType === "2g") {
+      return FRAME_COUNT_LIGHT;
+    }
+  }
+  // 700 CSS px is the point below which the map is a phone-sized map:
+  // roughly Tailwind's `md`, and the width at which the town labels
+  // other than Lafayette are hidden for the same reason.
+  return boxWidth > 0 && boxWidth < 700 ? FRAME_COUNT_PHONE : FRAME_COUNT;
+}
 
 export type RadarFrame = {
   /** Valid time of the frame, ms since epoch. */
@@ -96,7 +159,8 @@ export function frameUrl(time: number, width: number): string {
  */
 export async function fetchRadarFrames(
   signal: AbortSignal,
-  width: number
+  width: number,
+  count: number = FRAME_COUNT
 ): Promise<RadarFrame[]> {
   const res = await fetch(`${RADAR}?f=json`, { signal });
   if (!res.ok) throw new Error(`radar service ${res.status}`);
@@ -110,9 +174,9 @@ export async function fetchRadarFrames(
   const span = Math.min(LOOP_MINUTES * 60_000, end - start);
   if (!(span > 0)) throw new Error("radar service window is empty");
 
-  const step = span / (FRAME_COUNT - 1);
-  return Array.from({ length: FRAME_COUNT }, (_, i) => {
-    const time = Math.round(end - step * (FRAME_COUNT - 1 - i));
+  const step = span / (count - 1);
+  return Array.from({ length: count }, (_, i) => {
+    const time = Math.round(end - step * (count - 1 - i));
     return { time, url: frameUrl(time, width) };
   });
 }

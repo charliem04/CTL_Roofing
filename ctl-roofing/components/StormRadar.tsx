@@ -6,6 +6,7 @@ import { radarLand, radarTowns, radarView, radarZones } from "@/lib/radarBasemap
 import {
   LOOP_MINUTES,
   centralTime,
+  frameBudget,
   fetchAlerts,
   fetchRadarFrames,
   isWarning,
@@ -24,8 +25,8 @@ import { btn } from "./Button";
  *    1. Our own map. Parish outlines drawn from committed path data
  *       (lib/radarBasemap.ts) in the site's palette, with the six
  *       parishes CTL works in lifted out of the surrounding land.
- *    2. The last fifty minutes of NWS base reflectivity, as
- *       transparent PNGs from a federal image service, animated.
+ *    2. The last hour of NWS base reflectivity, sampled every five
+ *       minutes, as transparent PNGs from a federal image service.
  *    3. Town markers and labels, in HTML rather than SVG text so a
  *       label is the same number of real pixels on a phone as on a
  *       desktop instead of scaling down into a smear.
@@ -41,11 +42,13 @@ import { btn } from "./Button";
  *  Acadiana, held still, answering one question. A pinch-zoom map on a
  *  marketing page mostly succeeds at trapping the scroll.
  *
- *  It does not load anything until it is scrolled to. Six radar frames
- *  is most of a megabyte on a desktop, and the visitor this page was
- *  built for is on a phone in a parish that may have just lost power.
- *  Nothing is requested until the frame is nearly on screen, and the
- *  request is sized to the box it will be drawn in.
+ *  It does not load anything until it is scrolled to, and it draws the
+ *  newest scan before the rest of the hour has arrived. An hour of
+ *  radar is thirteen PNGs on a desktop and nine on a phone, because the
+ *  visitor this page was built for is on cellular in a parish that may
+ *  have just lost power: nothing is requested until the frame is nearly
+ *  on screen, the request is sized to the box it will be drawn in, and
+ *  a browser reporting a metered or 2g connection gets the short loop.
  *
  *  It does not claim to be a warning system. The copy says so, the
  *  attribution line says where the data comes from, and every failure
@@ -157,8 +160,33 @@ export function StormRadar() {
     let live = true;
     setStatus((s) => (s === "ready" ? s : "loading"));
 
-    fetchRadarFrames(ac.signal, requestWidth(boxRef.current))
+    const box = boxRef.current;
+    fetchRadarFrames(
+      ac.signal,
+      requestWidth(box),
+      frameBudget(box?.clientWidth ?? 0)
+    )
       .then(async (next) => {
+        /* ── Newest first, then the rest ──────────────────────────
+           An hour of radar is thirteen images, and waiting for all
+           thirteen before drawing any of them means the map sits empty
+           for as long as the slowest one takes. The visitor's actual
+           question — is it raining on my house right now — is answered
+           by the last frame alone, so that one is fetched, shown and
+           left holding while the history fills in behind it. The loop
+           starts when the set is complete; nothing on screen jumps when
+           it does, because the frame being displayed is still the
+           newest one. */
+        const newest = next[next.length - 1];
+        if (await preload(newest.url)) {
+          if (!live || ac.signal.aborted) return;
+          setFrames([newest]);
+          setIndex(0);
+          setStatus("ready");
+        }
+
+        // The newest is already in the cache; this re-resolves it for
+        // free and keeps the indexing honest.
         const ok = await Promise.all(next.map((f) => preload(f.url)));
         const usable = next.filter((_, i) => ok[i]);
         if (!live || ac.signal.aborted) return;
@@ -223,7 +251,12 @@ export function StormRadar() {
     // it. Without the pause the eye never settles on now.
     const id = window.setTimeout(
       () => setIndex((i) => (i >= last ? 0 : i + 1)),
-      index >= last ? 1700 : 430
+      // 220ms a frame: thirteen scans read as an hour of weather moving
+      // in about three seconds, which is the pace a television loop
+      // runs at. The long hold on the newest frame is what stops it
+      // being a flicker — the loop shows the trend, the hold is the
+      // answer, and the eye needs a moment on the answer.
+      index >= last ? 1900 : 220
     );
     return () => window.clearTimeout(id);
   }, [playing, index, frames]);
@@ -319,28 +352,37 @@ export function StormRadar() {
         </p>
 
         {frames.length > 1 && (
-          <div
-            role="group"
-            aria-label="Radar frames"
-            className="flex items-end gap-1.5"
-          >
-            {frames.map((frame, i) => (
-              <button
-                key={frame.time}
-                type="button"
-                aria-label={`Radar at ${centralTime(frame.time)} Central`}
-                aria-current={i === index ? "true" : undefined}
-                onClick={() => {
-                  setPlaying(false);
-                  setIndex(i);
-                }}
-                className={`w-3.5 rounded-none border-0 transition-colors duration-150 ease-out active:translate-y-px ${
-                  i === index
-                    ? "h-5 bg-accent"
+          /* Captioned the way the legend beside it is. A row of ticks
+             says "there is a sequence"; it does not say how much time
+             the sequence covers, and an hour is the fact that makes the
+             loop mean anything. */
+          <div className="flex items-center gap-3">
+            <div
+              role="group"
+              aria-label="Radar frames"
+              className="flex items-end gap-1"
+            >
+              {frames.map((frame, i) => (
+                <button
+                  key={frame.time}
+                  type="button"
+                  aria-label={`Radar at ${centralTime(frame.time)} Central`}
+                  aria-current={i === index ? "true" : undefined}
+                  onClick={() => {
+                    setPlaying(false);
+                    setIndex(i);
+                  }}
+                  className={`w-2.5 rounded-none border-0 transition-colors duration-150 ease-out active:translate-y-px ${
+                    i === index
+                      ? "h-5 bg-accent"
                     : "h-3 bg-ink-invert-soft/35 hover:bg-ink-invert-soft/70"
-                }`}
-              />
-            ))}
+                  }`}
+                />
+              ))}
+            </div>
+            <p className="m-0 font-mono text-[11px] uppercase tracking-[0.09em] text-ink-invert-soft">
+              Last hour
+            </p>
           </div>
         )}
 

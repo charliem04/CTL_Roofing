@@ -92,7 +92,11 @@ export function MetalSpec({ moreHref }: { moreHref?: string }) {
           </dl>
 
           <div className="mt-10 flex flex-wrap items-center gap-x-8 gap-y-4">
-            <a href={client.bookingUrl || "/contact/"} className={btn("gold")}>
+            {/* Deliberately not client.bookingUrl: this band is the top of
+                the metal conversation, not the bottom of it. Sending it to
+                the contact form keeps the visitor on the site rather than
+                handing them off to a third-party scheduler mid-read. */}
+            <a href="/contact/" className={btn("gold")}>
               {metal.cta}
             </a>
             {moreHref && (

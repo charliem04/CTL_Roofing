@@ -276,7 +276,7 @@ export function StormRadar() {
          frozen rather than as paused. 780ms is about three frame-times
          — long enough to land on, short enough that the loop is
          obviously still running. */
-      index >= last ? 780 : 220,
+      index >= last ? 780 : 220
     );
     return () => window.clearTimeout(id);
   }, [playing, index, frames]);

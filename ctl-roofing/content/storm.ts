@@ -7,10 +7,10 @@ import type { CtaCopy, Faq, PageMeta, Photo } from "./types";
  *  The claim half of this page moved to content/insurance.ts. The two
  *  jobs run on different clocks — the tarp is tonight, the claim is the
  *  next six weeks — and were fighting each other for the top of one
- *  page. This one is about the building: what to do before the season,
- *  what to do in the first 48 hours, and how the repair actually runs.
- *  It links to /insurance/ at the point where the paperwork starts
- *  rather than restating it.
+ *  page. This one is about the building: what the weather is doing
+ *  right now, what to do before the season, what to do in the first 48
+ *  hours, and how the repair actually runs. It links to /insurance/ at
+ *  the point where the paperwork starts rather than restating it.
  *
  *  Nothing here promises what a policy will pay. Coverage language
  *  lives on the insurance page, where the licence caveat lives with it.
@@ -28,14 +28,35 @@ export const storm = {
      * for. The URL stays /storm-damage/: that is the phrase people
      * search and the path every existing link points at.
      */
-    title: "Storm Prevention",
+    title: "Storm prevention",
     description:
       "How to get a roof ready before hurricane season in Acadiana, what to do in the first 48 hours if a storm gets through it, and how CTL runs the repair from tarp to final walkthrough.",
     path: "/storm-damage/",
   } satisfies PageMeta,
 
-  heading: "Storm prevention",
+  heading: "Storm Damage & Prevention",
   lede: "Two jobs, in this order: keep the next storm from finding a way in, and get the water stopped and the house rebuilt when one does.",
+
+  /**
+   * The live radar band, directly under the hero.
+   *
+   * It sits above prevention, which is the only thing on this page it
+   * has any business outranking, because it is the only part of the
+   * page whose answer is different at 9pm than it was at noon. Somebody
+   * arriving here in July is reading about next month; somebody
+   * arriving with the sky going green is asking one question, and this
+   * answers it without making them scroll past six paragraphs of
+   * advice to find out we also do tarping.
+   *
+   * The copy is careful about what it is: a picture of where the rain
+   * is. Not an alerting service, and it must never be written as one.
+   * A roofer's website is not where anybody's tornado warning should
+   * come from, and saying so plainly is what keeps the feature honest.
+   */
+  radar: {
+    heading: "What the sky is doing right now",
+    lede: "National Weather Service radar over the six parishes we work in, with any watch or warning currently out over them. It answers the one question worth asking at 9pm — is that coming here — and the answer decides whether the rest of this page is about next month or about tonight.",
+  },
 
   photo: {
     src: "/ctl/storm-tarped-home.jpg",

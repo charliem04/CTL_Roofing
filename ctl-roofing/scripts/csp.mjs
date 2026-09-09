@@ -67,6 +67,17 @@ const LINK_ONLY = new Set([
   "https://www.instagram.com",
   "https://g.page",
   "https://www.ctlpro.com",
+  // The lender's prequalification portal. Every use of it in
+  // content/financing.ts is the href of an <a> the visitor clicks —
+  // nothing on this site ever fetches it, and it must stay that way:
+  // the application belongs on EnerBank's origin, not on ours.
+  "https://prequalification.enerbank.com",
+  // Where the radar sends people when it cannot draw itself, and where
+  // the attribution line under it points. Both are hrefs only — the
+  // radar imagery itself comes from mapservices.weather.noaa.gov, which
+  // is in the policy above.
+  "https://radar.weather.gov",
+  "https://www.weather.gov",
   // Framework strings baked into React/Next dev warnings.
   "https://nextjs.org",
   "https://react.dev",
@@ -107,6 +118,13 @@ export function buildCsp(env = process.env) {
     "https://api.web3forms.com", // contact form
     "https://places.googleapis.com", // live Google reviews
     "https://plausible.io", // analytics events, after consent
+    // The storm radar, both halves of it. mapservices is read twice —
+    // once as JSON for the service's moving time window, then as PNGs
+    // in img-src below; api.weather.gov is the active watches and
+    // warnings over the six served parish zones. Both are National
+    // Weather Service, keyless, and CORS-open. See lib/nwsRadar.ts.
+    "https://mapservices.weather.noaa.gov",
+    "https://api.weather.gov",
     ...new Set(extra),
   ];
 
@@ -117,8 +135,10 @@ export function buildCsp(env = process.env) {
     // React writes style attributes; there is no nonce for those either.
     "style-src 'self' 'unsafe-inline'",
     // data: for the inlined SVG icons; googleusercontent for the
-    // reviewer avatars Google's API returns.
-    "img-src 'self' data: https://*.googleusercontent.com",
+    // reviewer avatars Google's API returns; mapservices for the radar
+    // frames on /storm-damage/, which are transparent PNGs drawn over
+    // our own map rather than a third-party basemap.
+    "img-src 'self' data: https://*.googleusercontent.com https://mapservices.weather.noaa.gov",
     "font-src 'self'", // Fontsource bundles them, nothing external
     "media-src 'self'", // the job walkthrough mp4
     `connect-src ${connect.join(" ")}`,

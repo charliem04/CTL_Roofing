@@ -2,11 +2,17 @@
 
 import { useEffect, useRef, useState } from "react";
 import { client } from "@/client.config";
-import { radarLand, radarTowns, radarView, radarZones } from "@/lib/radarBasemap";
+import {
+  radarLand,
+  radarTowns,
+  radarView,
+  radarZones,
+} from "@/lib/radarBasemap";
 import {
   LOOP_MINUTES,
   centralTime,
   frameBudget,
+  latestFrame,
   fetchAlerts,
   fetchRadarFrames,
   isWarning,
@@ -98,7 +104,10 @@ function parishes(names: string[]): string {
  */
 function requestWidth(el: HTMLElement | null): number {
   const css = el?.clientWidth || 900;
-  const dpr = typeof window === "undefined" ? 1 : Math.min(window.devicePixelRatio || 1, 2);
+  const dpr =
+    typeof window === "undefined"
+      ? 1
+      : Math.min(window.devicePixelRatio || 1, 2);
   const want = Math.round((css * dpr) / 40) * 40;
   return Math.min(1400, Math.max(560, want));
 }
@@ -147,7 +156,7 @@ export function StormRadar() {
           io.disconnect();
         }
       },
-      { rootMargin: "400px" }
+      { rootMargin: "400px" },
     );
     io.observe(el);
     return () => io.disconnect();
@@ -164,7 +173,7 @@ export function StormRadar() {
     fetchRadarFrames(
       ac.signal,
       requestWidth(box),
-      frameBudget(box?.clientWidth ?? 0)
+      frameBudget(box?.clientWidth ?? 0),
     )
       .then(async (next) => {
         /* ── Newest first, then the rest ──────────────────────────
@@ -188,7 +197,17 @@ export function StormRadar() {
         // The newest is already in the cache; this re-resolves it for
         // free and keeps the indexing honest.
         const ok = await Promise.all(next.map((f) => preload(f.url)));
-        const usable = next.filter((_, i) => ok[i]);
+        let usable = next.filter((_, i) => ok[i]);
+
+        if (!usable.length && !next[0]?.untimed) {
+          /* Every timestamped frame failed, which is what a stale time
+             index looks like from here — the times were readable but
+             nothing was rendered for them. One more try, with the
+             request that lets the service choose its own raster. */
+          const still = latestFrame(requestWidth(box));
+          if (await preload(still.url)) usable = [still];
+        }
+
         if (!live || ac.signal.aborted) return;
         if (!usable.length) throw new Error("no frame decoded");
         setFrames(usable);
@@ -199,7 +218,8 @@ export function StormRadar() {
         // A refresh that fails leaves the frames already on screen
         // alone. They are an hour old at worst, and an hour-old radar
         // beats an error message where a map was.
-        if (live && !ac.signal.aborted) setStatus((s) => (s === "ready" ? s : "failed"));
+        if (live && !ac.signal.aborted)
+          setStatus((s) => (s === "ready" ? s : "failed"));
       });
 
     return () => {
@@ -227,12 +247,9 @@ export function StormRadar() {
   /* ── Refresh, while the tab is actually being looked at ────────── */
   useEffect(() => {
     if (!armed) return;
-    const id = window.setInterval(
-      () => {
-        if (document.visibilityState === "visible") setCycle((c) => c + 1);
-      },
-      6 * 60_000
-    );
+    const id = window.setInterval(() => {
+      if (document.visibilityState === "visible") setCycle((c) => c + 1);
+    }, 6 * 60_000);
     return () => window.clearInterval(id);
   }, [armed]);
 
@@ -246,17 +263,20 @@ export function StormRadar() {
   useEffect(() => {
     if (!playing || frames.length < 2) return;
     const last = frames.length - 1;
-    // A longer hold on the newest frame: the loop exists to show which
-    // way the weather is moving, and the answer is read off the end of
-    // it. Without the pause the eye never settles on now.
     const id = window.setTimeout(
       () => setIndex((i) => (i >= last ? 0 : i + 1)),
-      // 220ms a frame: thirteen scans read as an hour of weather moving
-      // in about three seconds, which is the pace a television loop
-      // runs at. The long hold on the newest frame is what stops it
-      // being a flicker — the loop shows the trend, the hold is the
-      // answer, and the eye needs a moment on the answer.
-      index >= last ? 1900 : 220
+      /* 220ms a frame: thirteen scans read as an hour of weather moving
+         in about three seconds, the pace a television loop runs at.
+
+         The newest frame is held longer, because the loop shows the
+         trend and the last frame is the answer, and an answer that
+         flicks past at 220ms is not an answer. But the hold is a beat,
+         not a stop: at the 1900ms this was first written with, the map
+         spent more than 40% of every cycle motionless and read as
+         frozen rather than as paused. 780ms is about three frame-times
+         — long enough to land on, short enough that the loop is
+         obviously still running. */
+      index >= last ? 780 : 220,
     );
     return () => window.clearTimeout(id);
   }, [playing, index, frames]);
@@ -280,7 +300,7 @@ export function StormRadar() {
         {frames.map((frame, i) => (
           // eslint-disable-next-line @next/next/no-img-element
           <img
-            key={frame.time}
+            key={frame.url}
             src={frame.url}
             alt=""
             aria-hidden
@@ -320,96 +340,139 @@ export function StormRadar() {
         )}
       </div>
 
-      {/* ── Time, transport, legend ─────────────────────────────── */}
-      <div className="mt-4 flex flex-wrap items-center gap-x-6 gap-y-4">
-        <button
-          type="button"
-          onClick={() => setPlaying((p) => !p)}
-          disabled={frames.length < 2}
-          className={`${btn("lineDeep", "sm")} disabled:pointer-events-none disabled:opacity-40`}
-        >
-          {/* Reads Play whenever nothing is looping, including when the
+      {/* ── Time, transport, legend ───────────────────────────────
+          Two clusters, pushed to the two edges of the map above them:
+          the controls on the left, the two reference captions on the
+          right. Below `sm` they stack and both read left, because at
+          that width justifying them apart would put six characters in
+          one corner and six in the other with a hole in between. */}
+      <div className="mt-4 flex flex-col gap-y-4 sm:flex-row sm:items-center sm:justify-between sm:gap-x-8">
+        <div className="flex flex-wrap items-center gap-x-6 gap-y-4">
+          <button
+            type="button"
+            onClick={() => setPlaying((p) => !p)}
+            disabled={frames.length < 2}
+            className={`${btn("lineDeep", "sm")} disabled:pointer-events-none disabled:opacity-40`}
+          >
+            {/* Reads Play whenever nothing is looping, including when the
               feed is down — a disabled Pause describes a state the page
               is not in. */}
-          <span aria-hidden className="font-mono text-[13px] leading-none">
-            {playing && frames.length > 1 ? "❚❚" : "▶"}
-          </span>
-          {playing && frames.length > 1 ? "Pause" : "Play"}
-          <span className="sr-only"> the radar loop</span>
-        </button>
+            <span aria-hidden className="font-mono text-[13px] leading-none">
+              {playing && frames.length > 1 ? "❚❚" : "▶"}
+            </span>
+            {playing && frames.length > 1 ? "Pause" : "Play"}
+            <span className="sr-only"> the radar loop</span>
+          </button>
 
-        <p className="m-0 font-mono text-[13px] tracking-[0.04em] text-ink-invert">
-          {current ? (
-            <>
-              {centralTime(current.time)} CT
-              <span className="text-ink-invert-soft">
-                {current === newest ? " · latest scan" : " · replay"}
-              </span>
-            </>
-          ) : (
-            <span className="text-ink-invert-soft">—</span>
-          )}
-        </p>
+          {/* A fixed measure, because this text changes on every frame
+            and everything to the right of it would otherwise shuffle
+            sideways once a second. "12:44 PM CT · replay" is the widest
+            it gets in normal running, at 20 characters; the font is
+            monospaced, so the measure is counted in ch. The fallback
+            line is longer and simply overruns it, which is fine —
+            there are no ticks beside it in that state.
 
-        {frames.length > 1 && (
-          /* Captioned the way the legend beside it is. A row of ticks
+            23ch and not 20, because the row carries 0.04em of tracking
+            and a ch unit knows nothing about it: twenty characters
+            actually measure twenty ch plus 0.8em. At 21ch the ticks
+            still crept two pixels every loop. */}
+          <p className="m-0 inline-block min-w-[23ch] font-mono text-[13px] tracking-[0.04em] text-ink-invert">
+            {!current ? (
+              <span className="text-ink-invert-soft">—</span>
+            ) : current.untimed ? (
+              /* The service picked this frame, so we know it is current
+               and we do not know what time it is valid for. Printing a
+               clock time here would be inventing one. */
+              <>
+                Latest scan
+                {frames.length === 1 && (
+                  <span className="text-ink-invert-soft">
+                    {" "}
+                    · history unavailable
+                  </span>
+                )}
+              </>
+            ) : (
+              <>
+                {centralTime(current.time)} CT
+                <span className="text-ink-invert-soft">
+                  {current === newest ? " · latest scan" : " · replay"}
+                </span>
+              </>
+            )}
+          </p>
+
+          {frames.length > 1 && (
+            /* Captioned the way the legend beside it is. A row of ticks
              says "there is a sequence"; it does not say how much time
              the sequence covers, and an hour is the fact that makes the
              loop mean anything. */
+            <div className="flex items-center gap-3">
+              <div
+                role="group"
+                aria-label="Radar frames"
+                className="flex items-end gap-1"
+              >
+                {frames.map((frame, i) => (
+                  <button
+                    key={frame.url}
+                    type="button"
+                    aria-label={
+                      frame.untimed
+                        ? "Latest radar scan"
+                        : `Radar at ${centralTime(frame.time)} Central`
+                    }
+                    aria-current={i === index ? "true" : undefined}
+                    onClick={() => {
+                      setPlaying(false);
+                      setIndex(i);
+                    }}
+                    className={`w-2.5 rounded-none border-0 transition-colors duration-150 ease-out active:translate-y-px ${
+                      i === index
+                        ? "h-5 bg-accent"
+                        : "h-3 bg-ink-invert-soft/35 hover:bg-ink-invert-soft/70"
+                    }`}
+                  />
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+
+        <div
+          className={`flex flex-wrap items-center gap-x-6 gap-y-3 sm:justify-end ${
+            frames.length ? "" : "hidden"
+          }`}
+        >
+          {frames.length > 1 && (
+            <p className="m-0 font-mono text-[11px] uppercase tracking-[0.09em] text-ink-invert-soft">
+              Last hour
+            </p>
+          )}
           <div className="flex items-center gap-3">
-            <div
-              role="group"
-              aria-label="Radar frames"
-              className="flex items-end gap-1"
-            >
-              {frames.map((frame, i) => (
-                <button
-                  key={frame.time}
-                  type="button"
-                  aria-label={`Radar at ${centralTime(frame.time)} Central`}
-                  aria-current={i === index ? "true" : undefined}
-                  onClick={() => {
-                    setPlaying(false);
-                    setIndex(i);
-                  }}
-                  className={`w-2.5 rounded-none border-0 transition-colors duration-150 ease-out active:translate-y-px ${
-                    i === index
-                      ? "h-5 bg-accent"
-                    : "h-3 bg-ink-invert-soft/35 hover:bg-ink-invert-soft/70"
-                  }`}
+            <div aria-hidden className="flex">
+              {LEGEND.map((step) => (
+                <i
+                  key={step.color}
+                  title={step.label}
+                  className="block h-2.5 w-4"
+                  style={{ background: step.color }}
                 />
               ))}
             </div>
             <p className="m-0 font-mono text-[11px] uppercase tracking-[0.09em] text-ink-invert-soft">
-              Last hour
+              Light → severe
             </p>
           </div>
-        )}
-
-        <div className={`flex items-center gap-3 ${frames.length ? "" : "hidden"}`}>
-          <div aria-hidden className="flex">
-            {LEGEND.map((step) => (
-              <i
-                key={step.color}
-                title={step.label}
-                className="block h-2.5 w-4"
-                style={{ background: step.color }}
-              />
-            ))}
-          </div>
-          <p className="m-0 font-mono text-[11px] uppercase tracking-[0.09em] text-ink-invert-soft">
-            Light → severe
-          </p>
         </div>
       </div>
 
       {/* ── Where it comes from, and what it is not ─────────────── */}
       <p className="mt-6 max-w-[74ch] text-[15px] leading-[1.6] text-ink-invert-soft">
         Base reflectivity from the National Weather Service, refreshed every few
-        minutes, over{" "}
-        {parishes(radarZones.map((z) => z.parish))}. Parish outlines from the US Census Bureau.
-        This is a picture of where the rain is, not a warning service — for
-        warnings, use{" "}
+        minutes, over {parishes(radarZones.map((z) => z.parish))}. Parish
+        outlines from the US Census Bureau. This is a picture of where the rain
+        is, not a warning service — for warnings, use{" "}
         <a
           href={NWS_OFFICE}
           rel="noopener"
@@ -492,7 +555,9 @@ function AlertPanel({ alerts }: { alerts: NwsAlert[] | null }) {
             <p className={`m-0 text-base ${severe ? "text-ink" : ""}`}>
               {parishes(alert.parishes)}
               {ends !== undefined && (
-                <span className={severe ? "text-ink/70" : "text-ink-invert-soft"}>
+                <span
+                  className={severe ? "text-ink/70" : "text-ink-invert-soft"}
+                >
                   {" · until "}
                   {centralTime(ends)} CT
                 </span>
@@ -529,7 +594,9 @@ function Basemap() {
       .filter(filter)
       // vector-effect is not an inherited property, so it goes on every
       // path rather than once on the group around them.
-      .map((l, i) => <path key={i} d={l.d} vectorEffect="non-scaling-stroke" />);
+      .map((l, i) => (
+        <path key={i} d={l.d} vectorEffect="non-scaling-stroke" />
+      ));
 
   return (
     <svg

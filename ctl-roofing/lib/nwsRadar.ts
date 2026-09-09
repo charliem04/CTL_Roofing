@@ -106,9 +106,15 @@ export function frameBudget(boxWidth: number): number {
 }
 
 export type RadarFrame = {
-  /** Valid time of the frame, ms since epoch. */
+  /** Valid time of the frame, ms since epoch. Meaningless when `untimed`. */
   time: number;
   url: string;
+  /**
+   * True for the one frame requested with no time parameter at all, so
+   * the service picks its own most recent raster. We do not know what
+   * time it is valid for, so the page must not print one.
+   */
+  untimed?: true;
 };
 
 export type NwsAlert = {
@@ -131,7 +137,7 @@ export type NwsAlert = {
  * visitor on a phone during a hurricane downloads six full-size PNGs
  * over whatever signal is left.
  */
-export function frameUrl(time: number, width: number): string {
+export function frameUrl(time: number | null, width: number): string {
   const height = Math.round((width * radarView.height) / radarView.width);
   const params = new URLSearchParams({
     bbox: radarView.bbox3857,
@@ -142,43 +148,127 @@ export function frameUrl(time: number, width: number): string {
     // what lets our own coastline read underneath the rain.
     format: "png32",
     transparent: "true",
-    time: String(time),
     f: "image",
   });
+  // Omitting `time` entirely makes the service return its own most
+  // recent raster, which is the one request that cannot land outside
+  // the window. See `latestFrame`.
+  if (time !== null) params.set("time", String(time));
   return `${RADAR}/exportImage?${params}`;
+}
+
+/**
+ * The service's own latest raster, as a one-frame loop.
+ *
+ * ── WHY THIS EXISTS ─────────────────────────────────────────────────
+ *
+ * The time index and the image renderer are separate paths on the same
+ * ArcGIS host and they fail independently: measured on a quiet
+ * afternoon, `?f=json` returned 502 once in six calls while
+ * `exportImage` answered every time. Losing the whole radar because the
+ * index blinked is the wrong trade — the visitor came for the picture,
+ * and the picture is still there.
+ *
+ * So when the index cannot be read, this is what gets drawn: no loop,
+ * no history, no invented timestamps, just the current scan. The one
+ * request with no `time` on it is also the only one guaranteed to be
+ * inside the window, which matters because a timestamp the service has
+ * not ingested comes back as a fully transparent PNG — indistinguishable
+ * from a clear sky, and the single most dangerous thing this component
+ * could render.
+ */
+export function latestFrame(width: number): RadarFrame {
+  return { time: 0, url: frameUrl(null, width), untimed: true };
+}
+
+/**
+ * fetch with a couple of retries, for an endpoint known to blink.
+ *
+ * Short waits on purpose: this runs while somebody is looking at an
+ * empty map, so the budget is under two seconds total before falling
+ * back to the still image. An abort is never retried.
+ */
+async function fetchRetry(
+  url: string,
+  signal: AbortSignal,
+  init: RequestInit = {},
+  attempts = 3
+): Promise<Response> {
+  let last: unknown;
+  for (let i = 0; i < attempts; i++) {
+    if (signal.aborted) throw new DOMException("Aborted", "AbortError");
+    try {
+      const res = await fetch(url, { ...init, signal });
+      if (res.ok) return res;
+      last = new Error(`${url} responded ${res.status}`);
+    } catch (err) {
+      if (signal.aborted) throw err;
+      last = err;
+    }
+    if (i < attempts - 1) {
+      await new Promise((r) => setTimeout(r, 300 * (i + 1) ** 2));
+    }
+  }
+  throw last instanceof Error ? last : new Error(`${url} failed`);
 }
 
 /**
  * The frames to animate, oldest first.
  *
- * The service publishes its own moving window and it is not exactly two
- * hours — it is whatever has been ingested — so the window is read
- * rather than assumed. Asking for a timestamp outside it returns an
- * empty image, which looks exactly like clear skies and is the one
- * failure this component must never render.
+ * ── WHY THE NEWEST FRAME CARRIES NO TIMESTAMP ───────────────────────
+ *
+ * The service's time index runs ahead of its renderer. Measured against
+ * the live service: any timestamp inside roughly the last five and a
+ * half minutes renders as a 490-byte fully transparent PNG, while
+ * `timeInfo.timeExtent[1]` — the newest time the index admits to — was
+ * observed at ages between 3.3 and 16.4 minutes. When the index happens
+ * to sit on the young side of that boundary, asking for it by name
+ * returns a blank, and a blank frame on this map is not an error
+ * message: it is a picture of a clear sky over Acadiana, which is the
+ * most dangerous thing this component could draw.
+ *
+ * So the newest frame is requested with no `time` at all and the
+ * service picks its own raster. That answer is never blank, and it is
+ * strictly fresher than anything we can name: the untimed image hashes
+ * differently from every timestamped one, including the boundary the
+ * index reports. The cost is that we do not know what minute it is
+ * valid for, so the page prints "Latest scan" rather than inventing a
+ * clock time — see the `untimed` flag.
+ *
+ * The history frames step back from the index end and stop one step
+ * short of it, so none of them goes near the boundary either.
  */
 export async function fetchRadarFrames(
   signal: AbortSignal,
   width: number,
   count: number = FRAME_COUNT
 ): Promise<RadarFrame[]> {
-  const res = await fetch(`${RADAR}?f=json`, { signal });
-  if (!res.ok) throw new Error(`radar service ${res.status}`);
-  const meta = await res.json();
-  const extent = meta?.timeInfo?.timeExtent;
+  let extent: unknown;
+  try {
+    const res = await fetchRetry(`${RADAR}?f=json`, signal);
+    extent = (await res.json())?.timeInfo?.timeExtent;
+  } catch (err) {
+    if (signal.aborted) throw err;
+    return [latestFrame(width)];
+  }
+
   if (!Array.isArray(extent) || extent.length !== 2) {
-    throw new Error("radar service returned no time extent");
+    return [latestFrame(width)];
   }
 
   const [start, end] = extent as [number, number];
   const span = Math.min(LOOP_MINUTES * 60_000, end - start);
-  if (!(span > 0)) throw new Error("radar service window is empty");
+  if (!(span > 0)) return [latestFrame(width)];
 
+  // count - 1 timestamped frames, then the untimed one. The newest
+  // timestamped frame is a full step short of `end`, which is what
+  // keeps every named request clear of the render boundary.
   const step = span / (count - 1);
-  return Array.from({ length: count }, (_, i) => {
+  const history = Array.from({ length: count - 1 }, (_, i) => {
     const time = Math.round(end - step * (count - 1 - i));
     return { time, url: frameUrl(time, width) };
   });
+  return [...history, latestFrame(width)];
 }
 
 /** Severity, worst first. Anything unrecognised sorts last. */
@@ -211,11 +301,9 @@ export async function fetchAlerts(signal: AbortSignal): Promise<NwsAlert[]> {
   const zones = radarZones.map((z) => z.zone);
   const byZone = new Map(radarZones.map((z) => [z.zone, z.parish]));
 
-  const res = await fetch(`${ALERTS}?zone=${zones.join(",")}`, {
-    signal,
+  const res = await fetchRetry(`${ALERTS}?zone=${zones.join(",")}`, signal, {
     headers: { Accept: "application/geo+json" },
   });
-  if (!res.ok) throw new Error(`alerts ${res.status}`);
   const body = await res.json();
 
   const alerts: NwsAlert[] = (body?.features ?? [])

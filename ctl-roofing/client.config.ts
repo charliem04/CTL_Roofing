@@ -278,8 +278,10 @@ export const client = {
 
   /** Photo printed beside the contact details column. */
   contactPhoto: {
-    src: "/ctl/materials.jpg",
-    alt: "Pallets of shingles and underlayment staged for delivery",
+    src: "/ctl/crew-two-story.jpg",
+    alt: "A CTL crew working on the roof of a two-story home",
+    width: 1200,
+    height: 652,
   },
 
   // ── Testimonials (set to [] to hide the section) ──────────────────

@@ -107,7 +107,7 @@ export const services: ServicePage[] = [
       },
       {
         q: "My roof was damaged in a storm. Is that different?",
-        a: "The work is the same; the paperwork is not. The storm damage prevention and restoration page covers the roof side — tarping, dry-out and the rebuild — and the insurance page covers the claim, which has its own sequence and its own deadlines.",
+        a: "The work is the same; the paperwork is not. The storm prevention page covers the roof side — getting ahead of it, tarping, dry-out and the rebuild — and the insurance page covers the claim, which has its own sequence and its own deadlines.",
       },
     ],
     cta: {

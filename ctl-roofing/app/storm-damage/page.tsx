@@ -146,7 +146,7 @@ export default function StormDamagePage() {
 
       <FaqList
         faqs={storm.faqs}
-        heading="Storm and restoration questions"
+        heading="Storm questions"
         lede={`If water is coming in right now, stop reading and call the storm line at ${client.stormPhone}.`}
       />
 

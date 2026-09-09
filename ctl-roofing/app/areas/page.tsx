@@ -104,7 +104,7 @@ export default function AreasPage() {
                 Storm line {client.stormPhone}
               </a>
               <MoreLink href="/storm-damage/" tone="deep">
-                Storm damage &amp; restoration
+                Storm prevention
               </MoreLink>
               <MoreLink href="/insurance/" tone="deep">
                 How insurance claims work

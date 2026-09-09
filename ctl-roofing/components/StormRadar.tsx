@@ -246,17 +246,20 @@ export function StormRadar() {
   useEffect(() => {
     if (!playing || frames.length < 2) return;
     const last = frames.length - 1;
-    // A longer hold on the newest frame: the loop exists to show which
-    // way the weather is moving, and the answer is read off the end of
-    // it. Without the pause the eye never settles on now.
     const id = window.setTimeout(
       () => setIndex((i) => (i >= last ? 0 : i + 1)),
-      // 220ms a frame: thirteen scans read as an hour of weather moving
-      // in about three seconds, which is the pace a television loop
-      // runs at. The long hold on the newest frame is what stops it
-      // being a flicker — the loop shows the trend, the hold is the
-      // answer, and the eye needs a moment on the answer.
-      index >= last ? 1900 : 220
+      /* 220ms a frame: thirteen scans read as an hour of weather moving
+         in about three seconds, the pace a television loop runs at.
+
+         The newest frame is held longer, because the loop shows the
+         trend and the last frame is the answer, and an answer that
+         flicks past at 220ms is not an answer. But the hold is a beat,
+         not a stop: at the 1900ms this was first written with, the map
+         spent more than 40% of every cycle motionless and read as
+         frozen rather than as paused. 780ms is about three frame-times
+         — long enough to land on, short enough that the loop is
+         obviously still running. */
+      index >= last ? 780 : 220
     );
     return () => window.clearTimeout(id);
   }, [playing, index, frames]);

@@ -2,7 +2,7 @@ import type { CtaCopy, Faq, PageMeta, Photo } from "./types";
 
 /**
  * ════════════════════════════════════════════════════════════════════
- *  STORM DAMAGE PREVENTION & RESTORATION
+ *  STORM PREVENTION
  *
  *  The claim half of this page moved to content/insurance.ts. The two
  *  jobs run on different clocks — the tarp is tonight, the claim is the
@@ -19,13 +19,22 @@ import type { CtaCopy, Faq, PageMeta, Photo } from "./types";
 
 export const storm = {
   meta: {
-    title: "Storm Damage Prevention & Restoration",
+    /*
+     * The page is titled for the half a reader can act on before
+     * anything has happened. It still carries the aftermath — the
+     * first 48 hours and the restoration sequence — because somebody
+     * arriving mid-storm lands here from the gold strip and needs it,
+     * and because the second half is what the first half is arguing
+     * for. The URL stays /storm-damage/: that is the phrase people
+     * search and the path every existing link points at.
+     */
+    title: "Storm Prevention",
     description:
-      "How to get a roof ready before hurricane season in Acadiana, what to do in the first 48 hours after storm damage, and how CTL runs the restoration from tarp to final walkthrough.",
+      "How to get a roof ready before hurricane season in Acadiana, what to do in the first 48 hours if a storm gets through it, and how CTL runs the repair from tarp to final walkthrough.",
     path: "/storm-damage/",
   } satisfies PageMeta,
 
-  heading: "Storm damage prevention & restoration",
+  heading: "Storm prevention",
   lede: "Two jobs, in this order: keep the next storm from finding a way in, and get the water stopped and the house rebuilt when one does.",
 
   photo: {
@@ -42,12 +51,13 @@ export const storm = {
    * generates those child pages.
    *
    * Items are the short form of `restoration` below; nothing is claimed
-   * here that is not claimed there. The label is shorter than the page
-   * heading because it sits in a card and a nav dropdown, both of which
-   * are narrower than a headline.
+   * here that is not claimed there. The label names the repair as well
+   * as the prevention, unlike the page heading: a card in a grid of
+   * services has to say what CTL will come and do, and nobody scanning
+   * that grid after a hurricane is looking for the word "prevention".
    */
   card: {
-    label: "Storm Damage & Restoration",
+    label: "Storm Prevention & Repair",
     columns: [
       {
         items: [

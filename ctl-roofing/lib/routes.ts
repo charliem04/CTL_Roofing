@@ -65,7 +65,7 @@ export const nav: RouteNode[] = [
        */
       {
         href: "/storm-damage/",
-        label: "Storm damage & restoration",
+        label: "Storm prevention",
         live: true,
         priority: 0.9,
       },

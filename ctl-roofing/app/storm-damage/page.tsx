@@ -7,6 +7,7 @@ import { Reveal } from "@/components/Reveal";
 import { FaqList } from "@/components/FaqList";
 import { CtaBand } from "@/components/CtaBand";
 import { MoreLink } from "@/components/MoreLink";
+import { StormRadar } from "@/components/StormRadar";
 import { cascade } from "@/lib/motion";
 
 const storm = getStorm();
@@ -31,6 +32,24 @@ export default function StormDamagePage() {
         lede={storm.lede}
         photo={storm.photo}
       />
+
+      {/* ── The live radar ─────────────────────────────────────────
+          Above prevention on purpose: it is the only band on the page
+          whose answer is different at 9pm than it was at noon, and the
+          reader who needs it most is the one least willing to scroll.
+          A step up from the hero's ground rather than a change of
+          register — the map is the bright object here, and putting it
+          on white would make the rain compete with the page. */}
+      <section className="on-deep band bg-surface-deep-alt text-ink-invert-soft">
+        <div className="section">
+          <SectionHead
+            heading={storm.radar.heading}
+            lede={storm.radar.lede}
+            tone="deep"
+          />
+          <StormRadar />
+        </div>
+      </section>
 
       {/* ── Prevention ─────────────────────────────────────────────── */}
       <section className="band bg-surface">

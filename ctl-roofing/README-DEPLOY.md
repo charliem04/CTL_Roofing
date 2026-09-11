@@ -54,6 +54,18 @@ Nothing links to them and the sitemap omits them until that flips.
 - [ ] Phase 2: `/case-studies/`, `/video/`, `/team/`, `/areas/` + town
       pages, `/reviews/`, `/careers/`, blog
 
+## 2a. The gallery is now editable without a developer
+
+Photos live in `content/gallery.json`, written by the CMS at `/admin/`
+rather than by editing TypeScript. `scripts/gallery.mjs` runs before
+every build: it reads each image's real dimensions out of the file
+header, records whether a thumbnail exists, and fails the build — naming
+the photo — on a missing alt text, a duplicate, a missing file, or an
+unknown category.
+
+Full walkthrough, including what to tell whoever maintains it:
+`docs/GALLERY-CMS.md`.
+
 ## 3. Images — `/public/ctl`
 - [x] Logo, hero, four service photos, metal panel, team, owner,
       materials — all real CTL job photography
@@ -67,12 +79,42 @@ Nothing links to them and the sitemap omits them until that flips.
 - [ ] `NEXT_PUBLIC_WEB3FORMS_KEY` — REQUIRED. The access key for the
       office inbox. Without it the form refuses to submit and shows the
       phone number; it no longer pretends to succeed.
-- [ ] `NEXT_PUBLIC_LEAD_WEBHOOK_URL` — the CRM copy of the lead, once a
-      CRM is chosen. Fired in parallel and never awaited, so a CRM
-      outage cannot cost the email.
+- [ ] `NEXT_PUBLIC_LEAD_WEBHOOK_URL` — the lead relay's `/lead` route,
+      so every enquiry is collected in one list. Fired in parallel and
+      never awaited, so a relay or CRM outage cannot cost the email.
+      See `workers/lead-relay/README.md`.
+- [ ] `NEXT_PUBLIC_CAREERS_ENDPOINT` — the résumé upload Worker.
+- [ ] `NEXT_PUBLIC_TURNSTILE_SITE_KEY` — before `/careers/` goes live.
+      It is the only layer that tells a person from a script.
 - [ ] `NEXT_PUBLIC_PLAUSIBLE_DOMAIN` — or leave empty for no analytics
+- [ ] `CMS_AUTH_URL` — the gallery CMS sign-in relay. NOT a
+      `NEXT_PUBLIC_` variable: it is read at build time and written into
+      the CMS config, never compiled into a page.
+      See `docs/GALLERY-CMS.md`.
 - [ ] Mirror these in Cloudflare Pages → Settings → Environment
       variables, for Production *and* Preview
+
+## 4a. The three Workers
+
+The site is a static export, so anything that needs a server is a
+Worker. Each has its own README with the exact commands.
+
+- [ ] **`workers/careers-upload`** — takes the résumé, validates it hard,
+      writes it to a PRIVATE R2 bucket. `TURNSTILE_SECRET` is required;
+      without it the Worker refuses every upload rather than running
+      open. Do not attach a public URL to that bucket.
+- [ ] **`workers/lead-relay`** — the lead book. Stores every assessment
+      request and job application in D1 and forwards to whichever CRM is
+      chosen. `CRM_WEBHOOK_URL` unset is a supported state: leads are
+      still captured, and the first retry sweep after it is set delivers
+      the whole backlog.
+- [ ] **The CMS OAuth relay** — a published Worker
+      (`sveltia/sveltia-cms-auth`) that holds the GitHub client secret
+      so `/admin/` can sign in. Set `ALLOWED_DOMAINS`.
+
+The careers Worker and the relay share one secret: `RELAY_INGEST_SECRET`
+on the first must equal `INGEST_SECRET` on the second, or applications
+are refused at the relay with a 401.
 
 ## 5. Legal — written, not yet lawyer-reviewed
 Both pages now describe what this site actually does, service by
@@ -148,13 +190,21 @@ from production, which defeats the point of checking it there.
 - [ ] `NEXT_PUBLIC_WEB3FORMS_KEY` — required, or the form refuses to
       submit and tells people to phone
 - [ ] `NEXT_PUBLIC_PLAUSIBLE_DOMAIN` — `ctlpro.com`, or empty for none
-- [ ] `NEXT_PUBLIC_LEAD_WEBHOOK_URL` — once a CRM is chosen
+- [ ] `NEXT_PUBLIC_LEAD_WEBHOOK_URL` — the relay's `/lead` route
+- [ ] `NEXT_PUBLIC_CAREERS_ENDPOINT`, `NEXT_PUBLIC_TURNSTILE_SITE_KEY`
+- [ ] `CMS_AUTH_URL` — build-time only, for `/admin/`
 
 ### 3. Check the preview
 
 - [ ] Submit the form and confirm the email actually arrives
 - [ ] Submit with the key deliberately wrong, and confirm the visitor
       sees the failure and the phone number rather than a false success
+- [ ] Confirm the same submission appears in the relay:
+      `curl -H "Authorization: Bearer $EXPORT_TOKEN" https://<relay>/export.csv`
+- [ ] Apply through `/careers/` with a real PDF, and confirm both the
+      object in R2 and the row in the relay
+- [ ] Open `/admin/`, sign in with GitHub, change a caption and save —
+      then confirm the rebuild lands it on `/gallery/`
 - [ ] Book a real slot through the inline calendar
 - [ ] Decline the analytics banner, then confirm no Plausible request
       in the Network tab; accept, and confirm it loads

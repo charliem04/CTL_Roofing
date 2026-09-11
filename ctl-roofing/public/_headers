@@ -19,18 +19,26 @@
   # a year. That closes the gap this site otherwise has every time
   # somebody types "ctlpro.com" into the bar: the first request goes out
   # unencrypted and is redirected, and anything on the path between can
-  # answer it first.
+  # answer it first and serve a convincing fake instead.
   #
-  # includeSubDomains is deliberate — it is the half that stops the same
-  # trick on a subdomain — and is safe here because everything on this
-  # domain terminates at Cloudflare over TLS. If a subdomain ever has to
-  # serve plain HTTP, this is the line to revisit BEFORE it is set up,
-  # because the browser will have cached this for a year.
+  # ── WHY THERE IS NO includeSubDomains ──────────────────────────────
   #
-  # `preload` is deliberately NOT set. It hard-codes the domain into
-  # browsers themselves, and getting back off that list takes months —
-  # not a commitment to make on a site's behalf without asking.
-  Strict-Transport-Security: max-age=31536000; includeSubDomains
+  # It was here and was taken back out. That directive extends the same
+  # promise to every subdomain — mail., cpanel., whatever a vendor set
+  # up years ago — and a browser that has seen it will refuse plain HTTP
+  # to those hosts for a year with no way to take it back early. Nobody
+  # has audited what lives under this domain, and the two hostnames that
+  # actually matter, ctlpro.com and www.ctlpro.com, are both served by
+  # this Pages project and both get the header directly.
+  #
+  # So this protects exactly what it can verify. If the subdomains are
+  # ever audited and all of them are HTTPS, adding includeSubDomains is
+  # a one-word change — and worth making, in that order.
+  #
+  # `preload` is a separate and much larger commitment: it hard-codes
+  # the domain into browsers themselves and takes months to undo. Not
+  # something to set on a client's behalf without asking.
+  Strict-Transport-Security: max-age=31536000
 
 # Next's build output is content-hashed, so a given URL's bytes never
 # change. Cache it hard and forever.

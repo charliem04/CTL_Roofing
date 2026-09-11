@@ -24,7 +24,7 @@ against the effort rather than taken on faith.
 | --- | --- |
 | `npm run build` exited 1 | Three over-length meta descriptions failed `scripts/seo.mjs`. Cloudflare Pages runs that command, so **the deploy would have failed**. |
 | `three`, `@react-three/fiber`, `gsap` were installed and never imported | 33MB of `node_modules` and three supply-chain dependencies for nothing. The shipped bundle was byte-identical before and after removal, which confirms they were never bundled — the cost was install and build time, not download. |
-| No `Strict-Transport-Security` header | Every time somebody types `ctlpro.com`, the first request goes out over plain HTTP. Now closed for a year after the first visit. |
+| No `Strict-Transport-Security` header | Every time somebody types `ctlpro.com`, the first request goes out over plain HTTP, where it can be answered by something other than Cloudflare. Now closed for a year after the first visit — for `ctlpro.com` and `www.ctlpro.com` only. `includeSubDomains` is deliberately omitted until somebody has audited what else lives under this domain, since that promise cannot be withdrawn early. |
 | The display font was discovered late | Big Shoulders could not be requested until the stylesheet had downloaded and parsed — a second round trip in front of the largest text on every page, and a visible reflow from Arial Narrow once it landed. Now preloaded from the head. |
 
 ## Measured page weight

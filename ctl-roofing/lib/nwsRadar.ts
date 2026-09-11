@@ -126,7 +126,97 @@ export type NwsAlert = {
   parishes: string[];
   /** ISO, if the alert carries one. */
   ends?: string;
+  /** ISO start, for a product issued ahead of the weather it describes. */
+  onset?: string;
+  /**
+   * Immediate | Expected | Future | Past | Unknown. This is the field
+   * that answers "on the way" versus "happening now", and it is the
+   * only one that does — severity says how bad, not how soon.
+   */
+  urgency?: string;
+  /** The NWS's own one-line summary. Already written for the public. */
+  headline?: string;
+  /**
+   * The "what to do" half of the product, verbatim. We do not write
+   * safety instructions for a tornado; we pass along the ones from the
+   * office whose job that is.
+   */
+  instruction?: string;
+  /** Largest hail expected, in inches — the CAP `maxHailSize` parameter. */
+  hail?: string;
+  /** Peak gust, as the NWS words it ("60 mph"). */
+  gust?: string;
+  /** RADAR INDICATED | OBSERVED, on tornado products. */
+  tornado?: string;
+  /** CONSIDERABLE | DESTRUCTIVE, on the tagged thunderstorm products. */
+  damage?: string;
 };
+
+/**
+ * The shape of weather an alert is about.
+ *
+ * Grouped by what a homeowner does about it rather than by the NWS's
+ * own product taxonomy: every tropical product lands on "hurricane"
+ * because the preparation is the same whether the word is Hurricane,
+ * Tropical Storm or Storm Surge, and hail gets its own bucket even
+ * though the NWS delivers it inside a Severe Thunderstorm product,
+ * because hail is the one that costs a roof.
+ */
+export type AlertKind =
+  | "tornado"
+  | "hurricane"
+  | "hail"
+  | "thunderstorm"
+  | "flood"
+  | "wind"
+  | "other";
+
+export function alertKind(alert: NwsAlert): AlertKind {
+  const e = alert.event.toLowerCase();
+  if (e.includes("tornado")) return "tornado";
+  if (/hurricane|tropical|storm surge|typhoon/.test(e)) return "hurricane";
+  if (e.includes("thunderstorm")) {
+    // The NWS has no "Hail Warning". Hail arrives tagged onto a severe
+    // thunderstorm product, so the tag is what separates the storm that
+    // wets a roof from the one that replaces it. One inch is the NWS's
+    // own severe threshold and roughly where shingle bruising starts.
+    const inches = Number.parseFloat(alert.hail ?? "");
+    return Number.isFinite(inches) && inches >= 1 ? "hail" : "thunderstorm";
+  }
+  if (e.includes("flood")) return "flood";
+  if (/wind|gale/.test(e)) return "wind";
+  return "other";
+}
+
+/**
+ * Is this the kind of weather that takes a roof off?
+ *
+ * The bar for the briefing section under the map, and deliberately
+ * narrower than "the NWS has something out". A Dense Fog Advisory is a
+ * real alert and it is not what that section is for — putting it there
+ * would train the reader to scroll past the block on the day it says
+ * Tornado Warning.
+ */
+export function isSevereKind(alert: NwsAlert): boolean {
+  // Statements are narrative follow-ups to a product, not products —
+  // a Hurricane Local Statement accompanies the Hurricane Warning that
+  // is already in this list, and a Severe Weather Statement is usually
+  // the NWS cancelling something. Letting them through would put two
+  // cards on screen for one piece of weather, one of which has no
+  // timing, no tags and nothing to do about it.
+  if (/\bstatement\b/i.test(alert.event)) return false;
+
+  const kind = alertKind(alert);
+  return (
+    kind === "tornado" ||
+    kind === "hurricane" ||
+    kind === "hail" ||
+    kind === "wind" ||
+    // A flash flood warning is a get-out-now product; a river flood
+    // advisory two parishes away is not.
+    (kind === "flood" && isWarning(alert))
+  );
+}
 
 /**
  * One radar frame as a URL.
@@ -306,6 +396,25 @@ export async function fetchAlerts(signal: AbortSignal): Promise<NwsAlert[]> {
   });
   const body = await res.json();
 
+  /**
+   * CAP `parameters` is a bag of string ARRAYS, not strings — every
+   * value arrives as ["1.75"] even when there is only ever one. Read
+   * through it in one place so nothing downstream renders "1.75"
+   * complete with its brackets and quotes.
+   */
+  const param = (p: any, key: string): string | undefined => {
+    const raw = p?.parameters?.[key];
+    const value = Array.isArray(raw) ? raw[0] : raw;
+    const text = typeof value === "string" ? value.trim() : "";
+    return text || undefined;
+  };
+
+  /** Trim, and drop the empties — an empty string is not a headline. */
+  const text = (value: unknown): string | undefined => {
+    const s = typeof value === "string" ? value.trim() : "";
+    return s || undefined;
+  };
+
   const alerts: NwsAlert[] = (body?.features ?? [])
     .map((f: any) => {
       const p = f?.properties ?? {};
@@ -319,6 +428,14 @@ export async function fetchAlerts(signal: AbortSignal): Promise<NwsAlert[]> {
         severity: String(p.severity ?? "Unknown"),
         parishes,
         ends: p.ends ?? p.expires ?? undefined,
+        onset: p.onset ?? p.effective ?? undefined,
+        urgency: text(p.urgency),
+        headline: text(p.headline),
+        instruction: text(p.instruction),
+        hail: param(p, "maxHailSize"),
+        gust: param(p, "maxWindGust"),
+        tornado: param(p, "tornadoDetection"),
+        damage: param(p, "thunderstormDamageThreat"),
       };
     })
     .filter((a: NwsAlert) => a.event && a.parishes.length > 0);
@@ -341,4 +458,150 @@ export function centralTime(ms: number): string {
     hour: "numeric",
     minute: "2-digit",
   }).format(ms);
+}
+
+/**
+ * ════════════════════════════════════════════════════════════════════
+ *  IS IT ACTUALLY RAINING — reading the sky off the radar itself.
+ *
+ *  The alerts feed answers "has the National Weather Service issued
+ *  something", which on the overwhelming majority of days is no. That
+ *  is not the same question as "is there weather over my house": most
+ *  rain, including most of the rain that finds a bad flashing detail,
+ *  never earns a product. A page that says ALL CLEAR while the map
+ *  behind it is half green is a page nobody trusts twice.
+ *
+ *  So the badge on the map reads the picture rather than the paperwork.
+ *
+ *  ── HOW, AND WHY IT IS A SEPARATE REQUEST ───────────────────────────
+ *
+ *  A canvas readback needs the image to be CORS-clean, and a browser
+ *  caches a CORS request separately from a plain one — so reusing a
+ *  display frame here would re-download it in full. Against a sky full
+ *  of storms that is another ~145kB on the phone this file spends its
+ *  whole length trying not to spend.
+ *
+ *  This asks for its own raster instead, 160px wide: a few kB, the same
+ *  untimed "whatever is current" request the newest display frame uses,
+ *  and enough resolution to measure how much of the map has returns on
+ *  it. Coverage is an area fraction, not a diagnosis.
+ *
+ *  ── EVERY FAILURE RETURNS null ──────────────────────────────────────
+ *
+ *  If the service sends no Access-Control-Allow-Origin the image never
+ *  loads at all and the readback never runs; if it loads and the canvas
+ *  is tainted anyway, getImageData throws. Both end here, as null, and
+ *  the badge falls back to reporting the alerts alone. What it must
+ *  never do is read a failure as zero coverage, because zero coverage
+ *  renders as "clear" — the same dangerous lie a blank frame would be.
+ * ════════════════════════════════════════════════════════════════════
+ */
+
+export type SkyRead = {
+  /** Share of the map showing any return at all, 0..1. */
+  coverage: number;
+  /** Share showing thunderstorm intensity or above — the amber-and-up end. */
+  heavy: number;
+};
+
+/** The probe raster. Small, current, and nothing else asks for this URL. */
+const SKY_PROBE_WIDTH = 160;
+
+/**
+ * Below this, the map is empty enough to call clear.
+ *
+ * Not zero. MRMS mosaics carry a thin scatter of isolated pixels —
+ * ground clutter, birds, the edges of the radar's own cone — on
+ * afternoons with nothing in the sky at all. Requiring literal zero
+ * would mean the badge never once said clear, which is the same as not
+ * having built it. Half a percent of the frame is a handful of specks.
+ */
+const CLEAR_COVERAGE = 0.005;
+
+/** Above this, it is not "a shower somewhere", it is raining on the area. */
+const WIDESPREAD_COVERAGE = 0.06;
+
+/** Enough amber-and-up to be worth naming as storms rather than rain. */
+const STORM_HEAVY = 0.002;
+
+/**
+ * Warm pixel test — thunderstorm intensity or above on the ramp above.
+ *
+ * Written against LEGEND in StormRadar: amber (255,201,0), orange
+ * (255,157,0) and red (193,0,0) pass; every green and blue on the ramp
+ * fails on the red channel alone, well clear of the boundary. The
+ * `r > b + 60` term is what keeps a downscaled grey-white pixel — the
+ * average of several colours at a cell edge — from reading as amber.
+ */
+function isHeavyPixel(r: number, g: number, b: number): boolean {
+  return r >= 140 && b <= 110 && r > b + 60;
+}
+
+/**
+ * Alpha below which a pixel is scatter rather than weather. Downscaling
+ * to the probe size averages a small cell against the transparency
+ * around it, so real returns arrive softened; 24/255 keeps those and
+ * drops the single-pixel speckle.
+ */
+const MIN_ALPHA = 24;
+
+export function skyProbeUrl(): string {
+  return frameUrl(null, SKY_PROBE_WIDTH);
+}
+
+export async function readSky(signal: AbortSignal): Promise<SkyRead | null> {
+  if (typeof document === "undefined") return null;
+
+  const img = new Image();
+  // Without this the canvas is tainted and getImageData throws. With
+  // it, a service that sends no CORS header simply fails to load —
+  // which is the same answer, arrived at earlier and more cheaply.
+  img.crossOrigin = "anonymous";
+
+  const loaded = await new Promise<boolean>((resolve) => {
+    const done = (ok: boolean) => () => resolve(ok);
+    img.onload = done(true);
+    img.onerror = done(false);
+    // An abort mid-flight resolves false rather than hanging the caller.
+    signal.addEventListener("abort", done(false), { once: true });
+    img.src = skyProbeUrl();
+  });
+
+  if (!loaded || signal.aborted) return null;
+
+  try {
+    const width = img.naturalWidth || SKY_PROBE_WIDTH;
+    const height = img.naturalHeight || SKY_PROBE_WIDTH;
+    const canvas = document.createElement("canvas");
+    canvas.width = width;
+    canvas.height = height;
+    const ctx = canvas.getContext("2d", { willReadFrequently: true });
+    if (!ctx) return null;
+    ctx.drawImage(img, 0, 0, width, height);
+
+    const { data } = ctx.getImageData(0, 0, width, height);
+    const total = width * height;
+    if (!total) return null;
+
+    let wet = 0;
+    let heavy = 0;
+    for (let i = 0; i < data.length; i += 4) {
+      if (data[i + 3] < MIN_ALPHA) continue;
+      wet++;
+      if (isHeavyPixel(data[i], data[i + 1], data[i + 2])) heavy++;
+    }
+    return { coverage: wet / total, heavy: heavy / total };
+  } catch {
+    // Tainted canvas, or a browser refusing the readback outright.
+    return null;
+  }
+}
+
+/** What the badge says, given a reading. */
+export type SkyState = "clear" | "isolated" | "rain" | "storms";
+
+export function skyState(read: SkyRead): SkyState {
+  if (read.heavy >= STORM_HEAVY) return "storms";
+  if (read.coverage < CLEAR_COVERAGE) return "clear";
+  return read.coverage >= WIDESPREAD_COVERAGE ? "rain" : "isolated";
 }

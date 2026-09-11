@@ -3,14 +3,15 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build && node scripts/csp.mjs && node scripts/seo.mjs",
+    "dev": "node scripts/gallery.mjs && next dev",
+    "build": "node scripts/gallery.mjs && next build && node scripts/csp.mjs && node scripts/cms.mjs && node scripts/seo.mjs",
     "start": "next start",
     "lint": "next lint",
     "deploy": "npm run build && npx wrangler pages deploy out --project-name ctl-roofing",
     "preview:build": "node scripts/preview-build.mjs",
     "preview:deploy": "npm run preview:build && npx wrangler pages deploy out --project-name ctl-preview --branch main --commit-dirty=true",
-    "check": "node scripts/check.mjs app components lib content client.config.ts"
+    "check": "node scripts/check.mjs app components lib content client.config.ts",
+    "gallery": "node scripts/gallery.mjs"
   },
   "dependencies": {
     "@fontsource/big-shoulders-display": "^5.3.0",

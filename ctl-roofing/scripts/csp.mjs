@@ -160,6 +160,14 @@ function originsInBuild(dir = "out") {
     for (const name of readdirSync(d)) {
       const p = join(d, name);
       if (statSync(p).isDirectory()) {
+        // out/admin is the gallery CMS, and it is governed by its own
+        // policy rather than this one — see scripts/cms.mjs, which
+        // writes a /admin/* rule and runs the same drift check against
+        // it. Scanning it here would report the CMS's origins as
+        // uncovered by a policy that is not supposed to cover them, and
+        // the only way to quiet that would be to allow a CDN and the
+        // GitHub API across the whole site.
+        if (p === join("out", "admin")) continue;
         walk(p);
         continue;
       }

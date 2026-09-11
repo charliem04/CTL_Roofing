@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- Never indexed. This page is a tool, not content, and a login
+         screen in search results is noise at best. The matching
+         X-Robots-Tag in public/_headers covers the config file beside
+         it, which has no <head> to put this in. -->
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Gallery — CTL Roofing</title>
+    <link rel="icon" href="/icon.png" />
+    <style>
+      /* Only the setup notice is styled here. Everything else on this
+         page is the CMS's own interface, and restyling somebody else's
+         admin UI is a maintenance bill with no return. */
+      body {
+        margin: 0;
+        font: 16px/1.6 "IBM Plex Sans", -apple-system, "Segoe UI", sans-serif;
+        color: #0b1233;
+        background: #edeff7;
+      }
+      .setup {
+        max-width: 46rem;
+        margin: 12vh auto;
+        padding: 2.5rem;
+        background: #fff;
+        border-top: 3px solid #f1cc47;
+      }
+      .setup h1 {
+        margin: 0 0 1rem;
+        font-size: 1.5rem;
+      }
+      .setup code {
+        font-family: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+        font-size: 0.9em;
+        background: #edeff7;
+        padding: 0.15em 0.4em;
+      }
+      .setup ol {
+        padding-left: 1.2rem;
+      }
+      .setup li {
+        margin-bottom: 0.6rem;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- ════════════════════════════════════════════════════════════════
+         THE GALLERY EDITOR.
+
+         Sveltia CMS, loaded from a CDN and pinned to a major version.
+         It is a drop-in for Decap and reads the same config.yml, so the
+         configuration beside this file is not a bet on either one.
+
+         It signs in with GitHub and commits straight to the repository,
+         which is the whole reason for choosing a git-backed CMS here:
+         the gallery stays in version control, every change has an
+         author and a diff, there is no database to back up, and nothing
+         new can be down at 2am. The cost is a rebuild between saving
+         and seeing it live, which for job photographs is the right
+         trade.
+
+         ── ON PINNING TO A MAJOR VERSION ──────────────────────────────
+         A CDN URL with no version pins nothing, and an admin page that
+         silently updates itself is an admin page that breaks on a day
+         nobody chose. ^0.x follows patches and not breaking changes.
+         ═════════════════════════════════════════════════════════════ -->
+    <script src="https://unpkg.com/@sveltia/cms@^0.86.0/dist/sveltia-cms.js"></script>
+
+    <script>
+      // The config carries base_url only once the OAuth relay is
+      // deployed (see scripts/cms.mjs). Without it, GitHub sign-in
+      // cannot complete, and the CMS's own failure for that is an
+      // unexplained error after the popup closes. Checking first turns
+      // a confusing dead end into instructions.
+      (async () => {
+        let configured = false;
+        try {
+          const res = await fetch("/admin/config.yml", { cache: "no-store" });
+          const text = await res.text();
+          configured = /^\s*base_url:\s*https:\/\/\S+/m.test(text);
+        } catch {
+          // Treat an unreadable config as unconfigured: the CMS cannot
+          // start without it either, and this way the page says so.
+          configured = false;
+        }
+        if (configured) return;
+
+        document.body.innerHTML = `
+          <div class="setup">
+            <h1>The gallery editor is not connected yet</h1>
+            <p>
+              It needs a GitHub sign-in relay before it can save. This is
+              a one-time setup, and it takes about ten minutes.
+            </p>
+            <ol>
+              <li>Deploy the OAuth relay Worker and note its URL.</li>
+              <li>
+                Create a GitHub OAuth app whose callback is that URL plus
+                <code>/callback</code>.
+              </li>
+              <li>
+                Set <code>CMS_AUTH_URL</code> to the Worker URL in the
+                Cloudflare Pages environment variables, for Production
+                and Preview both, then redeploy.
+              </li>
+            </ol>
+            <p>
+              The full walkthrough, with the exact commands, is in
+              <code>ctl-roofing/docs/GALLERY-CMS.md</code> in the
+              repository.
+            </p>
+          </div>
+        `;
+      })();
+    </script>
+  </body>
+</html>

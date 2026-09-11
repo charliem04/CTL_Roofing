@@ -1,0 +1,108 @@
+# ════════════════════════════════════════════════════════════════════
+#  THE GALLERY CMS, as it is presented to whoever keeps it up to date.
+#
+#  Read by Sveltia CMS (and by Decap, which uses the same format) from
+#  /admin/ on the deployed site. Editing here changes what the person
+#  updating the gallery sees; it does not change how the site renders.
+#
+#  ── PATHS ARE REPOSITORY-RELATIVE, NOT SITE-RELATIVE ────────────────
+#  The site lives in ctl-roofing/ inside this repository, so everything
+#  the CMS writes is prefixed with it. `public_folder` is the exception
+#  and must NOT be — that one is the URL the browser asks for, which is
+#  what ends up in the src of each photo.
+#
+#  ── base_url IS FILLED IN AT BUILD TIME ─────────────────────────────
+#  It is the GitHub OAuth relay, and its address is only known once the
+#  Worker is deployed. scripts/cms.mjs writes it into the copy of this
+#  file in out/ from CMS_AUTH_URL. Left unset, /admin/ renders a setup
+#  notice instead of a broken login button.
+# ════════════════════════════════════════════════════════════════════
+
+backend:
+  name: github
+  repo: charliem04/CTL_Roofing
+  branch: main
+  # A commit per save, attributed to the GitHub account that signed in,
+  # so the gallery's history is the site's history.
+  commit_messages:
+    update: 'Gallery: update {{collection}}'
+
+# Where uploaded photos are committed, and the URL they are served from.
+media_folder: ctl-roofing/public/ctl/gallery
+public_folder: /ctl/gallery
+
+# Every save is a direct commit to main, which triggers a Pages build.
+# No editorial workflow: there is one person maintaining this and a
+# review queue nobody empties is worse than no queue at all.
+publish_mode: simple
+
+collections:
+  - name: gallery
+    label: Gallery
+    description: >-
+      The job photographs shown on the gallery page, and the handful
+      marked for the home page. Changes go live a couple of minutes
+      after saving.
+    files:
+      - name: photos
+        label: Photos
+        file: ctl-roofing/content/gallery.json
+        description: >-
+          Drag to reorder — this is the order they appear in. The first
+          few of each kind are the ones most people will see.
+        fields:
+          - name: shots
+            label: Photos
+            label_singular: Photo
+            widget: list
+            # So the list reads as a list of jobs rather than of rows.
+            summary: '{{fields.caption}} — {{fields.category}}'
+            fields:
+              - name: src
+                label: Photo
+                widget: image
+                # The gallery is CTL's own work; one photo per entry.
+                allow_multiple: false
+                media_library:
+                  config:
+                    max_file_size: 6000000
+
+              - name: alt
+                label: Alt text
+                widget: string
+                hint: >-
+                  Describe what is actually in the frame, for people
+                  using a screen reader and for Google Images. "Crew
+                  setting metal panels on a low-slope section", not
+                  "roof". Required.
+                pattern:
+                  - '.{3,}'
+                  - Please describe what is in the photo.
+
+              - name: caption
+                label: Caption
+                widget: string
+                required: false
+                hint: >-
+                  The short line shown under the photo, three or four
+                  words. Leave empty for no caption.
+
+              - name: category
+                label: Kind of work
+                widget: select
+                # These five are defined in ctl-roofing/content/gallery.ts
+                # and each maps to a real service page. scripts/gallery.mjs
+                # fails the build if this list and that one disagree, so
+                # adding one here alone will not quietly half-work.
+                options: [roofing, metal, outdoor, remodeling, storm]
+                default: roofing
+
+              - name: featured
+                label: Also show on the home page
+                widget: boolean
+                default: false
+                required: false
+                hint: >-
+                  The home page band shows only these. Eight or so is
+                  the right number — it is a taste of the work, not the
+                  whole gallery.

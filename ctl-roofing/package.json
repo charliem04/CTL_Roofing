@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "node scripts/gallery.mjs && next dev",
-    "build": "node scripts/gallery.mjs && next build && node scripts/csp.mjs && node scripts/cms.mjs && node scripts/fonts.mjs && node scripts/seo.mjs && node scripts/routes.mjs && node scripts/harden.mjs",
+    "build": "node scripts/gallery.mjs && next build && node scripts/csp.mjs && node scripts/cms.mjs && node scripts/fonts.mjs && node scripts/seo.mjs && node scripts/routes.mjs --check && node scripts/harden.mjs",
     "start": "next start",
     "lint": "next lint",
     "deploy": "npm run build && npx wrangler pages deploy out --project-name ctl-roofing",

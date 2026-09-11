@@ -32,7 +32,8 @@
  *  list is exhaustive, and they are counted so a reader knows how many
  *  there are.
  *
- *  Run by `npm run build`, and on its own with `npm run routes`.
+ *  `npm run build` runs this with --check: it verifies and prints, and
+ *  does NOT rewrite the document. `npm run routes` regenerates it.
  * ════════════════════════════════════════════════════════════════════
  */
 import { existsSync, readFileSync, readdirSync, statSync, writeFileSync, mkdirSync } from "node:fs";
@@ -105,7 +106,7 @@ function resolve(href, built) {
   return { kind: "page", ok: false };
 }
 
-function run() {
+function run({ write = true } = {}) {
   if (!existsSync(OUT)) {
     console.error(`[routes] ${OUT}/ is missing — did the build run?`);
     return false;
@@ -236,8 +237,10 @@ ${all
   .join("\n")}
 `;
 
-  mkdirSync(dirname(DOC), { recursive: true });
-  writeFileSync(DOC, doc);
+  if (write) {
+    mkdirSync(dirname(DOC), { recursive: true });
+    writeFileSync(DOC, doc);
+  }
 
   if (broken.length) {
     console.error(
@@ -255,13 +258,23 @@ ${all
 
   console.log(
     `[routes] ${all.length} pages, ${totals.length} links, ${anchors} in-page anchors, ` +
-      `${external.size} external origins — all resolve. ${DOC} written.`
+      `${external.size} external origins — all resolve.` +
+      (write ? ` ${DOC} written.` : "")
   );
   return true;
 }
 
 if (process.argv[1] && process.argv[1].endsWith("routes.mjs")) {
-  process.exit(run() ? 0 : 1);
+  // The build VERIFIES; `npm run routes` verifies and rewrites the doc.
+  //
+  // Both halves matter and they are not the same job. Failing the build
+  // on a link to a page that does not exist has to happen on every
+  // build. Rewriting a committed markdown file on every build does not,
+  // and doing it anyway leaves the working tree dirty after a routine
+  // `npm run build` — worse, the document's contents depend on which
+  // environment variables were set, so two correct builds produce two
+  // different files and the diff is noise either way.
+  process.exit(run({ write: !process.argv.includes("--check") }) ? 0 : 1);
 }
 
 export { run };

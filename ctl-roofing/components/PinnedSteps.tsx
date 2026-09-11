@@ -22,8 +22,8 @@
  * ────────────────────────────────────────────────────────────────────
  *
  * ── THE CONTRACT ────────────────────────────────────────────────────
- * `children` is a render prop taking the active step index and whether
- * the band is pinned.
+ * `children` is a render prop taking the active step index, whether the
+ * band is pinned, and a function that scrolls to a given step.
  *
  *   active >= 0, pinned    the band is held; the scroll walks the steps
  *   active >= 0, unpinned  the page scrolls normally and the current
@@ -36,6 +36,12 @@
  * a card that changes size as it passes the middle of the screen shifts
  * everything below it under the thumb that is scrolling — the same
  * animation, minus the part that fights the reader.
+ *
+ * The third argument, `goTo`, is what makes the steps navigable rather
+ * than merely observable: it scrolls the page to the position at which
+ * the requested step becomes current. It works in all three modes, so a
+ * caller can wire a click to it without first asking which one is
+ * running — see the note on the function itself for the geometry.
  *
  * -1 is now the reduced-motion rendering only. It used to be what
  * phones got too, which is what left them showing step one lit and the
@@ -50,9 +56,10 @@
  * and no error, which is the safe way to be wrong.
  * ────────────────────────────────────────────────────────────────────
  */
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import type { ReactNode } from "react";
 import { useStepMode } from "@/lib/useScrollMotion";
+import { scrollToPosition } from "./SmoothScroll";
 
 export function PinnedSteps({
   count,
@@ -67,7 +74,7 @@ export function PinnedSteps({
   scrollPerStep = 0.6,
 }: {
   count: number;
-  children: (active: number, pinned: boolean) => ReactNode;
+  children: (active: number, pinned: boolean, goTo: (i: number) => void) => ReactNode;
   className?: string;
   scrollPerStep?: number;
 }) {
@@ -206,6 +213,96 @@ export function PinnedSteps({
     };
   }, [mode, count]);
 
+  /**
+   * ── JUMPING TO A STEP ───────────────────────────────────────────────
+   * Both measuring effects above answer "given a scroll position, which
+   * step is current". This is that question run backwards: given a step,
+   * what scroll position makes it current. Same two geometries, same
+   * two formulas solved the other way, so a jump can never disagree with
+   * what the scroll listener will report on arrival.
+   *
+   * Pinned, the destination is inside the synthetic track:
+   *
+   *     progress = -rect.top / span        (the listener)
+   *     scrollY' = scrollY + rect.top + progress · span   (this)
+   *
+   * Aimed at the MIDDLE of the step's share rather than its leading
+   * edge. Landing on a boundary means a pixel of drift — a rounded
+   * scroll position, a font finishing loading, a rubber-band on a
+   * trackpad — flips to the neighbouring step, so the band would
+   * occasionally settle one off from the card that was clicked.
+   *
+   * Unpinned, there is no track and the card itself is the target:
+   * centred in the viewport, because the middle of the screen is the
+   * playhead the flow measurement uses.
+   *
+   * ── WHY THE DURATION GROWS WITH THE DISTANCE ────────────────────────
+   * The point of this on a pinned band is that the reader SEES the
+   * intervening steps go by — that is the sequence stating itself. A
+   * fixed duration makes one step feel sluggish and three feel like a
+   * cut. Scaling keeps the per-step pace roughly even, and the cap stops
+   * a four-step jump becoming something the reader waits out.
+   */
+  const goTo = useCallback(
+    (target: number) => {
+      const el = ref.current;
+      if (!el) return;
+      const index = Math.min(count - 1, Math.max(0, target));
+
+      // Long enough to read as travel, short enough to stay a control.
+      const distance = Math.abs(index - active) || 1;
+      const duration = Math.min(1.8, 0.5 + 0.32 * distance);
+
+      if (mode === "pinned") {
+        const rect = el.getBoundingClientRect();
+        const span = rect.height - window.innerHeight;
+        // A viewport taller than the track has no travel to distribute,
+        // and dividing by it would send the page to NaN.
+        if (span <= 0) return;
+        const progress = (index + 0.5) / count;
+        scrollToPosition(window.scrollY + rect.top + progress * span, duration);
+        return;
+      }
+
+      const steps = el.querySelectorAll<HTMLElement>("[data-step]");
+      if (!steps.length) return;
+
+      // The union of the steps, measured exactly as the flow listener
+      // measures it — NOT the clicked card's own box.
+      //
+      // Centring the card in the viewport is the obvious move and it is
+      // wrong at any width where the cards share a row. Between 640 and
+      // 1024 they are two-up, so steps 3 and 4 have the same vertical
+      // centre: centring either one puts the playhead three quarters of
+      // the way down the run, which the listener reads as step 4. A
+      // tablet could reach steps 1 and 4 and nothing else.
+      //
+      // The listener divides the run into equal shares by position, for
+      // the reasons written above it, so the jump has to speak the same
+      // language:
+      //
+      //     progress = (innerHeight / 2 - top) / span     (the listener)
+      //     scrollY' = scrollY + top - innerHeight / 2
+      //                + progress · span                  (this)
+      let top = Infinity;
+      let bottom = -Infinity;
+      steps.forEach((step) => {
+        const rect = step.getBoundingClientRect();
+        if (rect.top < top) top = rect.top;
+        if (rect.bottom > bottom) bottom = rect.bottom;
+      });
+      const span = bottom - top;
+      if (span <= 0) return;
+
+      const progress = (index + 0.5) / steps.length;
+      scrollToPosition(
+        window.scrollY + top - window.innerHeight / 2 + progress * span,
+        duration,
+      );
+    },
+    [mode, count, active],
+  );
+
   const pinned = mode === "pinned";
 
   return (
@@ -225,10 +322,10 @@ export function PinnedSteps({
         // of them. Overflowing is visible and survivable; clipping is
         // neither.
         <div className="sticky top-0 flex h-screen items-center">
-          {children(active, true)}
+          {children(active, true, goTo)}
         </div>
       ) : (
-        children(mode === "flow" ? active : -1, false)
+        children(mode === "flow" ? active : -1, false, goTo)
       )}
     </div>
   );

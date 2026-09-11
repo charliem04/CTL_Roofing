@@ -108,7 +108,7 @@ export function Process() {
   return (
     <section id="process" className="band bg-surface">
       <PinnedSteps count={process.steps.length}>
-        {(active, pinned) => (
+        {(active, pinned, goTo) => (
           <div className="section w-full">
             <SectionHead heading={process.heading} lede={process.lede} />
 
@@ -162,7 +162,10 @@ export function Process() {
                     // ground and the current step lifts to white with a
                     // brand edge — the box gains weight by coming
                     // forward, not by being outlined harder.
-                    className="flex basis-full flex-col rounded border p-7 sm:basis-[calc(50%-12px)] lg:basis-auto lg:p-0"
+                    // `relative` so the jump target below can cover the
+                    // card; the padding it has to cover is animated, and
+                    // inset-0 follows it for free.
+                    className="relative flex basis-full flex-col rounded border p-7 sm:basis-[calc(50%-12px)] lg:basis-auto lg:p-0"
                     animate={{
                       // ── WHY THE CARD GROWS BY PADDING ─────────────
                       // The first version of this divided the row with
@@ -212,6 +215,44 @@ export function Process() {
                     // rather than as three separate events.
                     transition={{ duration: dur.base, ease: ease.out }}
                   >
+                    {/*
+                      ── THE STEP AS A CONTROL ──────────────────────
+                      The band already knew which step was current and
+                      offered no way to say so — a sequence you can only
+                      watch go past. This makes each card a jump to its
+                      own position in the run, which on the pinned band
+                      means the scroll travels there and the reader
+                      watches the steps in between light up on the way.
+
+                      An overlay rather than a button wrapped around the
+                      content, for two reasons. The heading stays an h3
+                      — flow content is not allowed inside a button, and
+                      the document outline is worth more than the markup
+                      is worth saving. And the hit area is the whole
+                      card including the padding it gains when current,
+                      rather than the text's own bounding box.
+
+                      Named for what it does, not for what it is: "Go to
+                      step 3, Build" is a destination, where "Build"
+                      alone would be a link to a page about building.
+                    */}
+                    <button
+                      type="button"
+                      onClick={() => goTo(i)}
+                      aria-current={current ? "step" : undefined}
+                      // A card that does something has to look like it
+                      // does. The ground and border are framer's to
+                      // animate, so the affordance is a border of its
+                      // own on the overlay — a colour change under the
+                      // pointer, which is the hover language the rest of
+                      // the site uses, rather than a lift.
+                      className="absolute inset-0 z-10 cursor-pointer rounded border border-transparent transition-colors duration-150 ease-brand hover:border-brand/45 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                    >
+                      <span className="sr-only">
+                        Go to step {i + 1}, {step.title}
+                      </span>
+                    </button>
+
                     {/* The ruled top is the existing mark, not a new
                         one: it turns gold as its step becomes current,
                         so the row reads as a progress bar made of the

@@ -100,6 +100,30 @@ export function SmoothScroll() {
  * "back to top", say. Falls through to the native call when Lenis is
  * not running, so callers never have to ask whether it is.
  */
+/**
+ * Scroll to an absolute document position, over a stated duration.
+ *
+ * Separate from scrollToTarget because the caller that needs this — the
+ * pinned process band — is not aiming at an element. Its destination is
+ * a position inside a synthetic scroll track, and the distance is the
+ * point rather than an implementation detail: travelling three steps
+ * has to take visibly longer than travelling one, or the band arrives
+ * without the reader seeing it pass through anything.
+ *
+ * Lenis takes seconds. The native fallback cannot be given a duration
+ * at all, which is fine — it is the path for a visitor who has either
+ * no JavaScript-driven scrolling or an explicit reduced-motion
+ * preference, and in the second case an instant jump is the correct
+ * answer rather than a degraded one.
+ */
+export function scrollToPosition(top: number, duration?: number) {
+  if (lenis) {
+    lenis.scrollTo(top, duration === undefined ? undefined : { duration });
+    return;
+  }
+  window.scrollTo({ top, behavior: "smooth" });
+}
+
 export function scrollToTarget(target: string | number | HTMLElement) {
   if (lenis) {
     lenis.scrollTo(target);

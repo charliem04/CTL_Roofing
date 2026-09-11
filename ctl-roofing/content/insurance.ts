@@ -32,9 +32,9 @@ export const insurance = {
      * "Insurance | CTL Pro Construction" competes with every carrier in
      * the state and tells a searcher nothing about what is on it.
      */
-    title: "Insurance Claims — Adjusters, Coverage & Where We Fit",
+    title: "Roof Insurance Claims — Adjusters & Coverage",
     description:
-      "How a roof insurance claim runs in Louisiana: opening it yourself, what an adjuster looks for, what is typically covered, and what CTL does and does not do on your claim.",
+      "How a roof insurance claim runs in Louisiana: opening it, what an adjuster looks for, what is covered, and where CTL stands in it.",
     path: "/insurance/",
   } satisfies PageMeta,
 

@@ -13,7 +13,10 @@ export default function robots(): MetadataRoute.Robots {
   }
 
   return {
-    rules: { userAgent: "*", allow: "/" },
+    // /admin/ is the gallery CMS — a tool, not content. It carries its
+    // own noindex meta and an X-Robots-Tag from scripts/cms.mjs; this is
+    // the layer that stops a well-behaved crawler fetching it at all.
+    rules: { userAgent: "*", allow: "/", disallow: "/admin/" },
     sitemap: `${client.siteUrl}/sitemap.xml`,
   };
 }

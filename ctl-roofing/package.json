@@ -3,27 +3,28 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build && node scripts/csp.mjs && node scripts/seo.mjs",
+    "dev": "node scripts/gallery.mjs && next dev",
+    "build": "node scripts/gallery.mjs && next build && node scripts/csp.mjs && node scripts/cms.mjs && node scripts/fonts.mjs && node scripts/seo.mjs && node scripts/routes.mjs --check && node scripts/harden.mjs",
     "start": "next start",
     "lint": "next lint",
     "deploy": "npm run build && npx wrangler pages deploy out --project-name ctl-roofing",
     "preview:build": "node scripts/preview-build.mjs",
     "preview:deploy": "npm run preview:build && npx wrangler pages deploy out --project-name ctl-preview --branch main --commit-dirty=true",
-    "check": "node scripts/check.mjs app components lib content client.config.ts"
+    "check": "node scripts/check.mjs app components lib content client.config.ts",
+    "gallery": "node scripts/gallery.mjs",
+    "routes": "node scripts/routes.mjs",
+    "harden": "node scripts/harden.mjs",
+    "fonts": "node scripts/fonts.mjs"
   },
   "dependencies": {
     "@fontsource/big-shoulders-display": "^5.3.0",
     "@fontsource/ibm-plex-mono": "^5.3.0",
     "@fontsource/ibm-plex-sans": "^5.3.0",
-    "@react-three/fiber": "^8.18.0",
     "framer-motion": "^11.11.17",
-    "gsap": "^3.15.0",
     "lenis": "^1.3.26",
     "next": "^14.2.15",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "three": "^0.185.1"
+    "react-dom": "^18.3.1"
   },
   "devDependencies": {
     "@types/node": "^20",

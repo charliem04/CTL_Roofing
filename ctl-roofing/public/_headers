@@ -15,6 +15,22 @@
   X-Frame-Options: DENY
   # Features this site has no business asking for.
   Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=()
+  # After one visit over HTTPS, the browser refuses to try plain HTTP for
+  # a year. That closes the gap this site otherwise has every time
+  # somebody types "ctlpro.com" into the bar: the first request goes out
+  # unencrypted and is redirected, and anything on the path between can
+  # answer it first.
+  #
+  # includeSubDomains is deliberate — it is the half that stops the same
+  # trick on a subdomain — and is safe here because everything on this
+  # domain terminates at Cloudflare over TLS. If a subdomain ever has to
+  # serve plain HTTP, this is the line to revisit BEFORE it is set up,
+  # because the browser will have cached this for a year.
+  #
+  # `preload` is deliberately NOT set. It hard-codes the domain into
+  # browsers themselves, and getting back off that list takes months —
+  # not a commitment to make on a site's behalf without asking.
+  Strict-Transport-Security: max-age=31536000; includeSubDomains
 
 # Next's build output is content-hashed, so a given URL's bytes never
 # change. Cache it hard and forever.

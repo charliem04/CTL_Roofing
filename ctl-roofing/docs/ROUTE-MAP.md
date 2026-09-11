@@ -8,15 +8,15 @@ Regenerate with `npm run routes`. The build runs it too, and **fails if
 any internal link points at a page that was not built**, so this file
 cannot quietly drift from the site it describes.
 
-_Last generated: 2026-09-11 · 22 pages · 801 distinct links_
+_Last generated: 2026-09-11 · 22 pages · 798 distinct links_
 
 ## What this covers
 
 | Destination | Count |
 | --- | --- |
-| page | 495 |
-| external | 135 |
+| page | 554 |
 | phone | 122 |
+| external | 73 |
 | email | 22 |
 | text message | 22 |
 | same page | 4 |
@@ -28,7 +28,7 @@ counted once per page, not once per occurrence.
 
 ## What this does NOT cover
 
-190 controls on this site are buttons rather than links. They do not
+189 controls on this site are buttons rather than links. They do not
 navigate — they act on the page the visitor is already on:
 
 - the four **process steps** on the home page scroll the pinned band to
@@ -49,7 +49,6 @@ Every external origin this site links to, and how many links reach it.
 
 | Origin | Links |
 | --- | --- |
-| https://calendly.com | 62 |
 | https://g.page | 25 |
 | https://www.facebook.com | 23 |
 | https://www.instagram.com | 21 |
@@ -63,10 +62,6 @@ Every external origin this site links to, and how many links reach it.
 | Control | Goes to | Kind |
 | --- | --- | --- |
 | office@ctlpro.com | `mailto:office@ctlpro.com` | email |
-| Free assessment | `https://calendly.com/d/ct7p-3by-878/free-consultation` | external |
-| Schedule a free assessment | `https://calendly.com/d/ct7p-3by-878/free-consultation` | external |
-| Book directly on the calendar | `https://calendly.com/d/ct7p-3by-878/free-consultation` | external |
-| Book | `https://calendly.com/d/ct7p-3by-878/free-consultation` | external |
 | Read our Google reviews | `https://g.page/r/CdzPt0LheRXZEAI/review` | external |
 | Google reviews | `https://g.page/r/CdzPt0LheRXZEAI/review` | external |
 | CTL Roofing on Facebook | `https://www.facebook.com/ctlprola` | external |
@@ -76,8 +71,11 @@ Every external origin this site links to, and how many links reach it.
 | Every town we serve → | `/areas/` | page |
 | Careers | `/careers/` | page |
 | Contact | `/contact/` | page |
+| Free assessment | `/contact/` | page |
+| Schedule a free assessment | `/contact/` | page |
 | Talk through a metal roof | `/contact/` | page |
 | Or send us the details → | `/contact/` | page |
+| Book | `/contact/` | page |
 | Financing | `/financing/` | page |
 | Our Work | `/gallery/` | page |
 | The full gallery → | `/gallery/` | page |
@@ -119,8 +117,6 @@ Every external origin this site links to, and how many links reach it.
 | Control | Goes to | Kind |
 | --- | --- | --- |
 | office@ctlpro.com | `mailto:office@ctlpro.com` | email |
-| Free assessment | `https://calendly.com/d/ct7p-3by-878/free-consultation` | external |
-| Book | `https://calendly.com/d/ct7p-3by-878/free-consultation` | external |
 | Google reviews | `https://g.page/r/CdzPt0LheRXZEAI/review` | external |
 | CTL Roofing on Facebook | `https://www.facebook.com/ctlprola` | external |
 | CTL Roofing on Instagram | `https://www.instagram.com/ctlpro` | external |
@@ -129,6 +125,8 @@ Every external origin this site links to, and how many links reach it.
 | About us | `/#about` | page |
 | Careers | `/careers/` | page |
 | Contact | `/contact/` | page |
+| Free assessment | `/contact/` | page |
+| Book | `/contact/` | page |
 | Financing | `/financing/` | page |
 | Our Work | `/gallery/` | page |
 | Our work | `/gallery/` | page |
@@ -161,9 +159,6 @@ No links.
 | Control | Goes to | Kind |
 | --- | --- | --- |
 | office@ctlpro.com | `mailto:office@ctlpro.com` | email |
-| Free assessment | `https://calendly.com/d/ct7p-3by-878/free-consultation` | external |
-| Schedule a free assessment | `https://calendly.com/d/ct7p-3by-878/free-consultation` | external |
-| Book | `https://calendly.com/d/ct7p-3by-878/free-consultation` | external |
 | Google reviews | `https://g.page/r/CdzPt0LheRXZEAI/review` | external |
 | CTL Roofing on Facebook | `https://www.facebook.com/ctlprola` | external |
 | CTL Roofing on Instagram | `https://www.instagram.com/ctlpro` | external |
@@ -172,7 +167,10 @@ No links.
 | About us | `/#about` | page |
 | Careers | `/careers/` | page |
 | Contact | `/contact/` | page |
+| Free assessment | `/contact/` | page |
+| Schedule a free assessment | `/contact/` | page |
 | Or send us the details → | `/contact/` | page |
+| Book | `/contact/` | page |
 | Financing | `/financing/` | page |
 | Our Work | `/gallery/` | page |
 | See work from around Acadiana → | `/gallery/` | page |
@@ -205,8 +203,6 @@ No links.
 | --- | --- | --- |
 | Or email the office → | `mailto:office@ctlpro.com` | email |
 | office@ctlpro.com | `mailto:office@ctlpro.com` | email |
-| Free assessment | `https://calendly.com/d/ct7p-3by-878/free-consultation` | external |
-| Book | `https://calendly.com/d/ct7p-3by-878/free-consultation` | external |
 | Google reviews | `https://g.page/r/CdzPt0LheRXZEAI/review` | external |
 | CTL Roofing on Facebook | `https://www.facebook.com/ctlprola` | external |
 | CTL Roofing on Instagram | `https://www.instagram.com/ctlpro` | external |
@@ -215,6 +211,8 @@ No links.
 | About us | `/#about` | page |
 | Careers | `/careers/` | page |
 | Contact | `/contact/` | page |
+| Free assessment | `/contact/` | page |
+| Book | `/contact/` | page |
 | Financing | `/financing/` | page |
 | Our Work | `/gallery/` | page |
 | Our work | `/gallery/` | page |
@@ -245,9 +243,6 @@ No links.
 | Control | Goes to | Kind |
 | --- | --- | --- |
 | office@ctlpro.com | `mailto:office@ctlpro.com` | email |
-| Free assessment | `https://calendly.com/d/ct7p-3by-878/free-consultation` | external |
-| Schedule a free assessment | `https://calendly.com/d/ct7p-3by-878/free-consultation` | external |
-| Book | `https://calendly.com/d/ct7p-3by-878/free-consultation` | external |
 | Google reviews | `https://g.page/r/CdzPt0LheRXZEAI/review` | external |
 | CTL Roofing on Facebook | `https://www.facebook.com/ctlprola` | external |
 | CTL Roofing on Instagram | `https://www.instagram.com/ctlpro` | external |
@@ -256,7 +251,10 @@ No links.
 | About us | `/#about` | page |
 | Careers | `/careers/` | page |
 | Contact | `/contact/` | page |
+| Free assessment | `/contact/` | page |
+| Schedule a free assessment | `/contact/` | page |
 | Or send us the details → | `/contact/` | page |
+| Book | `/contact/` | page |
 | Financing | `/financing/` | page |
 | Our Work | `/gallery/` | page |
 | See the work so far → | `/gallery/` | page |
@@ -286,11 +284,6 @@ No links.
 | Control | Goes to | Kind |
 | --- | --- | --- |
 | office@ctlpro.com | `mailto:office@ctlpro.com` | email |
-| Free assessment | `https://calendly.com/d/ct7p-3by-878/free-consultation` | external |
-| Open Calendly instead | `https://calendly.com/d/ct7p-3by-878/free-consultation` | external |
-| Book directly on the calendar | `https://calendly.com/d/ct7p-3by-878/free-consultation` | external |
-| Schedule a free assessment | `https://calendly.com/d/ct7p-3by-878/free-consultation` | external |
-| Book | `https://calendly.com/d/ct7p-3by-878/free-consultation` | external |
 | Google reviews | `https://g.page/r/CdzPt0LheRXZEAI/review` | external |
 | CTL Roofing on Facebook | `https://www.facebook.com/ctlprola` | external |
 | CTL Roofing on Instagram | `https://www.instagram.com/ctlpro` | external |
@@ -299,7 +292,10 @@ No links.
 | About us | `/#about` | page |
 | Careers | `/careers/` | page |
 | Contact | `/contact/` | page |
+| Free assessment | `/contact/` | page |
+| Schedule a free assessment | `/contact/` | page |
 | Or send us the details → | `/contact/` | page |
+| Book | `/contact/` | page |
 | Financing | `/financing/` | page |
 | Our Work | `/gallery/` | page |
 | Our work | `/gallery/` | page |
@@ -329,9 +325,6 @@ No links.
 | Control | Goes to | Kind |
 | --- | --- | --- |
 | office@ctlpro.com | `mailto:office@ctlpro.com` | email |
-| Free assessment | `https://calendly.com/d/ct7p-3by-878/free-consultation` | external |
-| Schedule a free assessment | `https://calendly.com/d/ct7p-3by-878/free-consultation` | external |
-| Book | `https://calendly.com/d/ct7p-3by-878/free-consultation` | external |
 | Google reviews | `https://g.page/r/CdzPt0LheRXZEAI/review` | external |
 | As low as 8.99% APR * Traditional installment loan The lo… | `https://prequalification.enerbank.com/apply/loanproduct?sponsorPhoneNumber=8007747598&amp;contractorNumber=198295&amp;loanCode=DEL2622&amp;contractorEmail=rob@ctlpro.com` | external |
 | 12 months * Same-as-cash No payments and no interest for … | `https://prequalification.enerbank.com/apply/loanproduct?sponsorPhoneNumber=8007747598&amp;contractorNumber=198295&amp;loanCode=DEL2625&amp;contractorEmail=rob@ctlpro.com` | external |
@@ -343,7 +336,10 @@ No links.
 | About us | `/#about` | page |
 | Careers | `/careers/` | page |
 | Contact | `/contact/` | page |
+| Free assessment | `/contact/` | page |
+| Schedule a free assessment | `/contact/` | page |
 | Or send us the details → | `/contact/` | page |
+| Book | `/contact/` | page |
 | Talk to us about terms | `/contact/?about=financing` | page |
 | Financing | `/financing/` | page |
 | Our Work | `/gallery/` | page |
@@ -376,9 +372,6 @@ No links.
 | Control | Goes to | Kind |
 | --- | --- | --- |
 | office@ctlpro.com | `mailto:office@ctlpro.com` | email |
-| Free assessment | `https://calendly.com/d/ct7p-3by-878/free-consultation` | external |
-| Schedule a free assessment | `https://calendly.com/d/ct7p-3by-878/free-consultation` | external |
-| Book | `https://calendly.com/d/ct7p-3by-878/free-consultation` | external |
 | Google reviews | `https://g.page/r/CdzPt0LheRXZEAI/review` | external |
 | CTL Roofing on Facebook | `https://www.facebook.com/ctlprola` | external |
 | CTL Roofing on Instagram | `https://www.instagram.com/ctlpro` | external |
@@ -387,7 +380,10 @@ No links.
 | About us | `/#about` | page |
 | Careers | `/careers/` | page |
 | Contact | `/contact/` | page |
+| Free assessment | `/contact/` | page |
+| Schedule a free assessment | `/contact/` | page |
 | Or send us the details → | `/contact/` | page |
+| Book | `/contact/` | page |
 | Financing | `/financing/` | page |
 | Our Work | `/gallery/` | page |
 | Our work | `/gallery/` | page |
@@ -416,9 +412,6 @@ No links.
 | Control | Goes to | Kind |
 | --- | --- | --- |
 | office@ctlpro.com | `mailto:office@ctlpro.com` | email |
-| Free assessment | `https://calendly.com/d/ct7p-3by-878/free-consultation` | external |
-| Schedule a free assessment | `https://calendly.com/d/ct7p-3by-878/free-consultation` | external |
-| Book | `https://calendly.com/d/ct7p-3by-878/free-consultation` | external |
 | Google reviews | `https://g.page/r/CdzPt0LheRXZEAI/review` | external |
 | CTL Roofing on Facebook | `https://www.facebook.com/ctlprola` | external |
 | CTL Roofing on Instagram | `https://www.instagram.com/ctlpro` | external |
@@ -427,7 +420,10 @@ No links.
 | About us | `/#about` | page |
 | Careers | `/careers/` | page |
 | Contact | `/contact/` | page |
+| Free assessment | `/contact/` | page |
+| Schedule a free assessment | `/contact/` | page |
 | Or send us the details → | `/contact/` | page |
+| Book | `/contact/` | page |
 | Talk to us about terms → | `/contact/?about=financing` | page |
 | Financing | `/financing/` | page |
 | See financing options | `/financing/` | page |
@@ -459,8 +455,6 @@ No links.
 | Control | Goes to | Kind |
 | --- | --- | --- |
 | office@ctlpro.com | `mailto:office@ctlpro.com` | email |
-| Free assessment | `https://calendly.com/d/ct7p-3by-878/free-consultation` | external |
-| Book | `https://calendly.com/d/ct7p-3by-878/free-consultation` | external |
 | Google reviews | `https://g.page/r/CdzPt0LheRXZEAI/review` | external |
 | CTL Roofing on Facebook | `https://www.facebook.com/ctlprola` | external |
 | CTL Roofing on Instagram | `https://www.instagram.com/ctlpro` | external |
@@ -469,6 +463,8 @@ No links.
 | About us | `/#about` | page |
 | Careers | `/careers/` | page |
 | Contact | `/contact/` | page |
+| Free assessment | `/contact/` | page |
+| Book | `/contact/` | page |
 | Financing | `/financing/` | page |
 | Our Work | `/gallery/` | page |
 | Our work | `/gallery/` | page |
@@ -496,9 +492,6 @@ No links.
 | Control | Goes to | Kind |
 | --- | --- | --- |
 | office@ctlpro.com | `mailto:office@ctlpro.com` | email |
-| Free assessment | `https://calendly.com/d/ct7p-3by-878/free-consultation` | external |
-| Schedule a free assessment | `https://calendly.com/d/ct7p-3by-878/free-consultation` | external |
-| Book | `https://calendly.com/d/ct7p-3by-878/free-consultation` | external |
 | Read the reviews on Google | `https://g.page/r/CdzPt0LheRXZEAI/review` | external |
 | Read and leave reviews on Google | `https://g.page/r/CdzPt0LheRXZEAI/review` | external |
 | Google reviews | `https://g.page/r/CdzPt0LheRXZEAI/review` | external |
@@ -511,7 +504,10 @@ No links.
 | About us | `/#about` | page |
 | Careers | `/careers/` | page |
 | Contact | `/contact/` | page |
+| Free assessment | `/contact/` | page |
+| Schedule a free assessment | `/contact/` | page |
 | Or send us the details → | `/contact/` | page |
+| Book | `/contact/` | page |
 | Financing | `/financing/` | page |
 | Our Work | `/gallery/` | page |
 | Our work | `/gallery/` | page |
@@ -540,9 +536,6 @@ No links.
 | Control | Goes to | Kind |
 | --- | --- | --- |
 | office@ctlpro.com | `mailto:office@ctlpro.com` | email |
-| Free assessment | `https://calendly.com/d/ct7p-3by-878/free-consultation` | external |
-| Schedule a free assessment | `https://calendly.com/d/ct7p-3by-878/free-consultation` | external |
-| Book | `https://calendly.com/d/ct7p-3by-878/free-consultation` | external |
 | Google reviews | `https://g.page/r/CdzPt0LheRXZEAI/review` | external |
 | CTL Roofing on Facebook | `https://www.facebook.com/ctlprola` | external |
 | CTL Roofing on Instagram | `https://www.instagram.com/ctlpro` | external |
@@ -551,7 +544,10 @@ No links.
 | About us | `/#about` | page |
 | Careers | `/careers/` | page |
 | Contact | `/contact/` | page |
+| Free assessment | `/contact/` | page |
+| Schedule a free assessment | `/contact/` | page |
 | Or send us the details → | `/contact/` | page |
+| Book | `/contact/` | page |
 | Financing | `/financing/` | page |
 | Our Work | `/gallery/` | page |
 | Our work | `/gallery/` | page |
@@ -586,9 +582,6 @@ No links.
 | Control | Goes to | Kind |
 | --- | --- | --- |
 | office@ctlpro.com | `mailto:office@ctlpro.com` | email |
-| Free assessment | `https://calendly.com/d/ct7p-3by-878/free-consultation` | external |
-| Schedule a free assessment | `https://calendly.com/d/ct7p-3by-878/free-consultation` | external |
-| Book | `https://calendly.com/d/ct7p-3by-878/free-consultation` | external |
 | Google reviews | `https://g.page/r/CdzPt0LheRXZEAI/review` | external |
 | CTL Roofing on Facebook | `https://www.facebook.com/ctlprola` | external |
 | CTL Roofing on Instagram | `https://www.instagram.com/ctlpro` | external |
@@ -597,7 +590,10 @@ No links.
 | About us | `/#about` | page |
 | Careers | `/careers/` | page |
 | Contact | `/contact/` | page |
+| Free assessment | `/contact/` | page |
+| Schedule a free assessment | `/contact/` | page |
 | Or send us the details → | `/contact/` | page |
+| Book | `/contact/` | page |
 | Financing | `/financing/` | page |
 | Our Work | `/gallery/` | page |
 | Our work | `/gallery/` | page |
@@ -630,9 +626,6 @@ No links.
 | Control | Goes to | Kind |
 | --- | --- | --- |
 | office@ctlpro.com | `mailto:office@ctlpro.com` | email |
-| Free assessment | `https://calendly.com/d/ct7p-3by-878/free-consultation` | external |
-| Schedule a free assessment | `https://calendly.com/d/ct7p-3by-878/free-consultation` | external |
-| Book | `https://calendly.com/d/ct7p-3by-878/free-consultation` | external |
 | Google reviews | `https://g.page/r/CdzPt0LheRXZEAI/review` | external |
 | CTL Roofing on Facebook | `https://www.facebook.com/ctlprola` | external |
 | CTL Roofing on Instagram | `https://www.instagram.com/ctlpro` | external |
@@ -641,7 +634,10 @@ No links.
 | About us | `/#about` | page |
 | Careers | `/careers/` | page |
 | Contact | `/contact/` | page |
+| Free assessment | `/contact/` | page |
+| Schedule a free assessment | `/contact/` | page |
 | Or send us the details → | `/contact/` | page |
+| Book | `/contact/` | page |
 | Financing | `/financing/` | page |
 | Our Work | `/gallery/` | page |
 | Our work | `/gallery/` | page |
@@ -673,9 +669,6 @@ No links.
 | Control | Goes to | Kind |
 | --- | --- | --- |
 | office@ctlpro.com | `mailto:office@ctlpro.com` | email |
-| Free assessment | `https://calendly.com/d/ct7p-3by-878/free-consultation` | external |
-| Schedule a free assessment | `https://calendly.com/d/ct7p-3by-878/free-consultation` | external |
-| Book | `https://calendly.com/d/ct7p-3by-878/free-consultation` | external |
 | Google reviews | `https://g.page/r/CdzPt0LheRXZEAI/review` | external |
 | CTL Roofing on Facebook | `https://www.facebook.com/ctlprola` | external |
 | CTL Roofing on Instagram | `https://www.instagram.com/ctlpro` | external |
@@ -684,7 +677,10 @@ No links.
 | About us | `/#about` | page |
 | Careers | `/careers/` | page |
 | Contact | `/contact/` | page |
+| Free assessment | `/contact/` | page |
+| Schedule a free assessment | `/contact/` | page |
 | Or send us the details → | `/contact/` | page |
+| Book | `/contact/` | page |
 | Financing | `/financing/` | page |
 | Our Work | `/gallery/` | page |
 | Our work | `/gallery/` | page |
@@ -717,9 +713,6 @@ No links.
 | Control | Goes to | Kind |
 | --- | --- | --- |
 | office@ctlpro.com | `mailto:office@ctlpro.com` | email |
-| Free assessment | `https://calendly.com/d/ct7p-3by-878/free-consultation` | external |
-| Schedule a free assessment | `https://calendly.com/d/ct7p-3by-878/free-consultation` | external |
-| Book | `https://calendly.com/d/ct7p-3by-878/free-consultation` | external |
 | Google reviews | `https://g.page/r/CdzPt0LheRXZEAI/review` | external |
 | CTL Roofing on Facebook | `https://www.facebook.com/ctlprola` | external |
 | CTL Roofing on Instagram | `https://www.instagram.com/ctlpro` | external |
@@ -728,7 +721,10 @@ No links.
 | About us | `/#about` | page |
 | Careers | `/careers/` | page |
 | Contact | `/contact/` | page |
+| Free assessment | `/contact/` | page |
+| Schedule a free assessment | `/contact/` | page |
 | Or send us the details → | `/contact/` | page |
+| Book | `/contact/` | page |
 | Financing | `/financing/` | page |
 | Our Work | `/gallery/` | page |
 | Our work | `/gallery/` | page |
@@ -761,9 +757,6 @@ No links.
 | Control | Goes to | Kind |
 | --- | --- | --- |
 | office@ctlpro.com | `mailto:office@ctlpro.com` | email |
-| Free assessment | `https://calendly.com/d/ct7p-3by-878/free-consultation` | external |
-| Schedule a free assessment | `https://calendly.com/d/ct7p-3by-878/free-consultation` | external |
-| Book | `https://calendly.com/d/ct7p-3by-878/free-consultation` | external |
 | Google reviews | `https://g.page/r/CdzPt0LheRXZEAI/review` | external |
 | CTL Roofing on Facebook | `https://www.facebook.com/ctlprola` | external |
 | CTL Roofing on Instagram | `https://www.instagram.com/ctlpro` | external |
@@ -772,8 +765,11 @@ No links.
 | About us | `/#about` | page |
 | Careers | `/careers/` | page |
 | Contact | `/contact/` | page |
+| Free assessment | `/contact/` | page |
 | Talk through a metal roof | `/contact/` | page |
+| Schedule a free assessment | `/contact/` | page |
 | Or send us the details → | `/contact/` | page |
+| Book | `/contact/` | page |
 | Financing | `/financing/` | page |
 | Our Work | `/gallery/` | page |
 | Our work | `/gallery/` | page |
@@ -806,9 +802,6 @@ No links.
 | Control | Goes to | Kind |
 | --- | --- | --- |
 | office@ctlpro.com | `mailto:office@ctlpro.com` | email |
-| Free assessment | `https://calendly.com/d/ct7p-3by-878/free-consultation` | external |
-| Schedule a free assessment | `https://calendly.com/d/ct7p-3by-878/free-consultation` | external |
-| Book | `https://calendly.com/d/ct7p-3by-878/free-consultation` | external |
 | Google reviews | `https://g.page/r/CdzPt0LheRXZEAI/review` | external |
 | CTL Roofing on Facebook | `https://www.facebook.com/ctlprola` | external |
 | CTL Roofing on Instagram | `https://www.instagram.com/ctlpro` | external |
@@ -818,7 +811,10 @@ No links.
 | About us | `/#about` | page |
 | Careers | `/careers/` | page |
 | Contact | `/contact/` | page |
+| Free assessment | `/contact/` | page |
+| Schedule a free assessment | `/contact/` | page |
 | Or send us the details → | `/contact/` | page |
+| Book | `/contact/` | page |
 | Financing | `/financing/` | page |
 | Paying for it over time → | `/financing/` | page |
 | Our Work | `/gallery/` | page |
@@ -851,9 +847,6 @@ No links.
 | Control | Goes to | Kind |
 | --- | --- | --- |
 | office@ctlpro.com | `mailto:office@ctlpro.com` | email |
-| Free assessment | `https://calendly.com/d/ct7p-3by-878/free-consultation` | external |
-| Schedule a free assessment | `https://calendly.com/d/ct7p-3by-878/free-consultation` | external |
-| Book | `https://calendly.com/d/ct7p-3by-878/free-consultation` | external |
 | What customers say on Google → | `https://g.page/r/CdzPt0LheRXZEAI/review` | external |
 | Google reviews | `https://g.page/r/CdzPt0LheRXZEAI/review` | external |
 | CTL Roofing on Facebook | `https://www.facebook.com/ctlprola` | external |
@@ -864,7 +857,10 @@ No links.
 | Where this crew works → | `/areas/` | page |
 | Careers | `/careers/` | page |
 | Contact | `/contact/` | page |
+| Free assessment | `/contact/` | page |
+| Schedule a free assessment | `/contact/` | page |
 | Or send us the details → | `/contact/` | page |
+| Book | `/contact/` | page |
 | Financing | `/financing/` | page |
 | Our Work | `/gallery/` | page |
 | Our work | `/gallery/` | page |
@@ -893,8 +889,6 @@ No links.
 | Control | Goes to | Kind |
 | --- | --- | --- |
 | office@ctlpro.com | `mailto:office@ctlpro.com` | email |
-| Free assessment | `https://calendly.com/d/ct7p-3by-878/free-consultation` | external |
-| Book | `https://calendly.com/d/ct7p-3by-878/free-consultation` | external |
 | Google reviews | `https://g.page/r/CdzPt0LheRXZEAI/review` | external |
 | CTL Roofing on Facebook | `https://www.facebook.com/ctlprola` | external |
 | CTL Roofing on Instagram | `https://www.instagram.com/ctlpro` | external |
@@ -903,6 +897,8 @@ No links.
 | About us | `/#about` | page |
 | Careers | `/careers/` | page |
 | Contact | `/contact/` | page |
+| Free assessment | `/contact/` | page |
+| Book | `/contact/` | page |
 | Financing | `/financing/` | page |
 | Our Work | `/gallery/` | page |
 | Our work | `/gallery/` | page |
@@ -930,9 +926,6 @@ No links.
 | Control | Goes to | Kind |
 | --- | --- | --- |
 | office@ctlpro.com | `mailto:office@ctlpro.com` | email |
-| Free assessment | `https://calendly.com/d/ct7p-3by-878/free-consultation` | external |
-| Schedule a free assessment | `https://calendly.com/d/ct7p-3by-878/free-consultation` | external |
-| Book | `https://calendly.com/d/ct7p-3by-878/free-consultation` | external |
 | Google reviews | `https://g.page/r/CdzPt0LheRXZEAI/review` | external |
 | CTL Roofing on Facebook | `https://www.facebook.com/ctlprola` | external |
 | CTL Roofing on Instagram | `https://www.instagram.com/ctlpro` | external |
@@ -942,7 +935,10 @@ No links.
 | About us | `/#about` | page |
 | Careers | `/careers/` | page |
 | Contact | `/contact/` | page |
+| Free assessment | `/contact/` | page |
+| Schedule a free assessment | `/contact/` | page |
 | Or send us the details → | `/contact/` | page |
+| Book | `/contact/` | page |
 | Financing | `/financing/` | page |
 | Our Work | `/gallery/` | page |
 | photo gallery | `/gallery/` | page |

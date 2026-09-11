@@ -70,9 +70,18 @@ export const client = {
   // ── Booking ───────────────────────────────────────────────────────
   /**
    * Scheduler the primary CTAs point at. Empty string falls the CTAs
-   * back to the on-page request form.
+   * back to /contact/ — the request form, the phone and the storm line
+   * — and drops the booking band from that page along with it.
+   *
+   * Deliberately empty. Every CTA used to hand the visitor to Calendly
+   * mid-decision; they now land on our own contact page instead, which
+   * is the one place that carries all the ways in. Putting a scheduler
+   * URL back here re-arms the CTAs, the /contact/ booking band and the
+   * Calendly paragraph in the privacy notice in one edit — the CSP
+   * drift check in scripts/csp.mjs will then fail the build until
+   * frame-src names the scheduler's origin, which is the reminder.
    */
-  bookingUrl: "https://calendly.com/d/ct7p-3by-878/free-consultation",
+  bookingUrl: "",
   /**
    * Call tracking. Dynamic number insertion is the provider’s own
    * script rewriting numbers in the page at runtime, so this is a URL,

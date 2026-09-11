@@ -84,12 +84,19 @@ export default function PrivacyPage() {
         between people. Both process the information only to provide those
         services to us.
       </p>
-      <p>
-        The booking calendar is hosted by <strong>Calendly</strong>. It does
-        not load until you either accept analytics or press the button on the
-        booking panel — until then, nothing is sent to them. Once loaded, your
-        use of the calendar is subject to Calendly’s own privacy policy.
-      </p>
+      {/* Only true while a scheduler is configured. With
+          client.bookingUrl empty there is no booking embed on the site,
+          and a notice describing one would be describing something that
+          does not happen. */}
+      {client.bookingUrl && (
+        <p>
+          The booking calendar is hosted by a third-party scheduling service.
+          It does not load until you either accept analytics or press the
+          button on the booking panel — until then, nothing is sent to them.
+          Once loaded, your use of the calendar is subject to that service’s
+          own privacy policy.
+        </p>
+      )}
       <p>
         A job application does not go through a form service. The résumé is
         uploaded straight into our own private storage on{" "}

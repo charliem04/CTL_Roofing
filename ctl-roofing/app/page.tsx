@@ -21,9 +21,10 @@ import { client } from "@/client.config";
  * to go back up to the nav to follow the thread they are already on.
  *
  * Testimonials are config-gated and render when real reviews are
- * added. Booking lives on /contact/ as an iframe, not here: the home
- * page CTAs link straight out to Calendly, which is one decision fewer
- * for somebody who already knows they want a time.
+ * added. The CTAs go to /contact/ rather than to an outside scheduler:
+ * that page carries the phone, the storm line, the request form and —
+ * when client.bookingUrl is set — the calendar, so it answers whichever
+ * way in the visitor actually wanted.
  */
 export default function Home() {
   return (

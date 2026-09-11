@@ -97,7 +97,7 @@ export function Hero() {
         </motion.p>
 
         <motion.div {...anim(stagger.loose * 3)} className="mt-10 flex flex-wrap gap-2.5">
-          <a href={client.bookingUrl || "#contact"} className={btn("gold")}>
+          <a href={client.bookingUrl || "/contact/"} className={btn("gold")}>
             {client.copy.heroCta}
           </a>
           {/* The office, not the storm line. This is the generic "call

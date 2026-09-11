@@ -119,26 +119,38 @@ export function Lightbox({
 }
 
 /**
- * The grid paints these at ~267 CSS px and crops them to 4:3, but the
- * files are 1100px wide — the gallery page was pulling 3.4MB to show
- * thumbnails. public/ctl/gallery/thumb/ holds a pre-cropped 640x480 of
- * each, which covers a 2x display exactly and is 60% lighter. The
- * lightbox still opens the full-size original.
+ * What the grid should actually paint.
  *
- * Only paths under /ctl/gallery/ are rewritten. The eight home-band
- * photos at /ctl/work-*.jpg are deliberately left alone: they are
- * already encoded tightly enough that a 640x480 re-encode came out
- * fractionally LARGER, so a thumbnail would cost a request and save
- * nothing. Anything else is returned untouched too, so a tile pointed
- * at some other photo renders it rather than 404ing on a thumbnail
- * nobody generated.
+ * The grid draws these at ~267 CSS px and crops them to 4:3, but the
+ * originals are 1100px wide — the gallery page was pulling 3.4MB to
+ * show thumbnails. public/ctl/gallery/thumb/ holds a pre-cropped
+ * 640x480 of each, which covers a 2x display exactly and is 60%
+ * lighter. The lightbox still opens the full-size original.
  *
- * Regenerate with the scratchpad imgtool/thumbs.mjs after adding photos.
+ * ── WHY THIS IS A LOOKUP AND NOT A STRING REPLACEMENT ───────────────
+ *
+ * It used to rewrite any /ctl/gallery/ path to /ctl/gallery/thumb/ and
+ * assume the file was there. That held exactly as long as every photo
+ * arrived through a developer who remembered to regenerate the
+ * thumbnails — and stopped holding the moment the gallery got a CMS,
+ * because a photo uploaded at /admin/ lands in /ctl/gallery/ with no
+ * thumbnail beside it. Every such photo would have rendered as a
+ * broken tile: the one failure mode a page that exists to show off the
+ * work cannot have, on the newest photo, which is the one somebody
+ * just added and will go look at.
+ *
+ * So the thumbnail is now a fact recorded by scripts/gallery.mjs from
+ * what is on disk, rather than a path guessed from a naming rule. No
+ * thumbnail means the original is used: heavier, correct, and reported
+ * in the build log so the optimisation can be restored deliberately.
+ *
+ * The eight home-band photos at /ctl/work-*.jpg have no thumbnails on
+ * purpose — they are already encoded tightly enough that a 640x480
+ * re-encode came out fractionally LARGER — and they reach the same
+ * branch by the same rule, with nothing special written about them.
  */
-function thumbFor(src: string): string {
-  return src.startsWith("/ctl/gallery/")
-    ? src.replace("/ctl/gallery/", "/ctl/gallery/thumb/")
-    : src;
+function thumbFor(shot: Photo): string {
+  return shot.thumb ?? shot.src;
 }
 
 /** Tile shared by the band and the page. */
@@ -162,7 +174,7 @@ export function GalleryTile({
     >
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
-        src={thumbFor(shot.src)}
+        src={thumbFor(shot)}
         alt={shot.alt}
         loading="lazy"
         width={640}

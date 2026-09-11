@@ -30,7 +30,7 @@ export const storm = {
      */
     title: "Storm prevention",
     description:
-      "How to get a roof ready before hurricane season in Acadiana, what to do in the first 48 hours if a storm gets through it, and how CTL runs the repair from tarp to final walkthrough.",
+      "Getting a roof ready before hurricane season in Acadiana, what to do in the first 48 hours if a storm gets through, and how CTL runs the repair.",
     path: "/storm-damage/",
   } satisfies PageMeta,
 

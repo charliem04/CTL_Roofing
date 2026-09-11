@@ -16,6 +16,16 @@ export type Photo = {
   width: number;
   height: number;
   caption?: string;
+  /**
+   * A pre-cropped 640x480 to paint in the grid, when one has been
+   * generated for this photo. Absent means there is none and the tile
+   * should use the full-size original — which is heavier, and is the
+   * only correct answer, because the alternative is a 404 where a
+   * photograph should be.
+   *
+   * Filled in by scripts/gallery.mjs from what is actually on disk.
+   */
+  thumb?: string;
 };
 
 /** Filters on the gallery page, each mapping to a service. */

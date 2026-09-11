@@ -1,0 +1,252 @@
+{
+  "shots": [
+    {
+      "src": "/ctl/work-standing-seam.jpg",
+      "alt": "Aerial view of a standing seam metal roof installation",
+      "caption": "Standing seam install",
+      "category": "metal",
+      "featured": true
+    },
+    {
+      "src": "/ctl/gallery/metal-aerial-complete.jpg",
+      "alt": "Aerial view of a large home finished in dark standing seam metal, seen from above the ridge",
+      "caption": "Standing seam, complete",
+      "category": "metal"
+    },
+    {
+      "src": "/ctl/gallery/metal-aerial-progress.jpg",
+      "alt": "Aerial view of a house part-way through a metal roof install, one wing finished and one still open",
+      "caption": "Half a roof to go",
+      "category": "metal"
+    },
+    {
+      "src": "/ctl/gallery/metal-panels-underlayment.jpg",
+      "alt": "Close aerial of metal panels being laid over blue self-adhered underlayment",
+      "caption": "Panels over underlayment",
+      "category": "metal"
+    },
+    {
+      "src": "/ctl/gallery/metal-crew-ridge.jpg",
+      "alt": "Crew setting metal roof panels on a commercial building still in its ZIP sheathing",
+      "caption": "Setting the ridge",
+      "category": "metal"
+    },
+    {
+      "src": "/ctl/gallery/metal-panel-setting.jpg",
+      "alt": "A roofer kneeling to set a metal panel over underlayment on a low-slope section",
+      "caption": "Panel by panel",
+      "category": "metal"
+    },
+    {
+      "src": "/ctl/gallery/metal-valley-crew.jpg",
+      "alt": "Aerial view of a crew working along the valley of a metal roof",
+      "caption": "Working the valley",
+      "category": "metal"
+    },
+    {
+      "src": "/ctl/gallery/copper-sheet-shop.jpg",
+      "alt": "A sheet of copper on the bench in the CTL shop, catching the light before it is formed",
+      "caption": "Copper, before forming",
+      "category": "metal"
+    },
+    {
+      "src": "/ctl/work-shingle-replacement.jpg",
+      "alt": "Brick home with a completed shingle roof",
+      "caption": "Shingle replacement",
+      "category": "roofing",
+      "featured": true
+    },
+    {
+      "src": "/ctl/work-tear-off.jpg",
+      "alt": "Crew tearing off an old roof deck",
+      "caption": "Tear-off in progress",
+      "category": "roofing",
+      "featured": true
+    },
+    {
+      "src": "/ctl/work-architectural-shingles.jpg",
+      "alt": "Close view of newly laid architectural shingles",
+      "caption": "Architectural shingles",
+      "category": "roofing",
+      "featured": true
+    },
+    {
+      "src": "/ctl/gallery/shingle-deck-exposed.jpg",
+      "alt": "Aerial view of a roof stripped back to bare decking with the crew working across it",
+      "caption": "Down to the deck",
+      "category": "roofing"
+    },
+    {
+      "src": "/ctl/gallery/shingle-aerial-finished.jpg",
+      "alt": "Aerial view of a finished gray shingle roof on a brick home",
+      "caption": "Finished from above",
+      "category": "roofing"
+    },
+    {
+      "src": "/ctl/gallery/shingle-close-finished.jpg",
+      "alt": "Low aerial of a newly finished shingle roof, ridge line in the foreground",
+      "caption": "New shingles, close up",
+      "category": "roofing"
+    },
+    {
+      "src": "/ctl/gallery/shingle-brick-ranch.jpg",
+      "alt": "Brick ranch home with a completed shingle roof and mature landscaping out front",
+      "caption": "Brick ranch, done",
+      "category": "roofing"
+    },
+    {
+      "src": "/ctl/gallery/shingle-crew-install.jpg",
+      "alt": "Crew laying shingles across the front slope of a single-story brick home",
+      "caption": "Laying the front slope",
+      "category": "roofing"
+    },
+    {
+      "src": "/ctl/gallery/shingle-turbine-vents.jpg",
+      "alt": "Close view of a shingle roof with turbine vents along the ridge",
+      "caption": "Ridge and vents",
+      "category": "roofing"
+    },
+    {
+      "src": "/ctl/gallery/tearoff-decking.jpg",
+      "alt": "Roof stripped to the decking mid tear-off, underlayment rolls staged ready",
+      "caption": "Stripped and staged",
+      "category": "roofing"
+    },
+    {
+      "src": "/ctl/gallery/tearoff-crew-tarps.jpg",
+      "alt": "Crew on a roof mid tear-off with tarps spread over the landscaping below",
+      "caption": "Tarps down first",
+      "category": "roofing"
+    },
+    {
+      "src": "/ctl/gallery/shingle-two-story.jpg",
+      "alt": "Two-story brick home with a finished shingle roof",
+      "caption": "Two stories, finished",
+      "category": "roofing"
+    },
+    {
+      "src": "/ctl/gallery/shingle-bundles.jpg",
+      "alt": "Bundles of architectural shingles stacked on a pallet ready for the job",
+      "caption": "Materials staged",
+      "category": "roofing"
+    },
+    {
+      "src": "/ctl/gallery/storm-tarped-brick.jpg",
+      "alt": "Brick home with tarps hung over the roof edge and walls after storm damage",
+      "caption": "Tarped and holding",
+      "category": "storm"
+    },
+    {
+      "src": "/ctl/gallery/storm-tarps-yard.jpg",
+      "alt": "Crew on a roof with blue tarps laid across the driveway and a CTL sign in the yard",
+      "caption": "Storm callout",
+      "category": "storm"
+    },
+    {
+      "src": "/ctl/work-patio-cover.jpg",
+      "alt": "Attached patio cover with wood columns",
+      "caption": "Patio cover",
+      "category": "outdoor",
+      "featured": true
+    },
+    {
+      "src": "/ctl/gallery/patio-frame-going-up.jpg",
+      "alt": "Heavy timber patio frame going up over a concrete slab, ladders either side",
+      "caption": "Frame going up",
+      "category": "outdoor"
+    },
+    {
+      "src": "/ctl/gallery/patio-timber-joint.jpg",
+      "alt": "Close view of a heavy timber post and beam joint against a clear sky",
+      "caption": "Post and beam",
+      "category": "outdoor"
+    },
+    {
+      "src": "/ctl/gallery/patio-cover-finished.jpg",
+      "alt": "Finished white patio cover over a concrete slab, looking out across the yard",
+      "caption": "Cover, finished",
+      "category": "outdoor"
+    },
+    {
+      "src": "/ctl/gallery/carport-attached.jpg",
+      "alt": "Metal carport attached along the side of a home, driveway running under it",
+      "caption": "Attached carport",
+      "category": "outdoor"
+    },
+    {
+      "src": "/ctl/gallery/porch-wood-columns.jpg",
+      "alt": "Covered patio across the back of a white lap-sided home, new wood posts carrying the roof over a fresh slab",
+      "caption": "Porch columns",
+      "category": "outdoor"
+    },
+    {
+      "src": "/ctl/gallery/sunroom-exterior.jpg",
+      "alt": "Enclosed sunroom on the side of a brick home, new windows all around",
+      "caption": "Sunroom",
+      "category": "outdoor"
+    },
+    {
+      "src": "/ctl/work-interior-remodel.jpg",
+      "alt": "Interior remodel under way in a living room",
+      "caption": "Interior remodel",
+      "category": "remodeling",
+      "featured": true
+    },
+    {
+      "src": "/ctl/work-window-replacement.jpg",
+      "alt": "New windows installed in a sunroom",
+      "caption": "Window replacement",
+      "category": "remodeling",
+      "featured": true
+    },
+    {
+      "src": "/ctl/work-exterior-renovation.jpg",
+      "alt": "Home mid-renovation with new siding going on",
+      "caption": "Exterior renovation",
+      "category": "remodeling",
+      "featured": true
+    },
+    {
+      "src": "/ctl/gallery/interior-new-windows.jpg",
+      "alt": "Room with newly installed windows above an exposed brick wall",
+      "caption": "New windows in",
+      "category": "remodeling"
+    },
+    {
+      "src": "/ctl/gallery/interior-window-wall.jpg",
+      "alt": "Interior wall of tall replacement windows looking out onto the yard",
+      "caption": "Window wall",
+      "category": "remodeling"
+    },
+    {
+      "src": "/ctl/gallery/interior-mid-remodel.jpg",
+      "alt": "Living room part-way through a remodel, ceiling fan up and materials still on the floor",
+      "caption": "Mid-remodel",
+      "category": "remodeling"
+    },
+    {
+      "src": "/ctl/gallery/bath-tiled-shower.jpg",
+      "alt": "Bathroom with a marble-effect tiled shower and tub surround",
+      "caption": "Tiled surround",
+      "category": "remodeling"
+    },
+    {
+      "src": "/ctl/gallery/bath-vanity-finished.jpg",
+      "alt": "Finished bathroom with a double vanity and marble-effect walls",
+      "caption": "Bathroom, finished",
+      "category": "remodeling"
+    },
+    {
+      "src": "/ctl/gallery/new-build-exterior.jpg",
+      "alt": "New-build home under construction with the roof on and siding under way",
+      "caption": "New build",
+      "category": "remodeling"
+    },
+    {
+      "src": "/ctl/gallery/multi-unit-siding.jpg",
+      "alt": "Multi-unit building mid-renovation with new siding going up in stages",
+      "caption": "Siding in stages",
+      "category": "remodeling"
+    }
+  ]
+}

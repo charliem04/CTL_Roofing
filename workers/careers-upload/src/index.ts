@@ -68,8 +68,26 @@ export interface Env {
    * leaves the endpoint open to any script that can send a valid PDF.
    */
   ALLOW_INSECURE_NO_CAPTCHA?: string;
-  /** Where the "new application" ping goes. Unset = no ping. */
+  /**
+   * Where the "new application" ping goes. Unset = no ping.
+   *
+   * In this deployment it is the lead relay's /application route (see
+   * workers/lead-relay), which is what puts job applications and
+   * assessment requests in one list. It stays a plain URL rather than a
+   * binding so it can point anywhere — a relay, a Zapier hook, an email
+   * service — without a code change.
+   */
   NOTIFY_WEBHOOK?: string;
+  /**
+   * Shared secret for the relay's /application route, which refuses
+   * anything without it. Sent as X-Ingest-Secret when set, and omitted
+   * entirely when not, so NOTIFY_WEBHOOK still works against a target
+   * that has never heard of it.
+   *
+   * Must match INGEST_SECRET on the relay. Set with
+   * `wrangler secret put RELAY_INGEST_SECRET` on BOTH Workers.
+   */
+  RELAY_INGEST_SECRET?: string;
   /**
    * Optional KV namespace. Used for two things: the per-IP backstop
    * limiter, and short-lived storage of the raw submitting IP (see
@@ -647,7 +665,14 @@ export default {
       try {
         const res = await fetch(env.NOTIFY_WEBHOOK, {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+            // Only when configured: an unset secret must not become a
+            // literal "undefined" header that the relay then rejects.
+            ...(env.RELAY_INGEST_SECRET
+              ? { "X-Ingest-Secret": env.RELAY_INGEST_SECRET }
+              : {}),
+          },
           body: JSON.stringify(payload),
         });
         if (!res.ok) {

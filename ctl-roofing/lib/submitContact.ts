@@ -115,14 +115,29 @@ export async function submitContact(
     submittedAt: new Date().toISOString(),
   };
 
-  // The CRM gets the flat lead, not Web3Forms' envelope. Deliberately
-  // not awaited: a CRM outage must not cost a lead.
+  /*
+   * ── THE SECOND COPY ──────────────────────────────────────────────
+   * The flat lead, to the relay (workers/lead-relay), which stores it
+   * and forwards it to whatever CRM is configured. Web3Forms' envelope
+   * is not what a CRM wants, so this sends the fields themselves.
+   *
+   * Deliberately not awaited: a relay or CRM outage must not cost a
+   * lead or show the customer an error, and the email below is the
+   * copy that matters.
+   *
+   * `keepalive` is what makes an un-awaited request actually arrive. A
+   * fetch nobody is waiting on is cancelled if the page navigates or
+   * unloads before it completes, which is a real possibility on a form
+   * whose success state is the visitor leaving. It costs nothing here —
+   * the payload is far inside the 64KB keepalive limit.
+   */
   if (WEBHOOK_URL) {
     fetch(WEBHOOK_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ ...fields, ...meta }),
-    }).catch((e) => console.warn("[contact] CRM webhook failed:", e));
+      keepalive: true,
+    }).catch((e) => console.warn("[contact] lead relay failed:", e));
   }
 
   if (!WEB3FORMS_KEY) {

@@ -103,6 +103,30 @@ const INERT = new Set([
   "https://tailwindcss.com",
 ]);
 
+/**
+ * Origins this site opens a TCP+TLS connection to and then never asks
+ * for anything.
+ *
+ * A <link rel="preconnect"> performs the handshake and stops. No
+ * request is issued, so no fetch directive governs it — connect-src
+ * does not apply, and adding one of these there would be a false
+ * statement in the policy: it would permit fetches this document must
+ * never make.
+ *
+ * They still belong somewhere visible, because a preconnect is a real
+ * disclosure of the visitor's IP to a third party. Each is warmed only
+ * behind cookie consent, and each has to be an origin the booking
+ * iframe genuinely fetches from once it loads — a preconnect to
+ * anywhere else is a connection opened for nothing.
+ */
+const PRECONNECT_ONLY = new Set([
+  // Calendly serves the embed's JavaScript and CSS from here. Our
+  // document never touches it; the iframe does, under Calendly's own
+  // policy rather than this one. We open the socket early so that
+  // fetch is not a cold start. See lib/booking.ts.
+  "https://assets.calendly.com",
+]);
+
 export function buildCsp(env = process.env) {
   // Only the endpoints this build actually points at.
   const extra = [
@@ -200,7 +224,7 @@ function checkDrift(csp) {
     [...csp.matchAll(/https:\/\/[a-zA-Z0-9.*-]+/g)].map((m) => m[0])
   );
   const unaccounted = [...originsInBuild()].filter((o) => {
-    if (LINK_ONLY.has(o) || INERT.has(o)) return false;
+    if (LINK_ONLY.has(o) || INERT.has(o) || PRECONNECT_ONLY.has(o)) return false;
     if (allowed.has(o)) return false;
     // Wildcard entries such as https://*.googleusercontent.com
     for (const a of allowed) {

@@ -1,4 +1,6 @@
 import { getContactPage } from "@/lib/content";
+import { bookingOrigins } from "@/lib/booking";
+import { CONSENT_KEY } from "@/lib/consent";
 import { pageMetadata } from "@/lib/meta";
 import { client } from "@/client.config";
 import { PageHero } from "@/components/PageHero";
@@ -19,6 +21,8 @@ export const metadata = pageMetadata(page.meta);
  * ones who would rather write it all down once.
  */
 export default function ContactPage() {
+  const origins = bookingOrigins();
+
   const lines = [
     {
       label: "Office",
@@ -48,6 +52,39 @@ export default function ContactPage() {
 
   return (
     <>
+      {/* ── Opening the scheduler's connections before React exists ───
+          BookingEmbed preconnects as soon as it knows the visitor has
+          accepted cookies — but it only knows that from an effect, and
+          an effect cannot run until the bundle has downloaded, parsed
+          and hydrated. On a phone on mobile data that is most of a
+          second in which the browser knows exactly which origins it is
+          about to need and is doing nothing about it.
+
+          This runs while the HTML is still being parsed. It reads the
+          same consent key and warms the same origins with the same
+          marker attribute, so BookingEmbed finds the links already
+          there and appends nothing. The saving is the handshake: by
+          the time the iframe mounts, DNS, TCP and TLS are done.
+
+          It stays behind consent, which is the whole posture — a
+          visitor who declined, or has not been asked, opens no
+          connection to anyone. It ships only on this page, so no other
+          route can reach a third party this way, and it is wrapped in
+          try/catch because localStorage throws outright in a locked-down
+          browser and a dead preconnect must not take the page with it. */}
+      {origins.length > 0 && (
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              `try{if(localStorage.getItem(${JSON.stringify(CONSENT_KEY)})==="accepted")` +
+              `${JSON.stringify(origins)}.forEach(function(o){` +
+              `var l=document.createElement("link");l.rel="preconnect";l.href=o;` +
+              `l.crossOrigin="anonymous";l.setAttribute("data-booking-warm",o);` +
+              `document.head.appendChild(l)})}catch(e){}`,
+          }}
+        />
+      )}
+
       <PageHero
         path={page.meta.path}
         heading={page.heading}

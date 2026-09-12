@@ -3,7 +3,13 @@
  * this before loading. Stored in localStorage; a custom event lets
  * components react to consent granted after initial mount.
  */
-const KEY = "cookie-consent"; // "accepted" | "declined"
+/**
+ * Exported because /contact/ reads it from an inline script that runs
+ * before this module is downloaded. Two copies of a storage key is the
+ * kind of thing that stays correct until the day it does not.
+ */
+export const CONSENT_KEY = "cookie-consent"; // "accepted" | "declined"
+const KEY = CONSENT_KEY;
 export const CONSENT_EVENT = "consent-changed";
 
 export type ConsentValue = "accepted" | "declined" | null;

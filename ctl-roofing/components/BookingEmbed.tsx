@@ -56,6 +56,7 @@
 import { useEffect, useRef, useState } from "react";
 import { client } from "@/client.config";
 import { getConsent, CONSENT_EVENT } from "@/lib/consent";
+import { bookingOrigins, bookingEmbedSrc } from "@/lib/booking";
 import { btn } from "./Button";
 
 /** Close enough that the visitor means to use it. */
@@ -74,39 +75,36 @@ const MOUNT_MARGIN = "300px";
 const bookingUrl: string = client.bookingUrl;
 
 /**
- * Open a connection to the scheduler without asking it for anything yet.
+ * Open connections to the scheduler without asking it for anything yet.
  *
- * The origin is read off bookingUrl rather than written out, so
- * the preconnect always points at whatever the iframe is about to
- * fetch — a hardcoded host would quietly warm the wrong one the first
- * time the scheduler changes.
+ * The origins come from lib/booking.ts rather than being written out
+ * here, so the preconnects always point at what the iframe is about to
+ * fetch — a hardcoded host quietly warms the wrong one the first time
+ * the scheduler changes.
  *
- * Idempotent: the browser is happy to be told twice, but a second
- * <link> is litter in the head and this can be reached from a hover, a
- * focus and an observer within the same second.
+ * Idempotent per origin, and it has to be: /contact/ also preconnects
+ * from an inline script before this file has even downloaded, so by
+ * the time this runs the links are usually already there. It can also
+ * be reached from a hover, a focus and an observer inside the same
+ * second. Re-appending would be litter in the head, not a second
+ * connection.
  */
 function warmScheduler() {
   if (typeof document === "undefined") return;
-  if (!bookingUrl) return;
-  if (document.head.querySelector("link[data-booking-warm]")) return;
 
-  let origin: string;
-  try {
-    origin = new URL(bookingUrl).origin;
-  } catch {
-    // A relative or malformed bookingUrl is nothing to preconnect to;
-    // the iframe below still works, it just starts cold.
-    return;
+  for (const origin of bookingOrigins()) {
+    if (document.head.querySelector(`link[data-booking-warm="${origin}"]`)) {
+      continue;
+    }
+    const link = document.createElement("link");
+    link.rel = "preconnect";
+    link.href = origin;
+    // The iframe document is fetched as a cross-origin navigation, so
+    // the connection has to be opened in anonymous mode to be reused.
+    link.crossOrigin = "anonymous";
+    link.setAttribute("data-booking-warm", origin);
+    document.head.appendChild(link);
   }
-
-  const link = document.createElement("link");
-  link.rel = "preconnect";
-  link.href = origin;
-  // The iframe document is fetched as a cross-origin navigation, so the
-  // connection has to be opened in anonymous mode to be the one reused.
-  link.crossOrigin = "anonymous";
-  link.setAttribute("data-booking-warm", "");
-  document.head.appendChild(link);
 }
 
 export function BookingEmbed() {
@@ -224,24 +222,50 @@ export function BookingEmbed() {
 
   // An iframe rather than the scheduler's widget script: same flow,
   // no third-party JavaScript running in the page's own context.
-  const src = `${bookingUrl}${
-    bookingUrl.includes("?") ? "&" : "?"
-  }hide_gdpr_banner=1&background_color=ffffff&text_color=0b1233&primary_color=2d3581`;
+  const src = bookingEmbedSrc();
 
   return (
     <div
       ref={boxRef}
       className="relative h-[760px] w-full overflow-hidden rounded border border-line bg-surface md:h-[700px]"
     >
-      {/* The box is drawn at full size before anything arrives in it, so
-          the band never changes height and nothing below it moves when
-          it paints. The caption is there because an empty bordered
-          rectangle reads as something that failed rather than as
-          something in progress. */}
+      {/* ── The wait ────────────────────────────────────────────────
+          The box is drawn at full size before anything arrives in it,
+          so the band never changes height and nothing below it moves
+          when the calendar paints.
+
+          What fills it is the shape of the thing being fetched, not a
+          line of text in the middle of 760px of nothing. The scheduler
+          is a third party on someone else's servers and some of that
+          wait is not ours to remove; a rectangle that already looks
+          like a month of dates reads as nearly-here, where an empty
+          bordered box reads as broken and gets a reload — which
+          genuinely does make it slower, because the reload throws away
+          the connection this component spent the whole page opening.
+
+          Marked aria-hidden and paired with an sr-only line: a screen
+          reader should hear that the calendar is loading, not a grid
+          of forty empty cells. */}
       {!ready && (
-        <p className="absolute inset-x-0 top-1/2 -translate-y-1/2 text-center font-mono text-[11px] uppercase tracking-[0.09em] text-ink-faint">
-          Loading the booking calendar…
-        </p>
+        <div className="absolute inset-0 p-8" aria-busy>
+          {/* The pulse is the only signal that a third-party request is
+              in flight, and it stops when the calendar lands.
+              deliberate-ignore decorative-motion */}
+          <div className="animate-pulse" aria-hidden>
+            <div className="h-3 w-40 rounded bg-line" />
+            <div className="mt-8 grid grid-cols-7 gap-2">
+              {Array.from({ length: 7 }, (_, i) => (
+                <div key={`d${i}`} className="h-2 rounded bg-line/60" />
+              ))}
+              {Array.from({ length: 35 }, (_, i) => (
+                <div key={i} className="aspect-square rounded bg-line/40" />
+              ))}
+            </div>
+          </div>
+          <p className="mt-8 text-center font-mono text-[11px] uppercase tracking-[0.09em] text-ink-faint">
+            Loading the booking calendar…
+          </p>
+        </div>
       )}
 
       {near && (

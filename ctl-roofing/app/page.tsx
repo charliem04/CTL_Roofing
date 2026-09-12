@@ -21,10 +21,10 @@ import { client } from "@/client.config";
  * to go back up to the nav to follow the thread they are already on.
  *
  * Testimonials are config-gated and render when real reviews are
- * added. The CTAs go to /contact/ rather than to an outside scheduler:
- * that page carries the phone, the storm line, the request form and —
- * when client.bookingUrl is set — the calendar, so it answers whichever
- * way in the visitor actually wanted.
+ * added. The CTAs go to /contact/ rather than out to the calendar:
+ * that page carries the phone, the storm line, the request form and
+ * the booking embed, so it answers whichever way in the visitor
+ * actually wanted rather than assuming they had already decided.
  */
 export default function Home() {
   return (

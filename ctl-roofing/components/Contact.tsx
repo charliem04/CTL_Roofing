@@ -8,6 +8,7 @@
  */
 import { useState, type FormEvent } from "react";
 import { client } from "@/client.config";
+import { CTA_HREF } from "@/lib/routes";
 import { contactConfigured, submitContact } from "@/lib/submitContact";
 import { trackEvent } from "@/lib/tracking";
 import { Reveal } from "./Reveal";
@@ -211,11 +212,15 @@ export function Contact() {
                 </p>
               )}
 
+              {/* The calendar itself, not the scheduler it embeds. This
+                  form renders on the home page and on /contact/, so the
+                  anchor both travels to the booking band and scrolls up
+                  to it when the visitor is already there. */}
               {client.bookingUrl && (
                 <p className="mt-4 text-sm text-ink-faint">
                   Prefer to pick your own time?{" "}
                   <a
-                    href={client.bookingUrl}
+                    href={`${CTA_HREF}#booking`}
                     className="border-b-2 border-accent text-ink no-underline transition-colors duration-150 hover:text-brand active:text-brand-strong"
                   >
                     Book directly on the calendar

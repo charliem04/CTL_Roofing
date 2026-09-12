@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { client } from "@/client.config";
-import { nav, liveChildren, type RouteNode } from "@/lib/routes";
+import { nav, liveChildren, CTA_HREF, type RouteNode } from "@/lib/routes";
 import { btn } from "./Button";
 
 /**
@@ -239,7 +239,7 @@ export function Nav() {
           <a href={`tel:${client.phoneHref}`} className={`max-lg:hidden ${btn("line", "sm")} font-mono tabular-nums`}>
             {client.phone}
           </a>
-          <a href={client.bookingUrl || "/contact/"} className={`${btn("gold", "sm")} whitespace-nowrap`}>
+          <a href={CTA_HREF} className={`${btn("gold", "sm")} whitespace-nowrap`}>
             {client.copy.navCta}
           </a>
           <button
@@ -295,7 +295,7 @@ export function Nav() {
             >
               Call {client.phone}
             </a>
-            <a href={client.bookingUrl || "/contact/"} className={`mt-6 w-full ${btn("gold")}`}>
+            <a href={CTA_HREF} className={`mt-6 w-full ${btn("gold")}`}>
               {client.copy.navCta}
             </a>
           </div>

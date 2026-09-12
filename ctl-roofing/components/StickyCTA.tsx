@@ -10,6 +10,7 @@
  * buttons are on screen anyway.
  */
 import { client } from "@/client.config";
+import { CTA_HREF } from "@/lib/routes";
 
 const cell =
   "flex flex-col items-center justify-center gap-0.5 py-2.5 text-[13px] font-semibold no-underline transition-colors duration-150";
@@ -40,7 +41,7 @@ export function StickyCTA() {
         Text
       </a>
       <a
-        href={client.bookingUrl || "/contact/"}
+        href={CTA_HREF}
         className={`${cell} bg-accent text-ink hover:bg-accent-lift active:bg-accent-press`}
       >
         <svg viewBox="0 0 24 24" className="h-5 w-5" fill="currentColor" aria-hidden>

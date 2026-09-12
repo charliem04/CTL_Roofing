@@ -45,6 +45,7 @@
  */
 import { useCallback, useEffect, useRef, useState } from "react";
 import { client } from "@/client.config";
+import { CTA_HREF } from "@/lib/routes";
 
 /** Which of the two lines was clicked; they are answered differently. */
 type Line = {
@@ -261,7 +262,7 @@ export function CallCard() {
           </button>
           <a
             ref={bookRef}
-            href={client.bookingUrl || "/contact/"}
+            href={CTA_HREF}
             className="inline-flex items-center justify-center gap-2 rounded border border-line-dark/20 bg-transparent px-[26px] py-[15px] text-base font-semibold text-ink-invert no-underline transition-colors duration-150 hover:border-accent hover:bg-accent/10 hover:text-accent active:translate-y-px active:bg-accent/20"
           >
             Book a time

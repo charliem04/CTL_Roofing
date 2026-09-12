@@ -32,6 +32,26 @@ export type RouteNode = {
   noindex?: boolean;
 };
 
+/**
+ * Where every primary call to action goes.
+ *
+ * It used to be `client.bookingUrl || "/contact/"` at each button, so
+ * the moment a scheduler URL existed every CTA on the site handed the
+ * visitor to a third party mid-read — the nav, the hero, the sticky
+ * bar, the call cards and the closing bands all at once. That is the
+ * wrong default for someone who is still deciding, and it is not
+ * something a booking URL should get to decide on its own.
+ *
+ * So the two are separated. `client.bookingUrl` now means one thing
+ * only: which calendar the embed on /contact/ loads. Getting there is
+ * this constant, and /contact/ carries every way in — the phone, the
+ * storm line, the request form and the calendar itself.
+ *
+ * MetalSpec reached this conclusion first and wrote /contact/ inline;
+ * it now imports this like the rest.
+ */
+export const CTA_HREF = "/contact/";
+
 const serviceChildren: RouteNode[] = getServices().map((s) => ({
   href: s.meta.path,
   label: s.navLabel,

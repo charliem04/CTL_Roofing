@@ -110,10 +110,10 @@ should confirm that language matches how they actually operate.
 
 ## Part F — Contact page ✅
 
-Full request form, both phone lines, hours, map slot, showroom
-address. The inline scheduler band is consent-gated and config-gated,
-and is currently off: `bookingUrl` is empty, so every CTA on the site
-lands here instead of on a third-party calendar.
+Full request form, inline Calendly (consent-gated, since it is a third
+party), both phone lines, hours, map slot, showroom address. The
+calendar band here is the site's only route to Calendly — every CTA
+elsewhere points at this page rather than at the scheduler.
 
 ## Part G — Financing + payment estimator ✅
 

@@ -13,10 +13,10 @@ const page = getContactPage();
 export const metadata = pageMetadata(page.meta);
 
 /**
- * Three routes in, in the order people actually use them: the phone at
- * the top for the ones who are already decided, the calendar for the
- * ones who hate phone tag, and the form for the ones who would rather
- * write it all down once.
+ * Routes in, in the order people actually use them: the phone at the
+ * top for the ones who are already decided, the calendar — when one is
+ * configured — for the ones who hate phone tag, and the form for the
+ * ones who would rather write it all down once.
  */
 export default function ContactPage() {
   const lines = [
@@ -77,17 +77,23 @@ export default function ContactPage() {
         </div>
       </section>
 
-      {/* ── Book a slot ────────────────────────────────────────────── */}
-      <section className="band bg-surface">
-        <div className="section">
-          <SectionHead heading={page.booking.heading} lede={page.booking.lede} />
-          <Reveal delay={0.06}>
-            <div className="mt-10">
-              <BookingEmbed />
-            </div>
-          </Reveal>
-        </div>
-      </section>
+      {/* ── Book a slot ──────────────────────────────────────────────
+          Gated on the same config as the embed inside it. BookingEmbed
+          renders nothing without a scheduler URL, and a band that is
+          only a heading over empty space reads as a page that broke
+          rather than one that never had a calendar. */}
+      {client.bookingUrl && (
+        <section className="band bg-surface">
+          <div className="section">
+            <SectionHead heading={page.booking.heading} lede={page.booking.lede} />
+            <Reveal delay={0.06}>
+              <div className="mt-10">
+                <BookingEmbed />
+              </div>
+            </Reveal>
+          </div>
+        </section>
+      )}
 
       {/* The request sheet and the showroom details, same component the
           home page uses — one form, one place to maintain it. */}

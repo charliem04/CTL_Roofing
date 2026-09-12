@@ -2,12 +2,16 @@
 
 /**
  * ════════════════════════════════════════════════════════════════════
- *  CALENDLY, embedded rather than linked — the plan's point being that
- *  bouncing someone to calendly.com mid-decision loses the ones who
- *  were only half sure.
+ *  THE SCHEDULER, embedded rather than linked — the plan's point being
+ *  that bouncing someone to a booking site mid-decision loses the ones
+ *  who were only half sure.
  *
- *  It does not load on arrival. Calendly is a third party that sets its
- *  own cookies, so the iframe goes in when the visitor asks for it —
+ *  Nothing here renders unless client.bookingUrl names a scheduler, and
+ *  it currently does not: the CTAs go to /contact/ instead. What
+ *  follows describes the band as it behaves once one is set again.
+ *
+ *  It does not load on arrival. The scheduler is a third party that
+ *  sets its own cookies, so the iframe goes in when the visitor asks —
  *  either because they already accepted cookies, or because they
  *  pressed the button on this panel, which is consent for this one
  *  embed and nothing else. Anyone who would rather not can still use
@@ -28,7 +32,7 @@
  *  So the work is moved earlier rather than made smaller, in two steps:
  *
  *    1. As soon as the embed is allowed, open the connection to
- *       calendly.com. DNS, TCP and TLS are the fixed cost of talking to
+ *       the scheduler. DNS, TCP and TLS are the fixed cost of talking to
  *       a new origin, and none of it needs to wait for a scroll.
  *    2. About a third of a screen out, mount the iframe and let it
  *       fetch over the connection that is already warm.
@@ -44,7 +48,7 @@
  *  every visitor who ever lands on this page — including the ones who
  *  decline cookies and the ones who never scroll this far. That
  *  contradicts the rest of the page's posture, so it is not done. Every
- *  path to warmCalendly() runs behind either consent or a deliberate
+ *  path to warmScheduler() runs behind either consent or a deliberate
  *  reach for the button.
  * ════════════════════════════════════════════════════════════════════
  */
@@ -57,23 +61,50 @@ import { btn } from "./Button";
 const MOUNT_MARGIN = "300px";
 
 /**
- * Open a connection to Calendly without asking it for anything yet.
+ * The scheduler URL, widened to string.
+ *
+ * client.config.ts is `as const`, so with booking switched off the
+ * literal type of client.bookingUrl is "" and TypeScript narrows every
+ * guarded use of it to `never` — correct about today's config, useless
+ * to a component written to work either way. Reading it through one
+ * widened binding keeps the code honest about what it handles without
+ * loosening the config's types for everyone else.
+ */
+const bookingUrl: string = client.bookingUrl;
+
+/**
+ * Open a connection to the scheduler without asking it for anything yet.
+ *
+ * The origin is read off bookingUrl rather than written out, so
+ * the preconnect always points at whatever the iframe is about to
+ * fetch — a hardcoded host would quietly warm the wrong one the first
+ * time the scheduler changes.
  *
  * Idempotent: the browser is happy to be told twice, but a second
  * <link> is litter in the head and this can be reached from a hover, a
  * focus and an observer within the same second.
  */
-function warmCalendly() {
+function warmScheduler() {
   if (typeof document === "undefined") return;
-  if (document.head.querySelector('link[data-calendly-warm]')) return;
+  if (!bookingUrl) return;
+  if (document.head.querySelector("link[data-booking-warm]")) return;
+
+  let origin: string;
+  try {
+    origin = new URL(bookingUrl).origin;
+  } catch {
+    // A relative or malformed bookingUrl is nothing to preconnect to;
+    // the iframe below still works, it just starts cold.
+    return;
+  }
 
   const link = document.createElement("link");
   link.rel = "preconnect";
-  link.href = "https://calendly.com";
+  link.href = origin;
   // The iframe document is fetched as a cross-origin navigation, so the
   // connection has to be opened in anonymous mode to be the one reused.
   link.crossOrigin = "anonymous";
-  link.setAttribute("data-calendly-warm", "");
+  link.setAttribute("data-booking-warm", "");
   document.head.appendChild(link);
 }
 
@@ -82,12 +113,12 @@ export function BookingEmbed() {
   const [allowed, setAllowed] = useState(false);
   /** Scrolled close enough to mount the iframe. */
   const [near, setNear] = useState(false);
-  /** Calendly has actually painted, so the skeleton can go. */
+  /** The scheduler has actually painted, so the skeleton can go. */
   const [ready, setReady] = useState(false);
   const boxRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (!client.bookingUrl) return;
+    if (!bookingUrl) return;
     const check = () => {
       if (getConsent() === "accepted") setAllowed(true);
     };
@@ -115,13 +146,13 @@ export function BookingEmbed() {
      component exists to avoid. Somebody who has not decided gets a
      connection only if they reach for the button. */
   useEffect(() => {
-    if (allowed) warmCalendly();
+    if (allowed) warmScheduler();
   }, [allowed]);
 
   /* ── Mount on approach ───────────────────────────────────────────
      Disconnects on the first hit; the answer cannot change back. */
   useEffect(() => {
-    if (!client.bookingUrl) return;
+    if (!bookingUrl) return;
     const el = boxRef.current;
     if (!el) return;
     if (typeof IntersectionObserver === "undefined") {
@@ -145,7 +176,7 @@ export function BookingEmbed() {
     // points at is a different one on each side of it.
   }, [allowed]);
 
-  if (!client.bookingUrl) return null;
+  if (!bookingUrl) return null;
 
   if (!allowed) {
     return (
@@ -155,8 +186,8 @@ export function BookingEmbed() {
       >
         <p className="u-label">Booking calendar</p>
         <p className="mx-auto mt-3 max-w-[46ch]">
-          The calendar is hosted by Calendly, which sets its own cookies. Load
-          it here, or open it in a new tab — your choice.
+          The calendar is hosted by a scheduling service, which sets its own
+          cookies. Load it here, or open it in a new tab — your choice.
         </p>
         <div className="mt-6 flex flex-wrap justify-center gap-2.5">
           <button
@@ -166,30 +197,30 @@ export function BookingEmbed() {
             // signal there is. By the time the click lands the
             // handshake is usually done, so the iframe's first request
             // goes out on an open connection.
-            onPointerEnter={warmCalendly}
-            onFocus={warmCalendly}
+            onPointerEnter={warmScheduler}
+            onFocus={warmScheduler}
             className={btn("gold")}
           >
             Load the calendar
           </button>
           <a
-            href={client.bookingUrl}
+            href={bookingUrl}
             target="_blank"
             rel="noopener noreferrer"
-            onPointerEnter={warmCalendly}
+            onPointerEnter={warmScheduler}
             className={btn("line")}
           >
-            Open Calendly instead
+            Open the calendar instead
           </a>
         </div>
       </div>
     );
   }
 
-  // An iframe rather than Calendly's widget script: same booking flow,
+  // An iframe rather than the scheduler's widget script: same flow,
   // no third-party JavaScript running in the page's own context.
-  const src = `${client.bookingUrl}${
-    client.bookingUrl.includes("?") ? "&" : "?"
+  const src = `${bookingUrl}${
+    bookingUrl.includes("?") ? "&" : "?"
   }hide_gdpr_banner=1&background_color=ffffff&text_color=0b1233&primary_color=2d3581`;
 
   return (
@@ -199,7 +230,7 @@ export function BookingEmbed() {
     >
       {/* The box is drawn at full size before anything arrives in it, so
           the band never changes height and nothing below it moves when
-          Calendly paints. The caption is there because an empty bordered
+          it paints. The caption is there because an empty bordered
           rectangle reads as something that failed rather than as
           something in progress. */}
       {!ready && (

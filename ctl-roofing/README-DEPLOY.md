@@ -23,8 +23,11 @@ also the one file a CMS would replace.
 - [x] `address`, `hours`, `hoursShort`
 - [ ] `mapEmbedSrc` (Google Maps → Share → Embed → copy the iframe `src`).
       Empty today, so the contact column skips the map panel.
-- [x] `bookingUrl` — the Calendly link every primary CTA points at.
-      `calLink` is empty, so the Cal.com inline section stays hidden.
+- [x] `bookingUrl` — empty on purpose. Every primary CTA goes to
+      `/contact/` rather than out to a scheduler; setting a URL here
+      re-arms the CTAs and the booking band on that page, and the CSP
+      drift check then fails the build until `scripts/csp.mjs` names
+      the scheduler's origin in `frame-src`.
 - [x] `socials` — Facebook, Instagram and the Google review link.
       Icons sit in the utility strip and footer, never the main nav.
 - [x] `metal`, `process`, `brands`, `about`, `gallery` (config);
@@ -123,8 +126,9 @@ legal advice.
 - [ ] CTL's attorney reads both — particularly the claims-role section
       in the terms, which states that CTL does not adjust claims
 - [ ] Re-check the privacy page whenever a processor is added or
-      removed. It names Web3Forms, Calendly, Plausible and Cloudflare
-      by name, so adding a CRM or call tracking means adding a line.
+      removed. It names Web3Forms, Plausible and Cloudflare by name, so
+      adding a CRM or call tracking means adding a line. The scheduler
+      paragraph is gated on `bookingUrl` and reappears with it.
 
 ## 6. Brand
 - [x] `app/globals.css` — color tokens sampled from the CTL logo:
@@ -144,8 +148,10 @@ legal advice.
       mean a component edit inherited a default — fix it, or suppress
       consciously with `deliberate-ignore`.
 - [ ] Form submits end-to-end (check inbox AND lead webhook if enabled)
-- [ ] Calendly books a test slot — both the inline embed on `/contact/`
-      (which only loads once the visitor asks for it) and the direct link
+- [ ] Every primary CTA lands on `/contact/` (no scheduler is
+      configured). If `bookingUrl` is ever set, re-test the inline embed
+      on that page — it only loads once the visitor asks for it — and
+      the direct link beside it
 - [ ] Storm page language checked against how CTL actually operates in a
       claim — see the ⚠️ note in `content/storm.ts`
 - [ ] Cookie banner: decline → no analytics request in Network tab;

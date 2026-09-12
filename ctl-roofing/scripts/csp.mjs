@@ -142,9 +142,11 @@ export function buildCsp(env = process.env) {
     "font-src 'self'", // Fontsource bundles them, nothing external
     "media-src 'self'", // the job walkthrough mp4
     `connect-src ${connect.join(" ")}`,
-    // Calendly is embedded as an iframe, not a widget script; Turnstile
-    // renders its challenge in one too.
-    "frame-src https://calendly.com https://challenges.cloudflare.com",
+    // Turnstile renders its challenge in a frame. Nothing else does:
+    // the booking embed is off (client.bookingUrl is empty), and if a
+    // scheduler is put back the drift check below fails the build until
+    // its origin is named here.
+    "frame-src https://challenges.cloudflare.com",
     "frame-ancestors 'none'",
     "base-uri 'self'",
     "form-action 'self'",

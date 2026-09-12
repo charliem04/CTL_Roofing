@@ -8,15 +8,15 @@ Regenerate with `npm run routes`. The build runs it too, and **fails if
 any internal link points at a page that was not built**, so this file
 cannot quietly drift from the site it describes.
 
-_Last generated: 2026-09-11 · 22 pages · 798 distinct links_
+_Last generated: 2026-09-12 · 22 pages · 801 distinct links_
 
 ## What this covers
 
 | Destination | Count |
 | --- | --- |
-| page | 554 |
+| page | 556 |
 | phone | 122 |
-| external | 73 |
+| external | 74 |
 | email | 22 |
 | text message | 22 |
 | same page | 4 |
@@ -28,7 +28,7 @@ counted once per page, not once per occurrence.
 
 ## What this does NOT cover
 
-189 controls on this site are buttons rather than links. They do not
+190 controls on this site are buttons rather than links. They do not
 navigate — they act on the page the visitor is already on:
 
 - the four **process steps** on the home page scroll the pinned band to
@@ -53,6 +53,7 @@ Every external origin this site links to, and how many links reach it.
 | https://www.facebook.com | 23 |
 | https://www.instagram.com | 21 |
 | https://prequalification.enerbank.com | 3 |
+| https://calendly.com | 1 |
 | https://www.weather.gov | 1 |
 
 ## Page by page
@@ -76,6 +77,7 @@ Every external origin this site links to, and how many links reach it.
 | Talk through a metal roof | `/contact/` | page |
 | Or send us the details → | `/contact/` | page |
 | Book | `/contact/` | page |
+| Book directly on the calendar | `/contact/#booking` | page |
 | Financing | `/financing/` | page |
 | Our Work | `/gallery/` | page |
 | The full gallery → | `/gallery/` | page |
@@ -284,6 +286,7 @@ No links.
 | Control | Goes to | Kind |
 | --- | --- | --- |
 | office@ctlpro.com | `mailto:office@ctlpro.com` | email |
+| Open Calendly instead | `https://calendly.com/d/ct7p-3by-878/free-consultation` | external |
 | Google reviews | `https://g.page/r/CdzPt0LheRXZEAI/review` | external |
 | CTL Roofing on Facebook | `https://www.facebook.com/ctlprola` | external |
 | CTL Roofing on Instagram | `https://www.instagram.com/ctlpro` | external |
@@ -296,6 +299,7 @@ No links.
 | Schedule a free assessment | `/contact/` | page |
 | Or send us the details → | `/contact/` | page |
 | Book | `/contact/` | page |
+| Book directly on the calendar | `/contact/#booking` | page |
 | Financing | `/financing/` | page |
 | Our Work | `/gallery/` | page |
 | Our work | `/gallery/` | page |

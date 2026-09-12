@@ -23,11 +23,14 @@ also the one file a CMS would replace.
 - [x] `address`, `hours`, `hoursShort`
 - [ ] `mapEmbedSrc` (Google Maps → Share → Embed → copy the iframe `src`).
       Empty today, so the contact column skips the map panel.
-- [x] `bookingUrl` — empty on purpose. Every primary CTA goes to
-      `/contact/` rather than out to a scheduler; setting a URL here
-      re-arms the CTAs and the booking band on that page, and the CSP
-      drift check then fails the build until `scripts/csp.mjs` names
-      the scheduler's origin in `frame-src`.
+- [x] `bookingUrl` — the Calendly link the booking band on `/contact/`
+      embeds, and nothing else. The CTAs do not read it: they go to
+      `CTA_HREF` in `lib/routes.ts` (`/contact/`), so the calendar is
+      somewhere a visitor arrives rather than somewhere they are sent.
+      Swapping schedulers means updating `frame-src` in
+      `scripts/csp.mjs`, the consent sentence in `BookingEmbed`, and
+      the processor paragraph on `/privacy/` — the CSP drift check
+      fails the build until the first of those is done.
 - [x] `socials` — Facebook, Instagram and the Google review link.
       Icons sit in the utility strip and footer, never the main nav.
 - [x] `metal`, `process`, `brands`, `about`, `gallery` (config);
@@ -126,9 +129,10 @@ legal advice.
 - [ ] CTL's attorney reads both — particularly the claims-role section
       in the terms, which states that CTL does not adjust claims
 - [ ] Re-check the privacy page whenever a processor is added or
-      removed. It names Web3Forms, Plausible and Cloudflare by name, so
-      adding a CRM or call tracking means adding a line. The scheduler
-      paragraph is gated on `bookingUrl` and reappears with it.
+      removed. It names Web3Forms, Calendly, Plausible and Cloudflare
+      by name, so adding a CRM or call tracking means adding a line.
+      The Calendly paragraph is gated on `bookingUrl` and disappears
+      with it.
 
 ## 6. Brand
 - [x] `app/globals.css` — color tokens sampled from the CTL logo:
@@ -148,10 +152,11 @@ legal advice.
       mean a component edit inherited a default — fix it, or suppress
       consciously with `deliberate-ignore`.
 - [ ] Form submits end-to-end (check inbox AND lead webhook if enabled)
-- [ ] Every primary CTA lands on `/contact/` (no scheduler is
-      configured). If `bookingUrl` is ever set, re-test the inline embed
-      on that page — it only loads once the visitor asks for it — and
-      the direct link beside it
+- [ ] Every primary CTA lands on `/contact/` — nothing on the site
+      links straight out to the calendar
+- [ ] Calendly books a test slot from the band on `/contact/` — both
+      the inline embed (which only loads once the visitor asks for it)
+      and the direct link beside it
 - [ ] Storm page language checked against how CTL actually operates in a
       claim — see the ⚠️ note in `content/storm.ts`
 - [ ] Cookie banner: decline → no analytics request in Network tab;

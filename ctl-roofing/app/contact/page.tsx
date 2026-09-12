@@ -78,12 +78,20 @@ export default function ContactPage() {
       </section>
 
       {/* ── Book a slot ──────────────────────────────────────────────
-          Gated on the same config as the embed inside it. BookingEmbed
+          The one place on the site that reaches Calendly. Every CTA
+          elsewhere points at this page rather than out to the calendar,
+          so this band is the end of that path, not a detour off it.
+
+          Gated on the same config as the embed inside it: BookingEmbed
           renders nothing without a scheduler URL, and a band that is
           only a heading over empty space reads as a page that broke
-          rather than one that never had a calendar. */}
+          rather than one that never had a calendar.
+
+          The id is the target of the request form's "pick your own
+          time" link, which sits below this band on this page and on
+          another page entirely on the home page. */}
       {client.bookingUrl && (
-        <section className="band bg-surface">
+        <section id="booking" className="band bg-surface scroll-mt-24">
           <div className="section">
             <SectionHead heading={page.booking.heading} lede={page.booking.lede} />
             <Reveal delay={0.06}>

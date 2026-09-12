@@ -3,6 +3,7 @@
 import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { client } from "@/client.config";
+import { CTA_HREF } from "@/lib/routes";
 import { btn } from "./Button";
 import { Parallax } from "./Parallax";
 import { RevealText } from "./RevealText";
@@ -97,7 +98,7 @@ export function Hero() {
         </motion.p>
 
         <motion.div {...anim(stagger.loose * 3)} className="mt-10 flex flex-wrap gap-2.5">
-          <a href={client.bookingUrl || "/contact/"} className={btn("gold")}>
+          <a href={CTA_HREF} className={btn("gold")}>
             {client.copy.heroCta}
           </a>
           {/* The office, not the storm line. This is the generic "call

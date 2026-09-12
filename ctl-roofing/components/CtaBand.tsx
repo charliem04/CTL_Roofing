@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { client } from "@/client.config";
+import { CTA_HREF } from "@/lib/routes";
 import type { CtaCopy } from "@/content/types";
 import { stagger } from "@/lib/motion";
 import { btn } from "./Button";
@@ -60,7 +61,7 @@ export function CtaBand({
         <Reveal delay={stagger.loose * 2} className="flex flex-wrap gap-2.5">
           {actions ?? (
             <>
-              <a href={client.bookingUrl || "/contact/"} className={btn("gold")}>
+              <a href={CTA_HREF} className={btn("gold")}>
                 {client.copy.heroCta}
               </a>
               <a href={`tel:${href}`} className={btn("lineDeep")}>

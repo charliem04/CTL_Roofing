@@ -1,5 +1,6 @@
 import { client } from "@/client.config";
 import { stagger } from "@/lib/motion";
+import { CTA_HREF } from "@/lib/routes";
 import { Reveal } from "./Reveal";
 import { RevealText } from "./RevealText";
 import { BeforeAfterSlider } from "./BeforeAfterSlider";
@@ -92,11 +93,7 @@ export function MetalSpec({ moreHref }: { moreHref?: string }) {
           </dl>
 
           <div className="mt-10 flex flex-wrap items-center gap-x-8 gap-y-4">
-            {/* Deliberately not client.bookingUrl: this band is the top of
-                the metal conversation, not the bottom of it. Sending it to
-                the contact form keeps the visitor on the site rather than
-                handing them off to a third-party scheduler mid-read. */}
-            <a href="/contact/" className={btn("gold")}>
+            <a href={CTA_HREF} className={btn("gold")}>
               {metal.cta}
             </a>
             {moreHref && (

@@ -6,9 +6,10 @@
  *  that bouncing someone to a booking site mid-decision loses the ones
  *  who were only half sure.
  *
- *  Nothing here renders unless client.bookingUrl names a scheduler, and
- *  it currently does not: the CTAs go to /contact/ instead. What
- *  follows describes the band as it behaves once one is set again.
+ *  This band, on /contact/, is the only part of the site that reaches
+ *  Calendly. Every CTA elsewhere points at the page rather than at the
+ *  calendar (see CTA_HREF in lib/routes.ts), so a visitor arrives here
+ *  having chosen to book rather than having been sent.
  *
  *  It does not load on arrival. The scheduler is a third party that
  *  sets its own cookies, so the iframe goes in when the visitor asks —
@@ -185,9 +186,13 @@ export function BookingEmbed() {
         className="rounded border border-dashed border-line bg-surface p-8 text-center"
       >
         <p className="u-label">Booking calendar</p>
+        {/* Named, not "a scheduling service": consent to a third party
+            the visitor cannot identify is not consent, and /privacy/
+            names the same one. Swapping bookingUrl means editing this
+            sentence and that page together. */}
         <p className="mx-auto mt-3 max-w-[46ch]">
-          The calendar is hosted by a scheduling service, which sets its own
-          cookies. Load it here, or open it in a new tab — your choice.
+          The calendar is hosted by Calendly, which sets its own cookies.
+          Load it here, or open it in a new tab — your choice.
         </p>
         <div className="mt-6 flex flex-wrap justify-center gap-2.5">
           <button
@@ -210,7 +215,7 @@ export function BookingEmbed() {
             onPointerEnter={warmScheduler}
             className={btn("line")}
           >
-            Open the calendar instead
+            Open Calendly instead
           </a>
         </div>
       </div>

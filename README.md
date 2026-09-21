@@ -20,8 +20,9 @@ Cloudflare Workers that handle the things a static site cannot.
 
 - **`README-DEPLOY.md`** (repo root) — the go-live checklist. Every item
   that stands between this tree and a DNS cutover.
-- **`docs/PRODUCTION-READINESS.md`** — the engineering audit and the work
-  that closes it. *(not yet written)*
+- **`docs/PRODUCTION-READINESS.md`** — the engineering audit: what is
+  unfinished in the infrastructure and the work that closes it. Start
+  here.
 - **`docs/LAUNCH-CREDENTIALS.md`** — every account and key, who creates
   it, and what breaks without it.
 - **`docs/CUTOVER.md`** — the DNS move, T-14 to T+7, with the rollback.

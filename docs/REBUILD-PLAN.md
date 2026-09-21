@@ -288,6 +288,13 @@ studies and careers are built and dark (Part J).
 4. **Blog** — on hold; not a launch priority.
 5. **Warranty explainer, showroom.**
 
+## Blocked on us, not on Robert
+
+The infrastructure side — what is unfinished in the Workers, the CSP, the
+redirect map, the privacy disclosures and the build tooling — is audited
+separately in `PRODUCTION-READINESS.md`. Four of its findings are launch
+blockers and are not repeated here.
+
 ## Blocked on Robert
 
 Everything here is tracked in `content/pending.ts` as well, which is

@@ -1,20 +1,40 @@
 <!doctype html>
 <!--
-  CTL PRO CONSTRUCTION — SITE HANDOVER
+  CTL PRO CONSTRUCTION — SITE HANDOVER AND SESSION AGENDA
 
-  Open this file in any browser. It is self-contained apart from the
-  Google Fonts link below; offline it falls back to the stacks declared
-  alongside each face, which is a slightly plainer page and nothing
-  worse.
+  Two documents in one: what is built on the new site and why it was
+  built that way, then the thirty-one item run sheet for the working
+  session that clears the rest. The agenda used to live separately in
+  ctl-meeting-agenda.html; it was folded in here on 21 September 2026
+  and that file deleted, because two documents with overlapping item
+  numbers drift the first time either is edited.
 
-  THIS FILE IS THE SOURCE OF TRUTH. The same document is also published
-  as a shareable link at
+  Open it in any browser. Self-contained apart from the Google Fonts
+  link below; offline it falls back to the stacks declared alongside
+  each face, which is a slightly plainer page and nothing worse. It is
+  also written to print — there is a tick box per item and an @media
+  print sheet, because this one gets worked down with a pen.
+
+  ── REPUBLISHING ────────────────────────────────────────────────────
+
+  Shareable link:
   https://claude.ai/code/artifact/d2ccf3ec-9e6e-4d42-a7b0-c15a0dd7d81f
-  which is served as a fragment — the host injects its own doctype,
-  <head> and <body>. To republish after editing here, strip everything
-  from <!doctype html> down to <body> and the closing </body></html>,
-  and publish the remainder to that URL. Edit this file, not a copy of
-  the fragment, or the two will drift.
+
+  Publish THIS FILE, whole and unedited, to that URL. Nothing needs
+  cutting out first.
+
+  The host wraps whatever it is given in its own doctype, <head> and
+  <body>, so the published page carries two of each. That was the
+  reason this note used to describe hand-cutting a fragment — but it
+  was checked rather than assumed: both shapes were rendered in
+  Chromium and are pixel-identical, because the parser hoists our
+  <title>, stylesheet and <style> into the existing head and drops the
+  duplicate doctype. Publishing the whole file is therefore the better
+  of the two, and not by a little: it makes the file in this repository
+  and the page on that link the same bytes, so they cannot drift.
+
+  Keep the URL. Publishing without it creates a second artifact and
+  leaves whatever link the client already has pointing at the old text.
 -->
 <html lang="en">
 <head>
@@ -409,6 +429,97 @@
   @media (prefers-reduced-motion: reduce) {
     * { animation: none !important; transition: none !important; }
   }
+
+  /* ── Run-sheet furniture ────────────────────────────────────────────
+     Added when the meeting agenda was folded in. This document is now
+     worked down with a pen in a room, not only read, so: a tick box per
+     item, a second tag colour, the options table, and a print sheet. */
+
+  .ask .n { display: flex; align-items: center; gap: 9px; padding-top: 2px; }
+  .box {
+    width: 15px;
+    height: 15px;
+    flex: none;
+    border: 1.5px solid var(--line-strong);
+    border-radius: 2px;
+    background: var(--surface-2);
+  }
+
+  /* Gold already means "this one needs Robert". Indigo is the harder
+     claim — nothing launches without it. Two different urgencies, and
+     collapsing them into one colour is how the second kind gets treated
+     like the first. */
+  .tag.stop {
+    border-color: var(--indigo);
+    background: color-mix(in srgb, var(--indigo) 12%, transparent);
+    color: var(--indigo);
+    font-weight: 600;
+  }
+
+  .lede {
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--gold-press);
+    border-radius: 2px;
+    padding: 20px clamp(18px, 3vw, 26px);
+  }
+  .lede p { margin: 0; max-width: var(--measure); }
+  .lede p + p { margin-top: 10px; }
+
+  table.opts {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 14px;
+    font-size: 14.5px;
+  }
+  table.opts th, table.opts td {
+    text-align: left;
+    vertical-align: top;
+    padding: 11px 14px;
+    border: 1px solid var(--line);
+  }
+  table.opts th {
+    background: var(--surface-2);
+    color: var(--heading);
+    font-weight: 600;
+    font-size: 13px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  table.opts td:first-child { font-weight: 600; color: var(--heading); white-space: nowrap; }
+
+  /* Three columns of prose do not fit a phone, and a sideways scroll in
+     a document somebody prints is worse than a stack. */
+  @media (max-width: 620px) {
+    table.opts, table.opts tbody, table.opts tr, table.opts td { display: block; width: 100%; }
+    table.opts thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+    table.opts tr { border: 1px solid var(--line); margin-top: -1px; padding: 4px 0; }
+    table.opts td { border: 0; padding: 5px 14px; }
+    table.opts td:first-child { white-space: normal; padding-top: 12px; }
+    table.opts td:last-child { padding-bottom: 12px; }
+    table.opts td[data-label]::before {
+      content: attr(data-label);
+      display: block;
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-faint);
+      margin-bottom: 2px;
+    }
+  }
+
+  ol.steps { margin: 0; padding-left: 1.3em; }
+  ol.steps li { margin-bottom: 9px; max-width: var(--measure); }
+  ol.steps li:last-child { margin-bottom: 0; }
+
+  @media print {
+    :root { --ground: #fff; --surface: #fff; --surface-2: #fff; }
+    body { font-size: 11pt; line-height: 1.45; }
+    .status { border-top: 1px solid #000; border-bottom: 1px solid #000; }
+    .ask, .panel, .confirm, .lede { break-inside: avoid; }
+    a { text-decoration: none; }
+  }
 </style>
 </head>
 <body>
@@ -416,34 +527,33 @@
   <div class="wrap">
     <span class="seam" aria-hidden="true"><i></i><i></i><i></i></span>
     <p class="mono kicker" style="margin:14px 0 0">CTL Pro Construction LLC · Website rebuild</p>
-    <h1>A new site,<em>built on spec.</em></h1>
+    <h1>You have seen it.<em>Here is what it takes.</em></h1>
     <p>
-      This is a complete, working replacement for ctlpro.com — nineteen
-      pages, built and tested. Nobody asked for it and nothing has been
-      invoiced. It exists so the conversation can start with something real
-      on the screen instead of a proposal describing one.
+      A complete, working replacement for ctlpro.com — twenty pages, built
+      and tested. What stands between it and your domain is not more
+      building. It is thirty-one things that need a decision, a login or a
+      signature, and almost all of them need you specifically.
     </p>
-
-    <p class="live">
-      <a href="https://ctl-preview.pages.dev/">ctl-preview.pages.dev</a>
-      <span>Open it. Every page below links straight into it. This is a
-      temporary address for this conversation, not a published site —
-      it carries a banner saying so, search engines are kept off it, and
-      it comes down when we are done.</span>
+    <p>
+      This document is both halves: what is on the site and why it was built
+      the way it was, then the list to work down in one sitting. Nothing on
+      that list is difficult on its own. The reason it is worth doing in one
+      go is that most of the items unlock each other, and chasing them one
+      email at a time is what turns a two-week launch into a two-month one.
     </p>
     <dl class="meta mono">
       <div><dt>Prepared for</dt><dd>Robert LeBas</dd></div>
-      <div><dt>Status</dt><dd>Built · preview live</dd></div>
-      <div><dt>Date</dt><dd>1 September 2026</dd></div>
+      <div><dt>Status</dt><dd>Built · agenda for the session</dd></div>
+      <div><dt>Date</dt><dd>21 September 2026</dd></div>
     </dl>
   </div>
 </header>
 
 <div class="status">
   <div class="wrap">
-    <div><b>19</b><span>pages built</span></div>
-    <div><b>16</b><span>things needed from you</span></div>
-    <div><b>7</b><span>calls made on your behalf</span></div>
+    <div><b>20</b><span>pages built</span></div>
+    <div><b>31</b><span>items to clear</span></div>
+    <div><b>3</b><span>to start the same day</span></div>
     <div><b>0</b><span>invented photos, names or numbers</span></div>
   </div>
 </div>
@@ -457,32 +567,34 @@
         <span class="seam" aria-hidden="true"><i></i><i></i><i></i></span>
         <h2>What is on it</h2>
         <p>
-          Every page below is built and renders. The tag says whether it is
-          finished or whether it is waiting on something from your end.
+          Twenty pages, all built and rendering. The tag says whether one is
+          finished or whether it is waiting on something from your end — and
+          every one of those tags has an item number later in this document.
         </p>
       </div>
 
       <div class="panel">
         <ul class="built">
-          <li><span class="what"><a href="https://ctl-preview.pages.dev/">/</a></span><span class="note">Home — hero, services, storm strip, gallery band, reviews, booking, contact form</span><span class="tag mono done">Finished</span></li>
-          <li><span class="what"><a href="https://ctl-preview.pages.dev/services/">/services/</a></span><span class="note">Hub for all five service lines</span><span class="tag mono done">Finished</span></li>
-          <li><span class="what"><a href="https://ctl-preview.pages.dev/services/roofing/">/services/roofing/</a></span><span class="note">Roofing — materials, process, warranty, FAQs</span><span class="tag mono done">Finished</span></li>
-          <li><span class="what"><a href="https://ctl-preview.pages.dev/services/remodeling-restoration/">/services/remodeling-restoration/</a></span><span class="note">Remodeling &amp; restoration</span><span class="tag mono done">Finished</span></li>
-          <li><span class="what"><a href="https://ctl-preview.pages.dev/services/outdoor-living/">/services/outdoor-living/</a></span><span class="note">Patios, decks, outdoor structures</span><span class="tag mono done">Finished</span></li>
-          <li><span class="what"><a href="https://ctl-preview.pages.dev/services/emergency-inspections/">/services/emergency-inspections/</a></span><span class="note">Emergency response and inspections</span><span class="tag mono done">Finished</span></li>
-          <li><span class="what"><a href="https://ctl-preview.pages.dev/services/commercial/">/services/commercial/</a></span><span class="note">Commercial roofing</span><span class="tag mono now">Needs a photo</span></li>
-          <li><span class="what"><a href="https://ctl-preview.pages.dev/storm-damage/">/storm-damage/</a></span><span class="note">Storm damage and the insurance claim process</span><span class="tag mono now">Needs a read</span></li>
-          <li><span class="what"><a href="https://ctl-preview.pages.dev/gallery/">/gallery/</a></span><span class="note">40 job photographs, five filters, lightbox</span><span class="tag mono done">Finished</span></li>
-          <li><span class="what"><a href="https://ctl-preview.pages.dev/video/">/video/</a></span><span class="note">Job walkthrough video</span><span class="tag mono now">Second file broken</span></li>
-          <li><span class="what"><a href="https://ctl-preview.pages.dev/team/">/team/</a></span><span class="note">Robert, plus eight crew headshots</span><span class="tag mono now">Needs job titles</span></li>
-          <li><span class="what"><a href="https://ctl-preview.pages.dev/reviews/">/reviews/</a></span><span class="note">Live Google reviews and ten Facebook recommendations</span><span class="tag mono now">Needs a Google key</span></li>
-          <li><span class="what"><a href="https://ctl-preview.pages.dev/areas/">/areas/</a></span><span class="note">16 towns across 6 parishes</span><span class="tag mono done">Finished</span></li>
-          <li><span class="what"><a href="https://ctl-preview.pages.dev/financing/">/financing/</a></span><span class="note">Financing options and a monthly payment estimator</span><span class="tag mono now">Needs real terms</span></li>
-          <li><span class="what"><a href="https://ctl-preview.pages.dev/contact/">/contact/</a></span><span class="note">Assessment request form and booking</span><span class="tag mono now">Needs a form key</span></li>
-          <li><span class="what"><a href="https://ctl-preview.pages.dev/terms/">/terms/</a></span><span class="note">Terms of service</span><span class="tag mono now">Needs a lawyer</span></li>
-          <li><span class="what"><a href="https://ctl-preview.pages.dev/privacy/">/privacy/</a></span><span class="note">Privacy policy</span><span class="tag mono now">Needs a lawyer</span></li>
-          <li><span class="what"><a href="https://ctl-preview.pages.dev/case-studies/">/case-studies/</a></span><span class="note">Built and switched off — the page type is finished, waiting on projects to put in it</span><span class="tag mono now">Needs projects</span></li>
-          <li><span class="what"><a href="https://ctl-preview.pages.dev/careers/">/careers/</a></span><span class="note">Built and switched off — application form, questionnaire and résumé upload all working</span><span class="tag mono now">Needs roles</span></li>
+          <li><span class="what">/</span><span class="note">Home — hero, services, storm strip, gallery band, reviews, booking, contact form</span><span class="tag mono done">Finished</span></li>
+          <li><span class="what">/services/</span><span class="note">Hub for all five service lines</span><span class="tag mono done">Finished</span></li>
+          <li><span class="what">/services/roofing/</span><span class="note">Roofing — materials, process, warranty, FAQs</span><span class="tag mono done">Finished</span></li>
+          <li><span class="what">/services/remodeling-restoration/</span><span class="note">Remodeling &amp; restoration</span><span class="tag mono done">Finished</span></li>
+          <li><span class="what">/services/outdoor-living/</span><span class="note">Patios, decks, outdoor structures</span><span class="tag mono done">Finished</span></li>
+          <li><span class="what">/services/emergency-inspections/</span><span class="note">Emergency response and inspections</span><span class="tag mono done">Finished</span></li>
+          <li><span class="what">/services/commercial/</span><span class="note">Commercial roofing</span><span class="tag mono now">Item 19</span></li>
+          <li><span class="what">/storm-damage/</span><span class="note">Storm damage and the insurance claim process</span><span class="tag mono now">Items 27–28</span></li>
+          <li><span class="what">/insurance/</span><span class="note">How a claim works, start to finish — the companion to the storm page</span><span class="tag mono now">Items 27–28</span></li>
+          <li><span class="what">/gallery/</span><span class="note">40 job photographs, five filters, lightbox</span><span class="tag mono done">Finished</span></li>
+          <li><span class="what">/video/</span><span class="note">Job walkthrough video</span><span class="tag mono now">Item 20</span></li>
+          <li><span class="what">/team/</span><span class="note">Robert, plus eight crew headshots</span><span class="tag mono now">Item 18</span></li>
+          <li><span class="what">/reviews/</span><span class="note">Live Google reviews and ten Facebook recommendations</span><span class="tag mono now">Item 09</span></li>
+          <li><span class="what">/areas/</span><span class="note">16 towns across 6 parishes</span><span class="tag mono done">Finished</span></li>
+          <li><span class="what">/financing/</span><span class="note">Financing options and a monthly payment estimator</span><span class="tag mono now">Item 15</span></li>
+          <li><span class="what">/contact/</span><span class="note">Assessment request form and booking</span><span class="tag mono now">Item 08</span></li>
+          <li><span class="what">/terms/</span><span class="note">Terms of service</span><span class="tag mono now">Item 27</span></li>
+          <li><span class="what">/privacy/</span><span class="note">Privacy policy</span><span class="tag mono now">Item 27</span></li>
+          <li><span class="what">/case-studies/</span><span class="note">Built and switched off — the page type is finished, waiting on projects to put in it</span><span class="tag mono now">Item 17</span></li>
+          <li><span class="what">/careers/</span><span class="note">Live in the menu — application form and questionnaire built, but the résumé has nowhere to go until item 10 is settled, so the form tells applicants to email instead</span><span class="tag mono now">Items 10, 25</span></li>
         </ul>
       </div>
     </section>
@@ -530,20 +642,364 @@
     <section>
       <div class="sec-head">
         <span class="seam" aria-hidden="true"><i></i><i></i><i></i></span>
+        <h2>Three things to start before anything else</h2>
+        <p>
+          Almost everything on the list can be done in the room. These three
+          cannot — each one involves somebody outside it, and each takes
+          days. Starting them at the top of the session means they run in
+          the background while the rest gets worked through.
+        </p>
+      </div>
+
+      <div class="lede">
+        <p>
+          <strong>1. The attorney.</strong> Four documents need a read: the
+          terms, the privacy policy, the six questions on the job
+          application, and the language on the storm page about how CTL works
+          a claim. That last one is the important one — in Louisiana,
+          negotiating a claim on a homeowner's behalf is public adjusting and
+          needs a licence. The page is written so CTL documents the damage,
+          meets the adjuster and scopes the repair, and the homeowner files
+          and negotiates. If that is not exactly how you operate, the wording
+          has to change.
+        </p>
+        <p>
+          <strong>2. The Google Business Profile.</strong> Confirm who owns
+          it. If nobody at CTL knows, the reclaim process starts today —
+          Google takes days to a couple of weeks, and it sits on the critical
+          path for the reviews on the site.
+        </p>
+        <p>
+          <strong>3. The old site's address book.</strong> We need a list of
+          every page on the current ctlpro.com before it comes down, plus a
+          copy of its DNS settings. Both are only obtainable while it is
+          still running. This one is ours to do — we just need to know who
+          hosts it.
+        </p>
+      </div>
+    </section>
+
+    <!-- ── 4 ──────────────────────────────────────────────────────── -->
+    <section>
+      <div class="sec-head">
+        <span class="seam" aria-hidden="true"><i></i><i></i><i></i></span>
         <h2>What we need from you</h2>
         <p>
-          Sixteen items, grouped by what each one is holding up. Nothing
-          here is difficult; most of it is a file, a number or a decision
-          somebody at CTL already has.
+          Thirty-one items in five blocks, in the order to work through them.
+          Nothing here is difficult; most of it is a file, a number, a login
+          or a decision somebody at CTL already has. Two of them — the form
+          key and where résumés go — are the only items that stop the site
+          doing its job at all.
         </p>
       </div>
 
       <div class="group">
-        <h3>Finishes a page</h3>
-        <p>Each of these is the missing half of a page that is otherwise built.</p>
+        <h3>Block A — Accounts, logins and keys</h3>
+        <p>The unglamorous half of a launch, and the half that decides whether CTL owns its own website afterwards. Every account below should be in your name with us added to it, not the other way around.</p>
         <ol class="asks">
           <li class="ask">
-            <span class="n">01</span>
+            <span class="n"><span class="box" aria-hidden="true"></span>01</span>
+            <h4>The domain registrar login for ctlpro.com</h4>
+            <div class="body">
+              <p>
+                Wherever the domain itself was bought. We need to confirm it
+                is unlocked and that the transfer code can be retrieved.
+              </p>
+            </div>
+          </li>
+          <li class="ask">
+            <span class="n"><span class="box" aria-hidden="true"></span>02</span>
+            <span class="tag mono stop">Blocks the launch</span>
+            <h4>The current DNS settings, and a list of the current site&#8217;s pages</h4>
+            <div class="body">
+              <p>
+                Both from whoever hosts the site today. The settings are
+                usually a one-click export; the page list we can gather
+                ourselves once we know where to look.
+              </p>
+              <p class="why">
+                <strong>Two reasons, and the first is the serious one</strong>
+                — the same settings that point ctlpro.com at a website also
+                point your email at your mailbox. Moving the site without
+                copying those across first stops company email arriving. Not
+                slows it. Stops it. The page list is the other half: every
+                address Google has indexed and every link posted to Facebook
+                needs somewhere to land on the new site, or it starts
+                returning &ldquo;not found&rdquo; the day we switch. Both jobs
+                are only possible while the old site is still up.
+              </p>
+            </div>
+          </li>
+          <li class="ask">
+            <span class="n"><span class="box" aria-hidden="true"></span>03</span>
+            <h4>A Cloudflare account in CTL&#8217;s name</h4>
+            <div class="body">
+              <p>
+                This is where the site will be hosted. Created under CTL&#8217;s
+                email with us added as a member — so if we ever part ways, the
+                site does not leave with us. Free at the traffic a regional
+                contractor sees.
+              </p>
+            </div>
+          </li>
+          <li class="ask">
+            <span class="n"><span class="box" aria-hidden="true"></span>04</span>
+            <h4>A GitHub account for whoever edits the site</h4>
+            <div class="body">
+              <p>
+                The photo editor signs in with one. Free, two minutes, but
+                each person who will add gallery photos needs their own.
+              </p>
+              <p class="why">
+                <strong>Worth saying plainly</strong> — this is the one piece
+                of friction in the setup. If asking office staff to hold a
+                GitHub account is a problem, say so in the session and we will
+                look at a different editor instead.
+              </p>
+            </div>
+          </li>
+          <li class="ask">
+            <span class="n"><span class="box" aria-hidden="true"></span>05</span>
+            <span class="tag mono now">Start today</span>
+            <h4>Ownership of the Google Business Profile</h4>
+            <div class="body">
+              <p>
+                The listing that shows up in Maps and in the sidebar when
+                somebody searches &ldquo;roofer Lafayette&rdquo;. We need
+                manager access to point it at the new site and to pull your
+                reviews in.
+              </p>
+              <p class="why">
+                <strong>Your stars in search come from here</strong>, not from
+                the website — which is also why the site does not mark up its
+                own reviews. See &ldquo;things left off on purpose&rdquo;
+                below.
+              </p>
+            </div>
+          </li>
+          <li class="ask">
+            <span class="n"><span class="box" aria-hidden="true"></span>06</span>
+            <h4>Google Search Console</h4>
+            <div class="body">
+              <p>
+                Free, and it is how we tell Google the new site exists and
+                watch for anything broken afterwards. Created against the same
+                Google account as the Business Profile.
+              </p>
+            </div>
+          </li>
+          <li class="ask">
+            <span class="n"><span class="box" aria-hidden="true"></span>07</span>
+            <h4>Who hosts the site now, and when does that bill end</h4>
+            <div class="body">
+              <p>Do not cancel it on launch day.</p>
+              <p class="why">
+                <strong>Keep it running 30 days</strong> past the switch. If
+                anything goes wrong, going back is a five-minute change — but
+                only while the old site still exists to go back to.
+              </p>
+            </div>
+          </li>
+          <li class="ask">
+            <span class="n"><span class="box" aria-hidden="true"></span>08</span>
+            <span class="tag mono stop">Blocks the launch</span>
+            <h4>A form key for the office inbox</h4>
+            <div class="body">
+              <p>
+                Free to create, and it is what lets the contact form send.
+                Until it exists the form refuses to submit and tells the
+                visitor to phone instead.
+              </p>
+              <p class="why">
+                <strong>Why it fails loudly</strong> — the alternative is a
+                form that looks like it worked and quietly loses the lead.
+                Nothing on the site captures an enquiry until this exists.
+              </p>
+            </div>
+          </li>
+          <li class="ask">
+            <span class="n"><span class="box" aria-hidden="true"></span>09</span>
+            <h4>A Google API key and your place ID</h4>
+            <div class="body">
+              <p>
+                Turns the live Google reviews on, so the rating shown is the
+                one you actually have that morning. The key gets locked to
+                your domain so nobody else can spend against it.
+              </p>
+              <p class="why">
+                <strong>Worth knowing</strong> — this is the one thing on the
+                site that costs money per visitor, so we set a spending alert
+                the same day it is switched on. The place ID also gets checked
+                against your real listing before it goes anywhere: the wrong
+                one would show a different business&#8217;s reviews under your
+                name.
+              </p>
+            </div>
+          </li>
+        </ol>
+      </div>
+
+      <div class="group">
+        <h3>Block B — Decisions only you can make</h3>
+        <p>Seven choices. Each one switches on something that is already built and currently sitting dark. None needs research beforehand — they are questions about how CTL actually works.</p>
+        <ol class="asks">
+          <li class="ask">
+            <span class="n"><span class="box" aria-hidden="true"></span>10</span>
+            <span class="tag mono stop">Blocks the launch</span>
+            <h4>Where do résumés go?</h4>
+            <div class="body">
+              <p>
+                The careers page is live in the menu and the application form
+                is built and tested. What is not settled is where the CVs
+                land. As it stands that would be private storage we run —
+                which works, but it means we are holding strangers&#8217;
+                personal documents on CTL&#8217;s behalf. For a company your
+                size that responsibility is better sitting with a company
+                whose actual business is holding them.
+              </p>
+              <table class="opts">
+                <thead>
+                  <tr><th>Option</th><th>What it costs</th><th>What it gets you</th></tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>A hiring platform</td>
+                    <td data-label="Costs">A monthly fee, on CTL&#8217;s account</td>
+                    <td data-label="Gets you">They hold the CVs, handle how long they are kept, and give you somewhere to track applicants. Most responsibility moved off both of us</td>
+                  </tr>
+                  <tr>
+                    <td>A form service</td>
+                    <td data-label="Costs">A small monthly fee</td>
+                    <td data-label="Gets you">Keeps the application form exactly as it is on the site; the file goes to them instead of to us. Cheapest change</td>
+                  </tr>
+                  <tr>
+                    <td>Indeed only</td>
+                    <td data-label="Costs">Free</td>
+                    <td data-label="Gets you">The careers page becomes a page that points at your Indeed listings. Nothing to run, nothing to hold — but you lose the branded application</td>
+                  </tr>
+                </tbody>
+              </table>
+              <p class="why">
+                <strong>Until this is settled</strong> the form tells
+                applicants to email the office instead. That is deliberate — a
+                form that appears to take somebody&#8217;s CV and quietly drops
+                it costs them a job they think they applied for, and they
+                never find out.
+              </p>
+            </div>
+          </li>
+          <li class="ask">
+            <span class="n"><span class="box" aria-hidden="true"></span>11</span>
+            <h4>What do you use to track jobs and customers?</h4>
+            <div class="body">
+              <p>
+                JobNimbus, AccuLynx, Roofr, Leap — or a whiteboard and a
+                phone. There is no wrong answer; we just need to know,
+                because the site already collects every enquiry into one list
+                and can push it straight into whatever you use.
+              </p>
+              <p class="why">
+                <strong>If the answer is &ldquo;nothing yet&rdquo;</strong>
+                that is fine and nothing is lost. Enquiries are stored from
+                day one, and the first time a system is connected, everything
+                collected up to that point gets delivered into it.
+              </p>
+            </div>
+          </li>
+          <li class="ask">
+            <span class="n"><span class="box" aria-hidden="true"></span>12</span>
+            <h4>Which inbox gets leads — and who is the second pair of eyes?</h4>
+            <div class="body">
+              <p>
+                Every assessment request emails somebody. We need the
+                address, and we want a second one on it.
+              </p>
+              <p class="why">
+                <strong>One mailbox is a single point of failure.</strong> The
+                most common way a website loses a job is that the enquiry
+                arrived correctly and nobody opened it that week.
+              </p>
+            </div>
+          </li>
+          <li class="ask">
+            <span class="n"><span class="box" aria-hidden="true"></span>13</span>
+            <h4>Do you want to know which ads are producing calls?</h4>
+            <div class="body">
+              <p>
+                Call tracking gives a different phone number to the website,
+                Facebook and Google so you can see which one rings. It costs
+                a monthly fee and it is genuinely useful — or we skip it and
+                every number on the site stays your real one, which is what
+                it is today.
+              </p>
+            </div>
+          </li>
+          <li class="ask">
+            <span class="n"><span class="box" aria-hidden="true"></span>14</span>
+            <h4>Which visitor statistics do you want?</h4>
+            <div class="body">
+              <p>
+                Two choices. A paid one that does not track people across the
+                internet and keeps the consent banner short, or Google&#8217;s
+                free one, which is more detailed and connects to Google Ads if
+                you ever run them. Either way the site asks permission before
+                it loads anything.
+              </p>
+            </div>
+          </li>
+          <li class="ask">
+            <span class="n"><span class="box" aria-hidden="true"></span>15</span>
+            <h4>The financing partner and the real terms</h4>
+            <div class="body">
+              <p>
+                Partner name, the actual rates and terms, and the
+                pre-qualification link.
+              </p>
+              <p class="why">
+                <strong>The payment calculator stays off until these are
+                real.</strong> A monthly figure on a website is a number a
+                customer will hold you to, so it is not going up as an
+                estimate.
+              </p>
+            </div>
+          </li>
+          <li class="ask">
+            <span class="n"><span class="box" aria-hidden="true"></span>16</span>
+            <h4>ctlpro.com or www.ctlpro.com?</h4>
+            <div class="body">
+              <p>
+                One is the real address and the other forwards to it. Thirty
+                seconds to decide, awkward to change later. Both work for
+                visitors either way.
+              </p>
+            </div>
+          </li>
+        </ol>
+      </div>
+
+      <div class="group">
+        <h3>Block C — Content still owed</h3>
+        <p>Each of these is the missing half of a page that is otherwise finished. None of it stops the site going live — the pages are written so a gap reads as a normal page rather than an apology — but each one left open is a page working below its weight.</p>
+        <ol class="asks">
+          <li class="ask">
+            <span class="n"><span class="box" aria-hidden="true"></span>17</span>
+            <span class="tag mono now">Highest value</span>
+            <h4>Six to eight completed projects, with before and after photos</h4>
+            <div class="body">
+              <p>
+                For each: the town, what the problem turned out to be, and
+                what the job ended up being.
+              </p>
+              <p class="why">
+                <strong>Unblocks two sections at once</strong> — the case
+                studies, which are the last page type that adds real search
+                surface, and the individual town pages, which are only worth
+                building once there is local work to put on them.
+              </p>
+            </div>
+          </li>
+          <li class="ask">
+            <span class="n"><span class="box" aria-hidden="true"></span>18</span>
             <h4>Job titles for the eight crew</h4>
             <div class="body">
               <p>
@@ -555,222 +1011,208 @@
             </div>
           </li>
           <li class="ask">
-            <span class="n">02</span>
-            <span class="tag mono now">Highest value</span>
-            <h4>Six to eight completed projects, with before and after photos</h4>
+            <span class="n"><span class="box" aria-hidden="true"></span>19</span>
+            <h4>Commercial job photographs</h4>
             <div class="body">
               <p>
-                For each: the town, what the problem turned out to be, and
-                what the job ended up being.
+                The Milton Water System metal roof opens the page now, but
+                that is one building and one system. A low-slope membrane and
+                a coating going down are still missing, and those are two of
+                the three things the page sells.
               </p>
               <p class="why">
-                <strong>Switches on</strong> the case studies — the last page
-                type that adds real search surface, and also what makes
-                individual town pages worth building. This one item unblocks
-                two sections at once.
+                <strong>Also worth asking</strong> — whether Milton Water
+                System, or one or two other owners, are happy to be named.
+                That is what turns a photograph into a reference.
               </p>
             </div>
           </li>
           <li class="ask">
-            <span class="n">03</span>
-            <h4>Whether you are hiring, and for what</h4>
-            <div class="body">
-              <p>
-                Job titles, full time or seasonal, what each role actually
-                does day to day, and the genuine minimum somebody needs to
-                be considered.
-              </p>
-              <p class="why">
-                <strong>Switches on</strong> the openings list on the careers
-                page. Until it arrives the page runs as a general
-                application, which is honest but weaker — it cannot name a
-                job that might not exist.
-              </p>
-            </div>
-          </li>
-          <li class="ask">
-            <span class="n">04</span>
-            <h4>A working export of the second video</h4>
+            <span class="n"><span class="box" aria-hidden="true"></span>20</span>
+            <h4>A working copy of the second video</h4>
             <div class="body">
               <p>
                 The file supplied is a 417&nbsp;KB truncated download — it
                 decodes one frame and stops, so it was left off rather than
-                shipped broken. Captions would help too; the audio is
-                carrying the whole message.
+                shipped broken. Titles in your own words for each clip would
+                help, and captions more still; the audio is carrying the whole
+                message.
               </p>
             </div>
           </li>
           <li class="ask">
-            <span class="n">05</span>
-            <h4>One commercial job photograph</h4>
+            <span class="n"><span class="box" aria-hidden="true"></span>21</span>
+            <h4>Reviews you are happy to quote</h4>
             <div class="body">
               <p>
-                A low-slope membrane, a coating going down, or a finished
-                commercial metal roof. The commercial page currently has no
-                picture of commercial work on it.
+                There is a testimonials section built and currently hidden,
+                because inventing one is the single thing this site will not
+                do. Anything you have cleared for use goes straight in.
               </p>
             </div>
           </li>
-        </ol>
-      </div>
-
-      <div class="group">
-        <h3>Switches something on</h3>
-        <p>Built and waiting on a credential or a decision.</p>
-        <ol class="asks">
           <li class="ask">
-            <span class="n">06</span>
-            <h4>Web3Forms key for the office inbox</h4>
+            <span class="n"><span class="box" aria-hidden="true"></span>22</span>
+            <h4>The Google Maps link for the showroom</h4>
             <div class="body">
               <p>
-                Until this exists the contact form refuses to submit and
-                tells the visitor to phone instead.
-              </p>
-              <p class="why">
-                <strong>Why it fails loudly</strong> — the alternative is a
-                form that looks like it worked and quietly loses the lead.
+                Maps &rarr; Share &rarr; Embed a map &rarr; copy the link.
+                Puts a map on the contact page; without it that column simply
+                skips the map panel.
               </p>
             </div>
           </li>
           <li class="ask">
-            <span class="n">07</span>
-            <h4>Google Cloud API key and place ID</h4>
+            <span class="n"><span class="box" aria-hidden="true"></span>23</span>
+            <h4>Your Louisiana contractor licence number</h4>
             <div class="body">
               <p>
-                Turns the live Google reviews on. Places API (New), with the
-                key restricted to your domain.
-              </p>
-              <p class="why">
-                <strong>Worth knowing</strong> — it bills per page view, so
-                set a budget alert in the first week. It is the only thing on
-                the site that costs money per visitor.
+                There is a place for it in the footer and it is currently
+                empty — no licence line prints anywhere on the site until this
+                exists.
               </p>
             </div>
           </li>
           <li class="ask">
-            <span class="n">08</span>
-            <h4>A Cloudflare account to deploy the résumé uploader to</h4>
-            <div class="body">
-              <p>
-                The careers form takes a file, and a file needs somewhere to
-                land. A small upload service is written and tested; it needs
-                deploying to your Cloudflare account, which takes about ten
-                minutes and costs nothing at this volume.
-              </p>
-              <p class="why">
-                <strong>Switches on</strong> the careers page. Until then it
-                stays switched off deliberately — a live &ldquo;apply
-                here&rdquo; form with nothing behind it takes somebody&rsquo;s
-                résumé and drops it, and they never find out.
-              </p>
-            </div>
-          </li>
-          <li class="ask">
-            <span class="n">09</span>
-            <h4>Financing partner, real terms, prequalification link</h4>
-            <div class="body">
-              <p>
-                The payment estimator is built but switched off.
-              </p>
-              <p class="why">
-                <strong>Why it waits</strong> — a monthly figure on a website
-                is a number a customer will hold you to, so it stays dark
-                until the APR and terms are the real ones.
-              </p>
-            </div>
-          </li>
-          <li class="ask">
-            <span class="n">10</span>
-            <h4>Call-tracking provider and per-channel numbers</h4>
-            <div class="body">
-              <p>
-                Optional. Until one is chosen, every phone number on the site
-                is your real one, which is the safe default.
-              </p>
-            </div>
-          </li>
-        </ol>
-      </div>
-
-      <div class="group">
-        <h3>Needs a sign-off</h3>
-        <p>Legal or factual points that should not go live on my judgement alone.</p>
-        <ol class="asks">
-          <li class="ask">
-            <span class="n">11</span>
-            <h4>Louisiana contractor licence number</h4>
-            <div class="body">
-              <p>There is a place for it in the footer and it is currently empty.</p>
-            </div>
-          </li>
-          <li class="ask">
-            <span class="n">12</span>
+            <span class="n"><span class="box" aria-hidden="true"></span>24</span>
             <h4>Whether CTL is actually FORTIFIED-certified</h4>
             <div class="body">
               <p>
                 One of the supplied photographs shows a FORTIFIED sign. That
                 is an insurance-discount badge in Louisiana and worth
-                displaying — but the certification is unverified, so the
-                photo was excluded and no badge is claimed anywhere.
+                displaying — but the certification is unverified, so the photo
+                was excluded and no badge is claimed anywhere.
               </p>
               <p class="why">
                 <strong>Confirm it</strong> and both the photo and the badge
-                go on.
+                go on. Same question for any manufacturer certifications.
               </p>
             </div>
           </li>
           <li class="ask">
-            <span class="n">13</span>
-            <h4>The claims language on the storm page</h4>
+            <span class="n"><span class="box" aria-hidden="true"></span>25</span>
+            <h4>Whether you are hiring, and for what</h4>
             <div class="body">
               <p>
-                Public adjusting in Louisiana is a licensed activity under
-                La.&nbsp;R.S.&nbsp;22:1691. The copy is written to describe
-                helping with a claim without straying into adjusting it, but
-                somebody who knows how CTL actually works with insurers
-                should read it.
-              </p>
-            </div>
-          </li>
-          <li class="ask">
-            <span class="n">14</span>
-            <h4>An employment attorney&#8217;s read of the hiring questions</h4>
-            <div class="body">
-              <p>
-                The application form asks six questions. They are written
-                carefully — every one is about doing the job, the question
-                about ladders and heat describes the work and asks whether
-                you can do it rather than asking about your health, and
-                nothing touches criminal history, age, family or
-                citizenship.
+                Job titles, full time or seasonal, what each role actually
+                does day to day, and the genuine minimum somebody needs to be
+                considered.
               </p>
               <p class="why">
-                <strong>Careful is not the same as cleared.</strong> What an
-                employer may ask an applicant, and how it must be phrased,
-                is not a design decision. Somebody who does this for a
-                living should read them before the page goes live.
+                <strong>Switches on</strong> the openings list on the careers
+                page. Until it arrives the page runs as a general application,
+                which is honest but weaker — it cannot name a job that might
+                not exist.
               </p>
             </div>
           </li>
           <li class="ask">
-            <span class="n">15</span>
-            <h4>An attorney's read of the terms and privacy pages</h4>
+            <span class="n"><span class="box" aria-hidden="true"></span>26</span>
+            <h4>The definitive list of towns you serve</h4>
             <div class="body">
               <p>
-                Both were written from scratch to describe what the site
-                genuinely does. They are honest, but they are not legal
+                Sixteen are listed now, grouped into six parishes. Confirm,
+                add or remove — and it is worth getting right, because it is
+                also the list the town pages get built from later.
+              </p>
+            </div>
+          </li>
+        </ol>
+      </div>
+
+      <div class="group">
+        <h3>Block D — Sign-offs</h3>
+        <p>Two reads. One by a lawyer, one by you, and they are checking different things. Both start the day of the session; they are the longest pole in the tent.</p>
+        <ol class="asks">
+          <li class="ask">
+            <span class="n"><span class="box" aria-hidden="true"></span>27</span>
+            <span class="tag mono now">Start today</span>
+            <h4>Your attorney reads four things</h4>
+            <div class="body">
+              <p>
+                The terms of service, the privacy policy, the six questions on
+                the job application, and the claims section of the storm page.
+                All four were written from scratch to describe what this site
+                genuinely does. They are honest, and they are not legal
                 advice.
               </p>
+              <p class="why">
+                <strong>The claims section is the one that matters.</strong>
+                Public adjusting in Louisiana is licensed under
+                La.&nbsp;R.S.&nbsp;22:1691, and the line between documenting
+                damage and negotiating a claim is a legal one. The copy is
+                written to stay on the right side of it, and the hiring
+                questions are written conservatively — every one is about
+                doing the job, the question about ladders and heat describes
+                the work and asks whether you can do it rather than asking
+                about your health, and nothing touches criminal history, age,
+                family or citizenship. But careful is not the same as cleared,
+                and neither of those is a judgement we are qualified to make
+                for you.
+              </p>
             </div>
           </li>
           <li class="ask">
-            <span class="n">16</span>
-            <h4>The current site's page addresses</h4>
+            <span class="n"><span class="box" aria-hidden="true"></span>28</span>
+            <h4>You read the storm and insurance pages yourself</h4>
             <div class="body">
               <p>
-                Needed to build the redirect map so existing search rankings
-                survive the switch. There has been no access to crawl the
-                live site, so this cannot be worked out from here.
+                Separately from the attorney, and for a different reason: do
+                they describe how CTL actually handles a storm job? The first
+                48 hours, what you do when the adjuster is on site, what you
+                will and will not do during a claim. It is all written from how
+                the business appears to work from the outside. Tell us where it
+                is wrong.
+              </p>
+            </div>
+          </li>
+        </ol>
+      </div>
+
+      <div class="group">
+        <h3>Block E — The working arrangement</h3>
+        <p>Worth settling in the same sitting, because it changes what the launch looks like and who is responsible for what afterwards.</p>
+        <ol class="asks">
+          <li class="ask">
+            <span class="n"><span class="box" aria-hidden="true"></span>29</span>
+            <h4>Payment terms</h4>
+            <div class="body">
+              <p>What is owed, when, and how.</p>
+              <p class="why">
+                <strong>One practical note</strong> — paying an invoice by
+                card carries a percentage fee that gets meaningful at five
+                figures, while paying by bank transfer through the same
+                invoice costs a few dollars flat. Same link, different button.
+                Worth knowing before the first one arrives.
+              </p>
+            </div>
+          </li>
+          <li class="ask">
+            <span class="n"><span class="box" aria-hidden="true"></span>30</span>
+            <h4>Who looks after it after launch</h4>
+            <div class="body">
+              <p>
+                A site with forms, a photo editor and a live reviews feed is
+                not a thing you hang on a wall. Somebody needs to be the
+                person who gets called when a form stops working on a
+                Saturday. Decide what that arrangement is — response time,
+                what is included, what is billed — rather than discovering it
+                during the first outage.
+              </p>
+            </div>
+          </li>
+          <li class="ask">
+            <span class="n"><span class="box" aria-hidden="true"></span>31</span>
+            <h4>Who pays the running costs</h4>
+            <div class="body">
+              <p>
+                Hosting is free at this size. The recurring costs that do
+                exist are the ones chosen in Block B — the hiring platform,
+                the customer system, call tracking, statistics — plus the
+                small per-visitor charge from Google for the live reviews.
+                That last one is the only thing on the site that bills by
+                traffic, which is why a spending alert goes on it the day it
+                is turned on.
               </p>
             </div>
           </li>
@@ -778,7 +1220,7 @@
       </div>
     </section>
 
-    <!-- ── 4 ──────────────────────────────────────────────────────── -->
+    <!-- ── 5 ──────────────────────────────────────────────────────── -->
     <section>
       <div class="sec-head">
         <span class="seam" aria-hidden="true"><i></i><i></i><i></i></span>
@@ -837,10 +1279,11 @@
           </p>
         </div>
         <div class="confirm">
-          <h3>No live careers form yet</h3>
+          <h3>No résumé upload yet</h3>
           <p>
-            The application form is finished and tested, and the page is
-            switched off until the upload service is deployed. A form that
+            The careers page is live and the application form is finished and
+            tested, but until item 10 gives a résumé somewhere to go, the form
+            refuses and points applicants at the office email. A form that
             accepts a résumé and quietly discards it is worse than no form:
             the applicant believes they applied, and nobody ever tells them
             otherwise. The same rule governs the contact form, which refuses
@@ -858,7 +1301,7 @@
       </div>
     </section>
 
-    <!-- ── 5 ──────────────────────────────────────────────────────── -->
+    <!-- ── 6 ──────────────────────────────────────────────────────── -->
     <section>
       <div class="sec-head">
         <span class="seam" aria-hidden="true"><i></i><i></i><i></i></span>
@@ -875,10 +1318,11 @@
         <p>
           <strong>One exception, and it is worth knowing about.</strong> A
           file cannot be sent to a set of static files, so the résumé upload
-          on the careers page needs a small piece of software running on
-          Cloudflare. It does one thing — take an application, check it, and
-          put the file in private storage only you can reach — and it is the
-          only moving part on the whole site.
+          on the careers page needs something running behind it. That piece is
+          written and tested — it takes an application, checks it hard, and
+          puts the file in private storage only you can reach — and it is the
+          only moving part on the whole site. It is also the one piece we
+          would rather hand to somebody else, which is what item 10 decides.
         </p>
         <p>
           Content lives in plain, structured files rather than being buried
@@ -895,23 +1339,121 @@
         </p>
         <p>
           <strong>The current site is untouched.</strong> No DNS has been
-          pointed anywhere and ctlpro.com is running exactly as it was. The
-          preview address at the top of this document is a separate,
-          temporary copy for you to look at — search engines are kept off
-          it and it comes down when we are done. Going live on your own
-          domain is a deliberate, scheduled step, and it should not happen
-          before the redirect map in item 16 exists.
+          pointed anywhere and ctlpro.com is running exactly as it was. Going
+          live on your own domain is a deliberate, scheduled step with its own
+          order of operations — set out under &ldquo;what happens after the
+          session&rdquo; below — and it does not happen before item 02 is in
+          hand.
         </p>
       </div>
     </section>
 
-    <!-- ── 6 ──────────────────────────────────────────────────────── -->
+    <!-- ── 7 ──────────────────────────────────────────────────────── -->
+    <section>
+      <div class="sec-head">
+        <span class="seam" aria-hidden="true"><i></i><i></i><i></i></span>
+        <h2>What happens after the session</h2>
+        <p>
+          So the timeline is clear before anyone commits to a date. The switch
+          itself takes minutes; the two weeks before it are what make those
+          minutes uneventful.
+        </p>
+      </div>
+
+      <div class="panel">
+        <ol class="steps">
+          <li>
+            <strong>Same day</strong> — the attorney starts reading, Business
+            Profile ownership gets confirmed, and we take a full copy of the
+            current site&#8217;s pages and settings while it is still up.
+          </li>
+          <li>
+            <strong>Week one</strong> — every account and key from Blocks A
+            and B gets wired in. The site goes onto a private test address
+            with everything switched on, and we work through it properly:
+            submit the real form, book a real appointment, apply for a real
+            job, and confirm each one arrives in the right inbox and the right
+            list.
+          </li>
+          <li>
+            <strong>Week two</strong> — you review it on that test address.
+            Content from Block C goes in as it arrives. Legal comes back and
+            gets applied.
+          </li>
+          <li>
+            <strong>The switch</strong> — your email settings are recreated
+            and verified first, then the address moves. We send and receive a
+            test email on ctlpro.com before calling it done. Old page
+            addresses forward to their new homes so nothing you have ever
+            linked to breaks.
+          </li>
+          <li>
+            <strong>The week after</strong> — Google is told about the new
+            site, we watch for anything broken, and whoever is maintaining the
+            gallery gets walked through it. The old site stays paid up for a
+            month, so going back stays a five-minute job if it is ever needed.
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ── 8 ──────────────────────────────────────────────────────── -->
+    <section>
+      <div class="sec-head">
+        <span class="seam" aria-hidden="true"><i></i><i></i><i></i></span>
+        <h2>The short version</h2>
+      </div>
+
+      <div class="decisions">
+        <div class="confirm">
+          <h3>Bring to the session</h3>
+          <p>
+            The registrar login. Whoever hosts the site now, so we can ask
+            them for the settings export. The Google account that owns your
+            Business Profile. Your contractor licence number. Your
+            attorney&#8217;s details. CTL&#8217;s legal name and tax number
+            for the accounts we set up together.
+          </p>
+        </div>
+        <div class="confirm">
+          <h3>Decide in the session</h3>
+          <p>
+            Where résumés go. What you use to track customers. Which inbox
+            gets leads, and who else sees it. Call tracking, yes or no. Which
+            statistics. The financing partner. And whether the address is
+            ctlpro.com or www.ctlpro.com.
+          </p>
+        </div>
+        <div class="confirm">
+          <h3>Two that stop it working</h3>
+          <p>
+            Only two items genuinely prevent the site doing its job: a form
+            key so the contact form can send, and somewhere for résumés to go.
+            Everything else degrades gracefully — a section hides itself
+            rather than showing a gap, which is why nothing on this site reads
+            as unfinished.
+          </p>
+        </div>
+        <div class="confirm">
+          <h3>One that can go wrong quietly</h3>
+          <p>
+            The DNS settings from your current host. It is the difference
+            between a launch nobody notices and a morning where company email
+            has stopped and nobody knows why. A five-minute request, and it
+            needs making before anything moves.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── 9 ──────────────────────────────────────────────────────── -->
     <footer class="foot">
       <p>
-        Prepared by Charles Meyers · 1 September 2026 · Built for CTL Pro
-        Construction LLC, 1605 Eraste Landry Road, Lafayette LA 70506. This
-        document describes work completed on speculation; it is not an
-        invoice, a contract, or an engagement.
+        Prepared by Charles Meyers · 21 September 2026 · Built for CTL Pro
+        Construction LLC, 1605 Eraste Landry Road, Lafayette LA 70506. The
+        site described here was built on speculation and nothing has been
+        invoiced; this document is an agenda and a record of what exists, not
+        an invoice, a contract, or an engagement.
       </p>
     </footer>
 

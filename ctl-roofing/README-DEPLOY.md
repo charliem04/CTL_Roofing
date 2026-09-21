@@ -16,8 +16,10 @@ them rather than repeating their contents:
 - `docs/CUTOVER.md` — the DNS move: the email-survival check, the order
   of operations, and the rollback.
 
-The client-facing run sheet for the session where those get collected is
-`ctl-meeting-agenda.html` at the repo root.
+The client-facing document is `ctl-handover.html` at the repo root: what
+is built and why, followed by the thirty-one item run sheet for the
+session where the rest gets collected. It is mirrored to a published
+artifact — see the note in its header before editing it.
 
 Workflow for a new client: `git clone` → new repo → work back through
 this list top to bottom → `npm run deploy`.

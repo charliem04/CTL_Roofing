@@ -25,5 +25,12 @@ yarn-error.log*
 Thumbs.db
 *.swp
 
-# Redundant archive (identical to ctl_pictures/)
+# Redundant archive (identical to assets/source-photos/)
 ctl_pictures.zip
+
+# IDE / tooling state
+.idea/
+.vscode/
+
+# graphify code-analysis cache — regenerated output, never committed
+graphify-out/

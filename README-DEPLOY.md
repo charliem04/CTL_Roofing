@@ -1,112 +1,272 @@
 # Go-Live Checklist — touch every item before a client site ships
 
-> For CTL specifically, `ctl-handover.html` in this directory is the
-> client-facing version of what is built and what is still needed.
-> Open it in a browser.
+This tree is currently configured for **CTL Pro Construction LLC (CTL
+Roofing)**, Broussard LA. Items already done for CTL are checked; the
+open boxes are what still stands between this and a DNS cutover.
 
-Workflow per client: `git clone` → new repo → work through this list top
-to bottom → `npm run deploy`.
+Phase 1 of the multi-page rebuild is built — see `docs/REBUILD-PLAN.md`
+for the work breakdown, what phase 2 switches on, and the content still
+owed by the client.
 
-## 1. `client.config.ts` — every `TODO(client)` field
-- [ ] `businessName`, `legalName`, `tagline`, `subheadline`
-- [ ] `siteUrl` (the real production domain, https, no trailing slash)
-- [ ] `metaTitle`, `metaDescription`
-- [ ] `phone`, `phoneHref` (E.164), `email`
-- [ ] `address`, `hours`
-- [ ] `mapEmbedSrc` (Google Maps → Share → Embed → copy the iframe `src`)
-- [ ] `calLink` (client's Cal.com "username/event" — or `""` to hide booking)
-- [ ] `socials` (empty string hides a link)
-- [ ] `services` — icons, titles, descriptions
-- [ ] `about` — heading, body paragraphs, stats (or `[]`)
-- [ ] `testimonials` — REAL reviews only (or `[]` to hide the section)
-- [ ] `badges` — real license number(s)
-- [ ] `copy` — skim; defaults usually fine
+Three companion documents cover the launch itself, and this file defers
+to them rather than repeating their contents:
 
-## 2. Images — `/public`
-- [ ] Replace `placeholder/logo.svg` (or add real logo + update `logoPath`)
-- [ ] Replace hero image slot in `components/Hero.tsx` with a real
-      job-site photo/video (see the TODO comment there) + write alt text
-- [ ] Replace `placeholder/about.svg` reference + write alt text in
-      `components/About.tsx`
-- [ ] Create a real 1200×630 OG image, update `ogImagePath`
+- `docs/PRODUCTION-READINESS.md` — the engineering audit: what is
+  unfinished in the infrastructure, and the work that closes it. Start
+  here; several items below are unchecked because of a finding in it.
+- `docs/LAUNCH-CREDENTIALS.md` — every account and key, who creates it,
+  and what breaks without it.
+- `docs/CUTOVER.md` — the DNS move: the email-survival check, the order
+  of operations, and the rollback.
 
-## 3. Environment — `.env.local` (copy from `.env.example`)
-- [ ] `NEXT_PUBLIC_FORM_ENDPOINT` — Formspree URL or Cloudflare Worker.
-      Unset = form silently succeeds in demo mode. DO NOT SHIP UNSET.
-- [ ] `NEXT_PUBLIC_LEAD_WEBHOOK_URL` — only for Speed-to-Lead clients
+The client-facing document is `ctl-handover.html` at the repo root: what
+is built and why, followed by the thirty-one item run sheet for the
+session where the rest gets collected. It is mirrored to a published
+artifact — see the note in its header before editing it.
+
+Workflow for a new client: `git clone` → new repo → work back through
+this list top to bottom → `npm run deploy`.
+
+**Paths in this document.** `docs/`, `workers/`, `assets/` and
+`ctl-handover.html` are relative to the repo root. Every other path —
+`client.config.ts`, `content/`, `app/`, `components/`, `lib/`,
+`scripts/`, `public/` — is relative to `ctl-roofing/`, the Next.js app,
+which is also where `npm` commands are run from.
+
+## 1. Content — `client.config.ts` and `content/`
+
+`client.config.ts` holds identity, contact and sitewide copy. Page
+content lives in `content/`, read through `lib/content.ts` — which is
+also the one file a CMS would replace.
+- [x] `businessName`, `legalName`, `tagline`, `taglineEmphasis`, `subheadline`
+- [x] `siteUrl` (https://www.ctlpro.com, no trailing slash)
+- [x] `metaTitle`, `metaDescription`
+- [x] `phone`/`phoneHref` and `stormPhone`/`stormPhoneHref` (E.164), `email`
+- [x] `address`, `hours`, `hoursShort`
+- [ ] `mapEmbedSrc` (Google Maps → Share → Embed → copy the iframe `src`).
+      Empty today, so the contact column skips the map panel.
+- [x] `bookingUrl` — the Calendly link the booking band on `/contact/`
+      embeds, and nothing else. The CTAs do not read it: they go to
+      `CTA_HREF` in `lib/routes.ts` (`/contact/`), so the calendar is
+      somewhere a visitor arrives rather than somewhere they are sent.
+      Swapping schedulers means updating `frame-src` in
+      `scripts/csp.mjs`, the consent sentence in `BookingEmbed`, and
+      the processor paragraph on `/privacy/` — the CSP drift check
+      fails the build until the first of those is done.
+- [x] `socials` — Facebook, Instagram and the Google review link.
+      Icons sit in the utility strip and footer, never the main nav.
+- [x] `metal`, `process`, `brands`, `about`, `gallery` (config);
+      `content/services.ts`, `content/storm.ts`, `content/contact.ts`,
+      `content/towns.ts` (page content)
+- [x] `form.serviceOptions` — the one dropdown on the request sheet
+- [ ] `content/financing.ts` → `offers`, `lender`, `prequalifyUrl`.
+      Empty today, so the estimator renders the pending panel instead
+      of a payment. Do not add an offer until the terms are real.
+- [ ] `content/pending.ts` — every entry here is a visible placeholder
+      on the live site. The list shrinks as content arrives.
+- [ ] `client.config.ts` → `tracking.dniScriptUrl` — the call-tracking
+      provider's script. Empty = every number shown is the real one.
+- [ ] `testimonials` — REAL reviews only. Empty today, so the section
+      does not render; add quotes CTL has cleared for the site.
+- [ ] `badges` — real license number(s). Empty today, so no license line
+      prints. Confirm CTL's LA contractor license and add it.
+- [x] `copy` — headings, CTAs, hero facts, closing band
+
+## 2. Routes
+
+Phase-2 pages are registered in `lib/routes.ts` with `live: false`.
+Nothing links to them and the sitemap omits them until that flips.
+
+- [x] `/`, `/services/` + five service pages, `/storm-damage/`,
+      `/contact/`, `/financing/`, `/gallery/`, `/terms/`, `/privacy/`, 404
+- [ ] Phase 2: `/case-studies/`, `/video/`, `/team/`, `/areas/` + town
+      pages, `/reviews/`, `/careers/`, blog
+
+## 2a. The gallery is now editable without a developer
+
+Photos live in `content/gallery.json`, written by the CMS at `/admin/`
+rather than by editing TypeScript. `scripts/gallery.mjs` runs before
+every build: it reads each image's real dimensions out of the file
+header, records whether a thumbnail exists, and fails the build — naming
+the photo — on a missing alt text, a duplicate, a missing file, or an
+unknown category.
+
+Full walkthrough, including what to tell whoever maintains it:
+`docs/GALLERY-CMS.md`.
+
+## 3. Images — `/public/ctl`
+- [x] Logo, hero, four service photos, metal panel, team, owner,
+      materials — all real CTL job photography
+- [x] Gallery: 40 photographs across five categories, in
+      `content/gallery.ts`, feeding both the home band and `/gallery/`
+- [x] OG image (1200×630, `og.jpg`)
+- [x] Favicon — `app/icon.png`, the CTL letterform on the wordmark
+      periwinkle with the gold bar; legible at 32px
+
+## 4. Environment — `.env.local` (copy from `.env.example`)
+- [ ] `NEXT_PUBLIC_WEB3FORMS_KEY` — REQUIRED. The access key for the
+      office inbox. Without it the form refuses to submit and shows the
+      phone number; it no longer pretends to succeed.
+- [ ] `NEXT_PUBLIC_LEAD_WEBHOOK_URL` — the lead relay's `/lead` route,
+      so every enquiry is collected in one list. Fired in parallel and
+      never awaited, so a relay or CRM outage cannot cost the email.
+      See `workers/lead-relay/README.md`.
+- [ ] `NEXT_PUBLIC_CAREERS_ENDPOINT` — the résumé upload Worker.
+- [ ] `NEXT_PUBLIC_TURNSTILE_SITE_KEY` — before `/careers/` goes live.
+      It is the only layer that tells a person from a script.
 - [ ] `NEXT_PUBLIC_PLAUSIBLE_DOMAIN` — or leave empty for no analytics
-- [ ] Mirror these in Cloudflare Pages → Settings → Environment variables
+- [ ] `CMS_AUTH_URL` — the gallery CMS sign-in relay. NOT a
+      `NEXT_PUBLIC_` variable: it is read at build time and written into
+      the CMS config, never compiled into a page.
+      See `docs/GALLERY-CMS.md`.
+- [ ] Mirror these in Cloudflare Pages → Settings → Environment
+      variables, for Production *and* Preview
 
-## 4. Legal — ⚠️ both pages ship with REPLACE BEFORE LAUNCH banners
-- [ ] `app/terms/page.tsx` — review/replace text, set effective date,
-      remove the warning banner block
-- [ ] `app/privacy/page.tsx` — same, and confirm disclosures match what
-      actually runs (analytics on/off, lead webhook on/off)
+## 4a. The three Workers
 
-## 5. Brand
-- [ ] `app/globals.css` — set the `--brand*` color tokens
-- [ ] Fonts: self-host in `/public/fonts` + `@font-face` if the brand
-      needs a webfont; otherwise keep system stacks
+The site is a static export, so anything that needs a server is a
+Worker. Each has its own README with the exact commands.
 
-## 6. Verify before DNS cutover
-- [ ] `npm run build` clean
+- [ ] **`workers/careers-upload`** — takes the résumé, validates it hard,
+      writes it to a PRIVATE R2 bucket. `TURNSTILE_SECRET` is required;
+      without it the Worker refuses every upload rather than running
+      open. Do not attach a public URL to that bucket.
+- [ ] **`workers/lead-relay`** — the lead book. Stores every assessment
+      request and job application in D1 and forwards to whichever CRM is
+      chosen. `CRM_WEBHOOK_URL` unset is a supported state: leads are
+      still captured, and the first retry sweep after it is set delivers
+      the whole backlog.
+- [ ] **The CMS OAuth relay** — a published Worker
+      (`sveltia/sveltia-cms-auth`) that holds the GitHub client secret
+      so `/admin/` can sign in. Set `ALLOWED_DOMAINS`.
+
+The careers Worker and the relay share one secret: `RELAY_INGEST_SECRET`
+on the first must equal `INGEST_SECRET` on the second, or applications
+are refused at the relay with a 401.
+
+## 5. Legal — written, not yet lawyer-reviewed
+Both pages now describe what this site actually does, service by
+service, with an effective date set. They are a careful draft, not
+legal advice.
+- [ ] CTL's attorney reads both — particularly the claims-role section
+      in the terms, which states that CTL does not adjust claims
+- [ ] Re-check the privacy page whenever a processor is added or
+      removed. It names Web3Forms, Calendly, Plausible and Cloudflare
+      by name, so adding a CRM or call tracking means adding a line.
+      The Calendly paragraph is gated on `bookingUrl` and disappears
+      with it.
+
+## 6. Brand
+- [x] `app/globals.css` — color tokens sampled from the CTL logo:
+      indigo `#2D3581`, periwinkle `#5160A6`, gold `#F1CC47`, ink
+      `#0B1233`. Gold is the only call-to-action color; indigo carries
+      structure, links and focus rings.
+- [x] Type: Big Shoulders Display (display) + IBM Plex Sans/Mono
+      (body/utility), self-hosted via Fontsource — latin subsets only,
+      imported in `app/layout.tsx`. To swap: `npm i @fontsource/<face>`,
+      change the import, and update `--font-*` in globals.css.
+
+## 7. Verify before DNS cutover
+- [x] `npm run build` clean (static export to `./out`)
+- [x] `npm run check` — 0 errors, 0 warnings. The 5 advisories are
+      false positives (gradient `100%` stops read as round stats;
+      em-dashes counted inside CSS and TS comments). New findings elsewhere
+      mean a component edit inherited a default — fix it, or suppress
+      consciously with `deliberate-ignore`.
 - [ ] Form submits end-to-end (check inbox AND lead webhook if enabled)
-- [ ] Cal.com embed loads and books a test slot
+- [ ] Every primary CTA lands on `/contact/` — nothing on the site
+      links straight out to the calendar
+- [ ] Calendly books a test slot from the band on `/contact/` — both
+      the inline embed (which only loads once the visitor asks for it)
+      and the direct link beside it
+- [ ] Storm page language checked against how CTL actually operates in a
+      claim — see the ⚠️ note in `content/storm.ts`
 - [ ] Cookie banner: decline → no analytics request in Network tab;
       accept → script loads
 - [ ] Lighthouse mobile ≥ 90 performance
-- [ ] Rich Results Test on the LocalBusiness JSON-LD
-- [ ] tel:/sms: links work from a real phone
+- [ ] Rich Results Test on the `RoofingContractor`, `Service`,
+      `FAQPage` and `BreadcrumbList` JSON-LD
+- [ ] tel:/sms: links work from a real phone — both the office line and
+      the storm line
 - [ ] Grep the repo for `TODO(client)` — must return zero results
 
-## Deploy
-```bash
-npm run build            # emits ./out (static export)
-npx wrangler pages deploy out
-```
-Then Cloudflare Pages → Custom domains → attach the client domain, and
-submit the sitemap (`{siteUrl}/sitemap.xml`) in Google Search Console.
+## Deploy — Cloudflare Pages
 
-## Preview deploy — the pitch link, before there is a client
+The old ctlpro.com site is still live and DNS still points at it. Ship
+to a `*.pages.dev` preview first, check it there, and only then move
+DNS. Nothing below touches the live site until the final step.
 
-For putting the site on a temporary URL to show it to somebody, while
-it is still a replica of a business that has not asked for it.
+### 1. Connect the repo
+
+Cloudflare dashboard → Workers & Pages → Create → Pages → Connect to Git.
+
+| Setting | Value |
+|---|---|
+| Production branch | `main` |
+| Framework preset | None |
+| Build command | `npm run build` |
+| Build output directory | `out` |
+| **Root directory (advanced)** | `ctl-roofing` |
+
+The root directory is the one people miss. The Next project is not at
+the repo root, and without it the build fails looking for a package.json.
+
+Node version comes from `.nvmrc` (20). If Pages ignores it, set a
+`NODE_VERSION` environment variable to `20`.
+
+### 2. Environment variables
+
+Set these under Settings → Environment variables, for **both**
+Production and Preview — a preview without them behaves differently
+from production, which defeats the point of checking it there.
+
+- [ ] `NEXT_PUBLIC_WEB3FORMS_KEY` — required, or the form refuses to
+      submit and tells people to phone
+- [ ] `NEXT_PUBLIC_PLAUSIBLE_DOMAIN` — `ctlpro.com`, or empty for none
+- [ ] `NEXT_PUBLIC_LEAD_WEBHOOK_URL` — the relay's `/lead` route
+- [ ] `NEXT_PUBLIC_CAREERS_ENDPOINT`, `NEXT_PUBLIC_TURNSTILE_SITE_KEY`
+- [ ] `CMS_AUTH_URL` — build-time only, for `/admin/`
+
+### 3. Check the preview
+
+- [ ] Submit the form and confirm the email actually arrives
+- [ ] Submit with the key deliberately wrong, and confirm the visitor
+      sees the failure and the phone number rather than a false success
+- [ ] Confirm the same submission appears in the relay:
+      `curl -H "Authorization: Bearer $EXPORT_TOKEN" https://<relay>/export.csv`
+- [ ] Apply through `/careers/` with a real PDF, and confirm both the
+      object in R2 and the row in the relay
+- [ ] Open `/admin/`, sign in with GitHub, change a caption and save —
+      then confirm the rebuild lands it on `/gallery/`
+- [ ] Book a real slot through the inline calendar
+- [ ] Decline the analytics banner, then confirm no Plausible request
+      in the Network tab; accept, and confirm it loads
+- [ ] Both phone numbers and the text link from an actual phone
+- [ ] Lighthouse mobile ≥ 90
+
+### 4. Before DNS moves
+
+- [ ] Fill in `public/_redirects` from the old site's URLs — crawl it
+      while it is still up. This gets harder after cutover, not easier.
+- [ ] Legal pages read and approved (see §5)
+- [ ] Decide on the `www` vs apex canonical and make the other redirect
+- [ ] `siteUrl` in `client.config.ts` matches the winner
+
+### 5. Cutover
+
+Pages → Custom domains → add the domain, then move the DNS records.
+Afterwards:
+
+- [ ] Turn on HSTS in the Cloudflare dashboard (deliberately not set in
+      `_headers` — committing to it before the domain is fully served
+      over HTTPS is hard to undo)
+- [ ] Submit `{siteUrl}/sitemap.xml` in Google Search Console
+- [ ] Re-check the old site's top URLs now redirect rather than 404
+
+### Manual deploy, if ever needed
 
 ```bash
 cd ctl-roofing
-npx wrangler login                 # opens a browser; needs a Cloudflare account
-npm run preview:deploy             # builds with NEXT_PUBLIC_PREVIEW=1 and pushes
+npm run build            # emits ./out (static export)
+npx wrangler pages deploy out
 ```
-
-The first run asks to create the Pages project (`ctl-preview`) — accept,
-and **enter `main` as the production branch**. Pages calls a deployment
-"production" (the clean `ctl-preview.pages.dev`) only when its branch
-matches the project's production branch; anything else gets a
-hash-prefixed preview URL. Wrangler infers the branch from git, so
-`--branch main` is pinned in the script and every deploy lands on the
-clean URL whatever branch you happen to be on.
-
-It prints a `*.pages.dev` URL — that is the link to send. Non-interactively (CI, or no browser), set
-`CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` instead of logging
-in; the token needs the "Cloudflare Pages: Edit" permission.
-
-`NEXT_PUBLIC_PREVIEW=1` is what makes that build safe to expose:
-
-| Layer | What it stops |
-|---|---|
-| Banner on every page, not dismissible | Somebody believing it is CTL's site and calling the number on it |
-| `noindex, nofollow` on every page | The replica competing with ctlpro.com in search |
-| `robots.txt` disallowing everything, no sitemap advertised | A well-behaved crawler before it fetches a page |
-| `X-Robots-Tag` response header | Images and other files a meta tag cannot reach |
-
-Do NOT set `NEXT_PUBLIC_WEB3FORMS_KEY` on a preview build. With no key
-the contact form refuses and tells the visitor to phone, which is the
-honest failure; with a key, a stranger's enquiry lands in CTL's inbox
-from a site CTL has never seen.
-
-**Take it down when the conversation ends.** Nothing here does that for
-you — `npx wrangler pages project delete ctl-preview`.
-
-When CTL says yes, this all goes away: deploy with `npm run deploy`
-(no preview flag), which restores the real robots.txt, the sitemap and
-the indexable pages, and drops the banner.

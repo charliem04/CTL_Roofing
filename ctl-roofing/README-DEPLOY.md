@@ -8,6 +8,17 @@ Phase 1 of the multi-page rebuild is built — see `docs/REBUILD-PLAN.md`
 for the work breakdown, what phase 2 switches on, and the content still
 owed by the client.
 
+Two companion documents cover the launch itself, and this file defers to
+them rather than repeating their contents:
+
+- `docs/LAUNCH-CREDENTIALS.md` — every account and key, who creates it,
+  and what breaks without it.
+- `docs/CUTOVER.md` — the DNS move: the email-survival check, the order
+  of operations, and the rollback.
+
+The client-facing run sheet for the session where those get collected is
+`ctl-meeting-agenda.html` at the repo root.
+
 Workflow for a new client: `git clone` → new repo → work back through
 this list top to bottom → `npm run deploy`.
 

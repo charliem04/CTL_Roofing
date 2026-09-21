@@ -195,7 +195,7 @@ export function applyCms(env = process.env) {
   } else {
     console.log(
       "[cms] CMS_AUTH_URL is not set — /admin/ will render its setup notice.\n" +
-        "      See ctl-roofing/docs/GALLERY-CMS.md to finish wiring it up."
+        "      See docs/GALLERY-CMS.md to finish wiring it up."
     );
   }
 

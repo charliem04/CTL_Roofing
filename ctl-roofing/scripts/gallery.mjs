@@ -336,7 +336,7 @@ function run() {
         `so the grid loads the full-size file${noThumb.length === 1 ? "" : "s"}:\n` +
         noThumb.map((s) => `      · ${s}`).join("\n") +
         `\n      The page is correct either way — this is weight, not breakage.` +
-        `\n      See ctl-roofing/docs/GALLERY-CMS.md for generating them.`
+        `\n      See docs/GALLERY-CMS.md for generating them.`
     );
   }
 

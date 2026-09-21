@@ -2,9 +2,9 @@
   "version": "0.0.1",
   "configurations": [
     {
-      "name": "white-label-dev",
+      "name": "ctl-roofing-dev",
       "runtimeExecutable": "npm",
-      "runtimeArgs": ["--prefix", "white-label-template", "run", "dev"],
+      "runtimeArgs": ["--prefix", "ctl-roofing", "run", "dev"],
       "port": 3000
     }
   ]

@@ -8,7 +8,7 @@
  *    1. VERIFY. Every internal link is resolved against the files the
  *       build actually produced. A link to a page that does not exist
  *       fails this script, which fails the build.
- *    2. DOCUMENT. The surviving map is written to docs/ROUTE-MAP.md, so
+ *    2. DOCUMENT. The surviving map is written to docs/ROUTE-MAP.md at the repo root, so
  *       there is a page-by-page answer to "what happens when somebody
  *       presses that".
  *
@@ -40,7 +40,7 @@ import { existsSync, readFileSync, readdirSync, statSync, writeFileSync, mkdirSy
 import { join, dirname } from "node:path";
 
 const OUT = "out";
-const DOC = "docs/ROUTE-MAP.md";
+const DOC = "../docs/ROUTE-MAP.md";
 
 /** Every built page, as a site path. */
 function pages() {

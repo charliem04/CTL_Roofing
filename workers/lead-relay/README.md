@@ -45,11 +45,34 @@ The CRM has not been chosen. Writing straight to HubSpot or Jobber or
 AccuLynx would mean either waiting for that decision — losing every lead
 in the meantime — or rewriting both forms once it is made.
 
-So leads are captured now and forwarded to a URL in a secret. When a CRM
-is picked, `wrangler secret put CRM_WEBHOOK_URL` is the whole
-integration, and the next retry sweep delivers the entire backlog.
-Nothing collected in the meantime is lost. `/export.csv` hands the same
-backlog to anything that prefers an import.
+So leads are captured now and forwarded through an **adapter**, picked
+by `CRM_ADAPTER`. Nothing collected in the meantime is lost, and the
+next retry sweep delivers the entire backlog the moment one is
+configured. `/export.csv` hands the same backlog to anything that
+prefers an import.
+
+| `CRM_ADAPTER` | What it does | Configured by |
+| --- | --- | --- |
+| `generic` (default) | Flat JSON POST, one shape for both kinds — what a Zapier/Make catch hook wants | `CRM_WEBHOOK_URL` |
+| `hubspot` | HubSpot CRM Objects API: dedups on email, falls back to a phone search, upserts the contact | `CRM_AUTH_TOKEN` (private app token) |
+
+HubSpot is the **demo** CRM — the thing that can be shown working this
+week, not the thing a roofing contractor should still be using next
+year. The whole of it is `src/crm/hubspot.ts` plus a variable;
+`docs/HUBSPOT-SETUP.md` is the runbook, including what changes when the
+client moves to JobNimbus or AccuLynx.
+
+The adapters live in `src/crm/`. Each one owns its request shaping, its
+endpoint and its auth; none of them touches the database, and none may
+throw — every outcome comes back as a `CrmOutcome` and `forward()`
+records it in one place. That is what keeps the retry sweep a plain
+query over `crm_status`. Adding a CRM is a file next to those two and a
+line in `src/crm/index.ts`.
+
+A value of `CRM_ADAPTER` that names no adapter is treated as *no CRM*
+rather than quietly falling back to `generic`, because a typo would
+otherwise throw every lead at whatever `CRM_WEBHOOK_URL` happened to
+hold. Rows park as `disabled` and the log says so.
 
 ## Routes
 
@@ -65,8 +88,13 @@ visitor's behalf and nothing else — a script sets `Origin` to whatever
 it likes. The KV rate limiter is a backstop; a WAF rate-limiting rule on
 the route is better, because it stops the request before it bills.
 
-The only content rule is that a record must carry a phone number or an
-email. Everything else on both forms is optional somewhere.
+The only content rule is reachability, and it differs by kind. A `/lead`
+must carry an **email address** — the contact form requires one, the CRM
+deduplicates on it, and a lead the office cannot email costs a second
+call to repair. An `/application` keeps the older floor of a phone
+number *or* an email, because the careers form asks for the address
+optionally on purpose. Everything else on both forms is optional
+somewhere.
 
 ## Setup
 
@@ -80,9 +108,11 @@ npm run schema                        # creates the table and indexes
 # 2. Secrets
 npx wrangler secret put INGEST_SECRET   # any long random string
 npx wrangler secret put EXPORT_TOKEN    # any long random string
-# When a CRM is chosen:
+# When a CRM is chosen — either the generic webhook:
 npx wrangler secret put CRM_WEBHOOK_URL
 npx wrangler secret put CRM_AUTH_TOKEN  # if it wants one
+# …or HubSpot (set CRM_ADAPTER = "hubspot" in wrangler.toml first):
+npx wrangler secret put CRM_AUTH_TOKEN  # the private app token
 
 # 3. Deploy
 npx wrangler deploy
@@ -99,9 +129,11 @@ Then connect the two producers:
   npx wrangler secret put RELAY_INGEST_SECRET   # the SAME value as INGEST_SECRET
   ```
 
-`CRM_WEBHOOK_URL` being unset is a supported state, not a half-finished
-one: leads are stored with `crm_status='disabled'` and delivered in full
-the first time the secret exists.
+An unconfigured CRM is a supported state, not a half-finished one —
+whether that is no `CRM_WEBHOOK_URL` on the generic adapter or no
+`CRM_AUTH_TOKEN` on HubSpot. Leads are stored with
+`crm_status='disabled'` and delivered in full the first time the secret
+exists.
 
 ## Getting the leads out
 
@@ -126,7 +158,9 @@ Run locally against a stand-in CRM (`wrangler dev --env dev --local
 
 - a contact lead and a job application both stored and forwarded, in one
   normalised shape
-- a record with no phone and no email refused
+- a record with no phone and no email refused, and a `/lead` with a
+  phone but no email refused while the same body on `/application` was
+  accepted
 - `/application` without the shared secret → 401; `/export.csv` without
   the bearer token → 401; unknown route → 404; wrong method → 405
 - **the outage case**: with the CRM returning 503, the caller still got
@@ -138,9 +172,25 @@ Run locally against a stand-in CRM (`wrangler dev --env dev --local
 - the real contact form, driven in Chromium, reached the relay and the
   CRM with its source URL attributed, while Web3Forms got its own copy
 
+## Tests
+
+```bash
+npm test        # node runs the TypeScript directly; no build, no framework
+npm run typecheck
+```
+
+`test/crm.test.ts` covers the parts of an adapter that can be checked
+without a CRM account: the property mapping, and the delivery flow
+against a stand-in HubSpot told to answer 409, 429 or 401 on demand.
+It is not integration testing — the first real lead through a real
+portal is still what proves the property names.
+
 ## Operating notes
 
-`crm_attempts` stops at 6. Something that has refused six times is a
+`crm_attempts` stops at 6, and a 429 does not count against it: a
+throttle is "not now", not a refusal, and spending an attempt on one
+would eventually strand a good lead because the office had a busy
+afternoon. Something that has refused six times is a
 configuration problem, and retrying forever hides it — the rows stay
 visible as `failed` with the CRM's own error text in `crm_error`, which
 is usually where a CRM says *why*.

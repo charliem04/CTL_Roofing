@@ -6,8 +6,9 @@
     "dev": "wrangler dev --env dev",
     "deploy": "wrangler deploy",
     "typecheck": "tsc --noEmit",
+    "test": "node --test \"test/*.test.ts\"",
     "schema": "wrangler d1 execute ctl-leads --remote --file=schema.sql",
-    "schema:local": "wrangler d1 execute ctl-leads --local --env dev --file=schema.sql",
+    "schema:local": "wrangler d1 execute DB --local --env dev --file=schema.sql",
     "tail": "wrangler tail"
   },
   "devDependencies": {

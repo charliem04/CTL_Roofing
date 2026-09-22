@@ -16,10 +16,16 @@
  *  The CRM has not been picked yet. Writing directly to HubSpot or
  *  Jobber or AccuLynx would mean either waiting for that decision — and
  *  losing every lead in the meantime — or rewriting both forms when it
- *  is made. So the relay stores first and forwards second, to a URL in
- *  a secret. Pointing it at a real CRM later is one `wrangler secret
- *  put`; until then every lead is still captured, and /export.csv hands
- *  the backlog to whatever gets chosen, for import on day one.
+ *  is made. So the relay stores first and forwards second, through an
+ *  adapter chosen by CRM_ADAPTER. Until one is configured every lead is
+ *  still captured, and /export.csv hands the backlog to whatever gets
+ *  chosen, for import on day one.
+ *
+ *  The adapters live in src/crm/ and that is the only place a CRM is
+ *  named. `generic` posts flat JSON at CRM_WEBHOOK_URL, which is what a
+ *  Zapier hook wants and is still the default; `hubspot` talks to the
+ *  CRM Objects API and is the demo account. Adding a roofing CRM later
+ *  is a file next to those two — this file does not change.
  *
  *  ── THE ORDER OF OPERATIONS IS THE DESIGN ───────────────────────────
  *
@@ -45,25 +51,24 @@
  * ════════════════════════════════════════════════════════════════════
  */
 
-export interface Env {
+import {
+  adapterFor,
+  crmConfigured,
+  type CrmEnv,
+  type LeadRow,
+} from "./crm/index.ts";
+
+/**
+ * Everything the Worker is given. The CRM half of it is declared with
+ * the adapters, in src/crm/types.ts, because that is where it is read
+ * and where it is documented.
+ */
+export interface Env extends CrmEnv {
   /** The lead book. See schema.sql. */
   DB: D1Database;
 
   /** Comma-separated, exact scheme+host. No wildcards, no trailing slash. */
   ALLOWED_ORIGINS: string;
-
-  /**
-   * Where leads are forwarded. Unset is a supported state, not a
-   * misconfiguration: rows are stored with crm_status='disabled' and
-   * /export.csv is how they get into whatever is chosen later.
-   */
-  CRM_WEBHOOK_URL?: string;
-
-  /**
-   * Sent as `Authorization: Bearer …` on the forward, when the CRM
-   * wants one. Most do.
-   */
-  CRM_AUTH_TOKEN?: string;
 
   /**
    * Shared secret for POST /application, which is called by the careers
@@ -225,23 +230,6 @@ async function overRateLimit(ip: string, env: Env): Promise<boolean> {
 
 /* ── The row ────────────────────────────────────────────────────── */
 
-type LeadRow = {
-  id: string;
-  kind: "lead" | "application";
-  received_at: string;
-  name: string | null;
-  phone: string | null;
-  email: string | null;
-  address: string | null;
-  service: string | null;
-  urgency: string | null;
-  message: string | null;
-  role: string | null;
-  answers: string | null;
-  resume_key: string | null;
-  source: string | null;
-};
-
 function rowFrom(body: Record<string, unknown>, kind: LeadRow["kind"]): LeadRow {
   return {
     id: crypto.randomUUID(),
@@ -293,87 +281,107 @@ async function store(row: LeadRow, status: string, env: Env): Promise<void> {
 /* ── Forwarding ─────────────────────────────────────────────────── */
 
 /**
- * One flat JSON object, the same shape for both kinds.
+ * The delivery state a row is born with.
  *
- * Flat because almost every CRM's inbound webhook, Zapier step and
- * no-code mapper is happier with a flat object than a nested one, and
- * the cost of flatness here is nothing — these records have no depth to
- * lose. If the CRM eventually chosen wants a different shape, this
- * function is the only thing that changes.
+ * 'pending'  there is a CRM and it wants this row
+ * 'skipped'  there is a CRM and it does not — an application, with
+ *            CRM_FORWARD_APPLICATIONS off
+ * 'disabled' there is no CRM yet, or CRM_ADAPTER is misspelled
+ *
+ * Deciding it here rather than writing 'pending' and immediately
+ * correcting it keeps the row's history honest: crm_attempts stays a
+ * count of real attempts, and nothing in the table implies a delivery
+ * was tried when none was.
  */
-function crmPayload(row: LeadRow): Record<string, unknown> {
-  return {
-    id: row.id,
-    type: row.kind,
-    receivedAt: row.received_at,
-    name: row.name ?? "",
-    phone: row.phone ?? "",
-    email: row.email ?? "",
-    address: row.address ?? "",
-    service: row.service ?? "",
-    urgency: row.urgency ?? "",
-    message: row.message ?? "",
-    role: row.role ?? "",
-    answers: row.answers ? JSON.parse(row.answers) : {},
-    resumeKey: row.resume_key ?? "",
-    source: row.source ?? "",
-  };
+function crmStatusAtRest(row: LeadRow, env: Env): string {
+  const adapter = adapterFor(env);
+  if (!adapter || !adapter.configured(env)) return "disabled";
+  return adapter.accepts(row, env) ? "pending" : "skipped";
+}
+
+type Delivery = {
+  status: string;
+  /** 1 for a real attempt, 0 for a throttle or a skip. See CrmOutcome. */
+  spent: 0 | 1;
+  error: string | null;
+  sentAt: string | null;
+};
+
+/**
+ * Write what happened back to the row. The one place that does.
+ *
+ * Swallows its own failure on purpose: the lead is already stored and
+ * the email already sent, so a bookkeeping write that does not land
+ * costs a status column, not a customer.
+ */
+async function record(row: LeadRow, env: Env, state: Delivery): Promise<void> {
+  try {
+    await env.DB.prepare(
+      `UPDATE leads
+          SET crm_status = ?, crm_attempts = crm_attempts + ?,
+              crm_error = ?, crm_sent_at = ?
+        WHERE id = ?`
+    )
+      .bind(state.status, state.spent, state.error, state.sentAt, row.id)
+      .run();
+  } catch (e) {
+    console.error(`[relay] could not record CRM result for ${row.id}:`, e);
+  }
 }
 
 /**
  * Send one row onward and record what happened.
  *
- * Never throws. Every outcome is a state written back to the row, which
- * is what lets the retry sweep below be a simple query rather than a
- * queue with its own failure modes.
+ * Never throws — the adapters are held to the same rule, so every
+ * outcome is a state written back to the row, which is what lets the
+ * retry sweep below be a simple query rather than a queue with its own
+ * failure modes.
  */
 async function forward(row: LeadRow, env: Env): Promise<void> {
-  if (!env.CRM_WEBHOOK_URL) return;
+  const adapter = adapterFor(env);
+  if (!adapter || !adapter.configured(env)) return;
 
-  let ok = false;
-  let error = "";
-  try {
-    const res = await fetch(env.CRM_WEBHOOK_URL, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        ...(env.CRM_AUTH_TOKEN
-          ? { Authorization: `Bearer ${env.CRM_AUTH_TOKEN}` }
-          : {}),
-      },
-      body: JSON.stringify(crmPayload(row)),
+  /*
+   * A row this CRM does not take: an application with
+   * CRM_FORWARD_APPLICATIONS off, or a row stored under one adapter and
+   * swept under another. Recorded rather than left pending, so the
+   * sweep stops picking it up every fifteen minutes forever and so
+   * /export.csv says plainly that nobody tried — not that something
+   * failed.
+   */
+  if (!adapter.accepts(row, env)) {
+    await record(row, env, {
+      status: "skipped",
+      spent: 0,
+      error: null,
+      sentAt: null,
     });
-    ok = res.ok;
-    if (!ok) {
-      // The body is often where a CRM says WHY it refused, and a status
-      // code alone has sent people hunting for hours.
-      const detail = await res.text().catch(() => "");
-      error = `${res.status} ${detail.slice(0, 500)}`;
-    }
-  } catch (e) {
-    error = e instanceof Error ? e.message : String(e);
+    return;
   }
 
-  try {
-    await env.DB.prepare(
-      `UPDATE leads
-          SET crm_status = ?, crm_attempts = crm_attempts + 1,
-              crm_error = ?, crm_sent_at = ?
-        WHERE id = ?`
-    )
-      .bind(
-        ok ? "sent" : "failed",
-        ok ? null : error.slice(0, 1000),
-        ok ? new Date().toISOString() : null,
-        row.id
-      )
-      .run();
-  } catch (e) {
-    // The lead is safe either way; only the bookkeeping is lost.
-    console.error(`[relay] could not record CRM result for ${row.id}:`, e);
-  }
+  const outcome = await adapter.send(row, env);
 
-  if (!ok) console.error(`[relay] CRM refused ${row.id}: ${error}`);
+  await record(
+    row,
+    env,
+    outcome.ok
+      ? {
+          status: "sent",
+          spent: 1,
+          error: null,
+          sentAt: new Date().toISOString(),
+        }
+      : {
+          status: "failed",
+          spent: outcome.spendsAttempt ? 1 : 0,
+          error: outcome.error.slice(0, 1000),
+          sentAt: null,
+        }
+  );
+
+  if (!outcome.ok) {
+    console.error(`[relay] ${adapter.id} refused ${row.id}: ${outcome.error}`);
+  }
 }
 
 /**
@@ -387,8 +395,18 @@ async function forward(row: LeadRow, env: Env): Promise<void> {
  * configuration problem, and hammering it forever hides that.
  */
 async function retryFailed(env: Env): Promise<number> {
-  if (!env.CRM_WEBHOOK_URL) return 0;
+  if (!crmConfigured(env)) return 0;
 
+  /*
+   * 'disabled' is in the list so that configuring a CRM for the first
+   * time delivers everything captured before it existed. 'skipped' is
+   * deliberately NOT: those rows are a decision, not a backlog, and
+   * leaving them in would eventually fill every batch of 25 with the
+   * same applications and starve the leads behind them. Turning
+   * CRM_FORWARD_APPLICATIONS on therefore does not backfill by itself —
+   * that is one statement, documented in docs/HUBSPOT-SETUP.md:
+   *   UPDATE leads SET crm_status='pending' WHERE crm_status='skipped';
+   */
   const { results } = await env.DB.prepare(
     `SELECT * FROM leads
       WHERE crm_status IN ('failed', 'pending', 'disabled')
@@ -541,14 +559,36 @@ export default {
 
     const row = rowFrom(body, isApplication ? "application" : "lead");
 
-    // A record with no way to reach the person is not a lead. This is
-    // the only content rule: everything else on both forms is optional
-    // somewhere.
+    /*
+     * ── THE ONLY CONTENT RULE ────────────────────────────────────────
+     *
+     * It differs by kind, because the two forms ask differently and
+     * refusing a record is refusing a person who tried to get in touch.
+     *
+     * An assessment request must carry an email address. The contact
+     * form requires one, so a /lead without it is either a caller
+     * skipping the form's own validation or a bug on our side — and a
+     * row the office cannot email is a row that costs a second phone
+     * call to repair, if anyone notices at all. Refusing it here says
+     * so while the visitor is still on the page.
+     *
+     * An application is not held to that. The careers form asks for an
+     * email optionally on purpose — the roofer filling it in one-handed
+     * in a truck has a phone number and may not check an inbox — so the
+     * older floor still applies there: some way to reach the person.
+     *
+     * Both rules are about reachability, not format. Whether an address
+     * is deliverable is not knowable from here, and the browser has
+     * already made the obvious check.
+     */
+    if (isLead && !row.email) {
+      return reject("lead with no email", 400, origin, env, "Please include an email address.");
+    }
     if (!row.phone && !row.email) {
       return reject("no phone and no email", 400, origin, env, "Please include a phone number or an email.");
     }
 
-    const status = env.CRM_WEBHOOK_URL ? "pending" : "disabled";
+    const status = crmStatusAtRest(row, env);
     try {
       await store(row, status, env);
     } catch (e) {
@@ -560,7 +600,7 @@ export default {
 
     // Answer now; forward on the way out. The caller's form is not made
     // to wait on somebody else's CRM, and the row is already safe.
-    if (env.CRM_WEBHOOK_URL) ctx.waitUntil(forward(row, env));
+    if (status === "pending") ctx.waitUntil(forward(row, env));
 
     return json({ ok: true, id: row.id }, 200, origin, env);
   },

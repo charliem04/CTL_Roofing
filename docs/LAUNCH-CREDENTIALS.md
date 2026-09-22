@@ -53,6 +53,7 @@ minutes each once he is sitting there.
 | Cloudflare Turnstile site + secret pair | `NEXT_PUBLIC_TURNSTILE_SITE_KEY` + Worker secret | The careers Worker refuses every upload rather than running open |
 | GitHub organisation owned by CTL, + an account for each person who edits content | CMS sign-in | Sveltia requires a GitHub account with write access per editor. Real friction for an office — budget time to set it up properly |
 | CRM account + its webhook or Zapier/Make URL | `CRM_WEBHOOK_URL` (Worker secret) | Supported blank state: leads still stored, delivered in bulk the first time it is set |
+| **HubSpot free account** + private app token, if HubSpot is the demo CRM | `CRM_AUTH_TOKEN` (Worker secret) + `CRM_ADAPTER = "hubspot"` | Same supported blank state. Created in CTL's name, not Charlie's — this account owns the client's contact database. Full runbook, scopes and the four custom properties: **`docs/HUBSPOT-SETUP.md`**. Add HubSpot to the privacy policy before the token is set (§6) |
 | Analytics account (Plausible paid / GA4 free) | `NEXT_PUBLIC_PLAUSIBLE_DOMAIN` | No analytics. Banner still behaves correctly |
 | Call-tracking provider, if adopted | `client.config.ts → tracking.dniScriptUrl` | Every number on the site stays the real one, which is the correct default |
 | Résumé handling decision | `NEXT_PUBLIC_CAREERS_ENDPOINT` | `/careers/` is a **live nav item** — the form refuses and points at email until this is resolved |
@@ -129,7 +130,9 @@ processors handling visitor data:
 - Google Places sends the visitor's IP to Google on every page view that
   renders reviews
 - The relay stores names, phone numbers and addresses, and forwards them to a
-  third-party CRM
+  third-party CRM — name the CRM once it is chosen. If that is HubSpot, it is
+  a US processor receiving the name, phone, email, address and whatever the
+  visitor typed in the message box
 
 Add both paragraphs *before* setting the corresponding keys, not after. The
 file's own header comment already says to do this whenever a processor is

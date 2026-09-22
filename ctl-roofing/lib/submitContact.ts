@@ -41,7 +41,11 @@
 export type ContactPayload = {
   name: string;
   phone: string;
-  /** Empty when the form does not ask for it (CTL's does not) */
+  /**
+   * Optional on CTL's form — empty when the visitor leaves it blank.
+   * Web3Forms reads this field as the reply-to on the notification, so
+   * a filled one makes the office's reply land back with the customer.
+   */
   email: string;
   /** Property the work is for; empty when the form does not ask */
   address: string;

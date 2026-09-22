@@ -13,10 +13,11 @@ export default function robots(): MetadataRoute.Robots {
   }
 
   return {
-    // /admin/ is the gallery CMS — a tool, not content. It carries its
-    // own noindex meta and an X-Robots-Tag from scripts/cms.mjs; this is
-    // the layer that stops a well-behaved crawler fetching it at all.
-    rules: { userAgent: "*", allow: "/", disallow: "/admin/" },
+    // Everything published here is content. The gallery editor used to
+    // live at /admin/ and was disallowed from here; it is a hosted
+    // studio on Sanity's own domain now, so there is nothing on this
+    // origin to keep a crawler out of.
+    rules: { userAgent: "*", allow: "/" },
     sitemap: `${client.siteUrl}/sitemap.xml`,
   };
 }

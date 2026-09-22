@@ -356,8 +356,9 @@ extend to `team`, `testimonials`, `caseStudies`, `careers.roles` and
 - refresh the Facebook snapshot and its date (finding 13)
 - `grep -rn "TODO(client)"` must return zero — two remain
   (`app/layout.tsx:4`, `client.config.ts:96`)
-- handover training: walk the client's editor through `/admin/`, where leads
-  land, and how to pull the CSV. A short screen recording beats a document here
+- handover training: walk the client's editor through the gallery studio at
+  `<hostname>.sanity.studio`, where leads land, and how to pull the CSV. A short
+  screen recording beats a document here
 
 ---
 

@@ -150,9 +150,9 @@ curl -H "Authorization: Bearer $EXPORT_TOKEN" https://<relay>/export.csv -o lead
 
 ## After it is done
 
-- Hand over: walk Robert's editor through `/admin/`, where leads arrive, and
-  how to pull the CSV. A short screen recording is worth more here than a
-  document.
+- Hand over: walk Robert's editor through the gallery studio at
+  `<hostname>.sanity.studio`, where leads arrive, and how to pull the CSV. A
+  short screen recording is worth more here than a document.
 - Schedule a recurring `export.csv` pull as a backup. Gallery content is
   already safe in git; the lead book is not.
 - Re-read the Facebook reviews snapshot in `content/reviews.ts` and update its

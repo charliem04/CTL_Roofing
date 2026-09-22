@@ -1,6 +1,5 @@
 import type { GalleryCategory, GalleryShot } from "./types";
-import data from "./gallery.json";
-import derived from "./gallery.generated.json";
+import generated from "./gallery.generated.json";
 
 /**
  * ════════════════════════════════════════════════════════════════════
@@ -15,45 +14,41 @@ import derived from "./gallery.generated.json";
  *  CTL's own job photographs — no stock, and nothing captioned as
  *  something it isn't.
  *
- *  ── WHY THE PHOTOS LIVE IN JSON NOW ─────────────────────────────────
+ *  ── WHERE THE PHOTOS COME FROM ──────────────────────────────────────
  *
- *  They used to be an array literal in this file, which is the nicer
- *  thing to read and the wrong thing to hand to whoever is actually
- *  going to maintain the gallery. Adding a job photo meant editing
- *  TypeScript, and a misplaced comma in a source file does not produce
- *  a gallery with one photo missing — it produces a site that does not
- *  build.
+ *  They used to be an array literal in this file, then a JSON file a
+ *  git-backed CMS committed to this repository. They are now a document
+ *  in Sanity, fetched at build time by scripts/gallery.mjs and written
+ *  to content/gallery.generated.json, which this file imports.
  *
- *  So the list moved to content/gallery.json, which the CMS at /admin/
- *  writes (see public/admin/config.yml). This file is now the part that
- *  a CMS must never own: the category definitions, which map to real
- *  service routes, and the validation that stands between an edit made
- *  in a browser by somebody who is not a developer and the pages that
- *  render it.
+ *  The move off git was not about the editing model — committing every
+ *  change was the best thing about the old one, and the generated file
+ *  is committed precisely to keep it. It was about who can edit. A
+ *  git-backed CMS signs in with GitHub, so every person in the office
+ *  who might add a job photo needed a GitHub account with write access
+ *  to this repository. That is a real thing to ask of a roofing
+ *  company, and it is the reason the gallery sat unedited.
  *
- *  Categories deliberately stay here as code. They are a TypeScript
- *  union used across the site, each one points at a route that has to
- *  exist, and there are five of them — a set that changes when the
- *  business changes, not when a photo is added. The CMS offers them as
- *  a fixed dropdown; scripts/gallery.mjs fails the build if that
- *  dropdown and this list ever disagree.
+ *  ── WHAT STAYS HERE, AND WHY ────────────────────────────────────────
  *
- *  ── AND WHY THE PIXEL DIMENSIONS ARE IN A SECOND FILE ───────────────
+ *  Categories. They are a TypeScript union used across the site, each
+ *  one points at a route that has to exist, and there are five of them
+ *  — a set that changes when the business changes, not when a photo is
+ *  added. A CMS must never be able to invent one.
+ *
+ *  So the studio offers them as a fixed dropdown, from its own copy in
+ *  studio/schemas/galleryCategories.ts, and scripts/gallery.mjs reads
+ *  all three lists — that one, the union in ./types, and this array —
+ *  on every build and fails if any of them disagree.
+ *
+ *  ── AND THE DIMENSIONS ──────────────────────────────────────────────
  *
  *  Every photo needs its intrinsic width and height so the grid can
- *  reserve the box before the image decodes. Those numbers cannot live
- *  in gallery.json, because a git-based CMS writes that file from its
- *  own model of the fields its config declares — anything it was not
- *  told about is liable to be dropped on the next save. Declaring them
- *  as hidden fields would probably survive, and "probably" is the wrong
- *  guarantee for the values that stop the whole gallery reflowing.
- *
- *  So they live in gallery.generated.json, which the CMS never opens and
- *  scripts/gallery.mjs maintains by looking at the files themselves —
- *  pixel dimensions read out of each image header, and whether a
- *  pre-cropped thumbnail exists beside it. The CMS owns what a person
- *  writes; the build owns what a file measures. Neither can damage the
- *  other.
+ *  reserve the box before the image decodes. These used to be read out
+ *  of each JPEG's header by the build, because the file on disk was the
+ *  only thing that knew. Sanity records them on the asset, so they now
+ *  arrive with the photo — as the size of the rendition actually being
+ *  served, crop included, not the size of the original upload.
  * ════════════════════════════════════════════════════════════════════
  */
 
@@ -86,10 +81,10 @@ const CATEGORY_IDS = new Set<string>(galleryCategories.map((c) => c.id));
  * ── WHY THIS DROPS RATHER THAN THROWS ───────────────────────────────
  *
  * scripts/gallery.mjs is the loud half of this: it runs before the
- * build, checks the same rules against the file on disk plus the things
- * only a filesystem can answer, and fails with a message naming the
- * photo. That is where a bad edit is meant to be caught, because a
- * build that stops with an explanation is a five-minute problem.
+ * build, checks the same rules against what Sanity actually returned,
+ * and fails with a message naming the photo. That is where a bad edit
+ * is meant to be caught, because a build that stops with an
+ * explanation is a five-minute problem.
  *
  * This is the quiet half, and it exists for the case where the loud one
  * did not run. A marketing hire publishing a photo at 4pm should not be
@@ -100,24 +95,28 @@ const CATEGORY_IDS = new Set<string>(galleryCategories.map((c) => c.id));
  * The two together mean the ordinary path is "the build tells you",
  * and the worst path is "one photo is missing until someone looks".
  */
-type CmsShot = Omit<GalleryShot, "width" | "height">;
-
-function usable(shot: unknown, index: number): shot is CmsShot {
-  const s = shot as Partial<CmsShot> | null;
+function usable(shot: unknown, index: number): shot is GalleryShot {
+  const s = shot as Partial<GalleryShot> | null;
   const fail = (why: string) => {
     // Visible in the build log and in the dev console, silent in a
     // production browser — there is no user-facing action to take.
     console.warn(
       `[gallery] photo ${index + 1} (${
-        (s && s.src) || "no src"
+        (s && (s.caption || s.alt)) || "no caption"
       }) dropped: ${why}`
     );
     return false;
   };
 
   if (!s || typeof s !== "object") return fail("not an object");
-  if (typeof s.src !== "string" || !s.src.startsWith("/")) {
-    return fail("src must be a site-absolute path starting with /");
+  // Either a rendition on Sanity's CDN, or a file in public/. The
+  // second is what the gallery looked like before the migration and is
+  // still the right answer for a snapshot taken before the import ran.
+  if (
+    typeof s.src !== "string" ||
+    !(s.src.startsWith("https://cdn.sanity.io/") || s.src.startsWith("/"))
+  ) {
+    return fail("src must be a Sanity CDN URL or a path starting with /");
   }
   // Alt text is not decoration. A photo with none is invisible to a
   // screen reader and to Google Images, which is most of the reason a
@@ -128,36 +127,15 @@ function usable(shot: unknown, index: number): shot is CmsShot {
   if (typeof s.category !== "string" || !CATEGORY_IDS.has(s.category)) {
     return fail(`category "${s.category}" is not one of the five defined here`);
   }
+  // Without these the browser cannot reserve the box, so every image
+  // below this one jumps as it decodes. One missing photo is a smaller
+  // fault than a gallery that shudders its way down the page.
+  if (!(Number(s.width) > 0) || !(Number(s.height) > 0)) {
+    return fail("no pixel dimensions — run `npm run gallery`");
+  }
   return true;
 }
 
-type Derived = { w: number; h: number; thumb?: string };
-const measured: Record<string, Derived | undefined> = derived;
-
-/**
- * The photos, with their measured dimensions attached.
- *
- * A photo with no entry in the generated file is dropped rather than
- * rendered without width and height. Without them the browser cannot
- * reserve the box, so every image below it jumps as this one decodes —
- * one missing photo is a smaller fault than a gallery that shudders its
- * way down the page. scripts/gallery.mjs runs before every build and
- * every dev server precisely so this branch stays unreached.
- */
-export const gallery: GalleryShot[] = (data.shots as unknown[])
-  .filter(usable)
-  // Annotated rather than inferred: without it TypeScript widens the
-  // mapped element to a shape whose optional `thumb` is a required
-  // `string | undefined`, and the narrowing filter below then fails to
-  // line up with it.
-  .map((shot): GalleryShot | null => {
-    const size = measured[shot.src];
-    if (!size || !(size.w > 0) || !(size.h > 0)) {
-      console.warn(
-        `[gallery] ${shot.src} has no measured size — run \`npm run gallery\`.`
-      );
-      return null;
-    }
-    return { ...shot, width: size.w, height: size.h, thumb: size.thumb };
-  })
-  .filter((shot): shot is GalleryShot => shot !== null);
+export const gallery: GalleryShot[] = (
+  generated.shots as unknown[]
+).filter(usable);

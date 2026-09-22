@@ -30,7 +30,7 @@ const EMPTY = {
   address: "",
   service: client.form.serviceOptions[0],
   message: "",
-  company: "", // honeypot
+  referralNote: "", // honeypot — see the field markup for the naming rule
 };
 
 const REQUIRED = ["name", "phone", "email", "address"] as const;
@@ -91,7 +91,7 @@ export function Contact() {
       service: form.service,
       urgency: "",
       message: form.message,
-      company: form.company,
+      referralNote: form.referralNote,
     });
     if (result.ok) {
       setStatus("sent");
@@ -223,15 +223,35 @@ export function Contact() {
                 />
               </label>
 
-              {/* Honeypot — visually hidden, bots fill it */}
+              {/*
+                Honeypot — off-screen rather than display:none, because a
+                bot that renders CSS skips a hidden field but fills this
+                one. Anything in it makes submitContact drop the
+                submission.
+
+                THE NAME AND LABEL MUST NOT NAME A REAL FIELD. This was
+                `company` with the label "Company", which is exactly what
+                Chrome's autofill matches to its "organization" category —
+                so a returning visitor's browser filled it for them and
+                the form silently discarded a real lead. `autoComplete`
+                off does not stop Chrome; only not looking like a field it
+                recognises does. The data- attributes cover the credential
+                managers, which have their own opt-outs and ignore
+                autoComplete just as happily.
+              */}
               <label className="absolute -left-[9999px]" aria-hidden tabIndex={-1}>
-                Company
+                Referral note
                 <input
-                  name="company"
+                  name="referralNote"
                   tabIndex={-1}
                   autoComplete="off"
-                  value={form.company}
-                  onChange={set("company")}
+                  data-1p-ignore="true"
+                  data-lpignore="true"
+                  data-bwignore="true"
+                  data-protonpass-ignore="true"
+                  data-form-type="other"
+                  value={form.referralNote}
+                  onChange={set("referralNote")}
                 />
               </label>
 

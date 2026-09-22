@@ -19,7 +19,7 @@ export const metadata: Metadata = {
  *
  * It is not legal advice. Have CTL’s attorney read it before launch.
  */
-const EFFECTIVE = "August 30, 2026";
+const EFFECTIVE = "September 22, 2026";
 
 /*
  * Job applications are deleted after this long, and an R2 lifecycle
@@ -49,10 +49,10 @@ export default function PrivacyPage() {
 
       <h2>What you give us</h2>
       <p>
-        The assessment request form asks for your name, phone number, the
-        address of the property, the kind of work you need, and anything you
-        want to tell us about it. That is the whole form — it does not ask
-        for an email address, and there is no account to create.
+        The assessment request form asks for your name, phone number, email
+        address, the address of the property, the kind of work you need, and
+        anything you want to tell us about it. That is the whole form, and
+        there is no account to create.
       </p>
       <p>
         If you call or text either of our numbers, we have your phone number
@@ -79,10 +79,13 @@ export default function PrivacyPage() {
       <p>
         A form submission is delivered to our office inbox by{" "}
         <strong>Web3Forms</strong>, a form-delivery service acting on our
-        behalf. Where we have enabled it, the same details are also recorded
-        in our customer-relationship system so a request does not get lost
-        between people. Both process the information only to provide those
-        services to us.
+        behalf. The same details are also recorded in our
+        customer-relationship system, so a request does not get lost between
+        people. That system is <strong>HubSpot</strong>, whose servers are in
+        the United States; what reaches it is your name, phone number, email
+        address, the property address, the kind of work and whatever you
+        wrote in the message box. Both companies process the information only
+        to provide those services to us.
       </p>
       {/* Gated on the same config as the band it describes: with no
           scheduler configured there is no embed anywhere on the site,
@@ -105,6 +108,13 @@ export default function PrivacyPage() {
         no public address for those files and no way to request one. The
         details you typed are emailed to the office alongside it so somebody
         knows it arrived.
+      </p>
+      <p>
+        The photographs on the gallery page and the home page are served from{" "}
+        <strong>Sanity</strong>, which is where we keep and edit them. Your
+        browser fetches the images from them directly, so they see the
+        internet address it asks from, the same as any other image host. They
+        receive nothing you type.
       </p>
       <p>
         The site is hosted on <strong>Cloudflare Pages</strong>, which keeps

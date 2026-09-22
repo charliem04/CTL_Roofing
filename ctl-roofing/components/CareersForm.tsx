@@ -107,7 +107,7 @@ export function CareersForm({
       role: get("role"),
       answers,
       resume: file,
-      company: get("company"),
+      referralNote: get("referralNote"),
       turnstileToken: get("cf-turnstile-response"),
     });
 
@@ -146,15 +146,31 @@ export function CareersForm({
     <form ref={formRef} onSubmit={onSubmit} noValidate className="max-w-[42rem]">
       {/* Honeypot. Off-screen rather than display:none — some bots
           skip hidden fields, and none of them use a screen reader,
-          which is why it is also aria-hidden and untabbable. */}
+          which is why it is also aria-hidden and untabbable.
+
+          THE NAME AND LABEL MUST NOT NAME A REAL FIELD. This was
+          `company`, labelled "Company", which is precisely what Chrome
+          autofill matches to its "organization" category — so a
+          returning visitor's browser filled it for them and this form
+          discarded their application behind a success message.
+          autoComplete off does not stop Chrome; not looking like a
+          field it recognises does. The data- attributes cover the
+          credential managers, which ignore autoComplete just as
+          happily. The same rule, and the same bug, applies to the
+          contact form — see components/Contact.tsx. */}
       <div aria-hidden className="absolute left-[-9999px]" tabIndex={-1}>
-        <label htmlFor="field-company">Company</label>
+        <label htmlFor="field-referral-note">Referral note</label>
         <input
-          id="field-company"
-          name="company"
+          id="field-referral-note"
+          name="referralNote"
           type="text"
           tabIndex={-1}
           autoComplete="off"
+          data-1p-ignore="true"
+          data-lpignore="true"
+          data-bwignore="true"
+          data-protonpass-ignore="true"
+          data-form-type="other"
         />
       </div>
 

@@ -45,7 +45,7 @@ minutes each once he is sitting there.
 | Item | Variable it fills | Without it |
 |---|---|---|
 | Cloudflare account, **in CTL's name**, Charlie added as a member | — | CTL is locked to Charlie's personal account. Do this even if it costs an hour |
-| Web3Forms access key for the office inbox | `NEXT_PUBLIC_WEB3FORMS_KEY` | **The contact form refuses to submit** and shows the phone number. The site cannot take a lead |
+| Web3Forms access key for the office inbox | `NEXT_PUBLIC_WEB3FORMS_KEY` | **The contact form refuses to submit** and shows the phone number. The site cannot take a lead. Full runbook: **`docs/WEB3FORMS-SETUP.md`** |
 | Web3Forms spam protection switched on | — | The contact form's only defence today is a honeypot |
 | Google Cloud project → Places API (New) → API key, restricted to HTTP referrers | `NEXT_PUBLIC_GOOGLE_PLACES_KEY` | Reviews band degrades to a link. Harmless, just weaker |
 | **Budget alert on that key, set the same day** | — | This is the only thing on the site that bills per visitor |

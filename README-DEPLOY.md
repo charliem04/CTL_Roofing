@@ -113,6 +113,7 @@ Full walkthrough, including what to tell whoever maintains it:
 - [ ] `NEXT_PUBLIC_WEB3FORMS_KEY` — REQUIRED. The access key for the
       office inbox. Without it the form refuses to submit and shows the
       phone number; it no longer pretends to succeed.
+      Full runbook: `docs/WEB3FORMS-SETUP.md`.
 - [ ] `NEXT_PUBLIC_LEAD_WEBHOOK_URL` — the lead relay's `/lead` route,
       so every enquiry is collected in one list. Fired in parallel and
       never awaited, so a relay or CRM outage cannot cost the email.
@@ -247,6 +248,13 @@ from production, which defeats the point of checking it there.
       sees the failure and the phone number rather than a false success
 - [ ] Confirm the same submission appears in the relay:
       `curl -H "Authorization: Bearer $EXPORT_TOKEN" https://<relay>/export.csv`
+      — first add the preview origin to `ALLOWED_ORIGINS` in **both**
+      Workers' `wrangler.toml` and redeploy them. They ship with the two
+      production hostnames only, so a preview submission is refused with a
+      403 that is invisible from the page: the contact form does not await
+      that request, so it still reports success and the email still arrives
+      while no row is ever written. An empty CSV here usually means this and
+      not a broken relay.
 - [ ] Apply through `/careers/` with a real PDF, and confirm both the
       object in R2 and the row in the relay
 - [ ] Open the studio, change a caption and publish — then confirm the

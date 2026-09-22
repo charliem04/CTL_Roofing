@@ -40,8 +40,13 @@ export type ApplicationPayload = {
   /** Questionnaire answers, question → answer. */
   answers: Record<string, string>;
   resume: File | null;
-  /** honeypot — must be empty; bots fill it */
-  company?: string;
+  /**
+   * Honeypot — must be empty; bots fill it.
+   *
+   * Deliberately not named after anything a browser recognises. See the
+   * field's markup in components/CareersForm.tsx for why that matters.
+   */
+  referralNote?: string;
   /** Cloudflare Turnstile token, when the widget is configured. */
   turnstileToken?: string;
 };
@@ -91,8 +96,26 @@ export function checkResume(file: File | null): string | null {
 export async function submitApplication(
   payload: ApplicationPayload
 ): Promise<SubmitResult> {
-  // Honeypot: report success so bots learn nothing, send nothing.
-  if (payload.company) return { ok: true };
+  /*
+   * Honeypot: report success so bots learn nothing, send nothing.
+   *
+   * A false positive here costs somebody a job they believe they
+   * applied for — this file's own header is about exactly that — so it
+   * says so in development, where somebody is watching. Never in
+   * production: the silence there is the entire mechanism.
+   */
+  if (payload.referralNote) {
+    if (process.env.NODE_ENV !== "production") {
+      console.warn(
+        "[careers] honeypot field is not empty — this application was " +
+          "DISCARDED and no résumé was uploaded. If you did not type in " +
+          "it, something is filling it for you (browser autofill, a " +
+          "password manager, an extension). That is a bug, not a caught " +
+          "bot: see components/CareersForm.tsx."
+      );
+    }
+    return { ok: true };
+  }
 
   const fileError = checkResume(payload.resume);
   if (fileError) return { ok: false, error: fileError };

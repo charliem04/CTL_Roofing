@@ -212,12 +212,20 @@ other six belong to the client — leave them.
 Two settings. One is not a secret and lives in the repo; one is, and never
 does.
 
-**a. The adapter**, in `workers/lead-relay/wrangler.toml` — uncomment:
+**a. The adapter**, in `workers/lead-relay/wrangler.toml` — find the
+*active* `CRM_ADAPTER` line in `[vars]` and change its value:
 
 ```toml
 [vars]
-CRM_ADAPTER = "hubspot"
+CRM_ADAPTER = "hubspot"   # was "generic"
 ```
+
+> **Change that line; do not uncomment the commented one.** `[vars]` carries
+> both a commented `# CRM_ADAPTER = "hubspot"` in the explanatory block and a
+> live `CRM_ADAPTER = "generic"` further down. Uncommenting the first while
+> the second is still there puts the same key twice in one TOML table, which
+> is a parse error rather than a configuration — wrangler refuses the file
+> before it gets as far as deploying.
 
 **b. The key**, as a Worker secret — but note the order, which is the
 opposite of what feels natural:
@@ -288,6 +296,25 @@ npx wrangler d1 execute ctl-leads --remote \
 Do this on the **preview** deployment before production, and use a real address
 you can check — a bad token and a missing property look identical from the
 front of the site, because the form does not depend on any of this.
+
+> **First, put the preview origin in the relay's `ALLOWED_ORIGINS`** and
+> redeploy the Worker. `wrangler.toml` ships with the two production
+> hostnames only, so `/lead` refuses a preview submission with a 403 — and
+> because the contact form never awaits that request, the form still says it
+> sent and the email still arrives. You would read the empty result below as
+> a HubSpot problem and go looking in the wrong place. The comment above
+> `ALLOWED_ORIGINS` has the exact hostname to add.
+>
+> To skip the front end entirely, curl the route instead: a request with no
+> `Origin` header passes the check by design, since the check exists to stop
+> another *website* posting on a visitor's behalf.
+>
+> ```bash
+> curl -X POST https://<the-relay-hostname>/lead \
+>   -H 'Content-Type: application/json' \
+>   -d '{"name":"Test Person","email":"you@example.com","phone":"3375550113",
+>        "address":"1 Test St","service":"Roof replacement","message":"test"}'
+> ```
 
 **1. Submit the form.** `/contact/` on the preview site. Name, phone, an email
 you own, address, and something recognisable in the message box.

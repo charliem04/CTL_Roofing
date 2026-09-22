@@ -214,6 +214,7 @@ prints on the page. Re-read it before launch or it reads as stale on day one.
 Configuration the code already expects. In dependency order:
 
 1. **Web3Forms** — key into `NEXT_PUBLIC_WEB3FORMS_KEY`, spam protection on.
+   Runbook, including the deliberately-wrong-key test: **`docs/WEB3FORMS-SETUP.md`**.
 2. **Lead relay** — provision D1 (finding 1), set `INGEST_SECRET` and
    `EXPORT_TOKEN`, deploy. `CRM_WEBHOOK_URL` may stay unset: leads are stored as
    `crm_status='disabled'` and the first sweep after it is set delivers the

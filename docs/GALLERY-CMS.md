@@ -143,21 +143,25 @@ Until `SANITY_PROJECT_ID` is set, the build uses the committed
 correct; it just cannot see anything published since that file was
 written.
 
-> **On the terminal preview:** put these in your shell instead. The
-> build runs on your machine, so that is the only environment it can
-> read.
+> **On the terminal preview:** put these in `ctl-roofing/.env.local`
+> instead, alongside `NEXT_PUBLIC_WEB3FORMS_KEY`. The build runs on your
+> machine, so that file is where it looks.
 >
-> ```bash
-> cd ctl-roofing
-> export SANITY_PROJECT_ID=<the project id from step 1>
-> export SANITY_DATASET=production
+> ```
+> SANITY_PROJECT_ID=<the project id from step 1>
+> SANITY_DATASET=production
 > ```
 >
-> **Not `.env.local`.** Next loads that file for `NEXT_PUBLIC_*`, but
-> `scripts/gallery.mjs` is a plain Node script and there is no `dotenv`
-> in this project — it sees only the real environment. A
-> `SANITY_PROJECT_ID` sitting in `.env.local` does nothing at all, and
-> the only sign is the build quietly using the committed snapshot.
+> `.env.example` already carries both names with empty values — fill
+> those lines in rather than adding new ones at the bottom. Either works
+> (`scripts/env-file.mjs` treats an empty assignment as a placeholder
+> rather than a value, precisely because this file is meant to be copied
+> half-filled), but one definition per variable is easier to read.
+>
+> Nothing to export, and nothing platform-specific: this is the same
+> file and the same syntax on PowerShell, cmd and bash alike. A real
+> environment variable still wins if one is set, which is what keeps a
+> Cloudflare build authoritative.
 >
 > Keeping the dataset **public** while you work this way is the simpler
 > path: no `SANITY_READ_TOKEN`, so no read credential to leak into a
@@ -359,10 +363,10 @@ Production but not Preview. The build succeeds using the committed
 snapshot, which is why this is easy to miss.
 
 **The same line from `npm run preview:deploy`.** Different cause: that
-build runs on your machine, so it is your shell that is missing the
-variable, and setting it in Cloudflare will not help. Either you did not
-`export` it, or you put it in `.env.local` — which `scripts/gallery.mjs`
-does not read. Step 4.
+build runs on your machine, so the value is missing from
+`ctl-roofing/.env.local` and setting it in Cloudflare will not help.
+Check that the line has a value and not just the empty `SANITY_PROJECT_ID=`
+that `.env.example` ships. Step 4.
 
 **`Sanity returned 403`.** The dataset is private and
 `SANITY_READ_TOKEN` is missing, wrong, or was revoked.

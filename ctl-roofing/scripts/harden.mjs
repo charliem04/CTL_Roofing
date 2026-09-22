@@ -40,6 +40,12 @@
  */
 import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
 import { join } from "node:path";
+import { loadEnvFile } from "./env-file.mjs";
+
+// So a SANITY_READ_TOKEN that lives in .env.local is one this check can
+// actually look for in the output. Without it the token most likely to
+// leak was the only one invisible here.
+loadEnvFile();
 
 const OUT = "out";
 

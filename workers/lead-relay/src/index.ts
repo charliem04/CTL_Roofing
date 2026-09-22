@@ -541,9 +541,31 @@ export default {
 
     const row = rowFrom(body, isApplication ? "application" : "lead");
 
-    // A record with no way to reach the person is not a lead. This is
-    // the only content rule: everything else on both forms is optional
-    // somewhere.
+    /*
+     * ── THE ONLY CONTENT RULE ────────────────────────────────────────
+     *
+     * It differs by kind, because the two forms ask differently and
+     * refusing a record is refusing a person who tried to get in touch.
+     *
+     * An assessment request must carry an email address. The contact
+     * form requires one, so a /lead without it is either a caller
+     * skipping the form's own validation or a bug on our side — and a
+     * row the office cannot email is a row that costs a second phone
+     * call to repair, if anyone notices at all. Refusing it here says
+     * so while the visitor is still on the page.
+     *
+     * An application is not held to that. The careers form asks for an
+     * email optionally on purpose — the roofer filling it in one-handed
+     * in a truck has a phone number and may not check an inbox — so the
+     * older floor still applies there: some way to reach the person.
+     *
+     * Both rules are about reachability, not format. Whether an address
+     * is deliverable is not knowable from here, and the browser has
+     * already made the obvious check.
+     */
+    if (isLead && !row.email) {
+      return reject("lead with no email", 400, origin, env, "Please include an email address.");
+    }
     if (!row.phone && !row.email) {
       return reject("no phone and no email", 400, origin, env, "Please include a phone number or an email.");
     }

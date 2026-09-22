@@ -65,8 +65,13 @@ visitor's behalf and nothing else — a script sets `Origin` to whatever
 it likes. The KV rate limiter is a backstop; a WAF rate-limiting rule on
 the route is better, because it stops the request before it bills.
 
-The only content rule is that a record must carry a phone number or an
-email. Everything else on both forms is optional somewhere.
+The only content rule is reachability, and it differs by kind. A `/lead`
+must carry an **email address** — the contact form requires one, the CRM
+deduplicates on it, and a lead the office cannot email costs a second
+call to repair. An `/application` keeps the older floor of a phone
+number *or* an email, because the careers form asks for the address
+optionally on purpose. Everything else on both forms is optional
+somewhere.
 
 ## Setup
 
@@ -126,7 +131,9 @@ Run locally against a stand-in CRM (`wrangler dev --env dev --local
 
 - a contact lead and a job application both stored and forwarded, in one
   normalised shape
-- a record with no phone and no email refused
+- a record with no phone and no email refused, and a `/lead` with a
+  phone but no email refused while the same body on `/application` was
+  accepted
 - `/application` without the shared secret → 401; `/export.csv` without
   the bearer token → 401; unknown route → 404; wrong method → 405
 - **the outage case**: with the CRM returning 503, the caller still got

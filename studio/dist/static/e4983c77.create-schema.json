@@ -1,0 +1,154 @@
+[
+  {
+    "fields": [
+      {
+        "options": {
+          "layout": "grid"
+        },
+        "description": "Drag to reorder. The order here is the order on /gallery/.",
+        "of": [
+          {
+            "type": "galleryPhoto",
+            "title": "Photo"
+          }
+        ],
+        "name": "shots",
+        "type": "array",
+        "title": "Photos"
+      }
+    ],
+    "name": "gallery",
+    "type": "document"
+  },
+  {
+    "fields": [
+      {
+        "options": {
+          "hotspot": true
+        },
+        "validation": [
+          {
+            "level": "error",
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "message": "Every entry needs a photograph."
+          }
+        ],
+        "name": "image",
+        "type": "image",
+        "title": "Photo"
+      },
+      {
+        "validation": [
+          {
+            "level": "warning",
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              },
+              {
+                "flag": "min",
+                "constraint": 3
+              },
+              {
+                "flag": "max",
+                "constraint": 180
+              }
+            ],
+            "message": "Long for alt text — a screen reader reads every word."
+          }
+        ],
+        "description": "What is actually in the frame — this is what a screen reader reads aloud and what Google Images indexes. “Crew setting metal panels over underlayment on a low-slope section”, not “roof” and not “CTL Roofing Lafayette”.",
+        "name": "alt",
+        "type": "string",
+        "title": "Alt text"
+      },
+      {
+        "validation": [
+          {
+            "level": "warning",
+            "rules": [
+              {
+                "flag": "max",
+                "constraint": 80
+              }
+            ],
+            "message": "The tile will clip a long caption."
+          }
+        ],
+        "description": "The short line under the photo. Optional.",
+        "name": "caption",
+        "type": "string"
+      },
+      {
+        "options": {
+          "list": [
+            {
+              "value": "roofing",
+              "title": "Roofing"
+            },
+            {
+              "value": "metal",
+              "title": "Metal roofing"
+            },
+            {
+              "value": "outdoor",
+              "title": "Outdoor living"
+            },
+            {
+              "value": "remodeling",
+              "title": "Remodeling"
+            },
+            {
+              "value": "storm",
+              "title": "Storm response"
+            }
+          ],
+          "layout": "dropdown"
+        },
+        "initialValue": "roofing",
+        "validation": [
+          {
+            "level": "error",
+            "rules": [
+              {
+                "flag": "valid",
+                "constraint": [
+                  "roofing",
+                  "metal",
+                  "outdoor",
+                  "remodeling",
+                  "storm"
+                ]
+              },
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "message": "Pick the kind of work."
+          }
+        ],
+        "description": "Which filter it appears under, and which service page it links to.",
+        "name": "category",
+        "type": "string",
+        "title": "Kind of work"
+      },
+      {
+        "initialValue": false,
+        "description": "The band on the home page. Keep it to around eight — that band is a taste of the work, not the whole gallery.",
+        "name": "featured",
+        "type": "boolean",
+        "title": "Also show on the home page"
+      }
+    ],
+    "name": "galleryPhoto",
+    "type": "object",
+    "title": "Photo"
+  }
+]

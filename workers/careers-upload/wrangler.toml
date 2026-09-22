@@ -25,8 +25,12 @@ bucket_name = "ctl-resumes"
 
 [vars]
 # Exact scheme+host, comma separated. No wildcards, no trailing slash.
-# Add the Pages preview domain while testing, then take it out again.
-ALLOWED_ORIGINS = "https://www.ctlpro.com,https://ctlpro.com"
+#
+# The third entry is the terminal preview, and it COMES OUT AT CUTOVER —
+# docs/CUTOVER.md, T-7 days. It is the project's stable alias, not the
+# per-deployment hash URL a deploy prints, which changes every time. The same
+# note on the relay's ALLOWED_ORIGINS has the longer version.
+ALLOWED_ORIGINS = "https://www.ctlpro.com,https://ctlpro.com,https://ctl-preview.pages.dev"
 MAX_UPLOAD_BYTES = "5242880"   # 5 MB
 RATE_LIMIT_PER_HOUR = "5"
 

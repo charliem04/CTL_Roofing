@@ -28,9 +28,25 @@ database_id = "<paste the id wrangler prints>"
 # their CV sits somewhere "only we can reach", and that sentence is what
 # this comment protects. Reaching a file through an Access-gated Worker
 # route keeps it true; a public bucket does not.
-[[r2_buckets]]
-binding = "RESUMES"
-bucket_name = "ctl-resumes"
+# ── TEMPORARILY DISABLED: R2 is not enabled on this account ──────────
+# Turning R2 on requires a payment method on the Cloudflare account, even
+# for the free tier, and the account this currently deploys to is not yet
+# the one CTL will own (docs/LAUNCH-CREDENTIALS.md §2). Rather than put a
+# card on an account that is going to be replaced, the binding is off and
+# the relay does the job it is needed for today: the lead book.
+#
+# Nothing else is affected. RESUMES is declared optional in src/index.ts
+# and GET /resume/:leadId already answers 503 with an honest message when
+# it is unbound; every other route is untouched, and no résumé exists yet
+# because careers-upload has not been deployed.
+#
+# PUT IT BACK when R2 is enabled — which is the same moment
+# workers/careers-upload needs it, since its deploy sequence opens with
+# `wrangler r2 bucket create ctl-resumes`. Uncomment, redeploy, done.
+#
+# [[r2_buckets]]
+# binding = "RESUMES"
+# bucket_name = "ctl-resumes"
 
 # ── The retry sweep ──────────────────────────────────────────────────
 # Every fifteen minutes, push anything the CRM has not accepted yet.

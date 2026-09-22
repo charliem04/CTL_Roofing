@@ -142,27 +142,32 @@ npm run schema                        # creates the table and indexes
 # 2. Deploy, which is what creates the Worker.
 npx wrangler deploy
 
-# 3. Secrets. --env="" means the top-level (production) environment, and is
-#    required because wrangler.toml defines an [env.dev]; without it wrangler
-#    warns on every one of these and may target the wrong environment.
+# 3. Secrets. Do NOT pass --env: omitting it targets the top-level
+#    (production) environment, which is the one you want. Earlier revisions of
+#    this file said to pass --env="" for that; wrangler rejects it outright
+#    ("No environment found in configuration with name \"\""), and PowerShell
+#    strips the quotes before wrangler ever sees them anyway. Confirm where
+#    they landed with `npx wrangler secret list` — no --env there either.
 #
 #    Each command takes the secret's NAME. The value goes in at the hidden
 #    prompt that follows — never on the command line, where it lands in shell
 #    history.
-npx wrangler secret put INGEST_SECRET --env=""   # any long random string
-npx wrangler secret put EXPORT_TOKEN  --env=""   # any long random string
+npx wrangler secret put INGEST_SECRET  # any long random string
+npx wrangler secret put EXPORT_TOKEN   # any long random string
 
 #    Then the CRM. Either the generic webhook…
-npx wrangler secret put CRM_WEBHOOK_URL --env=""
-npx wrangler secret put CRM_AUTH_TOKEN  --env=""   # only if the target wants one
+npx wrangler secret put CRM_WEBHOOK_URL
+npx wrangler secret put CRM_AUTH_TOKEN   # only if the target wants one
 
 #    …or HubSpot (set CRM_ADAPTER = "hubspot" in wrangler.toml first):
-npx wrangler secret put CRM_AUTH_TOKEN --env=""    # the HubSpot service key
+npx wrangler secret put CRM_AUTH_TOKEN   # the HubSpot service key
 
 #    Optional: send job applicants somewhere other than the sales CRM
-npx wrangler secret put CRM_APPLICATION_WEBHOOK_URL --env=""
+npx wrangler secret put CRM_APPLICATION_WEBHOOK_URL
 
-# 4. Re-deploy is not needed — secrets take effect immediately.
+# 4. Re-deploy is not needed for a SECRET — those take effect immediately.
+#    CRM_ADAPTER is not a secret, though: it is a [vars] entry, shipped with
+#    the Worker code, so changing it does need another `wrangler deploy`.
 ```
 
 Two `[vars]` in `wrangler.toml` matter for the résumé link:

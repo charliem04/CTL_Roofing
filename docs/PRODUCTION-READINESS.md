@@ -231,9 +231,12 @@ Configuration the code already expects. In dependency order:
      spend one of the six retry attempts. Job applications are held back from
      the sales CRM unless `CRM_FORWARD_APPLICATIONS` says otherwise.
 
-   **What it still needs:** a HubSpot account in CTL's name, a private app
-   token in `CRM_AUTH_TOKEN`, four custom properties created by hand, and the
-   privacy policy naming HubSpot as a processor. Runbook, scopes, property
+   **What it still needs:** a HubSpot account in CTL's name, a service key in
+   `CRM_AUTH_TOKEN`, four custom properties created by hand, and the privacy
+   policy naming HubSpot as a processor. Note the credential deadline: HubSpot
+   disabled legacy private app creation for new accounts on 28 September 2026,
+   so a fresh portal issues a service key instead — same header, same scopes,
+   no code change. Runbook, scopes, property
    names and the end-to-end verification: **`docs/HUBSPOT-SETUP.md`**. Nothing
    here is on the critical path — with no CRM configured, leads are stored
    `disabled` and the first sweep after the token exists delivers the backlog.

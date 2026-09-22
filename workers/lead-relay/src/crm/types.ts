@@ -104,7 +104,7 @@ export interface CrmEnv {
   /**
    * Sent as `Authorization: Bearer …` on the forward. The `generic`
    * adapter includes it when set; the `hubspot` adapter REQUIRES it —
-   * there it is the private app access token, and without one that
+   * there it is the HubSpot service key, and without one that
    * adapter reports itself unconfigured rather than sending requests
    * that could only 401.
    */

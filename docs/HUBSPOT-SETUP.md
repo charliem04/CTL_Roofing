@@ -37,6 +37,17 @@ repeating any of these numbers to the client; the one that matters to the code
 is the custom-property cap, and that is the one to re-check if a property
 refuses to create.
 
+**The credential changed in late 2026, and the deadline matters here.** HubSpot
+is removing the ability to create *legacy private apps* — the per-account API
+credential this guide used to tell you to make. New accounts lost it on
+**28 September 2026**; accounts that already existed lose it on **26 October
+2026**. Existing private apps keep working and are not being revoked.
+
+CTL's account does not exist yet, which puts it squarely in the first case, so
+section 2 uses the replacement: a **service key**. Nothing about the code
+changes — it is the same `Authorization: Bearer …` header, the same two scopes,
+the same `CRM_AUTH_TOKEN` secret. Only the screen you get it from is different.
+
 **Before switching this on:** `app/privacy/page.tsx` names the processors that
 receive visitor data, and HubSpot will be one of them — names, phone numbers,
 addresses and whatever somebody typed into the message box, leaving Cloudflare
@@ -58,40 +69,95 @@ rule is in `docs/LAUNCH-CREDENTIALS.md` §6 and it is not a formality.
    the code uses it — the token identifies the portal — but it is what HubSpot
    support asks for first.
 
-> **Create a fresh account, even if an old free one exists.** Legacy free
-> portals do not all expose **Private Apps** in the settings UI, and there is
-> no way to switch it on from inside the account. If section 2 cannot find the
-> menu item, that is what happened: make a new free account and use that one.
-> Do not work around it with an API key — HubSpot's legacy API keys were
-> retired, and anything still suggesting one is out of date.
+> **Create a fresh account, even if an old free one exists.** An old portal
+> is the most likely way to end up somewhere this guide does not describe:
+> legacy free portals did not all expose the credential screens in the first
+> place, and an account that predates 28 September 2026 follows a different
+> deprecation date than a new one (section 0). A new account has exactly one
+> path available, which is the one section 2 documents.
+>
+> Do not work around anything here with an **API key**. HubSpot retired those
+> in November 2022; any guide still offering one — and there are many — is
+> describing a credential that no longer authenticates.
 
 ---
 
-## 2. Create the private app and its token
+## 2. Create the service key
 
-A **private app** is HubSpot's per-account API credential. It produces a bearer
-token, which is exactly what the relay already sends.
+A **service key** is HubSpot's account-level API credential for a
+system-to-system integration like this one: something that reads and writes
+data and has no user interface inside HubSpot. It produces a bearer token,
+which is exactly what the relay already sends.
+
+It replaces the **private app**, whose creation HubSpot disabled for new
+accounts on 28 September 2026 (section 0). If you are following an older
+guide — HubSpot's own included, in places — and it tells you to go to
+**Settings → Integrations → Private Apps**, that menu is the one that is going
+away. The two credentials are interchangeable as far as this code is
+concerned.
+
+### Before you start: the permission
+
+Creating a service key requires the **Developer tools access** permission, or
+a **Developer Seat**. On a free account with two core seats this is the step
+that catches people: the account owner has it by default, a second user
+invited later may not, and the Service Keys screen simply does not appear
+rather than explaining itself. If the menu in step 1 is missing, check this
+first — it is far more likely than anything being wrong with the account.
+
+### Making it
 
 1. In HubSpot: **Settings** (the gear, top right) → **Integrations** →
-   **Private Apps** → **Create a private app**.
-2. **Basic info** tab — name it something a stranger will understand in a
-   year, e.g. `CTL website lead relay`.
-3. **Scopes** tab — search each of these and tick it:
+   **Service Keys**. (The same screen is reachable from the main sidebar at
+   **Development → Keys → Service Keys**.)
+2. **Create service key**, and name it something a stranger will understand in
+   a year, e.g. `CTL website lead relay`.
+3. Add these scopes, and only these:
 
    | Scope | Why the code needs it |
    | --- | --- |
    | `crm.objects.contacts.write` | Creating and updating the contact |
    | `crm.objects.contacts.read` | The phone-number search, used when a lead has no email |
 
-   Those two, and nothing else. A token that can only touch contacts is a
-   token whose worst case is bounded, and this code never reads a deal, a
-   company or a file.
-4. **Create app** → **Continue creating** → **Show token** → copy it.
+   A key that can only touch contacts is a key whose worst case is bounded,
+   and this code never reads a deal, a company or a file. Note that a key can
+   only be granted scopes **the user creating it already has** — if a scope is
+   greyed out, that is a seat or permissions problem on your own login, not a
+   tier limit.
+4. Create it, then **copy the key**. HubSpot shows it once.
 
-The token starts `pat-`. It is a credential with write access to the client's
-contact database: it goes into `wrangler secret put` (section 4) and nowhere
-else. Not into `wrangler.toml`, not into a commit, not into a chat message.
-If it leaks, come back to this screen and **Rotate**.
+The key is a credential with write access to the client's contact database. It
+goes into `wrangler secret put` (section 4) and nowhere else: not into
+`wrangler.toml`, not into a commit, not into a chat message, not into a
+screenshot pasted to the client. If it leaks, come back to this screen and
+rotate it — rotation is built into the service-key screen, which is one of the
+reasons HubSpot moved to them.
+
+> **Service keys are in public beta** (since February 2026) while private-app
+> creation is being switched off. In practice that means the screen may move or
+> gain fields before it settles. It does not affect the token itself or how the
+> relay uses it, and the fallback below exists for the same reason.
+
+### Fallback: the legacy private app
+
+Only if the Service Keys screen is genuinely unavailable *and* the account
+predates 28 September 2026 — in which case private app creation still works
+until **26 October 2026**:
+
+**Settings → Integrations → Private Apps → Create a private app**, the same
+two scopes as above, then **Create app → Continue creating → Show token**.
+The token starts `pat-`.
+
+Everything downstream is identical. An existing private app is not being
+revoked, so if the client already has one wired to something else, there is no
+need to migrate it to satisfy this guide.
+
+### What it does not do
+
+A service key does not support **webhooks**. That is irrelevant here — the
+relay pushes *to* HubSpot and never asks HubSpot to call back — but it is the
+one reason a future integration might need a project-based app instead, so it
+is worth knowing before someone assumes the key covers everything.
 
 ---
 
@@ -157,7 +223,7 @@ CRM_ADAPTER = "hubspot"
 
 ```bash
 cd workers/lead-relay
-npx wrangler secret put CRM_AUTH_TOKEN     # paste the pat-… token, then Enter
+npx wrangler secret put CRM_AUTH_TOKEN     # paste the key from section 2, then Enter
 npx wrangler deploy
 ```
 
@@ -250,13 +316,14 @@ always enough.
 
 | What you see | Cause | Fix |
 | --- | --- | --- |
-| `401 … NOT TRANSIENT` | The token is wrong, revoked, or from a different portal | Re-copy it from the private app (section 2) and `wrangler secret put CRM_AUTH_TOKEN` again. Retrying will not fix it — the row will sit failed until the token is right, then the sweep delivers it |
-| `403` with a scope message | The private app is missing `crm.objects.contacts.read` or `.write` | Add the scope in the private app's Scopes tab. Note that changing scopes issues a **new token**; set the secret again |
+| `401 … NOT TRANSIENT` | The key is wrong, rotated, or from a different portal | Re-copy it from the service key (section 2) and `wrangler secret put CRM_AUTH_TOKEN` again. Retrying will not fix it — the row will sit failed until the key is right, then the sweep delivers it |
+| `403` with a scope message | The key is missing `crm.objects.contacts.read` or `.write` | Add the scope to the key (section 2). If the scope is greyed out, your own login lacks it — a key cannot be granted more than its creator has. On a legacy private app, changing scopes issues a **new token**, so set the secret again |
 | `400 Property "ctl_…" does not exist` | The property was not created, or its internal name differs | Create it exactly as section 3 says. Nothing is lost; the next sweep delivers the backlog |
 | `429 throttled by HubSpot, will retry` | Rate limited | Nothing. This does not count against the six-attempt budget and the sweep retries in fifteen minutes |
-| Row says `sent`, no contact in HubSpot | Almost always the wrong portal — two HubSpot accounts, token from the other one | Check the portal ID in the account menu against the one you created the private app in |
+| Row says `sent`, no contact in HubSpot | Almost always the wrong portal — two HubSpot accounts, key from the other one | Check the portal ID in the account menu against the one you created the key in |
 | Duplicate contacts for the same person | The lead had no email, so it matched on phone — and HubSpot's stored number is formatted differently from what the visitor typed (`(337) 555-0113` vs `3375550113`). The search is an exact string match | Merge the two in HubSpot. This cannot happen for a lead submitted through the current form, which requires an email; it is a risk for rows captured before that and for applications |
 | Everything `disabled` | No token, or `CRM_ADAPTER` is misspelled — a value that names no adapter is treated as *no CRM* rather than falling back to the generic webhook, so a typo cannot post leads somewhere unintended | `npx wrangler tail` and look for the `CRM_ADAPTER="…" is not one of` line |
+| No **Service Keys** menu in settings | The login lacks **Developer tools access** or a Developer Seat — far more common than an account problem | Grant it from **Settings → Users & Teams**, or sign in as the account owner. Section 2 |
 | `crm_attempts` stuck at 6 | Six refusals; the relay stops rather than hammering a configuration problem forever | Fix the cause, then `UPDATE leads SET crm_status='pending', crm_attempts=0 WHERE crm_status='failed';` |
 
 Live logs, while testing: `cd workers/lead-relay && npx wrangler tail`.
@@ -286,8 +353,32 @@ If the new CRM takes a webhook rather than an API — many of them do, via Zapie
 or Make — there is nothing to write at all: set `CRM_ADAPTER` back to
 `generic` and point `CRM_WEBHOOK_URL` at it.
 
-**Leaving HubSpot behind properly:** delete the private app (which invalidates
-the token), export or delete the contacts if the client is not keeping the
-account, and take HubSpot back out of the privacy policy's processor list. A
-dormant free account holding customer data is a disclosure obligation nobody is
-thinking about a year later.
+**Leaving HubSpot behind properly:** delete the service key — or the private
+app, if the fallback in section 2 was used — which invalidates the token
+immediately. Then export or delete the contacts if the client is not keeping
+the account, and take HubSpot back out of the privacy policy's processor list.
+A dormant free account holding customer data is a disclosure obligation nobody
+is thinking about a year later.
+
+---
+
+## Appendix. Where the credential dates come from
+
+HubSpot's deprecation timeline is the one part of this guide with an expiry
+date on it, so here is the source, checked **22 September 2026**:
+
+- [Legacy Private App Creation Being Disabled](https://developers.hubspot.com/changelog/legacy-private-app-creation-sunset)
+  — the 28 September / 26 October 2026 dates, and the statement that existing
+  private apps are not being revoked.
+- [Service Keys enter public beta](https://developers.hubspot.com/changelog/service-keys)
+  — public beta since February 2026, available on all hubs and tiers.
+- [Make API requests using a service key](https://developers.hubspot.com/docs/apps/developer-platform/build-apps/authentication/account-service-keys)
+  — the UI path, the scope model, and `Authorization: Bearer …` usage.
+
+Two things deliberately *not* stated above, because they could not be
+confirmed first-hand and nothing here depends on them: the **prefix** a service
+key carries (a private app token starts `pat-`; sources disagree on whether a
+service key does too — copy whatever HubSpot shows you), and whether the public
+beta has since gone GA. If the Service Keys screen looks different from section
+2, trust the screen and update this file.
+

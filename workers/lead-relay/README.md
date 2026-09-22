@@ -63,7 +63,7 @@ prefers an import.
 | `CRM_ADAPTER` | What it does | Configured by |
 | --- | --- | --- |
 | `generic` (default) | Flat JSON POST, one shape for both kinds — what a Zapier/Make catch hook wants | `CRM_WEBHOOK_URL` |
-| `hubspot` | HubSpot CRM Objects API: dedups on email, falls back to a phone search, upserts the contact | `CRM_AUTH_TOKEN` (private app token) |
+| `hubspot` | HubSpot CRM Objects API: dedups on email, falls back to a phone search, upserts the contact | `CRM_AUTH_TOKEN` (service key) |
 
 HubSpot is the **demo** CRM — the thing that can be shown working this
 week, not the thing a roofing contractor should still be using next
@@ -145,7 +145,7 @@ npx wrangler secret put CRM_WEBHOOK_URL
 npx wrangler secret put CRM_AUTH_TOKEN  # if it wants one
 
 # …or HubSpot (set CRM_ADAPTER = "hubspot" in wrangler.toml first):
-npx wrangler secret put CRM_AUTH_TOKEN  # the private app token
+npx wrangler secret put CRM_AUTH_TOKEN  # the HubSpot service key
 
 # Optional: send job applicants somewhere other than the sales CRM
 npx wrangler secret put CRM_APPLICATION_WEBHOOK_URL

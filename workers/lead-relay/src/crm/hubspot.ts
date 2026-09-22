@@ -19,10 +19,17 @@
  *  submission, and it is the wrong one here. It cannot search, so it
  *  cannot deduplicate on anything but email, and this system has rows
  *  with no email in them (see below). The Objects API can do the
- *  lookup, and a private app access token drops straight into the
- *  `Authorization: Bearer …` header the relay already sends. Free
- *  private apps allow on the order of 500K requests a day, which is
- *  several orders of magnitude past a roofing contractor's lead flow.
+ *  lookup, and an account-level bearer token drops straight into the
+ *  `Authorization: Bearer …` header the relay already sends. The free
+ *  allowance runs to the order of 500K requests a day, which is several
+ *  orders of magnitude past a roofing contractor's lead flow.
+ *
+ *  That token is a SERVICE KEY. It used to be a private app token, and
+ *  the two are interchangeable here — same header, same scopes, same
+ *  endpoints — but HubSpot disabled private app creation for new
+ *  accounts in September 2026, so a fresh portal can only issue the
+ *  former. Nothing in this file depends on which one it was given;
+ *  docs/HUBSPOT-SETUP.md section 2 is the runbook.
  *
  *  ── DEDUPLICATION: EMAIL FIRST, PHONE AS THE FALLBACK ───────────────
  *
@@ -256,10 +263,10 @@ function refusal(res: Call): CrmOutcome {
     return {
       ok: false,
       error:
-        `${res.status} HubSpot rejected the token — NOT TRANSIENT. The private ` +
-        `app token in CRM_AUTH_TOKEN is wrong, revoked, from another portal, ` +
-        `or missing the crm.objects.contacts scopes. Retrying will not fix it; ` +
-        `see docs/HUBSPOT-SETUP.md. — ${body}`,
+        `${res.status} HubSpot rejected the token — NOT TRANSIENT. The ` +
+        `service key in CRM_AUTH_TOKEN is wrong, rotated, from another ` +
+        `portal, or missing the crm.objects.contacts scopes. Retrying will ` +
+        `not fix it; see docs/HUBSPOT-SETUP.md. — ${body}`,
       spendsAttempt: true,
     };
   }

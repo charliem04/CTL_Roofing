@@ -80,10 +80,10 @@ thing it delivers is usable rather than merely present:
   dashboard or `wrangler r2 object get`, so in practice the résumé was not
   attached to the lead at all.
 - Payload shaping sits behind a CRM adapter (`CRM_ADAPTER`). `generic` is the
-  flat shape this Worker always sent and remains the default; `hubspot` posts
-  the Forms API v3 shape for the demo on HubSpot Free. Adding JobNimbus or
-  AccuLynx is one function and one line in `CRM_ADAPTERS`, nowhere near
-  `forward()`.
+  flat shape this Worker always sent and remains the default; `hubspot` talks
+  to the CRM Objects API for the demo on HubSpot Free, deduplicating on email
+  with a phone search as the fallback. Adding JobNimbus or AccuLynx is one
+  file in `src/crm/` and one line in its registry, nowhere near `forward()`.
 - `CRM_APPLICATION_WEBHOOK_URL`, when set, sends `kind='application'` rows
   somewhere other than the sales CRM. Unset, behaviour is unchanged.
 - A missing object returns **410 Gone** with the retention rule stated in

@@ -75,6 +75,8 @@
 import {
   adapterFor,
   crmConfigured,
+  crmStatusFor,
+  deliverableKinds,
   type CrmEnv,
   type LeadRow,
 } from "./crm/index.ts";
@@ -92,53 +94,6 @@ export interface Env extends CrmEnv {
   ALLOWED_ORIGINS: string;
 
   /**
-   * Where leads are forwarded. Unset is a supported state, not a
-   * misconfiguration: rows are stored with crm_status='disabled' and
-   * /export.csv is how they get into whatever is chosen later.
-   */
-  CRM_WEBHOOK_URL?: string;
-
-  /**
-   * Sent as `Authorization: Bearer …` on the forward, when the CRM
-   * wants one. Most do — HubSpot's Forms API is the exception, see
-   * CRM_ADAPTERS.
-   */
-  CRM_AUTH_TOKEN?: string;
-
-  /**
-   * Where job applications are forwarded, when they should not go where
-   * customer leads go. Unset = applications follow CRM_WEBHOOK_URL,
-   * which is exactly the previous behaviour.
-   *
-   * Set it and applicants stop landing in a sales CRM's contact list.
-   * That is worth doing for two unrelated reasons: a free CRM tier has
-   * a contact cap that job applicants will quietly burn through, and an
-   * applicant carries different retention obligations from a customer —
-   * the privacy policy promises their file is gone in twelve months,
-   * and that is a promise about our storage, not about a CRM's.
-   */
-  CRM_APPLICATION_WEBHOOK_URL?: string;
-
-  /**
-   * Which shape to send. A key of CRM_ADAPTERS; unset means "generic",
-   * the flat JSON object this Worker has always sent.
-   */
-  CRM_ADAPTER?: string;
-
-  /**
-   * This Worker's own public origin, e.g. https://relay.ctlpro.com —
-   * scheme and host, no trailing slash, no path.
-   *
-   * Used to build the absolute résumé URL that goes to the CRM. It is a
-   * variable rather than something derived from the incoming request
-   * because forward() also runs from the scheduled retry sweep, where
-   * there is no request to derive it from. A link that is right on the
-   * request path and empty on the retry path is the kind of bug that
-   * only ever shows up in the rows nobody looked at.
-   */
-  RELAY_PUBLIC_ORIGIN?: string;
-
-  /**
    * Read-only handle on the résumé bucket, for GET /resume/:leadId.
    *
    * The careers Worker owns the write side and keeps it; this binding
@@ -153,6 +108,8 @@ export interface Env extends CrmEnv {
    * routes that are the reason this Worker exists.
    */
   RESUMES?: R2Bucket;
+
+  /**
    * Shared secret for POST /application, which is called by the careers
    * Worker rather than by a browser. REQUIRED for that route: without
    * it the route refuses everything, because an open endpoint that
@@ -360,25 +317,17 @@ async function store(row: LeadRow, status: string, env: Env): Promise<void> {
     .run();
 }
 
-/* ── The résumé link ────────────────────────────────────────────── */
-
 /**
  * The delivery state a row is born with.
- *
- * 'pending'  there is a CRM and it wants this row
- * 'skipped'  there is a CRM and it does not — an application, with
- *            CRM_FORWARD_APPLICATIONS off
- * 'disabled' there is no CRM yet, or CRM_ADAPTER is misspelled
  *
  * Deciding it here rather than writing 'pending' and immediately
  * correcting it keeps the row's history honest: crm_attempts stays a
  * count of real attempts, and nothing in the table implies a delivery
- * was tried when none was.
+ * was tried when none was. What the states mean, and why 'skipped' and
+ * 'disabled' are different, is with the adapters in src/crm/index.ts.
  */
 function crmStatusAtRest(row: LeadRow, env: Env): string {
-  const adapter = adapterFor(env);
-  if (!adapter || !adapter.configured(env)) return "disabled";
-  return adapter.accepts(row, env) ? "pending" : "skipped";
+  return crmStatusFor(row, env);
 }
 
 type Delivery = {
@@ -411,297 +360,7 @@ async function record(row: LeadRow, env: Env, state: Delivery): Promise<void> {
   }
 }
 
-/* ── The résumé link ────────────────────────────────────────────── */
-
-/**
- * The absolute URL of this row's résumé, or "" if there is not one.
- *
- * This is what replaced sending the bare R2 object key to the CRM. The
- * key — `applications/2026/09/<uuid>-cv.pdf` — was honest and useless:
- * the person looking at the CRM record cannot do anything with it
- * without the R2 dashboard or wrangler, so in practice the résumé was
- * not attached to the lead at all. A URL somebody can click is the
- * difference between a pipeline that runs and a pipeline that works.
- *
- * Why not a presigned R2 URL, which needs no Worker route: R2's
- * S3-compatible signing tops out at seven days. A CRM record whose
- * résumé link dies after a week is worse than one that never claimed to
- * have a link, because the failure arrives long after anybody is
- * watching for it. Why not push the file into the CRM itself: that
- * copies a CV into a second retention regime nobody here controls,
- * which makes the privacy policy's twelve-month promise untrue.
- *
- * The key is kept alongside it. It costs one field and it is what
- * somebody needs to find the object by hand when the URL is the thing
- * that is broken.
- */
-function resumeUrl(row: LeadRow, env: Env): string {
-  if (!row.resume_key) return "";
-
-  const origin = (env.RELAY_PUBLIC_ORIGIN ?? "").trim().replace(/\/+$/, "");
-  if (!origin) {
-    // Loud, because the row still forwards and looks fine: the office
-    // just silently gets an application with no way to read the CV.
-    console.warn(
-      `[relay] RELAY_PUBLIC_ORIGIN is not set — ${row.id} forwarded without a résumé link`
-    );
-    return "";
-  }
-  return `${origin}/resume/${encodeURIComponent(row.id)}`;
-}
-
-/* ── CRM adapters ───────────────────────────────────────────────── */
-
-/**
- * One CRM's idea of a request: a body, and whatever that body needs.
- *
- * ── WHY AN ADAPTER RATHER THAN AN `if` IN forward() ─────────────────
- *
- * The demo runs on HubSpot Free and the client will likely move to
- * JobNimbus or AccuLynx, so this shape changes at least once more. The
- * forward path is the part that must NOT change with it: it holds the
- * ordering guarantee, the attempt cap, the error capture and the retry
- * bookkeeping, and each of those is a thing you only get right once.
- *
- * So adding a CRM is writing one function and adding one line to
- * CRM_ADAPTERS. It cannot reach the code that decides whether a lead is
- * safe, which is the property worth protecting — a mapping mistake in a
- * new adapter costs a badly-shaped record the retry will show you, not
- * a lost lead.
- */
-type CrmRequest = {
-  contentType: string;
-  body: string;
-  /** Anything beyond Content-Type and the optional bearer token. */
-  headers?: Record<string, string>;
-};
-
-type CrmAdapter = (row: LeadRow, env: Env) => CrmRequest;
-
-/**
- * The questionnaire as an object, whatever is actually in the column.
- *
- * cleanAnswers() is allowed to store a plain string when what arrived
- * did not parse as an object — it keeps the text rather than dropping
- * the only thing the applicant wrote. So a bare JSON.parse() here would
- * throw on exactly those rows, and a row that throws on every forward
- * is a row that retries six times and then sits failed forever with a
- * SyntaxError where the CRM's own reason should be.
- */
-function parsedAnswers(raw: string | null): Record<string, unknown> {
-  if (!raw) return {};
-  try {
-    const parsed = JSON.parse(raw);
-    if (parsed && typeof parsed === "object" && !Array.isArray(parsed)) {
-      return parsed as Record<string, unknown>;
-    }
-  } catch {
-    // Fall through: it is text, not an object.
-  }
-  return { answers: raw };
-}
-
-/**
- * One flat JSON object, the same shape for both kinds. The default.
- *
- * Flat because almost every CRM's inbound webhook, Zapier step and
- * no-code mapper is happier with a flat object than a nested one, and
- * the cost of flatness here is nothing — these records have no depth to
- * lose.
- *
- * This is also the shape to point a Zapier or Make webhook at, which is
- * still the right answer for any CRM whose own API is not worth an
- * adapter: the mapping lives in their UI instead of in this file.
- */
-function crmPayload(row: LeadRow, env: Env): Record<string, unknown> {
-  return {
-    id: row.id,
-    type: row.kind,
-    receivedAt: row.received_at,
-    name: row.name ?? "",
-    phone: row.phone ?? "",
-    email: row.email ?? "",
-    address: row.address ?? "",
-    service: row.service ?? "",
-    urgency: row.urgency ?? "",
-    message: row.message ?? "",
-    role: row.role ?? "",
-    answers: parsedAnswers(row.answers),
-    // The clickable one first, because it is the one a person uses.
-    // The key stays for support: it is how you find the object by hand.
-    resumeUrl: resumeUrl(row, env),
-    resumeKey: row.resume_key ?? "",
-    source: row.source ?? "",
-  };
-}
-}
-
-const genericAdapter: CrmAdapter = (row, env) => ({
-  contentType: "application/json",
-  body: JSON.stringify(crmPayload(row, env)),
-});
-
-/**
- * One name field into HubSpot's two.
- *
- * Both forms ask for a name once, because making a homeowner split
- * their own name into two boxes is friction that buys nothing. HubSpot
- * forms have firstname and lastname, so the split happens here: first
- * token to firstname, everything after it to lastname.
- *
- * It is wrong for some names and there is no rule that is right for all
- * of them. What makes it acceptable is that nothing is lost — the full
- * string as the person typed it is in D1, in /export.csv and in the
- * message text below. It is mis-boxed, not destroyed.
- */
-function splitName(full: string): { first: string; last: string } {
-  const parts = full.trim().split(/\s+/).filter(Boolean);
-  return {
-    first: parts[0] ?? "",
-    last: parts.slice(1).join(" "),
-  };
-}
-
-/**
- * HubSpot Free, via the Forms API v3.
- *
- * CRM_WEBHOOK_URL holds the whole endpoint:
- *   https://api.hsforms.com/submissions/v3/integration/submit/{portalId}/{formGuid}
- * It is unauthenticated — the form GUID is the credential — so
- * CRM_AUTH_TOKEN stays unset for HubSpot. That is HubSpot's design, not
- * an oversight here; it is the same endpoint their embedded form posts
- * to from a visitor's browser.
- *
- * Three things about this API worth knowing before debugging it at 9pm:
- *
- *  1. Every `name` must be a field that EXISTS on that form, and an
- *     unknown one makes HubSpot refuse the whole submission with a 400
- *     that names it. That error text lands in crm_error, where it is
- *     readable — but it means a stock form is the safe target, so
- *     everything without a standard box for it goes into the message
- *     text rather than into a field that may not be there.
- *  2. Values must be strings. A nested object is not accepted, which is
- *     the other reason the questionnaire is flattened into prose
- *     instead of being sent as `answers`.
- *  3. HubSpot identifies a contact by email address. A submission
- *     carrying only a phone number is refused with a 400.
- *
- * That last one is left as a visible failure rather than papered over
- * with a synthetic address. A made-up email in a CRM is worse than a
- * row somebody has to look at: it is wrong forever, and it is wrong in
- * the field the office will try to reach the customer on. The row stays
- * in D1 with the real details and the refusal in crm_error, and
- * /export.csv still has it.
- */
-const hubspotAdapter: CrmAdapter = (row, env) => {
-  const { first, last } = splitName(row.name ?? "");
-
-  // Everything a stock HubSpot form has no box for, as prose in the
-  // message field — which certainly exists. If the office later adds
-  // custom properties (`resume_url` is the one worth adding first, so
-  // the link is clickable in the record rather than sitting in the
-  // message body), each one becomes a line in the fields array below
-  // and can come back out of here.
-  const notes: string[] = [
-    row.kind === "application" ? "Job application" : "Assessment request",
-  ];
-  const note = (label: string, value: string | null) => {
-    if (value) notes.push(`${label}: ${value}`);
-  };
-  note("Role", row.role);
-  note("Service", row.service);
-  note("Urgency", row.urgency);
-  note("Address", row.address);
-  note("Message", row.message);
-
-  for (const [q, a] of Object.entries(parsedAnswers(row.answers))) {
-    notes.push(`${q}: ${a}`);
-  }
-
-  const url = resumeUrl(row, env);
-  if (url) notes.push(`Résumé: ${url}`);
-  note("Submitted from", row.source);
-  notes.push(`Relay id: ${row.id}`);
-
-  const fields: Array<{ name: string; value: string }> = [];
-  const field = (name: string, value: string) => {
-    // Omitted rather than sent empty. A blank value on a HubSpot
-    // property overwrites whatever a returning contact already had
-    // there, so "we did not ask" must not arrive as "it is empty now".
-    if (value) fields.push({ name, value });
-  };
-  field("firstname", first);
-  field("lastname", last);
-  field("email", row.email ?? "");
-  field("phone", row.phone ?? "");
-  field("message", notes.join("\n"));
-
-  return {
-    contentType: "application/json",
-    body: JSON.stringify({
-      fields,
-      // HubSpot shows this on the contact's timeline, which is where
-      // somebody asks "where did this person come from".
-      context: {
-        pageUri: row.source ?? "",
-        pageName: row.kind === "application" ? "Careers form" : "Contact form",
-      },
-    }),
-  };
-};
-
-/**
- * The registry. One line per CRM.
- *
- * `generic` is the default and stays the default: it is the shape a
- * Zapier or Make hook expects, and it is what every row forwarded
- * before this existed was sent as, so nothing already wired changes
- * shape because this file grew.
- */
-const CRM_ADAPTERS = {
-  generic: genericAdapter,
-  hubspot: hubspotAdapter,
-} satisfies Record<string, CrmAdapter>;
-
-function adapterFor(env: Env): CrmAdapter {
-  const name = (env.CRM_ADAPTER ?? "").trim().toLowerCase();
-  if (!name) return genericAdapter;
-  if (name in CRM_ADAPTERS) {
-    return CRM_ADAPTERS[name as keyof typeof CRM_ADAPTERS];
-  }
-  // A typo in CRM_ADAPTER must not stop leads being delivered, so this
-  // falls back rather than refusing — but it says so every time,
-  // because the CRM quietly receiving the wrong shape is the failure
-  // that takes longest to notice.
-  console.error(
-    `[relay] unknown CRM_ADAPTER "${name}" — falling back to "generic". Known: ${Object.keys(
-      CRM_ADAPTERS
-    ).join(", ")}`
-  );
-  return genericAdapter;
-}
-
 /* ── Forwarding ─────────────────────────────────────────────────── */
-
-/**
- * Where this row goes, which depends on what it is.
- *
- * Applications prefer CRM_APPLICATION_WEBHOOK_URL and fall back to the
- * one URL, so an unset second destination is the previous behaviour
- * unchanged. Leads only ever go to CRM_WEBHOOK_URL — a customer has no
- * business in the applicant tracker.
- *
- * undefined means "nowhere is configured for this kind", which is a
- * supported state and not an error: the row is stored with
- * crm_status='disabled' and delivered by the first sweep after a
- * destination exists.
- */
-function crmEndpoint(row: LeadRow, env: Env): string | undefined {
-  if (row.kind === "application" && env.CRM_APPLICATION_WEBHOOK_URL) {
-    return env.CRM_APPLICATION_WEBHOOK_URL;
-  }
-  return env.CRM_WEBHOOK_URL;
-}
 
 /**
  * Send one row onward and record what happened.
@@ -711,7 +370,6 @@ function crmEndpoint(row: LeadRow, env: Env): string | undefined {
  * retry sweep below be a simple query rather than a queue with its own
  * failure modes.
  */
-async function forward(row: LeadRow, env: Env): Promise<void> {
 async function forward(row: LeadRow, env: Env): Promise<void> {
   const adapter = adapterFor(env);
   if (!adapter || !adapter.configured(env)) return;
@@ -730,66 +388,6 @@ async function forward(row: LeadRow, env: Env): Promise<void> {
       spent: 0,
       error: null,
       sentAt: null,
-    });
-    return;
-  }
-
-  const endpoint = crmEndpoint(row, env);
-  if (!endpoint) return;
-
-  let ok = false;
-  let error = "";
-  try {
-    // Inside the try, not above it: shaping the body is now adapter
-    // code, and an adapter is the newest and least-exercised thing in
-    // this file. A throw from one has to land in crm_error like any
-    // other failure — the alternative is an exception escaping a
-    // function documented never to throw, which in the retry sweep
-    // would abandon every row queued behind this one.
-    const request = adapter(row, env);
-
-    const res = await fetch(endpoint, {
-      method: "POST",
-      headers: {
-        "Content-Type": request.contentType,
-        ...(env.CRM_AUTH_TOKEN
-          ? { Authorization: `Bearer ${env.CRM_AUTH_TOKEN}` }
-          : {}),
-        // Last, so an adapter can correct either of the above for a CRM
-        // that wants something other than a bearer token.
-        ...(request.headers ?? {}),
-      },
-      body: request.body,
-    });
-    ok = res.ok;
-    error = await res.text();
-    if (!ok) {
-      await record(row, env, {
-        status: "failed",
-        spent: 1,
-        error,
-        sentAt: null,
-      });
-      return;
-    }
-    await record(row, env, {
-      status: "sent",
-      spent: 1,
-      error: null,
-      sentAt: new Date().toISOString(),
-    });
-    return;
-  } catch (e) {
-    const message = e instanceof Error ? e.message : String(e);
-    await record(row, env, {
-      status: "failed",
-      spent: 1,
-      error: message,
-      sentAt: null,
-    });
-    return;
-  }
-}
     });
     return;
   }
@@ -832,16 +430,11 @@ async function forward(row: LeadRow, env: Env): Promise<void> {
 async function retryFailed(env: Env): Promise<number> {
   if (!crmConfigured(env)) return 0;
 
-  // Only ask for kinds that have somewhere to go. Without this filter
-  // the batch of 25 fills up with rows forward() will decline to send —
-  // if only CRM_APPLICATION_WEBHOOK_URL is set, every 'disabled' lead
-  // ever captured sorts ahead of the applications by received_at and
-  // starves them, sweep after sweep, while the table looks busy.
-  const kinds: LeadRow["kind"][] = [];
-  if (env.CRM_WEBHOOK_URL) kinds.push("lead");
-  if (env.CRM_WEBHOOK_URL || env.CRM_APPLICATION_WEBHOOK_URL) {
-    kinds.push("application");
-  }
+  // Only ask for kinds the configured adapter can actually deliver.
+  // The adapter decides, because CRM_WEBHOOK_URL is the generic
+  // adapter's destination and nobody else's — gating this on it meant
+  // HubSpot, which never sets it, swept nothing at all.
+  const kinds = deliverableKinds(env);
   if (!kinds.length) return 0;
 
   /*

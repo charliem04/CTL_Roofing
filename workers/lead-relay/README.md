@@ -83,37 +83,6 @@ rather than quietly falling back to `generic`, because a typo would
 otherwise throw every lead at whatever `CRM_WEBHOOK_URL` happened to
 hold. Rows park as `disabled` and the log says so.
 
-### Adapters
-
-The *shape* sent to that URL is a `CRM_ADAPTER` away, because the shape
-is the only part that a change of CRM changes:
-
-| `CRM_ADAPTER` | Sends | `CRM_AUTH_TOKEN` |
-| --- | --- | --- |
-| `generic` (default) | one flat JSON object — what this Worker has always sent, and what a Zapier or Make hook wants | if the target asks for one |
-| `hubspot` | HubSpot Forms API v3, `{fields: [{name, value}, …]}` | none — the endpoint is unauthenticated, the form GUID in the URL is the credential |
-
-For HubSpot Free, `CRM_WEBHOOK_URL` is the whole submit endpoint:
-
-```
-https://api.hsforms.com/submissions/v3/integration/submit/{portalId}/{formGuid}
-```
-
-Two HubSpot-specific things that will otherwise cost an evening. It
-identifies a contact **by email address**, so a lead that arrived with
-only a phone number is refused with a 400 — left as a visible failure in
-`crm_error` rather than papered over with a synthetic address, because a
-made-up email in a CRM is wrong forever and wrong in the field the
-office will try to reach the customer on. And every field name has to
-exist on that form, so everything a stock form has no box for is sent as
-prose inside `message` rather than as a field that may not be there.
-
-Adding JobNimbus or AccuLynx is writing one `CrmAdapter` function and
-adding one line to `CRM_ADAPTERS` — deliberately nowhere near
-`forward()`, which holds the ordering guarantee, the attempt cap and the
-retry bookkeeping. A mapping mistake in a new adapter costs a
-badly-shaped record the retry will show you, not a lost lead.
-
 ### Applicants do not have to go where customers go
 
 `CRM_APPLICATION_WEBHOOK_URL` is optional. Set it and `kind='application'`
@@ -347,11 +316,13 @@ directly, with `fetch()` captured to see what a CRM would have received:
   the wrangler fallback when `RESUMES` is unbound
 - `RELAY_PUBLIC_ORIGIN` unset → empty `resumeUrl`, `resumeKey` still
   there, and a warning in the log
-- `CRM_ADAPTER=hubspot` → posted to the hsforms URL as
-  `{fields: […]}`, the name split across firstname/lastname, empty
-  fields omitted rather than sent blank, and the role, questionnaire and
-  résumé link flattened into `message`; an unknown `CRM_ADAPTER` fell
-  back to `generic` and said so
+- `CRM_ADAPTER=hubspot` → posted to the CRM Objects API, the name split
+  across firstname/lastname, empty fields omitted rather than sent
+  blank, `hs_lead_status` stamped on creation and never on update, a 409
+  upserted rather than recorded as a failure, a 429 not spending an
+  attempt, and the role, questionnaire and résumé link flattened into
+  `message`; an unknown `CRM_ADAPTER` parked rows as `disabled` rather
+  than falling back to `generic`, and said so
 - with both webhook URLs set, the application went to the applicant URL
   and the lead to the sales URL; with only the applicant URL set, the
   lead was stored `disabled` and never forwarded, and the sweep's query

@@ -36,7 +36,12 @@ import assert from "node:assert/strict";
 
 import { hubspot, hubspotProperties, splitName } from "../src/crm/hubspot.ts";
 import { crmPayload, generic } from "../src/crm/generic.ts";
-import { adapterFor, crmConfigured } from "../src/crm/index.ts";
+import {
+  adapterFor,
+  crmConfigured,
+  crmStatusFor,
+  deliverableKinds,
+} from "../src/crm/index.ts";
 import type { LeadRow } from "../src/crm/types.ts";
 
 const TOKEN = { CRM_ADAPTER: "hubspot", CRM_AUTH_TOKEN: "pat-test-token" };
@@ -278,7 +283,13 @@ test("applications stay out of the sales CRM unless asked for", () => {
   );
   assert.equal(hubspot.accepts(lead(), TOKEN), true);
   // The generic webhook has always taken both kinds and still does.
-  assert.equal(generic.accepts(application, {}), true);
+  const hook = { CRM_WEBHOOK_URL: "https://hooks.example.test/catch" };
+  assert.equal(generic.accepts(application, hook), true);
+  assert.equal(generic.accepts(lead(), hook), true);
+  // With no destination at all it declines — but as 'disabled', so the
+  // sweep still delivers the backlog once a URL is set.
+  assert.equal(generic.accepts(application, {}), false);
+  assert.equal(generic.declineReason?.(application, {}), "disabled");
 });
 
 test("no token is 'not configured', not a stream of 401s", () => {
@@ -311,6 +322,7 @@ test("the generic wire format still has every field, flat", async () => {
     "phone",
     "receivedAt",
     "resumeKey",
+    "resumeUrl",
     "role",
     "service",
     "source",
@@ -334,4 +346,132 @@ test("the generic adapter posts that payload with the bearer token", async () =>
   assert.deepEqual(outcome, { ok: true });
   assert.equal(calls[0]!.url, "https://hooks.example.test/catch");
   assert.equal(calls[0]!.body.name, "Robert Thibodeaux");
+});
+
+/* ── What the merge broke, pinned ───────────────────────────────── */
+
+/*
+ * Everything below covers ground a bad merge had already taken away
+ * once: the résumé link, the tolerant answers parse, and a retry sweep
+ * that asked CRM_WEBHOOK_URL — a variable HubSpot never sets — whether
+ * there was anything to deliver.
+ */
+
+test("the sweep asks the adapter, not CRM_WEBHOOK_URL, which HubSpot never sets", () => {
+  // The regression: gated on CRM_WEBHOOK_URL this was [], so a HubSpot
+  // deployment swept nothing and every failed row sat forever.
+  assert.deepEqual(deliverableKinds(TOKEN), ["lead"]);
+  assert.deepEqual(
+    deliverableKinds({ ...TOKEN, CRM_FORWARD_APPLICATIONS: "true" }),
+    ["lead", "application"]
+  );
+
+  // Generic, both destinations and one.
+  assert.deepEqual(
+    deliverableKinds({ CRM_WEBHOOK_URL: "https://x.test" }),
+    ["lead", "application"]
+  );
+  assert.deepEqual(
+    deliverableKinds({ CRM_APPLICATION_WEBHOOK_URL: "https://x.test" }),
+    ["application"]
+  );
+
+  // Nothing configured, and a misspelled adapter, sweep nothing.
+  assert.deepEqual(deliverableKinds({}), []);
+  assert.deepEqual(deliverableKinds({ CRM_ADAPTER: "hubpsot" }), []);
+});
+
+test("'disabled' is a backlog and 'skipped' is a decision", () => {
+  const application = lead({ kind: "application", role: "Roofer" });
+
+  // No CRM at all: both kinds wait for one.
+  assert.equal(crmStatusFor(lead(), {}), "disabled");
+  assert.equal(crmStatusFor(application, {}), "disabled");
+
+  // HubSpot declines applications on purpose — that is a decision, and
+  // the sweep must leave it alone.
+  assert.equal(crmStatusFor(lead(), TOKEN), "pending");
+  assert.equal(crmStatusFor(application, TOKEN), "skipped");
+  assert.equal(
+    crmStatusFor(application, { ...TOKEN, CRM_FORWARD_APPLICATIONS: "true" }),
+    "pending"
+  );
+
+  // Generic with only the applicant URL set: the application goes, and
+  // the lead is honestly 'disabled' rather than buried as 'skipped',
+  // so setting CRM_WEBHOOK_URL later delivers it.
+  const applicantsOnly = { CRM_APPLICATION_WEBHOOK_URL: "https://x.test" };
+  assert.equal(crmStatusFor(application, applicantsOnly), "pending");
+  assert.equal(crmStatusFor(lead(), applicantsOnly), "disabled");
+
+  // A misspelled adapter parks rows rather than posting them anywhere.
+  assert.equal(crmStatusFor(lead(), { CRM_ADAPTER: "hubpsot" }), "disabled");
+});
+
+test("the CRM gets a résumé link, not a bare R2 object key", () => {
+  const application = lead({
+    kind: "application",
+    resume_key: "applications/2026/09/abc-cv.pdf",
+  });
+  const env = { RELAY_PUBLIC_ORIGIN: "https://relay.ctlpro.com/" };
+
+  // The trailing slash on the origin must not produce a double slash.
+  assert.equal(
+    crmPayload(application, env).resumeUrl,
+    "https://relay.ctlpro.com/resume/11111111-2222-3333-4444-555555555555"
+  );
+  // The key stays alongside it, for finding the object by hand.
+  assert.equal(
+    crmPayload(application, env).resumeKey,
+    "applications/2026/09/abc-cv.pdf"
+  );
+  // No origin, or no résumé: the row still forwards, just without a link.
+  assert.equal(crmPayload(application, {}).resumeUrl, "");
+  assert.equal(crmPayload(lead(), env).resumeUrl, "");
+});
+
+test("a non-object answers column does not strand the row forever", () => {
+  // cleanAnswers() stores a plain string when what arrived did not parse
+  // as an object. A bare JSON.parse here spent all six attempts and left
+  // a SyntaxError where the CRM's own reason belongs.
+  assert.deepEqual(crmPayload(lead({ answers: "just some text" })).answers, {
+    answers: "just some text",
+  });
+  assert.deepEqual(crmPayload(lead({ answers: "[1,2]" })).answers, {
+    answers: "[1,2]",
+  });
+  assert.deepEqual(crmPayload(lead({ answers: null })).answers, {});
+});
+
+test("an application forwarded to HubSpot carries its role, answers and CV", () => {
+  const application = lead({
+    kind: "application",
+    role: "Roofer",
+    message: null,
+    answers: '{"Years roofing":"6"}',
+    resume_key: "applications/2026/09/abc-cv.pdf",
+  });
+  const props = hubspotProperties(application, {
+    creating: true,
+    env: { RELAY_PUBLIC_ORIGIN: "https://relay.ctlpro.com" },
+  });
+
+  // Prose in a standard property, because none of this has a contact
+  // field and the free tier's ten customs are the client's to spend.
+  assert.match(props.message ?? "", /Role: Roofer/);
+  assert.match(props.message ?? "", /Years roofing: 6/);
+  assert.match(
+    props.message ?? "",
+    /Résumé: https:\/\/relay\.ctlpro\.com\/resume\//
+  );
+
+  // Still four customs — nothing here spent one.
+  const customs = Object.keys(props).filter((k) => k.startsWith("ctl_"));
+  assert.ok(customs.length <= 4, `customs: ${customs.join(", ")}`);
+
+  // A lead's message is untouched: it is what the customer wrote.
+  assert.equal(
+    hubspotProperties(lead(), { creating: true }).message,
+    "Water spot on the ceiling after Friday's wind."
+  );
 });

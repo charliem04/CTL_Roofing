@@ -56,7 +56,7 @@ Both handle visitor data:
 file's own header comment already instructs this whenever a processor is added;
 it simply has not been acted on.
 
-### 4. `/careers/` is live, and its form has nowhere to send a file
+### 4. `/careers/` is live, and its form has nowhere to send a file — **code closed, needs credentials**
 
 `lib/routes.ts` has careers at `live: true`, which contradicts
 `REBUILD-PLAN.md`'s description of it as dark. So the résumé path is a launch
@@ -65,6 +65,56 @@ points at the office email.
 
 That refusal is the correct failure — a form that takes a CV and drops it costs
 somebody a job they think they applied for. But it is not a shipping state.
+
+**What was built since.** The pipeline now runs end to end in code, and the
+thing it delivers is usable rather than merely present:
+
+- `GET /resume/:leadId` on the lead relay looks the lead up in D1, reads its
+  `resume_key`, and streams the object out of R2 as an attachment named for the
+  applicant. The relay has a read-only R2 binding for `ctl-resumes` to do it.
+  The bucket stays private: no `r2.dev` URL, no custom domain, and nothing in
+  the relay calls anything but `get()`.
+- `crmPayload()` emits a `resumeUrl` — an absolute, clickable link at that
+  route — and keeps `resumeKey` beside it for support. The bare object key it
+  used to send was honest and useless: retrieving the file meant the R2
+  dashboard or `wrangler r2 object get`, so in practice the résumé was not
+  attached to the lead at all.
+- Payload shaping sits behind a CRM adapter (`CRM_ADAPTER`). `generic` is the
+  flat shape this Worker always sent and remains the default; `hubspot` posts
+  the Forms API v3 shape for the demo on HubSpot Free. Adding JobNimbus or
+  AccuLynx is one function and one line in `CRM_ADAPTERS`, nowhere near
+  `forward()`.
+- `CRM_APPLICATION_WEBHOOK_URL`, when set, sends `kind='application'` rows
+  somewhere other than the sales CRM. Unset, behaviour is unchanged.
+- A missing object returns **410 Gone** with the retention rule stated in
+  words, not a 404. A row with a key and no object is the 365-day lifecycle
+  rule having worked; a 404 there would read as a broken link and send somebody
+  hunting for a file that was deleted on purpose.
+
+Retention is untouched by all of this. The three places that must agree —
+`RETENTION_DAYS` in `workers/careers-upload/scripts/set-retention.sh`, the same
+constant in that Worker's `src/index.ts`, and `APPLICATION_RETENTION` in
+`app/privacy/page.tsx` — still say 365 days and twelve months.
+
+**What is still open, and it is not code.** Two things, both in §A.4:
+
+1. **The Cloudflare Access application** in front of `/resume/*`. The route has
+   no auth of its own, deliberately — a browser following a link from a CRM
+   record cannot send an `Authorization` header, so a token there would be a
+   token in the URL. Until the application exists the route answers anybody
+   holding a lead id, and those ids are unguessable but not secret: they travel
+   in CRM records, in `/export.csv`, and in the JSON the contact form gets back.
+   Setup is §6 of `LAUNCH-CREDENTIALS.md`.
+2. **`workers_dev = false` and a route on the zone.** Access binds to hostnames
+   on a zone, so a `*.workers.dev` address serving the same code is an ungated
+   door beside the gated one. Both lines are in `wrangler.toml`, commented out,
+   to be enabled at the same moment the application is created — not before,
+   since without a route the Worker has no hostname at all.
+
+So the form still has nowhere to send a file **only** because finding 1 is
+open: D1 is unprovisioned, so the relay cannot deploy. The decision this
+finding was really asking for — where a résumé goes and how anybody reads it
+back — is made and built.
 
 ### 5. `public/_redirects` is effectively empty
 
@@ -92,20 +142,30 @@ does not cover, `scripts/harden.mjs` scans for leaked secrets and stray
 `.env`/source-map/`.git` files, `scripts/check.mjs` catches inherited frontend
 defaults.
 
-All of it runs only when somebody types `npm run build`. Nothing gates a commit,
-and nothing gates a deploy hook firing: a publish in the gallery studio triggers
-a Pages build with no check in front of it other than the build itself.
+All of it runs only when somebody types `npm run build`. Nothing gates a commit.
+
+That was sharpest while the CMS committed straight to `main` from `/admin/`
+with no check in front of it. Moving to Sanity (§B) removes *that* path, since
+content edits stop being commits — but it does not add CI, and the build
+pipeline still runs unsupervised on every deploy.
 
 A workflow running `npm run build` and `npm run check` on pull requests and on
 pushes to `main` would close this.
 
-### 8. `npm run lint` does nothing, and there are no tests
+### 8. `npm run lint` does nothing, and the site has no tests
 
 No eslint config and no eslint dependency, so `next lint` would offer to set one
-up rather than lint. No `*.test.*` or `*.spec.*` anywhere, and no test runner.
+up rather than lint. Nothing under `ctl-roofing/` is covered by a test.
 
 TypeScript is `strict: true` and `next build` type-checks, so types *are*
 enforced — but there is no standalone `typecheck` script.
+
+Partly closed on the Worker side: `workers/lead-relay` has `npm test`, which
+runs `test/crm.test.ts` on node's own test runner with no framework and no
+build step. It covers the CRM adapters — the property mapping, and the
+delivery flow against a stand-in CRM told to answer 409, 429 or 401 — because
+that is code whose failure mode is a lead silently not arriving somewhere
+nobody is looking yet.
 
 ### 9. Repo hygiene — **closed**
 
@@ -158,15 +218,58 @@ Configuration the code already expects. In dependency order:
    `EXPORT_TOKEN`, deploy. `CRM_WEBHOOK_URL` may stay unset: leads are stored as
    `crm_status='disabled'` and the first sweep after it is set delivers the
    whole backlog.
-3. **CRM** — `wrangler secret put CRM_WEBHOOK_URL` once chosen. Most roofing
-   CRMs will not take raw JSON, so budget a Zapier/Make account as the adapter.
-   The single function to adapt is `crmPayload()` in
-   `workers/lead-relay/src/index.ts`.
-4. **Careers** — per the decision taken. If the Worker stays: `TURNSTILE_SECRET`,
-   `NOTIFY_WEBHOOK` → the relay's `/application`, `RELAY_INGEST_SECRET` matching
-   the relay's `INGEST_SECRET`, `IP_HASH_SALT`, and **`npm run retention`
-   against the real bucket** — without that lifecycle rule the twelve-month
-   promise in the privacy policy is untrue.
+3. **CRM** — **partly built.** Forwarding is now an adapter chosen by
+   `CRM_ADAPTER`, in `workers/lead-relay/src/crm/`:
+
+   - `generic` (still the default, behaviour unchanged) — the flat JSON POST to
+     `CRM_WEBHOOK_URL` that a Zapier/Make catch hook wants. Most roofing CRMs
+     will not take raw JSON, so budget that account if this is the path taken.
+   - `hubspot` — **written and unit-tested, not yet run against a real
+     account.** HubSpot Free as the demo CRM: contacts through the CRM Objects
+     API, deduplicated on email with a phone-number search as the fallback, a
+     409 treated as an update rather than a failure, and a 429 that does not
+     spend one of the six retry attempts. Job applications are held back from
+     the sales CRM unless `CRM_FORWARD_APPLICATIONS` says otherwise.
+
+   **What it still needs:** a HubSpot account in CTL's name, a private app
+   token in `CRM_AUTH_TOKEN`, four custom properties created by hand, and the
+   privacy policy naming HubSpot as a processor. Runbook, scopes, property
+   names and the end-to-end verification: **`docs/HUBSPOT-SETUP.md`**. Nothing
+   here is on the critical path — with no CRM configured, leads are stored
+   `disabled` and the first sweep after the token exists delivers the backlog.
+
+   Moving to a roofing CRM later is one new file in `src/crm/` and two
+   variables; `/export.csv` carries the history across.
+
+   Set `CRM_APPLICATION_WEBHOOK_URL` the same time as `CRM_WEBHOOK_URL` unless
+   job applicants are meant to sit in the sales CRM's contact list, where they
+   burn a free tier's contact cap and inherit a retention policy written for
+   leads.
+4. **Careers** — the decision is taken: the Worker stays, and the file is read
+   back through the relay. What that needs, in order:
+
+   - **careers-upload** — `TURNSTILE_SECRET`, `NOTIFY_WEBHOOK` → the relay's
+     `/application`, `RELAY_INGEST_SECRET` matching the relay's
+     `INGEST_SECRET`, `IP_HASH_SALT`, and **`npm run retention` against the
+     real bucket** — without that lifecycle rule the twelve-month promise in
+     the privacy policy is untrue. (It is also what makes the relay's 410
+     truthful rather than theoretical.)
+   - **lead-relay** — the `RESUMES` binding is already in `wrangler.toml` and
+     needs the real `ctl-resumes` bucket to exist. Set `RELAY_PUBLIC_ORIGIN` to
+     the relay's own hostname; unset, records forward with `resumeKey` and no
+     clickable link, and the log says so on every one.
+   - **A Cloudflare Access application** on `<relay host>/resume`, Google as
+     the identity provider, allowing the people who handle hiring. This is the
+     one piece with no code behind it and no honest failure mode: without it
+     the route serves a CV to anybody holding a lead id. `LAUNCH-CREDENTIALS.md`
+     §6 has the full setup, including the two things that are easy to miss —
+     `workers_dev = false` with a route on the zone, and *not* putting Access in
+     front of `/lead` or `/application`, which would break the contact form for
+     every visitor and 302 every job application into HTML.
+   - **The bucket stays private throughout.** No `r2.dev` URL, no custom
+     domain. `app/privacy/page.tsx` tells applicants their CV sits where "only
+     we can reach it", and an Access-gated Worker route keeps that true where a
+     public bucket would not.
 5. **Google Reviews** — key and place ID, budget alert the same day.
 6. **Rate limiting** — finding 2.
 7. **Analytics and call tracking** — per the decisions taken.
@@ -178,36 +281,65 @@ retention promise both get rewritten. If the vendor can webhook into the relay's
 `/application` route the unified lead book survives; if not, that is a real loss
 and should be named rather than discovered.
 
-### B. Repo ownership and the CMS
+### B. Replace the CMS with Sanity
 
-**Move the site to a client-owned repo first.** The CMS commits directly to
-`main` on whatever repo it points at, and today that is a personal account. Then:
+**Decision, 21 September 2026: the gallery CMS moves from Sveltia to Sanity.**
 
-- ~~update `backend.repo` in `public/admin/config.yml`~~ — gone with the CMS
-- re-point the `sveltia-cms-auth` Worker's `ALLOWED_DOMAINS`
-- repo hygiene (finding 9) is done: `ctl_pictures/` moved to `assets/source-photos/`, `graphify-out/` and `.idea/` are untracked and gitignored, the stale root `README-DEPLOY.md` was deleted, and `package.json` was renamed to `ctl-roofing`.
+What exists today is a git-backed editor — Sveltia at `/admin/`, committing
+`content/gallery.json` straight to `main`. It works, and the content pipeline
+around it is sound. It was replaced for one reason that no amount of polish
+fixes: **signing in means a GitHub account with write access, per editor.**
+For a roofing office that is real friction, and it puts the client's content
+edits in a developer's personal repository.
 
-**The gallery has moved to Sanity — done.** The friction named below is what
-decided it: Sveltia sign-in needs a GitHub account with write access to the
-repository per editor, and for a non-technical office that is real overhead. It
-is why the gallery sat unedited. A Sanity account is an email invite, so the
-first bullet above — updating `backend.repo` — and the second — re-pointing the
-`sveltia-cms-auth` Worker — are both moot. That Worker and its GitHub OAuth app
-should now be **deleted**; see `docs/GALLERY-CMS.md`.
+Sanity was chosen over the alternatives (Tina Cloud, CloudCannon, Storyblok,
+DatoCMS, Contentful) on three grounds:
 
-What survived the move, deliberately: the loader boundary in `lib/content.ts` is
-untouched, the categories are still a TypeScript union the CMS cannot add to,
-`scripts/gallery.mjs` still fails the build naming the photo on a missing alt
-text, a duplicate or an unknown category, and the content is still committed to
-git — as `content/gallery.generated.json` — so every change keeps an author, a
-timestamp and a diff.
+1. **No GitHub accounts.** Editors are invited by email.
+2. **A real image pipeline.** This is the one that earns its keep. There is no
+   image processing anywhere in this project — `next.config.mjs` sets
+   `images.unoptimized: true` because a static export requires it, so photos
+   are committed and served at whatever size they were uploaded.
+   `docs/GALLERY-CMS.md` currently has to *ask editors to resize their own
+   photos*, and warn that a 12 MB phone photo is a 12 MB download for every
+   visitor on `/gallery/`. Sanity serves transforms from its CDN and returns
+   intrinsic dimensions from its API, which deletes that whole problem class —
+   and with it most of `scripts/gallery.mjs`.
+3. **The free tier covers this site comfortably**, so the recurring cost of
+   the decision is zero at CTL's size.
 
-**Then extend it beyond the gallery.** The pattern now exists in Sanity:
-a schema in `studio/schemas/`, a build-time fetch, and a loader boundary that
-did not move. Repeat it for `team`, `testimonials`, `caseStudies`,
-`careers.roles` and `financing` — one at a time, and only once the gallery has
-been through a few real edits and a few real deploys. Doing them all at once
-makes the failure surface unreadable.
+**The repo move happens anyway, and first.** It is a smaller job once the CMS
+no longer commits to the repository, but the site still lives in a personal
+account today:
+
+- move to a client-owned repo, re-point Cloudflare Pages at it
+- drop `ctl_pictures/`, `graphify-out/` and `.idea/`; delete the stale root
+  `README-DEPLOY.md`; rename the package (finding 9)
+- retire the `sveltia-cms-auth` Worker and the GitHub OAuth app, if they were
+  ever deployed
+
+**What makes this a contained change rather than a rewrite** is `lib/content.ts`.
+Every page and component reads content through its ~30 accessor functions, and
+a check across `app/` and `components/` confirms the boundary holds: the only
+direct `@/content/*` imports are `import type`, which stay as code regardless.
+So the migration replaces the bodies of those accessors and touches no page.
+
+Two things must survive the move, because they are the reason nothing broken
+has ever reached the site:
+
+- **Alt text enforced at build time.** A Sanity "required field" is weaker than
+  a build that fails naming the photo. Keep the check; point it at the fetched
+  data instead of the local files.
+- **Categories staying in code.** `content/gallery.ts` owns them as a
+  TypeScript union because each maps to a real service route. They are a set
+  that changes when the business changes, not when a photo is added. Sanity
+  should offer them as a fixed list validated against that union, exactly as
+  the Sveltia dropdown was.
+
+The implementation is specified separately — see the migration brief referenced
+in the pull request for this decision. Sequence: repo move, then Sanity, then
+extend to `team`, `testimonials`, `caseStudies`, `careers.roles` and
+`financing` once the gallery is proven.
 
 ### C. Close the gaps
 
@@ -252,6 +384,18 @@ an object in R2:
 curl -H "Authorization: Bearer $EXPORT_TOKEN" https://<relay>/export.csv
 ```
 
+The Worker's own checks, which need no credentials:
+
+```bash
+cd workers/lead-relay && npm run typecheck && npm test
+cd ../careers-upload && npm run typecheck
+```
+
+If a CRM is configured, `crm_status` in that CSV is the column that matters —
+`sent` is the only value that means a lead reached it. `docs/HUBSPOT-SETUP.md`
+§5 is the full walk-through for HubSpot, including the second submission with
+the same email address that proves deduplication works.
+
 ---
 
 ## Order
@@ -259,6 +403,6 @@ curl -H "Authorization: Bearer $EXPORT_TOKEN" https://<relay>/export.csv
 1. Start the long-lead items: attorney review, Business Profile ownership, and
    the old-site crawl (they block the cutover and nothing else depends on them)
 2. Wire the integrations as credentials arrive — §A
-3. Repo move and CMS extension — §B
+3. Repo move, then the Sanity migration — §B
 4. Close the gaps — §C
 5. Preview verification, then `CUTOVER.md`

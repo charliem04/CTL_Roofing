@@ -55,8 +55,13 @@ export type ContactPayload = {
   urgency: string;
   /** Free-text detail; optional on the form */
   message: string;
-  /** honeypot — must be empty; bots fill it */
-  company?: string;
+  /**
+   * Honeypot — must be empty; bots fill it.
+   *
+   * Deliberately not named after anything a browser recognises. See the
+   * field's markup in components/Contact.tsx for why that matters.
+   */
+  referralNote?: string;
 };
 
 export type SubmitResult = { ok: true } | { ok: false; error: string };
@@ -100,9 +105,31 @@ function compact(o: Record<string, string>): Record<string, string> {
 export async function submitContact(
   payload: ContactPayload
 ): Promise<SubmitResult> {
-  // Honeypot: report success so bots don't learn they were caught, but
-  // send nothing anywhere.
-  if (payload.company) return { ok: true };
+  /*
+   * Honeypot: report success so bots don't learn they were caught, but
+   * send nothing anywhere.
+   *
+   * This is the one path in this file that discards a submission
+   * without telling anybody, which makes a false positive here the most
+   * expensive bug on the site — a real lead, thrown away, behind a green
+   * tick. It has happened once already, to browser autofill; the field's
+   * markup carries the rule that stops it recurring.
+   *
+   * So it says so in development, where somebody is watching. Never in
+   * production: the silence there is the entire mechanism.
+   */
+  if (payload.referralNote) {
+    if (process.env.NODE_ENV !== "production") {
+      console.warn(
+        "[contact] honeypot field is not empty — this submission was " +
+          "DISCARDED and nothing was sent to Web3Forms or the relay. " +
+          "If you did not type in it, something is filling it for you " +
+          "(browser autofill, a password manager, an extension). That is " +
+          "a bug, not a caught bot: see components/Contact.tsx."
+      );
+    }
+    return { ok: true };
+  }
 
   const fields = compact({
     name: scrub(payload.name, 120),

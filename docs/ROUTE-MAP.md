@@ -8,7 +8,7 @@ Regenerate with `npm run routes`. The build runs it too, and **fails if
 any internal link points at a page that was not built**, so this file
 cannot quietly drift from the site it describes.
 
-_Last generated: 2026-09-21 · 22 pages · 801 distinct links_
+_Last generated: 2026-09-22 · 21 pages · 822 distinct links_
 
 ## What this covers
 
@@ -16,14 +16,14 @@ _Last generated: 2026-09-21 · 22 pages · 801 distinct links_
 | --- | --- |
 | page | 556 |
 | phone | 122 |
-| external | 74 |
+| external | 95 |
 | email | 22 |
 | text message | 22 |
 | same page | 4 |
 | file | 1 |
 
 Counts are **distinct** destination-and-wording pairs per page. The nav
-and footer repeat on all 22 pages; they are listed once per page and
+and footer repeat on all 21 pages; they are listed once per page and
 counted once per page, not once per occurrence.
 
 ## What this does NOT cover
@@ -51,6 +51,7 @@ Every external origin this site links to, and how many links reach it.
 | --- | --- |
 | https://g.page | 25 |
 | https://www.facebook.com | 23 |
+| https://www.ctlpro.com | 21 |
 | https://www.instagram.com | 21 |
 | https://prequalification.enerbank.com | 3 |
 | https://calendly.com | 1 |
@@ -65,6 +66,7 @@ Every external origin this site links to, and how many links reach it.
 | office@ctlpro.com | `mailto:office@ctlpro.com` | email |
 | Read our Google reviews | `https://g.page/r/CdzPt0LheRXZEAI/review` | external |
 | Google reviews | `https://g.page/r/CdzPt0LheRXZEAI/review` | external |
+| go to ctlpro.com | `https://www.ctlpro.com` | external |
 | CTL Roofing on Facebook | `https://www.facebook.com/ctlprola` | external |
 | CTL Roofing on Instagram | `https://www.instagram.com/ctlpro` | external |
 | CTL Roofing — home | `/` | page |
@@ -120,6 +122,7 @@ Every external origin this site links to, and how many links reach it.
 | --- | --- | --- |
 | office@ctlpro.com | `mailto:office@ctlpro.com` | email |
 | Google reviews | `https://g.page/r/CdzPt0LheRXZEAI/review` | external |
+| go to ctlpro.com | `https://www.ctlpro.com` | external |
 | CTL Roofing on Facebook | `https://www.facebook.com/ctlprola` | external |
 | CTL Roofing on Instagram | `https://www.instagram.com/ctlpro` | external |
 | CTL Roofing — home | `/` | page |
@@ -158,6 +161,7 @@ Every external origin this site links to, and how many links reach it.
 | --- | --- | --- |
 | office@ctlpro.com | `mailto:office@ctlpro.com` | email |
 | Google reviews | `https://g.page/r/CdzPt0LheRXZEAI/review` | external |
+| go to ctlpro.com | `https://www.ctlpro.com` | external |
 | CTL Roofing on Facebook | `https://www.facebook.com/ctlprola` | external |
 | CTL Roofing on Instagram | `https://www.instagram.com/ctlpro` | external |
 | CTL Roofing — home | `/` | page |
@@ -202,6 +206,7 @@ Every external origin this site links to, and how many links reach it.
 | Or email the office → | `mailto:office@ctlpro.com` | email |
 | office@ctlpro.com | `mailto:office@ctlpro.com` | email |
 | Google reviews | `https://g.page/r/CdzPt0LheRXZEAI/review` | external |
+| go to ctlpro.com | `https://www.ctlpro.com` | external |
 | CTL Roofing on Facebook | `https://www.facebook.com/ctlprola` | external |
 | CTL Roofing on Instagram | `https://www.instagram.com/ctlpro` | external |
 | CTL Roofing — home | `/` | page |
@@ -242,6 +247,7 @@ Every external origin this site links to, and how many links reach it.
 | --- | --- | --- |
 | office@ctlpro.com | `mailto:office@ctlpro.com` | email |
 | Google reviews | `https://g.page/r/CdzPt0LheRXZEAI/review` | external |
+| go to ctlpro.com | `https://www.ctlpro.com` | external |
 | CTL Roofing on Facebook | `https://www.facebook.com/ctlprola` | external |
 | CTL Roofing on Instagram | `https://www.instagram.com/ctlpro` | external |
 | CTL Roofing — home | `/` | page |
@@ -284,6 +290,7 @@ Every external origin this site links to, and how many links reach it.
 | office@ctlpro.com | `mailto:office@ctlpro.com` | email |
 | Open Calendly instead | `https://calendly.com/d/ct7p-3by-878/free-consultation` | external |
 | Google reviews | `https://g.page/r/CdzPt0LheRXZEAI/review` | external |
+| go to ctlpro.com | `https://www.ctlpro.com` | external |
 | CTL Roofing on Facebook | `https://www.facebook.com/ctlprola` | external |
 | CTL Roofing on Instagram | `https://www.instagram.com/ctlpro` | external |
 | CTL Roofing — home | `/` | page |
@@ -329,6 +336,7 @@ Every external origin this site links to, and how many links reach it.
 | As low as 8.99% APR * Traditional installment loan The lo… | `https://prequalification.enerbank.com/apply/loanproduct?sponsorPhoneNumber=8007747598&amp;contractorNumber=198295&amp;loanCode=DEL2622&amp;contractorEmail=rob@ctlpro.com` | external |
 | 12 months * Same-as-cash No payments and no interest for … | `https://prequalification.enerbank.com/apply/loanproduct?sponsorPhoneNumber=8007747598&amp;contractorNumber=198295&amp;loanCode=DEL2625&amp;contractorEmail=rob@ctlpro.com` | external |
 | 9.99% APR * 5 year loan Fixed rate over 60 months. Check … | `https://prequalification.enerbank.com/apply/loanproduct?sponsorPhoneNumber=8007747598&amp;contractorNumber=198295&amp;loanCode=DEL2674&amp;contractorEmail=rob@ctlpro.com` | external |
+| go to ctlpro.com | `https://www.ctlpro.com` | external |
 | CTL Roofing on Facebook | `https://www.facebook.com/ctlprola` | external |
 | CTL Roofing on Instagram | `https://www.instagram.com/ctlpro` | external |
 | CTL Roofing — home | `/` | page |
@@ -373,6 +381,7 @@ Every external origin this site links to, and how many links reach it.
 | --- | --- | --- |
 | office@ctlpro.com | `mailto:office@ctlpro.com` | email |
 | Google reviews | `https://g.page/r/CdzPt0LheRXZEAI/review` | external |
+| go to ctlpro.com | `https://www.ctlpro.com` | external |
 | CTL Roofing on Facebook | `https://www.facebook.com/ctlprola` | external |
 | CTL Roofing on Instagram | `https://www.instagram.com/ctlpro` | external |
 | CTL Roofing — home | `/` | page |
@@ -413,6 +422,7 @@ Every external origin this site links to, and how many links reach it.
 | --- | --- | --- |
 | office@ctlpro.com | `mailto:office@ctlpro.com` | email |
 | Google reviews | `https://g.page/r/CdzPt0LheRXZEAI/review` | external |
+| go to ctlpro.com | `https://www.ctlpro.com` | external |
 | CTL Roofing on Facebook | `https://www.facebook.com/ctlprola` | external |
 | CTL Roofing on Instagram | `https://www.instagram.com/ctlpro` | external |
 | CTL Roofing — home | `/` | page |
@@ -456,6 +466,7 @@ Every external origin this site links to, and how many links reach it.
 | --- | --- | --- |
 | office@ctlpro.com | `mailto:office@ctlpro.com` | email |
 | Google reviews | `https://g.page/r/CdzPt0LheRXZEAI/review` | external |
+| go to ctlpro.com | `https://www.ctlpro.com` | external |
 | CTL Roofing on Facebook | `https://www.facebook.com/ctlprola` | external |
 | CTL Roofing on Instagram | `https://www.instagram.com/ctlpro` | external |
 | CTL Roofing — home | `/` | page |
@@ -495,6 +506,7 @@ Every external origin this site links to, and how many links reach it.
 | Read the reviews on Google | `https://g.page/r/CdzPt0LheRXZEAI/review` | external |
 | Read and leave reviews on Google | `https://g.page/r/CdzPt0LheRXZEAI/review` | external |
 | Google reviews | `https://g.page/r/CdzPt0LheRXZEAI/review` | external |
+| go to ctlpro.com | `https://www.ctlpro.com` | external |
 | CTL Roofing on Facebook | `https://www.facebook.com/ctlprola` | external |
 | See the page | `https://www.facebook.com/ctlprola/reviews` | external |
 | Read the recommendations on Facebook | `https://www.facebook.com/ctlprola/reviews` | external |
@@ -537,6 +549,7 @@ Every external origin this site links to, and how many links reach it.
 | --- | --- | --- |
 | office@ctlpro.com | `mailto:office@ctlpro.com` | email |
 | Google reviews | `https://g.page/r/CdzPt0LheRXZEAI/review` | external |
+| go to ctlpro.com | `https://www.ctlpro.com` | external |
 | CTL Roofing on Facebook | `https://www.facebook.com/ctlprola` | external |
 | CTL Roofing on Instagram | `https://www.instagram.com/ctlpro` | external |
 | CTL Roofing — home | `/` | page |
@@ -583,6 +596,7 @@ Every external origin this site links to, and how many links reach it.
 | --- | --- | --- |
 | office@ctlpro.com | `mailto:office@ctlpro.com` | email |
 | Google reviews | `https://g.page/r/CdzPt0LheRXZEAI/review` | external |
+| go to ctlpro.com | `https://www.ctlpro.com` | external |
 | CTL Roofing on Facebook | `https://www.facebook.com/ctlprola` | external |
 | CTL Roofing on Instagram | `https://www.instagram.com/ctlpro` | external |
 | CTL Roofing — home | `/` | page |
@@ -627,6 +641,7 @@ Every external origin this site links to, and how many links reach it.
 | --- | --- | --- |
 | office@ctlpro.com | `mailto:office@ctlpro.com` | email |
 | Google reviews | `https://g.page/r/CdzPt0LheRXZEAI/review` | external |
+| go to ctlpro.com | `https://www.ctlpro.com` | external |
 | CTL Roofing on Facebook | `https://www.facebook.com/ctlprola` | external |
 | CTL Roofing on Instagram | `https://www.instagram.com/ctlpro` | external |
 | CTL Roofing — home | `/` | page |
@@ -670,6 +685,7 @@ Every external origin this site links to, and how many links reach it.
 | --- | --- | --- |
 | office@ctlpro.com | `mailto:office@ctlpro.com` | email |
 | Google reviews | `https://g.page/r/CdzPt0LheRXZEAI/review` | external |
+| go to ctlpro.com | `https://www.ctlpro.com` | external |
 | CTL Roofing on Facebook | `https://www.facebook.com/ctlprola` | external |
 | CTL Roofing on Instagram | `https://www.instagram.com/ctlpro` | external |
 | CTL Roofing — home | `/` | page |
@@ -714,6 +730,7 @@ Every external origin this site links to, and how many links reach it.
 | --- | --- | --- |
 | office@ctlpro.com | `mailto:office@ctlpro.com` | email |
 | Google reviews | `https://g.page/r/CdzPt0LheRXZEAI/review` | external |
+| go to ctlpro.com | `https://www.ctlpro.com` | external |
 | CTL Roofing on Facebook | `https://www.facebook.com/ctlprola` | external |
 | CTL Roofing on Instagram | `https://www.instagram.com/ctlpro` | external |
 | CTL Roofing — home | `/` | page |
@@ -758,6 +775,7 @@ Every external origin this site links to, and how many links reach it.
 | --- | --- | --- |
 | office@ctlpro.com | `mailto:office@ctlpro.com` | email |
 | Google reviews | `https://g.page/r/CdzPt0LheRXZEAI/review` | external |
+| go to ctlpro.com | `https://www.ctlpro.com` | external |
 | CTL Roofing on Facebook | `https://www.facebook.com/ctlprola` | external |
 | CTL Roofing on Instagram | `https://www.instagram.com/ctlpro` | external |
 | CTL Roofing — home | `/` | page |
@@ -803,6 +821,7 @@ Every external origin this site links to, and how many links reach it.
 | --- | --- | --- |
 | office@ctlpro.com | `mailto:office@ctlpro.com` | email |
 | Google reviews | `https://g.page/r/CdzPt0LheRXZEAI/review` | external |
+| go to ctlpro.com | `https://www.ctlpro.com` | external |
 | CTL Roofing on Facebook | `https://www.facebook.com/ctlprola` | external |
 | CTL Roofing on Instagram | `https://www.instagram.com/ctlpro` | external |
 | NWS Lake Charles | `https://www.weather.gov/lch/` | external |
@@ -849,6 +868,7 @@ Every external origin this site links to, and how many links reach it.
 | office@ctlpro.com | `mailto:office@ctlpro.com` | email |
 | What customers say on Google → | `https://g.page/r/CdzPt0LheRXZEAI/review` | external |
 | Google reviews | `https://g.page/r/CdzPt0LheRXZEAI/review` | external |
+| go to ctlpro.com | `https://www.ctlpro.com` | external |
 | CTL Roofing on Facebook | `https://www.facebook.com/ctlprola` | external |
 | CTL Roofing on Instagram | `https://www.instagram.com/ctlpro` | external |
 | CTL Roofing — home | `/` | page |
@@ -890,6 +910,7 @@ Every external origin this site links to, and how many links reach it.
 | --- | --- | --- |
 | office@ctlpro.com | `mailto:office@ctlpro.com` | email |
 | Google reviews | `https://g.page/r/CdzPt0LheRXZEAI/review` | external |
+| go to ctlpro.com | `https://www.ctlpro.com` | external |
 | CTL Roofing on Facebook | `https://www.facebook.com/ctlprola` | external |
 | CTL Roofing on Instagram | `https://www.instagram.com/ctlpro` | external |
 | CTL Roofing — home | `/` | page |
@@ -927,6 +948,7 @@ Every external origin this site links to, and how many links reach it.
 | --- | --- | --- |
 | office@ctlpro.com | `mailto:office@ctlpro.com` | email |
 | Google reviews | `https://g.page/r/CdzPt0LheRXZEAI/review` | external |
+| go to ctlpro.com | `https://www.ctlpro.com` | external |
 | CTL Roofing on Facebook | `https://www.facebook.com/ctlprola` | external |
 | CTL Roofing on Instagram | `https://www.instagram.com/ctlpro` | external |
 | Download it instead | `/ctl/video/job-walkthrough.mp4` | file |

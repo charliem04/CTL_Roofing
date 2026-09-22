@@ -54,6 +54,13 @@ CREATE TABLE IF NOT EXISTS leads (
   -- 'sent'     the CRM accepted it
   -- 'failed'   the CRM refused or was unreachable; the retry will pick it up
   -- 'disabled' no CRM is configured yet, so there is nothing to send to
+  -- 'skipped'  a CRM is configured and this row is not one it takes — a
+  --            job application, with CRM_FORWARD_APPLICATIONS off. A
+  --            decision, not a backlog: the retry sweep leaves these
+  --            alone, so switching that variable on does not backfill by
+  --            itself. To send them anyway:
+  --              UPDATE leads SET crm_status='pending'
+  --               WHERE crm_status='skipped';
   crm_status    TEXT NOT NULL DEFAULT 'pending',
   crm_attempts  INTEGER NOT NULL DEFAULT 0,
   crm_error     TEXT,

@@ -99,13 +99,20 @@ Pages build with no check in front of it.
 A workflow running `npm run build` and `npm run check` on pull requests and on
 pushes to `main` would close this.
 
-### 8. `npm run lint` does nothing, and there are no tests
+### 8. `npm run lint` does nothing, and the site has no tests
 
 No eslint config and no eslint dependency, so `next lint` would offer to set one
-up rather than lint. No `*.test.*` or `*.spec.*` anywhere, and no test runner.
+up rather than lint. Nothing under `ctl-roofing/` is covered by a test.
 
 TypeScript is `strict: true` and `next build` type-checks, so types *are*
 enforced — but there is no standalone `typecheck` script.
+
+Partly closed on the Worker side: `workers/lead-relay` has `npm test`, which
+runs `test/crm.test.ts` on node's own test runner with no framework and no
+build step. It covers the CRM adapters — the property mapping, and the
+delivery flow against a stand-in CRM told to answer 409, 429 or 401 — because
+that is code whose failure mode is a lead silently not arriving somewhere
+nobody is looking yet.
 
 ### 9. Repo hygiene — **closed**
 
@@ -158,10 +165,28 @@ Configuration the code already expects. In dependency order:
    `EXPORT_TOKEN`, deploy. `CRM_WEBHOOK_URL` may stay unset: leads are stored as
    `crm_status='disabled'` and the first sweep after it is set delivers the
    whole backlog.
-3. **CRM** — `wrangler secret put CRM_WEBHOOK_URL` once chosen. Most roofing
-   CRMs will not take raw JSON, so budget a Zapier/Make account as the adapter.
-   The single function to adapt is `crmPayload()` in
-   `workers/lead-relay/src/index.ts`.
+3. **CRM** — **partly built.** Forwarding is now an adapter chosen by
+   `CRM_ADAPTER`, in `workers/lead-relay/src/crm/`:
+
+   - `generic` (still the default, behaviour unchanged) — the flat JSON POST to
+     `CRM_WEBHOOK_URL` that a Zapier/Make catch hook wants. Most roofing CRMs
+     will not take raw JSON, so budget that account if this is the path taken.
+   - `hubspot` — **written and unit-tested, not yet run against a real
+     account.** HubSpot Free as the demo CRM: contacts through the CRM Objects
+     API, deduplicated on email with a phone-number search as the fallback, a
+     409 treated as an update rather than a failure, and a 429 that does not
+     spend one of the six retry attempts. Job applications are held back from
+     the sales CRM unless `CRM_FORWARD_APPLICATIONS` says otherwise.
+
+   **What it still needs:** a HubSpot account in CTL's name, a private app
+   token in `CRM_AUTH_TOKEN`, four custom properties created by hand, and the
+   privacy policy naming HubSpot as a processor. Runbook, scopes, property
+   names and the end-to-end verification: **`docs/HUBSPOT-SETUP.md`**. Nothing
+   here is on the critical path — with no CRM configured, leads are stored
+   `disabled` and the first sweep after the token exists delivers the backlog.
+
+   Moving to a roofing CRM later is one new file in `src/crm/` and two
+   variables; `/export.csv` carries the history across.
 4. **Careers** — per the decision taken. If the Worker stays: `TURNSTILE_SECRET`,
    `NOTIFY_WEBHOOK` → the relay's `/application`, `RELAY_INGEST_SECRET` matching
    the relay's `INGEST_SECRET`, `IP_HASH_SALT`, and **`npm run retention`
@@ -242,6 +267,18 @@ an object in R2:
 ```bash
 curl -H "Authorization: Bearer $EXPORT_TOKEN" https://<relay>/export.csv
 ```
+
+The Worker's own checks, which need no credentials:
+
+```bash
+cd workers/lead-relay && npm run typecheck && npm test
+cd ../careers-upload && npm run typecheck
+```
+
+If a CRM is configured, `crm_status` in that CSV is the column that matters —
+`sent` is the only value that means a lead reached it. `docs/HUBSPOT-SETUP.md`
+§5 is the full walk-through for HubSpot, including the second submission with
+the same email address that proves deduplication works.
 
 ---
 

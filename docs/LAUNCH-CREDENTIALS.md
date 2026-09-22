@@ -51,7 +51,7 @@ minutes each once he is sitting there.
 | **Budget alert on that key, set the same day** | — | This is the only thing on the site that bills per visitor |
 | Place ID, verified against the real listing | `NEXT_PUBLIC_GOOGLE_PLACE_ID` | A wrong ID shows **a different business's reviews under CTL's name**. Verify, do not assume |
 | Cloudflare Turnstile site + secret pair | `NEXT_PUBLIC_TURNSTILE_SITE_KEY` + Worker secret | The careers Worker refuses every upload rather than running open |
-| GitHub organisation owned by CTL, + an account for each person who edits content | CMS sign-in | Sveltia requires a GitHub account with write access per editor. Real friction for an office — budget time to set it up properly |
+| Sanity project owned by CTL, + a Sanity account invited for each person who edits content | gallery sign-in | An email invite per editor, free on Sanity's starter plan. This replaced a GitHub account with repository write access per editor, which was the friction that kept the gallery unedited |
 | CRM account + its webhook or Zapier/Make URL | `CRM_WEBHOOK_URL` (Worker secret) | Supported blank state: leads still stored, delivered in bulk the first time it is set |
 | Analytics account (Plausible paid / GA4 free) | `NEXT_PUBLIC_PLAUSIBLE_DOMAIN` | No analytics. Banner still behaves correctly |
 | Call-tracking provider, if adopted | `client.config.ts → tracking.dniScriptUrl` | Every number on the site stays the real one, which is the correct default |
@@ -71,8 +71,9 @@ No client involvement. Listed so nothing is forgotten at wiring time.
 | `IP_HASH_SALT` | careers-upload | Unset = no IP-derived value stored at all. Safe, but loses the "same source" signal |
 | `NOTIFY_WEBHOOK` | careers-upload | Point at the relay's `/application` route |
 | D1 `database_id` | `workers/lead-relay/wrangler.toml` | **Currently a placeholder string.** `wrangler d1 create ctl-leads`, paste the real id, `npm run schema` |
-| GitHub OAuth app client ID + secret | the `sveltia-cms-auth` Worker | Plus `ALLOWED_DOMAINS` |
-| `CMS_AUTH_URL` | Pages build env | Build-time only — **not** `NEXT_PUBLIC_`. Read by `scripts/cms.mjs` |
+| `SANITY_PROJECT_ID`, `SANITY_DATASET` | Pages build env | Public identifiers, in every gallery photo URL. Build-time only |
+| `SANITY_READ_TOKEN` | Pages build env, **encrypted** | Only if the dataset is private. Viewer role, read-only. **Not** `NEXT_PUBLIC_` — `scripts/harden.mjs` fails the build if it reaches `out/` |
+| Cloudflare Pages deploy hook URL | Sanity webhook | The whole reason a publish appears on the site. Treat the URL as a secret: anyone holding it can trigger builds |
 
 ---
 
@@ -90,7 +91,9 @@ NEXT_PUBLIC_TURNSTILE_SITE_KEY
 NEXT_PUBLIC_GOOGLE_PLACES_KEY
 NEXT_PUBLIC_GOOGLE_PLACE_ID
 NEXT_PUBLIC_PLAUSIBLE_DOMAIN
-CMS_AUTH_URL
+SANITY_PROJECT_ID
+SANITY_DATASET
+SANITY_READ_TOKEN
 ```
 
 Pages build settings, since the Next project is not at the repo root:

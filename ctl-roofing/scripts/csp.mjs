@@ -9,6 +9,12 @@
  *  policy would either omit them (breaking the feature in production
  *  and nowhere else) or allow them unconditionally (pointless).
  *
+ *  The drift check at the bottom is the part that keeps this honest:
+ *  every https origin that appears anywhere in out/ has to be covered
+ *  by the policy or declared below as something the browser never
+ *  fetches. Adding an embed, or a CDN for the gallery photographs,
+ *  fails the build until somebody decides which of those it is.
+ *
  *  ── WHY script-src CARRIES 'unsafe-inline', WHICH IS NOT IDEAL ──────
  *
  *  Next puts eight inline <script> blocks on every page — the flight
@@ -162,7 +168,14 @@ export function buildCsp(env = process.env) {
     // reviewer avatars Google's API returns; mapservices for the radar
     // frames on /storm-damage/, which are transparent PNGs drawn over
     // our own map rather than a third-party basemap.
-    "img-src 'self' data: https://*.googleusercontent.com https://mapservices.weather.noaa.gov",
+    //
+    // cdn.sanity.io is every photograph in the gallery. It is a fetch
+    // origin and not a link target: the <img> elements on /gallery/ and
+    // in the home band point straight at it, at a width and a crop
+    // chosen by scripts/gallery.mjs. Nothing else on the site loads
+    // from it — no script, no font, no stylesheet — which is why it is
+    // here and in no other directive.
+    "img-src 'self' data: https://*.googleusercontent.com https://mapservices.weather.noaa.gov https://cdn.sanity.io",
     "font-src 'self'", // Fontsource bundles them, nothing external
     "media-src 'self'", // the job walkthrough mp4
     `connect-src ${connect.join(" ")}`,
@@ -186,14 +199,17 @@ function originsInBuild(dir = "out") {
     for (const name of readdirSync(d)) {
       const p = join(d, name);
       if (statSync(p).isDirectory()) {
-        // out/admin is the gallery CMS, and it is governed by its own
-        // policy rather than this one — see scripts/cms.mjs, which
-        // writes a /admin/* rule and runs the same drift check against
-        // it. Scanning it here would report the CMS's origins as
-        // uncovered by a policy that is not supposed to cover them, and
-        // the only way to quiet that would be to allow a CDN and the
-        // GitHub API across the whole site.
-        if (p === join("out", "admin")) continue;
+        // Every directory in the output, with no exceptions.
+        //
+        // There used to be one: out/admin held the git-backed CMS and
+        // had its own, looser policy written by scripts/cms.mjs — a CDN
+        // for the editor bundle and the GitHub API to commit through.
+        // Excluding it from this scan was the price of not widening the
+        // site policy to cover a page one person used.
+        //
+        // The editor is hosted by Sanity now and serves from its own
+        // domain, so this site ships no admin page, needs no second
+        // policy, and this scan covers everything it publishes.
         walk(p);
         continue;
       }

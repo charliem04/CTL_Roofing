@@ -84,12 +84,17 @@ Nothing links to them and the sitemap omits them until that flips.
 
 ## 2a. The gallery is now editable without a developer
 
-Photos live in `content/gallery.json`, written by the CMS at `/admin/`
-rather than by editing TypeScript. `scripts/gallery.mjs` runs before
-every build: it reads each image's real dimensions out of the file
-header, records whether a thumbnail exists, and fails the build — naming
-the photo — on a missing alt text, a duplicate, a missing file, or an
-unknown category.
+Photos live in a Sanity project, edited at a hosted studio and signed
+into with a Sanity account — no GitHub account, and nothing to install.
+`scripts/gallery.mjs` runs before every build: it fetches the published
+gallery, writes it to `content/gallery.generated.json` with CDN image
+URLs and the dimensions Sanity measured, and fails the build — naming
+the photo — on a missing alt text, a duplicate, an unknown category, or
+the studio's category list drifting from the site's own.
+
+Publishing in the studio fires a webhook at a Cloudflare Pages deploy
+hook, which rebuilds the site. Nothing appears without a deploy; this is
+a static export and there is no server to render a change on request.
 
 Full walkthrough, including what to tell whoever maintains it:
 `docs/GALLERY-CMS.md`.
@@ -97,8 +102,9 @@ Full walkthrough, including what to tell whoever maintains it:
 ## 3. Images — `/public/ctl`
 - [x] Logo, hero, four service photos, metal panel, team, owner,
       materials — all real CTL job photography
-- [x] Gallery: 40 photographs across five categories, in
-      `content/gallery.ts`, feeding both the home band and `/gallery/`
+- [x] Gallery: 40 photographs across five categories, in Sanity and
+      mirrored to `content/gallery.generated.json`, feeding both the
+      home band and `/gallery/`
 - [x] OG image (1200×630, `og.jpg`)
 - [x] Favicon — `app/icon.png`, the CTL letterform on the wordmark
       periwinkle with the gold bar; legible at 32px
@@ -115,14 +121,17 @@ Full walkthrough, including what to tell whoever maintains it:
 - [ ] `NEXT_PUBLIC_TURNSTILE_SITE_KEY` — before `/careers/` goes live.
       It is the only layer that tells a person from a script.
 - [ ] `NEXT_PUBLIC_PLAUSIBLE_DOMAIN` — or leave empty for no analytics
-- [ ] `CMS_AUTH_URL` — the gallery CMS sign-in relay. NOT a
-      `NEXT_PUBLIC_` variable: it is read at build time and written into
-      the CMS config, never compiled into a page.
+- [ ] `SANITY_PROJECT_ID`, `SANITY_DATASET` — the gallery. Public
+      identifiers; they appear in every photo URL.
+- [ ] `SANITY_READ_TOKEN` — only if the dataset is private. NOT a
+      `NEXT_PUBLIC_` variable, and never rename it to one: it is read at
+      build time by a Node script and never compiled into a page.
+      `scripts/harden.mjs` fails the build if it reaches `out/`.
       See `docs/GALLERY-CMS.md`.
 - [ ] Mirror these in Cloudflare Pages → Settings → Environment
       variables, for Production *and* Preview
 
-## 4a. The three Workers
+## 4a. The two Workers
 
 The site is a static export, so anything that needs a server is a
 Worker. Each has its own README with the exact commands.
@@ -136,9 +145,12 @@ Worker. Each has its own README with the exact commands.
       chosen. `CRM_WEBHOOK_URL` unset is a supported state: leads are
       still captured, and the first retry sweep after it is set delivers
       the whole backlog.
-- [ ] **The CMS OAuth relay** — a published Worker
-      (`sveltia/sveltia-cms-auth`) that holds the GitHub client secret
-      so `/admin/` can sign in. Set `ALLOWED_DOMAINS`.
+There used to be a third: a published `sveltia/sveltia-cms-auth` Worker
+holding a GitHub OAuth client secret so `/admin/` could sign in. The
+gallery no longer signs in with GitHub, so if that Worker was ever
+deployed, delete it and its GitHub OAuth app — a live OAuth relay with a
+valid client secret and nothing using it is a credential nobody is
+watching. See `docs/GALLERY-CMS.md`.
 
 The careers Worker and the relay share one secret: `RELAY_INGEST_SECRET`
 on the first must equal `INGEST_SECRET` on the second, or applications
@@ -225,7 +237,8 @@ from production, which defeats the point of checking it there.
 - [ ] `NEXT_PUBLIC_PLAUSIBLE_DOMAIN` — `ctlpro.com`, or empty for none
 - [ ] `NEXT_PUBLIC_LEAD_WEBHOOK_URL` — the relay's `/lead` route
 - [ ] `NEXT_PUBLIC_CAREERS_ENDPOINT`, `NEXT_PUBLIC_TURNSTILE_SITE_KEY`
-- [ ] `CMS_AUTH_URL` — build-time only, for `/admin/`
+- [ ] `SANITY_PROJECT_ID`, `SANITY_DATASET`, and `SANITY_READ_TOKEN`
+      if the dataset is private — build-time only, for the gallery
 
 ### 3. Check the preview
 
@@ -236,8 +249,8 @@ from production, which defeats the point of checking it there.
       `curl -H "Authorization: Bearer $EXPORT_TOKEN" https://<relay>/export.csv`
 - [ ] Apply through `/careers/` with a real PDF, and confirm both the
       object in R2 and the row in the relay
-- [ ] Open `/admin/`, sign in with GitHub, change a caption and save —
-      then confirm the rebuild lands it on `/gallery/`
+- [ ] Open the studio, change a caption and publish — then confirm the
+      deploy hook fired, the build ran, and the change is on `/gallery/`
 - [ ] Book a real slot through the inline calendar
 - [ ] Decline the analytics banner, then confirm no Plausible request
       in the Network tab; accept, and confirm it loads

@@ -92,9 +92,9 @@ does not cover, `scripts/harden.mjs` scans for leaked secrets and stray
 `.env`/source-map/`.git` files, `scripts/check.mjs` catches inherited frontend
 defaults.
 
-All of it runs only when somebody types `npm run build`. Nothing gates a commit
-— including the CMS's direct-to-`main` commits from `/admin/`, which trigger a
-Pages build with no check in front of it.
+All of it runs only when somebody types `npm run build`. Nothing gates a commit,
+and nothing gates a deploy hook firing: a publish in the gallery studio triggers
+a Pages build with no check in front of it other than the build itself.
 
 A workflow running `npm run build` and `npm run check` on pull requests and on
 pushes to `main` would close this.
@@ -183,23 +183,31 @@ and should be named rather than discovered.
 **Move the site to a client-owned repo first.** The CMS commits directly to
 `main` on whatever repo it points at, and today that is a personal account. Then:
 
-- update `backend.repo` in `public/admin/config.yml`
+- ~~update `backend.repo` in `public/admin/config.yml`~~ — gone with the CMS
 - re-point the `sveltia-cms-auth` Worker's `ALLOWED_DOMAINS`
 - repo hygiene (finding 9) is done: `ctl_pictures/` moved to `assets/source-photos/`, `graphify-out/` and `.idea/` are untracked and gitignored, the stale root `README-DEPLOY.md` was deleted, and `package.json` was renamed to `ctl-roofing`.
 
-**Then extend the CMS beyond the gallery.** The pattern already exists:
-`content/gallery.json` is CMS-written, read through `lib/content.ts`, and
-validated by `scripts/gallery.mjs`, which fails the build on a missing alt text,
-a duplicate, a missing file or an unknown category. Repeat it for `team`,
-`testimonials`, `caseStudies`, `careers.roles` and `financing` — convert each
-from `.ts` to `.json`, add a Sveltia collection, and leave the loader boundary
-in `lib/content.ts` unchanged so the pages do not move.
+**The gallery has moved to Sanity — done.** The friction named below is what
+decided it: Sveltia sign-in needs a GitHub account with write access to the
+repository per editor, and for a non-technical office that is real overhead. It
+is why the gallery sat unedited. A Sanity account is an email invite, so the
+first bullet above — updating `backend.repo` — and the second — re-pointing the
+`sveltia-cms-auth` Worker — are both moot. That Worker and its GitHub OAuth app
+should now be **deleted**; see `docs/GALLERY-CMS.md`.
 
-Worth naming: Sveltia sign-in needs a GitHub account with write access per
-editor. For a non-technical office that is real overhead, and it is the reason a
-hosted CMS is the alternative. Extending Sveltia is the chosen path, so the
-mitigation is creating and documenting those accounts properly rather than
-pretending the friction is not there.
+What survived the move, deliberately: the loader boundary in `lib/content.ts` is
+untouched, the categories are still a TypeScript union the CMS cannot add to,
+`scripts/gallery.mjs` still fails the build naming the photo on a missing alt
+text, a duplicate or an unknown category, and the content is still committed to
+git — as `content/gallery.generated.json` — so every change keeps an author, a
+timestamp and a diff.
+
+**Then extend it beyond the gallery.** The pattern now exists in Sanity:
+a schema in `studio/schemas/`, a build-time fetch, and a loader boundary that
+did not move. Repeat it for `team`, `testimonials`, `caseStudies`,
+`careers.roles` and `financing` — one at a time, and only once the gallery has
+been through a few real edits and a few real deploys. Doing them all at once
+makes the failure surface unreadable.
 
 ### C. Close the gaps
 
@@ -216,8 +224,9 @@ pretending the friction is not there.
 - refresh the Facebook snapshot and its date (finding 13)
 - `grep -rn "TODO(client)"` must return zero — two remain
   (`app/layout.tsx:4`, `client.config.ts:96`)
-- handover training: walk the client's editor through `/admin/`, where leads
-  land, and how to pull the CSV. A short screen recording beats a document here
+- handover training: walk the client's editor through the gallery studio at
+  `<hostname>.sanity.studio`, where leads land, and how to pull the CSV. A short
+  screen recording beats a document here
 
 ---
 

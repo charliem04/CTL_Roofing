@@ -152,10 +152,6 @@ Every external origin this site links to, and how many links reach it.
 | Call | `tel:+13376586596` | phone |
 | Text | `sms:+13376586596` | text message |
 
-### `/admin/`
-
-No links.
-
 ### `/areas/`
 
 | Control | Goes to | Kind |

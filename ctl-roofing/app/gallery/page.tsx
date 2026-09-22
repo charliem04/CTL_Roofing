@@ -1,6 +1,6 @@
 import { client } from "@/client.config";
 import { getGallery } from "@/lib/content";
-import { pageMetadata } from "@/lib/meta";
+import { absoluteUrl, pageMetadata } from "@/lib/meta";
 import { PageHero } from "@/components/PageHero";
 import { GalleryBrowser } from "@/components/GalleryBrowser";
 import { CtaBand } from "@/components/CtaBand";
@@ -25,7 +25,7 @@ export default function GalleryPage() {
     name: `${client.businessName} — recent work`,
     description: meta.description,
     url: `${client.siteUrl}${meta.path}`,
-    image: shots.slice(0, 12).map((s) => `${client.siteUrl}${s.src}`),
+    image: shots.slice(0, 12).map((s) => absoluteUrl(s.src)),
   };
 
   return (

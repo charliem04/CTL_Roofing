@@ -1,114 +1,189 @@
 # The gallery CMS
 
 The gallery at `/gallery/`, and the handful of photos on the home page,
-are edited from **`https://ctlpro.com/admin/`** — a sign-in with GitHub,
-a list of photos, and a save button. No deploy, no editor, no developer.
+are edited at **`https://ctl-roofing.sanity.studio`** — a sign-in with a
+Sanity account, a list of photos you can drag into order, and a Publish
+button. No deploy, no editor, no developer, and no GitHub account.
 
-This document is the one-time setup, and then the day-to-day.
+This document is the one-time setup, then the day-to-day, then what to
+do when something goes wrong.
 
 ---
 
 ## How it works, in one paragraph
 
-The editor is a git-backed CMS. Saving commits straight to this
-repository — the photo into `ctl-roofing/public/ctl/gallery/`, the entry
-into `ctl-roofing/content/gallery.json` — and Cloudflare Pages rebuilds
-the site from that commit. So the gallery is version-controlled like
-everything else: every change has an author, a timestamp and a diff, any
-of it can be reverted, and there is no database to back up or keep
-running. The cost is the wait for a rebuild, which is a minute or two.
+The photographs live in a Sanity project. Publishing in the studio fires
+a webhook at a Cloudflare Pages **deploy hook**, which rebuilds the
+site; the build fetches the published gallery, writes it into
+`ctl-roofing/content/gallery.generated.json`, and renders it. The images
+themselves are served from Sanity's CDN at a size and crop the build
+asks for, so a 12MB phone photo is no longer a 12MB download.
 
-**There is no separate password.** Access is GitHub access: anyone with
-write permission on this repository can edit the gallery, and nobody
-else can. Removing someone's GitHub access removes their CMS access in
-the same motion.
+**Nothing appears without a rebuild.** This site is a static export —
+there is no server to render a change on request — so the gap between
+Publish and the change being live is one Cloudflare build, a minute or
+two. That is the trade for a site that costs nothing to run and cannot
+be taken down by a database.
+
+The generated file is committed to git, which means the gallery still
+has an author, a timestamp and a diff for every change, and would
+survive the Sanity project being lost. That was the best thing about the
+CMS this replaced and it did not have to be given up.
+
+### Why this replaced the old editor
+
+The gallery used to be edited at `ctlpro.com/admin/` by a git-backed CMS
+that committed straight to this repository. It worked, and it is gone
+for one reason: signing in meant a **GitHub account with write access to
+the repository, per editor**. That is a real thing to ask of a roofing
+office, and the gallery went unedited because of it. A Sanity account is
+an email invite.
 
 ---
 
 ## One-time setup
 
-The CMS signs in with GitHub, and GitHub's OAuth requires a *client
-secret* that must never be in a web page. So a tiny Cloudflare Worker
-holds the secret and performs the token exchange. It is about fifteen
-minutes of work, once.
+About half an hour, once.
 
-### 1. Create the GitHub OAuth app
+### 1. Create the Sanity project
 
-GitHub → **Settings → Developer settings → OAuth Apps → New OAuth App**.
+At [sanity.io/manage](https://www.sanity.io/manage) → **Create new
+project**. Name it `CTL Roofing`, dataset `production`.
+
+The project should be **owned by CTL's own Sanity organisation**, not by
+a developer's personal account — the same rule as the GitHub repository.
+Moving it later is possible and is one more thing to remember.
+
+Note the **Project ID** from the project's dashboard. It is public: it
+appears in the URL of every photograph the site serves.
+
+### 2. Configure and deploy the studio
+
+The studio is in `studio/` in this repository.
+
+```bash
+cd studio
+cp .env.example .env        # fill in SANITY_STUDIO_PROJECT_ID
+npm install
+npm run dev                 # http://localhost:3333, to look at it
+npm run deploy              # publishes to <hostname>.sanity.studio
+```
+
+`npm run deploy` asks for a hostname the first time. `ctl-roofing` gives
+`https://ctl-roofing.sanity.studio`, which is the URL the office uses.
+
+### 3. Import the forty photographs
+
+Only for a new, empty project. This is the one-off that moves the
+existing gallery in, with its alt text exactly as it was written.
+
+```bash
+cd studio
+# add SANITY_IMPORT_TOKEN to .env — sanity.io/manage → API → Tokens,
+# Editor role
+npm run import -- --dry-run   # lists what it would upload
+npm run import
+```
+
+It refuses to run if the gallery already has photos in it, so it cannot
+quietly overwrite a month of edits.
+
+Then **delete the token** from `.env` and revoke it at sanity.io/manage.
+It is a write credential and the import is over.
+
+Open the studio, check the order, press **Publish**.
+
+### 4. Tell the site where the gallery is
+
+In **Cloudflare Pages → the `ctl-roofing` project → Settings →
+Environment variables**, for **Production and Preview both**:
+
+```
+SANITY_PROJECT_ID = <the project id from step 1>
+SANITY_DATASET    = production
+```
+
+If the dataset is private (sanity.io/manage → API → **Dataset
+visibility**), also add, as an **encrypted** variable:
+
+```
+SANITY_READ_TOKEN = <a Viewer-role token>
+```
+
+None of these is `NEXT_PUBLIC_`, and the token must never be renamed to
+one. `NEXT_PUBLIC_` means "compile this into the JavaScript the browser
+downloads", which for a read token would publish read access to the
+whole dataset. `scripts/harden.mjs` fails the build if the token's value
+— or anything shaped like a Sanity token — reaches `out/`.
+
+Until `SANITY_PROJECT_ID` is set, the build uses the committed
+`content/gallery.generated.json` and says so in the log. The site is
+correct; it just cannot see anything published since that file was
+written.
+
+### 5. Wire Publish to a rebuild
+
+Two halves. Both are needed, and the gap between them is the single most
+common reason for "I published and nothing happened".
+
+**The deploy hook**, in Cloudflare Pages → the project → **Settings →
+Builds & deployments → Deploy hooks** → *Add deploy hook*:
 
 | Field | Value |
 | --- | --- |
-| Application name | `CTL Roofing gallery` |
-| Homepage URL | `https://ctlpro.com` |
-| Authorization callback URL | `https://ctl-cms-auth.<account>.workers.dev/callback` |
+| Name | `sanity-gallery` |
+| Branch | `main` |
 
-The callback host is the Worker from step 2 — deploy it first if you'd
-rather have the real URL to paste; GitHub lets you edit it afterwards
-either way.
+It gives you a URL ending in a long random id. **Treat that URL as a
+secret** — anyone holding it can trigger a build at any rate they like.
 
-Note the **Client ID**, then **Generate a new client secret** and keep
-the secret on screen. GitHub shows it once.
+**The webhook**, at sanity.io/manage → the project → **API → Webhooks**
+→ *Create webhook*:
 
-### 2. Deploy the OAuth relay
+| Field | Value |
+| --- | --- |
+| Name | `Rebuild ctlpro.com` |
+| URL | the deploy hook URL from above |
+| Dataset | `production` |
+| Trigger on | **Create, Update, Delete** |
+| Filter | `_type == "gallery"` |
+| Projection | *(leave empty)* |
+| HTTP method | `POST` |
+| API version | `v2021-03-25` |
+| Drafts | **off** |
 
-The relay is a published, single-purpose Worker — it takes the sign-in
-hop and the token exchange, and does nothing else:
+The filter matters. Without it every asset upload and every draft
+keystroke fires a build, and Cloudflare's build minutes are finite.
+Drafts off matters for the same reason: an editor saving as they type
+should not be deploying as they type.
 
-```bash
-git clone https://github.com/sveltia/sveltia-cms-auth
-cd sveltia-cms-auth
-npx wrangler deploy
-```
+### 6. Check it end to end
 
-Then set its three values as **secrets**, not variables, so they are
-never printed in the dashboard or in a build log:
+Change a caption in the studio, press Publish, and watch:
 
-```bash
-npx wrangler secret put GITHUB_CLIENT_ID       # from step 1
-npx wrangler secret put GITHUB_CLIENT_SECRET   # from step 1
-npx wrangler secret put ALLOWED_DOMAINS        # ctlpro.com,www.ctlpro.com
-```
+1. Sanity → API → Webhooks → the webhook's **delivery log** shows a 200.
+2. Cloudflare Pages → Deployments shows a build starting, triggered by
+   *Deploy hook*.
+3. The build log shows `[gallery] fetched 40 photos from sanity:…`.
+4. `/gallery/` shows the new caption.
 
-`ALLOWED_DOMAINS` is what stops the relay being used to sign people into
-some other site. Set it.
-
-Take the Worker's URL from the deploy output, and put it in the GitHub
-OAuth app's callback field with `/callback` on the end if you have not
-already.
-
-### 3. Tell the site where the relay is
-
-In **Cloudflare Pages → the `ctl-roofing` project → Settings →
-Environment variables**, add — to **Production and Preview both**:
-
-```
-CMS_AUTH_URL = https://ctl-cms-auth.<account>.workers.dev
-```
-
-Redeploy. `scripts/cms.mjs` writes that into the CMS config at build
-time and adds it to the `/admin/` security policy.
-
-Until this is set, `/admin/` shows a short setup notice instead of a
-sign-in button that could not work. That is deliberate.
-
-### 4. Check it
-
-Open `https://ctlpro.com/admin/`, sign in with GitHub, change a caption,
-save. Within a couple of minutes the gallery page shows it, and the
-repository has a commit with your name on it.
+If any step is silent, that is the step to fix. Each one is a different
+problem — see Troubleshooting.
 
 ---
 
 ## Day to day
 
-Open `/admin/`, choose **Gallery → Photos**.
+Open the studio, click **Gallery**.
 
-- **Add a photo** — *Add Photo*, upload the image, fill in the fields.
+- **Add a photo** — the *Add item* control at the bottom of the list,
+  then upload the image and fill in the fields.
 - **Reorder** — drag. The order in the list is the order on the page.
-- **Remove** — the delete control on the entry. It leaves the file in
-  the repository and stops showing it, which is recoverable.
+- **Remove** — the item's menu → *Remove*. The image stays in Sanity's
+  asset library, so it is recoverable.
 - **Home page** — tick *Also show on the home page*. Keep it to around
   eight; that band is a taste of the work, not the whole gallery.
+- **Publish** — nothing reaches the site until you press it.
 
 ### The fields
 
@@ -133,17 +208,22 @@ work. Describe the frame:
 The third one is keyword stuffing. Google has been discounting it since
 roughly 2012 and screen-reader users find it useless.
 
+The studio will not let you publish a photo without it. The build checks
+again anyway, and fails naming the photo — see below for why.
+
 ### About photo size
 
-Upload the full-size photo. It is committed as-is and served as-is —
-there is no image pipeline resizing it — so a 12MB phone photo is a
-12MB download for every visitor on the gallery page.
+**Upload the full-size photo.** This is the opposite of the old advice
+and it is now correct: Sanity stores the original and the site asks its
+CDN for a 1600px-wide version for the lightbox and a 640×480 crop for
+the grid. Resizing before uploading throws away quality the site would
+otherwise have on a large screen.
 
-**Aim for the long edge around 1600px and the file under 600KB.** Any
-image tool will do it; on a Mac, Preview → Tools → Adjust Size.
+### Cropping
 
-The CMS refuses anything over 6MB, which is a backstop against an
-accident, not a target to aim at.
+Click a photo, then the crop tool. Drag the circle to set the **focal
+point** — the part that must survive the grid's 4:3 crop. The build
+honours it, so a roofline is not cut out of the tile.
 
 ---
 
@@ -153,16 +233,25 @@ accident, not a target to aim at.
 message naming the photo, if:
 
 - a photo has no alt text, or under three characters of it
-- the same photo is listed twice
-- the file an entry points at is not there
 - a category is not one of the five real ones
-- the CMS's category dropdown has drifted from the site's own list
+- the same photograph is in the list twice
+- Sanity reports no pixel dimensions for an image
+- the studio's category list has drifted from the site's own
 
-It also reads each image's true pixel dimensions out of the file header
-and records them in `content/gallery.dimensions.json`, so the page can
-reserve each photo's box before it loads and the gallery does not
-shudder as it fills in. Nobody editing the gallery has to know those
-numbers exist.
+**Why alt text is checked here when the field is already required.**
+"Required" in the studio means its form will not let you press Publish.
+It does not mean the dataset cannot contain a photo without alt text —
+an import script, the CLI, or a token and `curl` write straight to the
+API, which does not run the studio's validation. A build that stops and
+names the photograph is the check that cannot be bypassed.
+
+**Why the categories are checked three ways.** The five kinds of work
+are a business fact, not a content entry: each maps to a service page
+that has to exist. So they are a TypeScript union in
+`content/types.ts`, a list of labels and routes in `content/gallery.ts`,
+and a dropdown in `studio/schemas/galleryCategories.ts` — and the build
+reads all three and fails if any disagree. Adding a category means
+editing all three in one commit, on purpose.
 
 If a bad entry ever does reach the site, `content/gallery.ts` drops that
 one photo rather than letting the page fail — a missing photo is
@@ -172,18 +261,53 @@ recoverable, a broken `/gallery/` during a storm week is not.
 
 ## Troubleshooting
 
-**"The gallery editor is not connected yet"** — `CMS_AUTH_URL` is unset
-or the build predates it. Step 3, then redeploy.
+**Published, and nothing happened.** Work through step 6 above in order.
+The webhook delivery log is the first place to look: no delivery means
+the filter is wrong or the trigger is off; a delivery with a 4xx means
+the deploy hook URL is wrong or was regenerated.
 
-**Sign-in popup closes and nothing happens** — the callback URL on the
-GitHub OAuth app does not exactly match the Worker's URL plus
-`/callback`, or `ALLOWED_DOMAINS` does not include the domain you are
-on.
+**The build failed.** The log names the photograph and the reason. The
+published gallery is untouched and the previous deployment stays live,
+so fix it in the studio and publish again. Nothing is lost.
 
-**Saved, but the site has not changed** — check the Pages deployment.
-If the build failed, the log names the photo and the reason; the commit
-is safe in the repository meanwhile.
+**`[gallery] SANITY_PROJECT_ID is not set` in a production build.** The
+environment variable is missing from Cloudflare, or was set on
+Production but not Preview. The build succeeds using the committed
+snapshot, which is why this is easy to miss.
 
-**A photo looks stretched** — it was replaced at the same filename and
-the browser is showing a cached copy at the old aspect ratio. `/ctl/*`
-is cached for a day; a hard refresh confirms it.
+**`Sanity returned 403`.** The dataset is private and
+`SANITY_READ_TOKEN` is missing, wrong, or was revoked.
+
+**A photo looks stretched or badly cropped.** Set its focal point in the
+studio's crop tool and publish. The grid's 4:3 crop is taken around it.
+
+**Someone needs access.** sanity.io/manage → the project → **Members** →
+*Invite*. Removing someone there removes their access to the gallery in
+the same motion.
+
+---
+
+## Retiring the old path
+
+If the previous editor was ever deployed, these should no longer exist:
+
+- The `sveltia-cms-auth` Cloudflare Worker. Delete it. It holds a live
+  GitHub OAuth client secret and nothing uses it.
+- Its **GitHub OAuth app** (GitHub → Settings → Developer settings →
+  OAuth Apps). Delete it, which revokes the secret.
+- The `CMS_AUTH_URL` variable in Cloudflare Pages. Remove it.
+- Repository write access granted to editors *only* so they could sign
+  in to `/admin/`. Review and remove.
+
+`public/admin/` and `scripts/cms.mjs` are already gone from this
+repository, and `/admin/` now returns a 404.
+
+The forty photographs as the old CMS held them are preserved at
+`studio/import/gallery.migration.json`, and before that in this
+repository's history as `ctl-roofing/content/gallery.json`. Once the
+import has been run and the gallery is live from Sanity, that file and
+`studio/scripts/import-gallery.mjs` can be deleted — git keeps them.
+
+The original image files are still in `ctl-roofing/public/ctl/`. Leave
+them until the gallery has been serving from Sanity for a while: they
+are the only local copies, and they are what the import script reads.

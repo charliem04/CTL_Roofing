@@ -25,6 +25,7 @@ import {
   checkResume,
   submitApplication,
 } from "@/lib/submitApplication";
+import { dialable, PHONE_NUDGE } from "@/lib/phone";
 import { trackEvent } from "@/lib/tracking";
 import { btn } from "./Button";
 import { Turnstile } from "./Turnstile";
@@ -73,7 +74,15 @@ export function CareersForm({
 
     const missing: string[] = [];
     if (!get("name")) missing.push("name");
-    if (!get("phone")) missing.push("phone");
+    /*
+     * A number nobody can ring is the same miss as a blank box on this
+     * form — the office replies to an application by phone, and email
+     * is optional here on purpose. So it fails the same way, and the
+     * message below says which of the two it was.
+     */
+    const phone = get("phone");
+    const badPhone = Boolean(phone) && !dialable(phone);
+    if (!phone || badPhone) missing.push("phone");
     for (const q of questions) {
       if (q.required && !get(`q-${q.id}`)) missing.push(`q-${q.id}`);
     }
@@ -85,10 +94,15 @@ export function CareersForm({
     setInvalid(missing);
     if (missing.length) {
       setStatus("error");
+      // One problem gets the reason; several get the summary, because
+      // naming one of four is worse than naming none.
+      const only = (key: string) => missing.length === 1 && missing[0] === key;
       setError(
-        fileError && missing.length === 1
+        fileError && only("resume")
           ? fileError
-          : "Please finish the highlighted fields."
+          : badPhone && only("phone")
+            ? PHONE_NUDGE
+            : "Please finish the highlighted fields."
       );
       document.getElementById(`field-${missing[0]}`)?.focus();
       return;

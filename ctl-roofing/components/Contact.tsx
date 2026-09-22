@@ -15,6 +15,7 @@
 import { useState, type FormEvent } from "react";
 import { client } from "@/client.config";
 import { CTA_HREF } from "@/lib/routes";
+import { dialable, PHONE_NUDGE } from "@/lib/phone";
 import { contactConfigured, submitContact } from "@/lib/submitContact";
 import { trackEvent } from "@/lib/tracking";
 import { Reveal } from "./Reveal";
@@ -49,8 +50,11 @@ const PROBLEM: Record<string, string> = {
   email: "Enter an email address — it’s where the quote and photos go.",
 };
 
-/** Filled in, but not an address. A different miss needs a different nudge. */
-const MALFORMED_EMAIL = "That email address doesn’t look right — check it over.";
+/** Filled in, but not usable. A different miss needs a different nudge. */
+const MALFORMED: Record<string, string> = {
+  email: "That email address doesn’t look right — check it over.",
+  phone: PHONE_NUDGE,
+};
 
 export function Contact() {
   const [status, setStatus] = useState<Status>("idle");
@@ -75,6 +79,11 @@ export function Contact() {
     // reach, which is worse than one that never typed anything.
     const email = form.email.trim();
     if (email && !EMAIL.test(email)) problems.push("email");
+    // Same shape, same reason: a number we cannot dial is a lead the
+    // office cannot chase, and it fails later and more expensively than
+    // it does here.
+    const phone = form.phone.trim();
+    if (phone && !dialable(phone)) problems.push("phone");
     setInvalid(problems);
     if (problems.length) {
       document.getElementById(`field-${problems[0]}`)?.focus();
@@ -111,7 +120,7 @@ export function Contact() {
   const problem = (key: string) =>
     invalid.includes(key) ? (
       <span className="mt-1.5 block text-sm text-danger">
-        {key === "email" && form.email.trim() ? MALFORMED_EMAIL : PROBLEM[key]}
+        {(form[key]?.trim() && MALFORMED[key]) || PROBLEM[key]}
       </span>
     ) : null;
 

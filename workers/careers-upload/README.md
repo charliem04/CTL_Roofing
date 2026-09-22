@@ -37,12 +37,6 @@ npx wrangler login
 # One private bucket. Do NOT attach a custom domain or enable the
 # r2.dev public URL on it.
 npx wrangler r2 bucket create ctl-resumes
-# ^ needs R2 enabled on the account first (Dashboard -> R2), which asks
-#   for a payment method even on the free tier. Doing this is also the
-#   moment to UNCOMMENT the [[r2_buckets]] block in
-#   ../lead-relay/wrangler.toml and redeploy that Worker: it is disabled
-#   there because R2 was not enabled when the relay first shipped, which
-#   leaves GET /resume/:leadId answering 503.
 
 # The bot defence. Get the pair from the Cloudflare dashboard
 # (Turnstile → Add site). The site key goes in the site's

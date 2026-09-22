@@ -73,11 +73,6 @@ around them.
 - [ ] Confirm `ALLOW_INSECURE_NO_CAPTCHA` is absent from the deployed Worker
       config. It belongs to `[env.dev.vars]` only. It is the one value where a
       copy-paste turns a gated endpoint into an open one.
-- [ ] **R2 enabled, `ctl-resumes` created, and the `[[r2_buckets]]` block in
-      `workers/lead-relay/wrangler.toml` uncommented** — it ships disabled
-      because R2 was not enabled on the account the relay was first deployed
-      to. Until it is back, `GET /resume/:leadId` answers 503 and the office
-      cannot open a CV from a CRM record.
 - [ ] Confirm the R2 bucket is private — no custom domain, no r2.dev URL.
 - [ ] Full preview verification per `README-DEPLOY.md` §3, including the check
       most people skip: **submit the contact form with a deliberately wrong

@@ -233,7 +233,7 @@ opposite of what feels natural:
 ```bash
 cd workers/lead-relay
 npx wrangler deploy                                  # FIRST — creates the Worker
-npx wrangler secret put CRM_AUTH_TOKEN --env=""      # then paste the key at the prompt
+npx wrangler secret put CRM_AUTH_TOKEN      # then paste the key at the prompt
 ```
 
 > **Deploy first.** A secret is attached to a Worker, so there is nothing to
@@ -257,11 +257,19 @@ npx wrangler secret put CRM_AUTH_TOKEN --env=""      # then paste the key at the
 > HubSpot before doing anything else; it is a thirty-second fix and the
 > alternative is a credential you cannot un-leak.
 
-> **`--env=""` is not optional here.** `wrangler.toml` defines an `[env.dev]`
-> block, so wrangler refuses to guess which environment you mean and warns on
-> every secret command. The empty string explicitly means "the top-level
-> environment" — the production one. Without it you get the warning every time
-> and, on some wrangler versions, the secret on the wrong environment.
+> **Do not pass `--env`.** Omitting it targets the top-level environment —
+> the production one — which is where these belong. Earlier revisions of this
+> guide said to pass `--env=""` to mean that explicitly; wrangler rejects it
+> outright, with *No environment found in configuration with name ""*, and on
+> PowerShell the quotes are stripped before wrangler sees them in any case.
+>
+> Confirm where a secret landed rather than assuming, since the failure is a
+> Worker that reads an empty value at runtime:
+>
+> ```bash
+> npx wrangler secret list          # the top-level environment
+> npx wrangler secret list --env dev
+> ```
 
 That is the whole integration. `CRM_WEBHOOK_URL` is not used by this adapter
 and can stay unset; leaving it set does nothing, and switching `CRM_ADAPTER`

@@ -56,7 +56,7 @@ Both handle visitor data:
 file's own header comment already instructs this whenever a processor is added;
 it simply has not been acted on.
 
-### 4. `/careers/` is live, and its form has nowhere to send a file
+### 4. `/careers/` is live, and its form has nowhere to send a file — **code closed, needs credentials**
 
 `lib/routes.ts` has careers at `live: true`, which contradicts
 `REBUILD-PLAN.md`'s description of it as dark. So the résumé path is a launch
@@ -65,6 +65,56 @@ points at the office email.
 
 That refusal is the correct failure — a form that takes a CV and drops it costs
 somebody a job they think they applied for. But it is not a shipping state.
+
+**What was built since.** The pipeline now runs end to end in code, and the
+thing it delivers is usable rather than merely present:
+
+- `GET /resume/:leadId` on the lead relay looks the lead up in D1, reads its
+  `resume_key`, and streams the object out of R2 as an attachment named for the
+  applicant. The relay has a read-only R2 binding for `ctl-resumes` to do it.
+  The bucket stays private: no `r2.dev` URL, no custom domain, and nothing in
+  the relay calls anything but `get()`.
+- `crmPayload()` emits a `resumeUrl` — an absolute, clickable link at that
+  route — and keeps `resumeKey` beside it for support. The bare object key it
+  used to send was honest and useless: retrieving the file meant the R2
+  dashboard or `wrangler r2 object get`, so in practice the résumé was not
+  attached to the lead at all.
+- Payload shaping sits behind a CRM adapter (`CRM_ADAPTER`). `generic` is the
+  flat shape this Worker always sent and remains the default; `hubspot` posts
+  the Forms API v3 shape for the demo on HubSpot Free. Adding JobNimbus or
+  AccuLynx is one function and one line in `CRM_ADAPTERS`, nowhere near
+  `forward()`.
+- `CRM_APPLICATION_WEBHOOK_URL`, when set, sends `kind='application'` rows
+  somewhere other than the sales CRM. Unset, behaviour is unchanged.
+- A missing object returns **410 Gone** with the retention rule stated in
+  words, not a 404. A row with a key and no object is the 365-day lifecycle
+  rule having worked; a 404 there would read as a broken link and send somebody
+  hunting for a file that was deleted on purpose.
+
+Retention is untouched by all of this. The three places that must agree —
+`RETENTION_DAYS` in `workers/careers-upload/scripts/set-retention.sh`, the same
+constant in that Worker's `src/index.ts`, and `APPLICATION_RETENTION` in
+`app/privacy/page.tsx` — still say 365 days and twelve months.
+
+**What is still open, and it is not code.** Two things, both in §A.4:
+
+1. **The Cloudflare Access application** in front of `/resume/*`. The route has
+   no auth of its own, deliberately — a browser following a link from a CRM
+   record cannot send an `Authorization` header, so a token there would be a
+   token in the URL. Until the application exists the route answers anybody
+   holding a lead id, and those ids are unguessable but not secret: they travel
+   in CRM records, in `/export.csv`, and in the JSON the contact form gets back.
+   Setup is §6 of `LAUNCH-CREDENTIALS.md`.
+2. **`workers_dev = false` and a route on the zone.** Access binds to hostnames
+   on a zone, so a `*.workers.dev` address serving the same code is an ungated
+   door beside the gated one. Both lines are in `wrangler.toml`, commented out,
+   to be enabled at the same moment the application is created — not before,
+   since without a route the Worker has no hostname at all.
+
+So the form still has nowhere to send a file **only** because finding 1 is
+open: D1 is unprovisioned, so the relay cannot deploy. The decision this
+finding was really asking for — where a résumé goes and how anybody reads it
+back — is made and built.
 
 ### 5. `public/_redirects` is effectively empty
 
@@ -158,15 +208,43 @@ Configuration the code already expects. In dependency order:
    `EXPORT_TOKEN`, deploy. `CRM_WEBHOOK_URL` may stay unset: leads are stored as
    `crm_status='disabled'` and the first sweep after it is set delivers the
    whole backlog.
-3. **CRM** — `wrangler secret put CRM_WEBHOOK_URL` once chosen. Most roofing
-   CRMs will not take raw JSON, so budget a Zapier/Make account as the adapter.
-   The single function to adapt is `crmPayload()` in
-   `workers/lead-relay/src/index.ts`.
-4. **Careers** — per the decision taken. If the Worker stays: `TURNSTILE_SECRET`,
-   `NOTIFY_WEBHOOK` → the relay's `/application`, `RELAY_INGEST_SECRET` matching
-   the relay's `INGEST_SECRET`, `IP_HASH_SALT`, and **`npm run retention`
-   against the real bucket** — without that lifecycle rule the twelve-month
-   promise in the privacy policy is untrue.
+3. **CRM** — `wrangler secret put CRM_WEBHOOK_URL` once chosen, plus
+   `CRM_ADAPTER` in `[vars]`. There are now two adapters in
+   `workers/lead-relay/src/index.ts`: `generic`, the flat JSON this Worker has
+   always sent and still the default, and `hubspot` for the Forms API v3 shape.
+   A Zapier/Make account is still the right answer for any CRM whose own API is
+   not worth an adapter — point it at `generic` and the mapping lives in their
+   UI. Writing an adapter for JobNimbus or AccuLynx is one function and one line
+   in `CRM_ADAPTERS`; `forward()` does not change either way.
+
+   Set `CRM_APPLICATION_WEBHOOK_URL` at the same time unless job applicants are
+   meant to sit in the sales CRM's contact list, where they burn a free tier's
+   contact cap and inherit a retention policy written for leads.
+4. **Careers** — the decision is taken: the Worker stays, and the file is read
+   back through the relay. What that needs, in order:
+
+   - **careers-upload** — `TURNSTILE_SECRET`, `NOTIFY_WEBHOOK` → the relay's
+     `/application`, `RELAY_INGEST_SECRET` matching the relay's
+     `INGEST_SECRET`, `IP_HASH_SALT`, and **`npm run retention` against the
+     real bucket** — without that lifecycle rule the twelve-month promise in
+     the privacy policy is untrue. (It is also what makes the relay's 410
+     truthful rather than theoretical.)
+   - **lead-relay** — the `RESUMES` binding is already in `wrangler.toml` and
+     needs the real `ctl-resumes` bucket to exist. Set `RELAY_PUBLIC_ORIGIN` to
+     the relay's own hostname; unset, records forward with `resumeKey` and no
+     clickable link, and the log says so on every one.
+   - **A Cloudflare Access application** on `<relay host>/resume`, Google as
+     the identity provider, allowing the people who handle hiring. This is the
+     one piece with no code behind it and no honest failure mode: without it
+     the route serves a CV to anybody holding a lead id. `LAUNCH-CREDENTIALS.md`
+     §6 has the full setup, including the two things that are easy to miss —
+     `workers_dev = false` with a route on the zone, and *not* putting Access in
+     front of `/lead` or `/application`, which would break the contact form for
+     every visitor and 302 every job application into HTML.
+   - **The bucket stays private throughout.** No `r2.dev` URL, no custom
+     domain. `app/privacy/page.tsx` tells applicants their CV sits where "only
+     we can reach it", and an Access-gated Worker route keeps that true where a
+     public bucket would not.
 5. **Google Reviews** — key and place ID, budget alert the same day.
 6. **Rate limiting** — finding 2.
 7. **Analytics and call tracking** — per the decisions taken.

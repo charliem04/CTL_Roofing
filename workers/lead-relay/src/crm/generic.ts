@@ -10,7 +10,31 @@
  * ────────────────────────────────────────────────────────────────────
  */
 
-import type { CrmAdapter, LeadRow } from "./types.ts";
+import {
+  parsedAnswers,
+  resumeUrl,
+  type CrmAdapter,
+  type CrmEnv,
+  type LeadRow,
+} from "./types.ts";
+
+/**
+ * Where this row goes, which depends on what it is.
+ *
+ * Applications prefer CRM_APPLICATION_WEBHOOK_URL and fall back to
+ * the one URL, so an unset second destination is the previous
+ * behaviour unchanged. Leads only ever go to CRM_WEBHOOK_URL — a
+ * customer has no business in the applicant tracker.
+ *
+ * undefined means "nowhere is configured for this kind", which is a
+ * supported state and not an error.
+ */
+export function destinationFor(row: LeadRow, env: CrmEnv): string | undefined {
+  if (row.kind === "application" && env.CRM_APPLICATION_WEBHOOK_URL) {
+    return env.CRM_APPLICATION_WEBHOOK_URL;
+  }
+  return env.CRM_WEBHOOK_URL;
+}
 
 /**
  * One flat JSON object, the same shape for both kinds.
@@ -21,7 +45,7 @@ import type { CrmAdapter, LeadRow } from "./types.ts";
  * lose. This is the `generic` adapter's wire format and nothing else's:
  * a CRM with a real API gets shaped by its own adapter instead.
  */
-export function crmPayload(row: LeadRow): Record<string, unknown> {
+export function crmPayload(row: LeadRow, env: CrmEnv = {}): Record<string, unknown> {
   return {
     id: row.id,
     type: row.kind,
@@ -34,7 +58,10 @@ export function crmPayload(row: LeadRow): Record<string, unknown> {
     urgency: row.urgency ?? "",
     message: row.message ?? "",
     role: row.role ?? "",
-    answers: row.answers ? JSON.parse(row.answers) : {},
+    answers: parsedAnswers(row.answers),
+    // The clickable one first, because it is the one a person uses.
+    // The key stays for support: it is how you find the object by hand.
+    resumeUrl: resumeUrl(row, env),
     resumeKey: row.resume_key ?? "",
     source: row.source ?? "",
   };
@@ -43,19 +70,28 @@ export function crmPayload(row: LeadRow): Record<string, unknown> {
 export const generic: CrmAdapter = {
   id: "generic",
 
-  configured: (env) => Boolean(env.CRM_WEBHOOK_URL),
+  configured: (env) =>
+    Boolean(env.CRM_WEBHOOK_URL || env.CRM_APPLICATION_WEBHOOK_URL),
 
   // Both kinds, as before. The unified lead book is the point of this
   // Worker, and a webhook pointed at a spreadsheet wants the
-  // applications too.
-  accepts: () => true,
+  // applications too. The only reason to decline is having nowhere to
+  // put this particular kind.
+  accepts: (row, env) => Boolean(destinationFor(row, env)),
+
+  // Never a decision, always a missing URL — so the sweep keeps these
+  // rows and delivers them once one is set.
+  declineReason: () => "disabled",
 
   async send(row, env, doFetch = fetch) {
-    const url = env.CRM_WEBHOOK_URL;
+    const url = destinationFor(row, env);
     if (!url) {
       return {
         ok: false,
-        error: "CRM_WEBHOOK_URL is not set",
+        error:
+          row.kind === "application"
+            ? "neither CRM_APPLICATION_WEBHOOK_URL nor CRM_WEBHOOK_URL is set"
+            : "CRM_WEBHOOK_URL is not set",
         spendsAttempt: false,
       };
     }
@@ -68,7 +104,7 @@ export const generic: CrmAdapter = {
             ? { Authorization: `Bearer ${env.CRM_AUTH_TOKEN}` }
             : {}),
         },
-        body: JSON.stringify(crmPayload(row)),
+        body: JSON.stringify(crmPayload(row, env)),
       });
       if (res.ok) return { ok: true };
 

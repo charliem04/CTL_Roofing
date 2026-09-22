@@ -19,10 +19,17 @@
  *  submission, and it is the wrong one here. It cannot search, so it
  *  cannot deduplicate on anything but email, and this system has rows
  *  with no email in them (see below). The Objects API can do the
- *  lookup, and a private app access token drops straight into the
- *  `Authorization: Bearer …` header the relay already sends. Free
- *  private apps allow on the order of 500K requests a day, which is
- *  several orders of magnitude past a roofing contractor's lead flow.
+ *  lookup, and an account-level bearer token drops straight into the
+ *  `Authorization: Bearer …` header the relay already sends. The free
+ *  allowance runs to the order of 500K requests a day, which is several
+ *  orders of magnitude past a roofing contractor's lead flow.
+ *
+ *  That token is a SERVICE KEY. It used to be a private app token, and
+ *  the two are interchangeable here — same header, same scopes, same
+ *  endpoints — but HubSpot disabled private app creation for new
+ *  accounts in September 2026, so a fresh portal can only issue the
+ *  former. Nothing in this file depends on which one it was given;
+ *  docs/HUBSPOT-SETUP.md section 2 is the runbook.
  *
  *  ── DEDUPLICATION: EMAIL FIRST, PHONE AS THE FALLBACK ───────────────
  *
@@ -56,7 +63,10 @@
 
 import {
   forwardsApplications,
+  parsedAnswers,
+  resumeUrl,
   type CrmAdapter,
+  type CrmEnv,
   type CrmOutcome,
   type FetchLike,
   type LeadRow,
@@ -101,6 +111,39 @@ export function splitName(name: string | null): {
 }
 
 /**
+ * Everything an application carries that a contact record has no box
+ * for, as prose for the standard `message` property.
+ *
+ * A job application is a role, a questionnaire and a CV. None of those
+ * is a contact property, and none is worth spending one of the ten
+ * free custom properties on — HubSpot is where this system's
+ * applications go only when somebody explicitly switches
+ * CRM_FORWARD_APPLICATIONS on, and it is the wrong tool for them even
+ * then. Prose in a field that certainly exists beats a 400 naming a
+ * property that does not, and beats an applicant arriving as a bare
+ * name and phone number, which is what happened before this.
+ *
+ * The résumé link is the part that matters: without it the record says
+ * somebody applied and gives no way to read what they sent.
+ */
+function applicationNotes(row: LeadRow, env: CrmEnv): string {
+  const lines: string[] = [];
+  const note = (label: string, value: string | null) => {
+    const v = (value ?? "").trim();
+    if (v) lines.push(`${label}: ${v}`);
+  };
+
+  note("Role", row.role);
+  note("Message", row.message);
+  for (const [question, answer] of Object.entries(parsedAnswers(row.answers))) {
+    note(question, typeof answer === "string" ? answer : JSON.stringify(answer));
+  }
+  note("Résumé", resumeUrl(row, env) || null);
+
+  return lines.join("\n");
+}
+
+/**
  * A lead row as HubSpot contact properties.
  *
  * Pure, and exported for exactly that reason: it is the part of this
@@ -124,7 +167,7 @@ export function splitName(name: string | null): {
  */
 export function hubspotProperties(
   row: LeadRow,
-  opts: { creating: boolean }
+  opts: { creating: boolean; env?: CrmEnv }
 ): Record<string, string> {
   const props: Record<string, string> = {};
   const put = (key: string, value: string | null | undefined) => {
@@ -139,7 +182,12 @@ export function hubspotProperties(
   put("firstname", firstname);
   put("lastname", lastname);
   put("address", row.address);
-  put("message", row.message);
+  put(
+    "message",
+    row.kind === "application"
+      ? applicationNotes(row, opts.env ?? {})
+      : row.message
+  );
 
   put("ctl_service", row.service);
   put("ctl_urgency", row.urgency);
@@ -215,10 +263,10 @@ function refusal(res: Call): CrmOutcome {
     return {
       ok: false,
       error:
-        `${res.status} HubSpot rejected the token — NOT TRANSIENT. The private ` +
-        `app token in CRM_AUTH_TOKEN is wrong, revoked, from another portal, ` +
-        `or missing the crm.objects.contacts scopes. Retrying will not fix it; ` +
-        `see docs/HUBSPOT-SETUP.md. — ${body}`,
+        `${res.status} HubSpot rejected the token — NOT TRANSIENT. The ` +
+        `service key in CRM_AUTH_TOKEN is wrong, rotated, from another ` +
+        `portal, or missing the crm.objects.contacts scopes. Retrying will ` +
+        `not fix it; see docs/HUBSPOT-SETUP.md. — ${body}`,
       spendsAttempt: true,
     };
   }
@@ -249,10 +297,11 @@ async function patch(
   doFetch: FetchLike,
   url: string,
   row: LeadRow,
-  token: string
+  token: string,
+  env: CrmEnv
 ): Promise<CrmOutcome> {
   const res = await call(doFetch, url, "PATCH", token, {
-    properties: hubspotProperties(row, { creating: false }),
+    properties: hubspotProperties(row, { creating: false, env }),
   });
   return res.ok ? { ok: true } : refusal(res);
 }
@@ -269,16 +318,17 @@ async function patch(
 async function createOrPatch(
   doFetch: FetchLike,
   row: LeadRow,
-  token: string
+  token: string,
+  env: CrmEnv
 ): Promise<CrmOutcome> {
   const created = await call(doFetch, CONTACTS, "POST", token, {
-    properties: hubspotProperties(row, { creating: true }),
+    properties: hubspotProperties(row, { creating: true, env }),
   });
   if (created.ok) return { ok: true };
   if (created.status !== 409) return refusal(created);
 
   const id = existingIdFrom(created.body);
-  if (id) return patch(doFetch, `${CONTACTS}/${id}`, row, token);
+  if (id) return patch(doFetch, `${CONTACTS}/${id}`, row, token, env);
 
   // No id in the message — HubSpot's wording is not a contract. The
   // email itself is a unique id as far as the API is concerned, so
@@ -288,7 +338,8 @@ async function createOrPatch(
       doFetch,
       `${CONTACTS}/${encodeURIComponent(row.email)}?idProperty=email`,
       row,
-      token
+      token,
+      env
     );
   }
   return refusal(created);
@@ -307,13 +358,14 @@ async function createOrPatch(
 async function matchOnPhone(
   doFetch: FetchLike,
   row: LeadRow,
-  token: string
+  token: string,
+  env: CrmEnv
 ): Promise<CrmOutcome> {
   const phone = (row.phone ?? "").trim();
   // Intake refuses a record with neither a phone nor an email, so this
   // is unreachable from the routes — but a row is a row, and creating
   // the contact beats dropping it silently.
-  if (!phone) return createOrPatch(doFetch, row, token);
+  if (!phone) return createOrPatch(doFetch, row, token, env);
 
   const found = await call(doFetch, SEARCH, "POST", token, {
     filterGroups: [
@@ -325,8 +377,8 @@ async function matchOnPhone(
   if (!found.ok) return refusal(found);
 
   const id = firstMatchFrom(found.body);
-  if (id) return patch(doFetch, `${CONTACTS}/${id}`, row, token);
-  return createOrPatch(doFetch, row, token);
+  if (id) return patch(doFetch, `${CONTACTS}/${id}`, row, token, env);
+  return createOrPatch(doFetch, row, token, env);
 }
 
 /* ── The adapter ────────────────────────────────────────────────── */
@@ -355,8 +407,8 @@ export const hubspot: CrmAdapter = {
       // Email first, because it is HubSpot's own dedup key and one
       // request covers the common case of a new customer.
       return row.email
-        ? await createOrPatch(doFetch, row, token)
-        : await matchOnPhone(doFetch, row, token);
+        ? await createOrPatch(doFetch, row, token, env)
+        : await matchOnPhone(doFetch, row, token, env);
     } catch (e) {
       // A network failure, not a refusal. Same treatment as the
       // generic adapter: it costs an attempt and the sweep tries again.

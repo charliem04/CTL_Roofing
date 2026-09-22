@@ -80,10 +80,10 @@ thing it delivers is usable rather than merely present:
   dashboard or `wrangler r2 object get`, so in practice the résumé was not
   attached to the lead at all.
 - Payload shaping sits behind a CRM adapter (`CRM_ADAPTER`). `generic` is the
-  flat shape this Worker always sent and remains the default; `hubspot` posts
-  the Forms API v3 shape for the demo on HubSpot Free. Adding JobNimbus or
-  AccuLynx is one function and one line in `CRM_ADAPTERS`, nowhere near
-  `forward()`.
+  flat shape this Worker always sent and remains the default; `hubspot` talks
+  to the CRM Objects API for the demo on HubSpot Free, deduplicating on email
+  with a phone search as the fallback. Adding JobNimbus or AccuLynx is one
+  file in `src/crm/` and one line in its registry, nowhere near `forward()`.
 - `CRM_APPLICATION_WEBHOOK_URL`, when set, sends `kind='application'` rows
   somewhere other than the sales CRM. Unset, behaviour is unchanged.
 - A missing object returns **410 Gone** with the retention rule stated in
@@ -231,9 +231,12 @@ Configuration the code already expects. In dependency order:
      spend one of the six retry attempts. Job applications are held back from
      the sales CRM unless `CRM_FORWARD_APPLICATIONS` says otherwise.
 
-   **What it still needs:** a HubSpot account in CTL's name, a private app
-   token in `CRM_AUTH_TOKEN`, four custom properties created by hand, and the
-   privacy policy naming HubSpot as a processor. Runbook, scopes, property
+   **What it still needs:** a HubSpot account in CTL's name, a service key in
+   `CRM_AUTH_TOKEN`, four custom properties created by hand, and the privacy
+   policy naming HubSpot as a processor. Note the credential deadline: HubSpot
+   disabled legacy private app creation for new accounts on 28 September 2026,
+   so a fresh portal issues a service key instead — same header, same scopes,
+   no code change. Runbook, scopes, property
    names and the end-to-end verification: **`docs/HUBSPOT-SETUP.md`**. Nothing
    here is on the critical path — with no CRM configured, leads are stored
    `disabled` and the first sweep after the token exists delivers the backlog.

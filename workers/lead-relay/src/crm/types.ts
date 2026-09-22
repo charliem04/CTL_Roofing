@@ -83,9 +83,28 @@ export interface CrmEnv {
   CRM_WEBHOOK_URL?: string;
 
   /**
+   * Where the `generic` adapter sends kind='application' rows, when
+   * they should not go where customer leads go. Unset, applications
+   * follow CRM_WEBHOOK_URL, which is the behaviour this Worker has
+   * always had.
+   *
+   * Set it and applicants stop landing in a sales CRM's contact list.
+   * That is worth doing for two unrelated reasons: a free CRM tier has
+   * a contact cap that job applicants will quietly burn through, and an
+   * applicant carries different retention obligations from a customer —
+   * the privacy policy promises their file is gone in twelve months,
+   * and that is a promise about our storage, not about a CRM's.
+   *
+   * Read only by `generic`. An adapter talking to a real CRM API has
+   * one endpoint, not two, and expresses the same choice through
+   * CRM_FORWARD_APPLICATIONS instead.
+   */
+  CRM_APPLICATION_WEBHOOK_URL?: string;
+
+  /**
    * Sent as `Authorization: Bearer …` on the forward. The `generic`
    * adapter includes it when set; the `hubspot` adapter REQUIRES it —
-   * there it is the private app access token, and without one that
+   * there it is the HubSpot service key, and without one that
    * adapter reports itself unconfigured rather than sending requests
    * that could only 401.
    */
@@ -108,12 +127,85 @@ export interface CrmEnv {
    * appear in /export.csv regardless of this setting.
    */
   CRM_FORWARD_APPLICATIONS?: string;
+
+  /**
+   * The Worker's own public origin, e.g. https://relay.ctlpro.com —
+   * scheme and host, no trailing slash, no path.
+   *
+   * It is what turns a stored résumé into something the office can
+   * open: resumeUrl() builds RELAY_PUBLIC_ORIGIN + /resume/<row id>,
+   * and that link is what goes to the CRM. The bare R2 object key went
+   * before it and was honest and useless — nobody opens a CRM record
+   * and then reaches for `wrangler r2 object get`.
+   *
+   * It lives here, on the CRM env, because the adapters are what build
+   * the link. A variable rather than something read off the incoming
+   * request, because the retry sweep forwards rows with no request in
+   * hand — a link that is right on the request path and empty on the
+   * sweep path is a bug that only shows up in the rows nobody looked
+   * at.
+   *
+   * Unset, rows still forward and still carry resumeKey; they just
+   * arrive with no link, and the log says so on every one.
+   */
+  RELAY_PUBLIC_ORIGIN?: string;
 }
 
 const TRUTHY = new Set(["1", "true", "yes", "on"]);
 
 export function forwardsApplications(env: CrmEnv): boolean {
   return TRUTHY.has((env.CRM_FORWARD_APPLICATIONS ?? "").trim().toLowerCase());
+}
+
+/* ── Row helpers the adapters share ─────────────────────────────── */
+
+/**
+ * The questionnaire as an object, whatever is actually in the column.
+ *
+ * cleanAnswers() in the Worker is allowed to store a plain string when
+ * what arrived did not parse as an object — it keeps the text rather
+ * than dropping the only thing the applicant wrote. So a bare
+ * JSON.parse() in an adapter would throw on exactly those rows, and a
+ * row that throws on every forward is a row that retries six times and
+ * then sits failed forever with a SyntaxError where the CRM's own
+ * reason should be.
+ */
+export function parsedAnswers(raw: string | null): Record<string, unknown> {
+  if (!raw) return {};
+  try {
+    const parsed = JSON.parse(raw);
+    if (parsed && typeof parsed === "object" && !Array.isArray(parsed)) {
+      return parsed as Record<string, unknown>;
+    }
+  } catch {
+    // Fall through: it is text, not an object.
+  }
+  return { answers: raw };
+}
+
+/**
+ * The absolute URL of this row's résumé, or "" if there is not one.
+ *
+ * This is what replaced sending the bare R2 object key to the CRM. The
+ * key — `applications/2026/09/<uuid>-cv.pdf` — was honest and useless:
+ * the person looking at the record cannot do anything with it without
+ * the R2 dashboard. The link points at the Worker's own
+ * GET /resume/:leadId, which streams the file from a bucket that stays
+ * private, behind Cloudflare Access.
+ */
+export function resumeUrl(row: LeadRow, env: CrmEnv): string {
+  if (!row.resume_key) return "";
+
+  const origin = (env.RELAY_PUBLIC_ORIGIN ?? "").trim().replace(/\/+$/, "");
+  if (!origin) {
+    // Loud, because the row still forwards and looks fine: the office
+    // just silently gets an application with no way to read the CV.
+    console.warn(
+      `[relay] RELAY_PUBLIC_ORIGIN is not set — ${row.id} forwarded without a résumé link`
+    );
+    return "";
+  }
+  return `${origin}/resume/${encodeURIComponent(row.id)}`;
 }
 
 /* ── The contract ───────────────────────────────────────────────── */
@@ -144,6 +236,23 @@ export interface CrmAdapter {
 
   /** Whether this particular row is one this CRM should receive. */
   accepts(row: LeadRow, env: CrmEnv): boolean;
+
+  /**
+   * Why accepts() said no, which decides whether the row is ever
+   * looked at again.
+   *
+   * 'skipped'  a decision. This CRM does not take rows like this one,
+   *            and the sweep leaves it alone forever.
+   * 'disabled' an absence. There is nowhere to put this row YET, and
+   *            the sweep delivers it the moment somewhere exists.
+   *
+   * Defaulted to 'skipped' because that is the usual reason an adapter
+   * declines — HubSpot turning applications away is policy, not a
+   * missing setting. `generic` overrides it: it only ever declines for
+   * want of a URL, and forgetting a URL must not permanently bury the
+   * leads captured before it was set.
+   */
+  declineReason?(row: LeadRow, env: CrmEnv): "skipped" | "disabled";
 
   /**
    * Send one row. The fetch is injectable so the flow — dedup,

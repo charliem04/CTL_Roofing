@@ -127,31 +127,42 @@ somewhere.
 
 ## Setup
 
+**The order matters.** Secrets attach to a Worker, so the Worker has to exist
+before any of them can be set — and `deploy` will not run until D1 does.
+Database, then deploy, then secrets.
+
 ```bash
 npm install
 
-# 1. The database
+# 1. The database. `deploy` fails until this id is real: wrangler.toml ships
+#    with a placeholder, not an id.
 npx wrangler d1 create ctl-leads      # paste the id into wrangler.toml
 npm run schema                        # creates the table and indexes
 
-# 2. Secrets
-npx wrangler secret put INGEST_SECRET   # any long random string
-npx wrangler secret put EXPORT_TOKEN    # any long random string
-# When a CRM is chosen — either the generic webhook:
-npx wrangler secret put CRM_WEBHOOK_URL
-npx wrangler secret put CRM_AUTH_TOKEN  # if it wants one
-# When a CRM is chosen — either the generic webhook:
-npx wrangler secret put CRM_WEBHOOK_URL
-npx wrangler secret put CRM_AUTH_TOKEN  # if it wants one
-
-# …or HubSpot (set CRM_ADAPTER = "hubspot" in wrangler.toml first):
-npx wrangler secret put CRM_AUTH_TOKEN  # the HubSpot service key
-
-# Optional: send job applicants somewhere other than the sales CRM
-npx wrangler secret put CRM_APPLICATION_WEBHOOK_URL
-
-# 3. Deploy
+# 2. Deploy, which is what creates the Worker.
 npx wrangler deploy
+
+# 3. Secrets. --env="" means the top-level (production) environment, and is
+#    required because wrangler.toml defines an [env.dev]; without it wrangler
+#    warns on every one of these and may target the wrong environment.
+#
+#    Each command takes the secret's NAME. The value goes in at the hidden
+#    prompt that follows — never on the command line, where it lands in shell
+#    history.
+npx wrangler secret put INGEST_SECRET --env=""   # any long random string
+npx wrangler secret put EXPORT_TOKEN  --env=""   # any long random string
+
+#    Then the CRM. Either the generic webhook…
+npx wrangler secret put CRM_WEBHOOK_URL --env=""
+npx wrangler secret put CRM_AUTH_TOKEN  --env=""   # only if the target wants one
+
+#    …or HubSpot (set CRM_ADAPTER = "hubspot" in wrangler.toml first):
+npx wrangler secret put CRM_AUTH_TOKEN --env=""    # the HubSpot service key
+
+#    Optional: send job applicants somewhere other than the sales CRM
+npx wrangler secret put CRM_APPLICATION_WEBHOOK_URL --env=""
+
+# 4. Re-deploy is not needed — secrets take effect immediately.
 ```
 
 Two `[vars]` in `wrangler.toml` matter for the résumé link:

@@ -49,8 +49,34 @@ const PROBLEM: Record<string, string> = {
   email: "Enter an email address — it’s where the quote and photos go.",
 };
 
-/** Filled in, but not an address. A different miss needs a different nudge. */
-const MALFORMED_EMAIL = "That email address doesn’t look right — check it over.";
+/*
+ * A reachability check, not a format validator — the same rule as the
+ * email above. It counts digits and ignores everything else, so
+ * (337) 555-0113, 337.555.0113, +1 337-555-0113 and 3375550113 all
+ * pass. They are the same number, and arguing with how somebody writes
+ * their own phone number loses leads for nothing.
+ *
+ * Ten digits is the floor because that is a number the office can
+ * actually dial. Seven — a local number with no area code — is one
+ * nobody can return from a CRM record a week later, and it is the most
+ * common way a real enquiry arrives unreachable.
+ *
+ * Fifteen is the ceiling because E.164 says so, which leaves room for a
+ * country code and an extension without accepting a paragraph.
+ */
+const PHONE_MIN_DIGITS = 10;
+const PHONE_MAX_DIGITS = 15;
+
+function dialable(value: string): boolean {
+  const digits = value.replace(/\D/g, "").length;
+  return digits >= PHONE_MIN_DIGITS && digits <= PHONE_MAX_DIGITS;
+}
+
+/** Filled in, but not usable. A different miss needs a different nudge. */
+const MALFORMED: Record<string, string> = {
+  email: "That email address doesn’t look right — check it over.",
+  phone: "That doesn’t look like a full phone number — include the area code.",
+};
 
 export function Contact() {
   const [status, setStatus] = useState<Status>("idle");
@@ -75,6 +101,11 @@ export function Contact() {
     // reach, which is worse than one that never typed anything.
     const email = form.email.trim();
     if (email && !EMAIL.test(email)) problems.push("email");
+    // Same shape, same reason: a number we cannot dial is a lead the
+    // office cannot chase, and it fails later and more expensively than
+    // it does here.
+    const phone = form.phone.trim();
+    if (phone && !dialable(phone)) problems.push("phone");
     setInvalid(problems);
     if (problems.length) {
       document.getElementById(`field-${problems[0]}`)?.focus();
@@ -111,7 +142,7 @@ export function Contact() {
   const problem = (key: string) =>
     invalid.includes(key) ? (
       <span className="mt-1.5 block text-sm text-danger">
-        {key === "email" && form.email.trim() ? MALFORMED_EMAIL : PROBLEM[key]}
+        {(form[key]?.trim() && MALFORMED[key]) || PROBLEM[key]}
       </span>
     ) : null;
 

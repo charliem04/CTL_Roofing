@@ -45,6 +45,28 @@ an email invite.
 
 About half an hour, once.
 
+> ### Which deployment are you on?
+>
+> This matters from step 4 onward, because the two are configured in
+> completely different places.
+>
+> **A Git-connected Pages project** — Cloudflare clones the repo and runs
+> the build itself. Steps 4 to 6 below are written for this, and it is
+> what ctlpro.com will be after the domain migration.
+>
+> **The terminal preview** — `npm run preview:deploy`, which is
+> `wrangler pages deploy out` against the `ctl-preview` project. This is
+> a **direct upload**: the build runs on your machine and Cloudflare only
+> receives the finished `out/` directory. It never builds anything, so
+> **nothing in the Pages dashboard reaches it** — not environment
+> variables, not a deploy hook. The site is a static export with no Pages
+> Functions, so there is no runtime there to read a variable either.
+>
+> Until the migration, the terminal preview is the only deployment that
+> exists. The notes marked **On the terminal preview** below are the ones
+> to follow; the surrounding instructions stay correct and become live
+> the day the Git-connected project is created.
+
 ### 1. Create the Sanity project
 
 At [sanity.io/manage](https://www.sanity.io/manage) → **Create new
@@ -121,10 +143,49 @@ Until `SANITY_PROJECT_ID` is set, the build uses the committed
 correct; it just cannot see anything published since that file was
 written.
 
+> **On the terminal preview:** put these in your shell instead. The
+> build runs on your machine, so that is the only environment it can
+> read.
+>
+> ```bash
+> cd ctl-roofing
+> export SANITY_PROJECT_ID=<the project id from step 1>
+> export SANITY_DATASET=production
+> ```
+>
+> **Not `.env.local`.** Next loads that file for `NEXT_PUBLIC_*`, but
+> `scripts/gallery.mjs` is a plain Node script and there is no `dotenv`
+> in this project — it sees only the real environment. A
+> `SANITY_PROJECT_ID` sitting in `.env.local` does nothing at all, and
+> the only sign is the build quietly using the committed snapshot.
+>
+> Keeping the dataset **public** while you work this way is the simpler
+> path: no `SANITY_READ_TOKEN`, so no read credential to leak into a
+> build you are iterating on.
+
 ### 5. Wire Publish to a rebuild
 
 Two halves. Both are needed, and the gap between them is the single most
 common reason for "I published and nothing happened".
+
+> **On the terminal preview: skip this step — it cannot be built yet.**
+> A deploy hook triggers a build *on Cloudflare*, and a direct-upload
+> project has no build to trigger. There is nothing for a Sanity webhook
+> to call, so create both halves the day the Git-connected project
+> exists, not before.
+>
+> Until then the loop is manual, and the gallery step is inside the
+> build, so this is the whole of it:
+>
+> ```bash
+> npm run preview:deploy
+> ```
+>
+> Worth being straight with the client about what that means: **the
+> office cannot publish a photo and watch it appear** until production
+> is wired. Publishing works, and a developer has to deploy. That is the
+> single thing this step exists to remove, and it is the last thing to
+> get switched on.
 
 **The deploy hook**, in Cloudflare Pages → the project → **Settings →
 Builds & deployments → Deploy hooks** → *Add deploy hook*:
@@ -169,6 +230,28 @@ Change a caption in the studio, press Publish, and watch:
 
 If any step is silent, that is the step to fix. Each one is a different
 problem — see Troubleshooting.
+
+> **On the terminal preview**, the first two steps do not exist. Change
+> a caption, press Publish, then:
+>
+> ```bash
+> npm run preview:deploy
+> ```
+>
+> 1. The output shows `[gallery] fetched 40 photos from sanity:…`. If it
+>    says `SANITY_PROJECT_ID is not set — using the committed gallery`
+>    instead, the export did not take: re-read the note in step 4.
+> 2. `git diff content/gallery.generated.json` shows your caption, and
+>    the `source` line no longer starting `migration:`. **Commit it** —
+>    that file is what gives the gallery a history and what the build
+>    falls back to.
+> 3. `/gallery/` on the preview URL shows the new caption.
+>
+> Fewer steps, and every failure is local and legible rather than buried
+> in a remote build log. `npm run preview:deploy` runs the gallery step
+> inside the build and refuses to deploy if it fails, so there is no
+> separate command to remember and no way to ship a stale gallery by
+> forgetting one.
 
 ---
 
@@ -274,6 +357,12 @@ so fix it in the studio and publish again. Nothing is lost.
 environment variable is missing from Cloudflare, or was set on
 Production but not Preview. The build succeeds using the committed
 snapshot, which is why this is easy to miss.
+
+**The same line from `npm run preview:deploy`.** Different cause: that
+build runs on your machine, so it is your shell that is missing the
+variable, and setting it in Cloudflare will not help. Either you did not
+`export` it, or you put it in `.env.local` — which `scripts/gallery.mjs`
+does not read. Step 4.
 
 **`Sanity returned 403`.** The dataset is private and
 `SANITY_READ_TOKEN` is missing, wrong, or was revoked.

@@ -165,7 +165,33 @@ looking at a damaged roof.
 
 ---
 
-## 5. Mirror it into Cloudflare Pages
+## 5. Get the key into the deployed site
+
+Which half of this applies depends on how the site is being deployed, and the
+two put the key in completely different places.
+
+### On the terminal preview — it is already done
+
+`npm run preview:deploy` is `wrangler pages deploy out`: a **direct upload**.
+The build runs on your machine and Cloudflare receives the finished `out/`
+directory, so **the key in your `.env.local` is the key that ships**. There is
+nothing to mirror, and setting `NEXT_PUBLIC_WEB3FORMS_KEY` in the Pages
+dashboard does nothing — Cloudflare never builds this project, and a static
+export with no Pages Functions has no runtime there to read a variable.
+
+Which also means the reverse: **the key is compiled into whatever you last
+deployed.** Changing `.env.local` changes nothing on the preview URL until you
+deploy again.
+
+The one thing worth watching is that a key belonging to a personal test inbox
+is just as deployable as the real one. Before a preview goes anywhere near the
+client, submit the form on it and confirm the mail lands where CTL will be
+reading it.
+
+### On a Git-connected Pages project — mirror it
+
+This is ctlpro.com after the domain migration. Cloudflare clones the repo and
+runs the build itself, so it needs the key:
 
 **Settings → Environment variables, for Production *and* Preview.** A preview
 missing the key behaves differently from production, which defeats the point
@@ -218,7 +244,7 @@ to be robust to what it is sent.
 | --- | --- | --- |
 | Form shows "call us instead" | The key is missing, wrong, or rejected | Check the browser console — `contactConfigured()` logs the unset case by name, and a rejection logs Web3Forms' own response body |
 | Nothing arrives, form says it sent | Almost always the spam folder on the first send | Check it, then mark as not-spam. If genuinely nothing: confirm the key is for the inbox you are watching |
-| Arrives locally, not from the deployed site | The Cloudflare variable is unset, set on one environment only, or set after the last build | Section 5. Redeploy — the key is baked in at build time |
+| Arrives locally, not from the deployed site | On a Git-connected project: the Cloudflare variable is unset, set on one environment only, or set after the last build. On the terminal preview: you changed `.env.local` and did not redeploy | Section 5. Either way the key is baked in at build time, so the fix ends in a rebuild |
 | Reply goes to Web3Forms, not the customer | The `email` field did not reach them | It is required on the form, so this means the payload was altered. Check `submitContact.ts` |
 | Suddenly stopped, nothing changed | Monthly plan limit, or the key was rotated | Check the dashboard's usage. This failure is invisible from the site |
 | Spam arriving | The honeypot alone is not enough | Section 4 |

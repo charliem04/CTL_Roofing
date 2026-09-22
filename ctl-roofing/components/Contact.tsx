@@ -7,11 +7,10 @@
  * number, where to write when the phone goes unanswered, which
  * property, and what they’re seeing.
  *
- * Email is the one optional contact field. The dispatcher calls first,
- * so demanding both a number and an address to reach someone would
- * cost leads to buy a second route that is used second anyway — but a
- * quote, a photo set and an insurance scope all travel by email, and
- * asking for it here beats asking for it on the call.
+ * Both contact routes are required. The dispatcher calls first, so the
+ * number is what starts the job — but the quote, the photo set and the
+ * insurance scope all travel by email, and a lead with no address to
+ * send them to stalls on the second call instead of the first.
  */
 import { useState, type FormEvent } from "react";
 import { client } from "@/client.config";
@@ -34,7 +33,7 @@ const EMPTY = {
   company: "", // honeypot
 };
 
-const REQUIRED = ["name", "phone", "address"] as const;
+const REQUIRED = ["name", "phone", "email", "address"] as const;
 
 /*
  * A typo check, not a validator. Anything stricter starts refusing
@@ -47,8 +46,11 @@ const PROBLEM: Record<string, string> = {
   name: "Enter your name so we know who to ask for.",
   phone: "Enter a phone number we can reach you on.",
   address: "Enter the address of the property.",
-  email: "That email address doesn’t look right — check it, or leave it blank.",
+  email: "Enter an email address — it’s where the quote and photos go.",
 };
+
+/** Filled in, but not an address. A different miss needs a different nudge. */
+const MALFORMED_EMAIL = "That email address doesn’t look right — check it over.";
 
 export function Contact() {
   const [status, setStatus] = useState<Status>("idle");
@@ -68,8 +70,9 @@ export function Contact() {
     // enquiry is two calls to the same person from two people.
     if (status === "sending") return;
     const problems: string[] = REQUIRED.filter((key) => !form[key].trim());
-    // Optional, so an empty box is fine; a filled one that cannot be an
-    // address is a lead the office would quietly fail to reach.
+    // Blank is already caught above; this is the filled-in box that
+    // cannot be an address — a lead the office would silently fail to
+    // reach, which is worse than one that never typed anything.
     const email = form.email.trim();
     if (email && !EMAIL.test(email)) problems.push("email");
     setInvalid(problems);
@@ -107,7 +110,9 @@ export function Contact() {
     invalid.includes(key) ? "border-danger bg-danger-soft" : "border-line";
   const problem = (key: string) =>
     invalid.includes(key) ? (
-      <span className="mt-1.5 block text-sm text-danger">{PROBLEM[key]}</span>
+      <span className="mt-1.5 block text-sm text-danger">
+        {key === "email" && form.email.trim() ? MALFORMED_EMAIL : PROBLEM[key]}
+      </span>
     ) : null;
 
   return (
@@ -157,9 +162,7 @@ export function Contact() {
               </div>
 
               <label className="mt-4 block">
-                <span className="u-label mb-1.5 block">
-                  Email <span className="normal-case">(optional)</span>
-                </span>
+                <span className="u-label mb-1.5 block">Email</span>
                 <input
                   id="field-email"
                   name="email"

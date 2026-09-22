@@ -1,10 +1,17 @@
 "use client";
 
 /**
- * The request sheet. Four fields and a note — an assessment request is
+ * The request sheet. Five fields and a note — an assessment request is
  * a phone call waiting to happen, not an intake questionnaire, so the
- * form asks only what a dispatcher needs to call back: who, what
- * number, which property, and what they’re seeing.
+ * form asks only what a dispatcher needs to make contact: who, what
+ * number, where to write when the phone goes unanswered, which
+ * property, and what they’re seeing.
+ *
+ * Email is the one optional contact field. The dispatcher calls first,
+ * so demanding both a number and an address to reach someone would
+ * cost leads to buy a second route that is used second anyway — but a
+ * quote, a photo set and an insurance scope all travel by email, and
+ * asking for it here beats asking for it on the call.
  */
 import { useState, type FormEvent } from "react";
 import { client } from "@/client.config";
@@ -20,17 +27,28 @@ type Status = "idle" | "sending" | "sent" | "error";
 const EMPTY = {
   name: "",
   phone: "",
+  email: "",
   address: "",
   service: client.form.serviceOptions[0],
   message: "",
   company: "", // honeypot
 };
 
-const REQUIRED = [
-  { key: "name", label: "Enter your name so we know who to ask for." },
-  { key: "phone", label: "Enter a phone number we can reach you on." },
-  { key: "address", label: "Enter the address of the property." },
-] as const;
+const REQUIRED = ["name", "phone", "address"] as const;
+
+/*
+ * A typo check, not a validator. Anything stricter starts refusing
+ * addresses that work, and the only way to learn an inbox exists is to
+ * send to it — which the office does anyway when it follows up.
+ */
+const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+const PROBLEM: Record<string, string> = {
+  name: "Enter your name so we know who to ask for.",
+  phone: "Enter a phone number we can reach you on.",
+  address: "Enter the address of the property.",
+  email: "That email address doesn’t look right — check it, or leave it blank.",
+};
 
 export function Contact() {
   const [status, setStatus] = useState<Status>("idle");
@@ -49,10 +67,14 @@ export function Contact() {
     // A slow network invites a second press, and a double-submitted
     // enquiry is two calls to the same person from two people.
     if (status === "sending") return;
-    const missing = REQUIRED.filter((r) => !form[r.key].trim()).map((r) => r.key);
-    setInvalid(missing);
-    if (missing.length) {
-      document.getElementById(`field-${missing[0]}`)?.focus();
+    const problems: string[] = REQUIRED.filter((key) => !form[key].trim());
+    // Optional, so an empty box is fine; a filled one that cannot be an
+    // address is a lead the office would quietly fail to reach.
+    const email = form.email.trim();
+    if (email && !EMAIL.test(email)) problems.push("email");
+    setInvalid(problems);
+    if (problems.length) {
+      document.getElementById(`field-${problems[0]}`)?.focus();
       return;
     }
 
@@ -61,7 +83,7 @@ export function Contact() {
     const result = await submitContact({
       name: form.name,
       phone: form.phone,
-      email: "",
+      email: form.email,
       address: form.address,
       service: form.service,
       urgency: "",
@@ -83,6 +105,10 @@ export function Contact() {
     "transition-colors duration-150 placeholder:text-ink-faint hover:border-brand-soft focus:border-brand active:border-brand";
   const tone = (key: string) =>
     invalid.includes(key) ? "border-danger bg-danger-soft" : "border-line";
+  const problem = (key: string) =>
+    invalid.includes(key) ? (
+      <span className="mt-1.5 block text-sm text-danger">{PROBLEM[key]}</span>
+    ) : null;
 
   return (
     <section id="contact" className="band bg-surface-alt">
@@ -109,11 +135,7 @@ export function Contact() {
                     aria-invalid={invalid.includes("name")}
                     className={`${field} ${tone("name")}`}
                   />
-                  {invalid.includes("name") && (
-                    <span className="mt-1.5 block text-sm text-danger">
-                      {REQUIRED[0].label}
-                    </span>
-                  )}
+                  {problem("name")}
                 </label>
 
                 <label className="block">
@@ -130,13 +152,28 @@ export function Contact() {
                     aria-invalid={invalid.includes("phone")}
                     className={`${field} ${tone("phone")} font-mono tabular-nums`}
                   />
-                  {invalid.includes("phone") && (
-                    <span className="mt-1.5 block text-sm text-danger">
-                      {REQUIRED[1].label}
-                    </span>
-                  )}
+                  {problem("phone")}
                 </label>
               </div>
+
+              <label className="mt-4 block">
+                <span className="u-label mb-1.5 block">
+                  Email <span className="normal-case">(optional)</span>
+                </span>
+                <input
+                  id="field-email"
+                  name="email"
+                  type="email"
+                  inputMode="email"
+                  autoComplete="email"
+                  maxLength={160}
+                  value={form.email}
+                  onChange={set("email")}
+                  aria-invalid={invalid.includes("email")}
+                  className={`${field} ${tone("email")}`}
+                />
+                {problem("email")}
+              </label>
 
               <label className="mt-4 block">
                 <span className="u-label mb-1.5 block">Property address</span>
@@ -151,11 +188,7 @@ export function Contact() {
                   aria-invalid={invalid.includes("address")}
                   className={`${field} ${tone("address")}`}
                 />
-                {invalid.includes("address") && (
-                  <span className="mt-1.5 block text-sm text-danger">
-                    {REQUIRED[2].label}
-                  </span>
-                )}
+                {problem("address")}
               </label>
 
               <label className="mt-4 block">

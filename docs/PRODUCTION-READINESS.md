@@ -111,25 +111,13 @@ enforced — but there is no standalone `typecheck` script.
 
 Resolved by the cleanup pass. What was found, and what was done:
 
-- `graphify-out/` (2.7 MB, a code-analysis cache) and `.idea/` were committed.
-  Both are untracked and gitignored now. `graphify-out/` is deliberately kept
-  in the working tree — it is a local tool cache that earns its keep — so it
-  must stay ignored rather than be deleted.
-- `ctl_pictures/` (52 MB) is unused by the build but is the client's only copy
-  of the originals, so it was kept and moved to `assets/source-photos/`, a name
-  that says it is source rather than a build input.
-- `package.json` is named `ctl-roofing`. So is the dev launch config, which
-  until then ran `--prefix` on a directory that did not exist.
-- The stale root `README-DEPLOY.md` — the template copy that **contradicted the
-  code**, naming Formspree and claiming an unset key meant the form silently
-  succeeds in demo mode — is deleted. The accurate checklist now sits at the
-  root in its place.
-- `ctl-roofing/docs/` moved to `docs/` at the repo root, alongside the
-  checklist, since these describe the launch rather than the Next app.
+- `graphify-out/` (2.7 MB, a code-analysis cache) and `.idea/` were committed. Both are untracked and gitignored now. `graphify-out/` is deliberately kept in the working tree — it is a local tool cache that earns its keep — so it must stay ignored rather than be deleted.
+- `ctl_pictures/` (52 MB) is unused by the build but is the client's only copy of the originals, so it was kept and moved to `assets/source-photos/`, a name that says it is source rather than a build input.
+- `package.json` is named `ctl-roofing`. So is the dev launch config, which until then ran `--prefix` on a directory that did not exist.
+- The stale root `README-DEPLOY.md` — the template copy that **contradicted the code**, naming Formspree and claiming an unset key meant the form silently succeeds in demo mode — is deleted. The accurate checklist now sits at the root in its place.
+- `ctl-roofing/docs/` moved to `docs/` at the repo root, alongside the checklist, since these describe the launch rather than the Next app.
 
-One thing this does **not** fix: the `.git` directory is still 122 MB, because
-untracking a file does not remove its blobs from history. Only a history
-rewrite would reclaim that, which is not worth doing before a cutover.
+One thing this does **not** fix: the `.git` directory is still 122 MB, because untracking a file does not remove its blobs from history. Only a history rewrite would reclaim that, which is not worth doing before a cutover.
 
 ### 10. Missing web app furniture
 
@@ -197,8 +185,7 @@ and should be named rather than discovered.
 
 - update `backend.repo` in `public/admin/config.yml`
 - re-point the `sveltia-cms-auth` Worker's `ALLOWED_DOMAINS`
-- repo hygiene, the package name and the stale root `README-DEPLOY.md` are
-  already done (finding 9); nothing here is outstanding
+- repo hygiene (finding 9) is done: `ctl_pictures/` moved to `assets/source-photos/`, `graphify-out/` and `.idea/` are untracked and gitignored, the stale root `README-DEPLOY.md` was deleted, and `package.json` was renamed to `ctl-roofing`.
 
 **Then extend the CMS beyond the gallery.** The pattern already exists:
 `content/gallery.json` is CMS-written, read through `lib/content.ts`, and

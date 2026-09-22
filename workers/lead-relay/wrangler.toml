@@ -78,7 +78,9 @@ RATE_LIMIT_PER_HOUR = "10"
 # posting them somewhere unintended. Fix the spelling and the next sweep
 # delivers the backlog.
 #
-# CRM_ADAPTER = "hubspot"
+
+CRM_ADAPTER = "hubspot"
+
 #
 # Job applications are NOT forwarded to a CRM that honours this setting
 # (HubSpot does; the generic webhook takes both kinds as it always has).
@@ -106,12 +108,7 @@ RELAY_PUBLIC_ORIGIN = "https://relay.ctlpro.com"
 
 # The active setting. See the block above for what the values mean;
 # adding a CRM is one file in src/crm/ and one line in its registry.
-#
-# "hubspot" with no CRM_AUTH_TOKEN set is deliberate and supported, not a
-# half-finished state: the adapter reports itself unconfigured, rows park
-# as crm_status='disabled', and the retry sweep delivers the whole
-# backlog the moment the service key is set. docs/HUBSPOT-SETUP.md §4.
-CRM_ADAPTER = "hubspot"
+# CRM_ADAPTER = "generic"
 
 # ── Secrets — set with `wrangler secret put`, never in this file ─────
 #

@@ -63,6 +63,13 @@ around them.
       `IP_HASH_SALT`, deployed, **and `npm run retention` run against the real
       bucket**. Without that lifecycle rule the twelve-month retention the
       privacy policy promises is not true.
+- [ ] **Remove `https://ctl-preview.pages.dev` from `ALLOWED_ORIGINS`** in
+      both `workers/lead-relay/wrangler.toml` and
+      `workers/careers-upload/wrangler.toml`, and redeploy both. It is there
+      so the terminal preview can post to them before production exists;
+      afterwards it is a third origin allowed to submit to the real relay for
+      no reason. Do this after the preview verification below, not before, or
+      the verification is what breaks.
 - [ ] Confirm `ALLOW_INSECURE_NO_CAPTCHA` is absent from the deployed Worker
       config. It belongs to `[env.dev.vars]` only. It is the one value where a
       copy-paste turns a gated endpoint into an open one.

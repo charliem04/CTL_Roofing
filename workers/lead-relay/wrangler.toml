@@ -43,25 +43,27 @@ crons = ["*/15 * * * *"]
 [vars]
 # Exact scheme+host, comma separated. No wildcards, no trailing slash.
 #
-# ADD THE PAGES PREVIEW ORIGIN BEFORE TESTING ON PREVIEW, and take it out
-# again afterwards. This list is the one place a preview deployment differs
-# from production in a way that is INVISIBLE from the front of the site:
-# /lead answers a preview origin with a 403, and the contact form fires that
-# request un-awaited with a .catch() (see lib/submitContact.ts), so the
-# visitor still sees success, the Web3Forms email still arrives, and the row
-# simply never exists. Nothing on the page says so.
+# The third entry is the terminal preview (`npm run preview:deploy`), and it
+# COMES OUT AT CUTOVER — see docs/CUTOVER.md, T-7 days.
 #
-# The origin is the branch alias, not a per-deployment hash URL — the hash
-# changes on every build and there are no wildcards here:
+# This list is the one place a preview deployment differs from production in
+# a way that is INVISIBLE from the front of the site: /lead answers an origin
+# that is not here with a 403, and the contact form fires that request
+# un-awaited with a .catch() (see lib/submitContact.ts), so the visitor still
+# sees success, the Web3Forms email still arrives, and the row simply never
+# exists. Nothing on the page says so.
 #
-#   https://<branch-with-slashes-and-dots-as-dashes>.<pages-project>.pages.dev
+# IT MUST BE THE STABLE ALIAS, NOT THE URL WRANGLER PRINTS. A deploy prints
+# its per-deployment hash first — https://b93c903c.ctl-preview.pages.dev —
+# and that hash changes every single deploy, so pinning it here works once
+# and then fails silently forever after. There are no wildcards. The stable
+# alias is the project's own hostname, https://ctl-preview.pages.dev, which
+# is also listed beside the hash under Pages -> ctl-preview -> Deployments.
 #
-# so branch `claude/my-branch` on project `ctl-roofing` is
-# https://claude-my-branch.ctl-roofing.pages.dev. Confirm the exact string in
-# Cloudflare Pages -> the deployment -> its alias, or read it out of the
-# browser's address bar; a guess that is one character off fails the same
-# silent way.
-ALLOWED_ORIGINS = "https://www.ctlpro.com,https://ctlpro.com"
+# Whichever you use, browse the site from THAT hostname when testing: the
+# browser sends the URL the page was loaded from as Origin, so opening the
+# hash URL and submitting the form is refused no matter what is in this list.
+ALLOWED_ORIGINS = "https://www.ctlpro.com,https://ctlpro.com,https://ctl-preview.pages.dev"
 RATE_LIMIT_PER_HOUR = "10"
 
 # ── Which CRM, and which rows ────────────────────────────────────────

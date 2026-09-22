@@ -14,12 +14,21 @@ was a list you could work through. This is that list.
         └──────────────┐
                        ▼
   careers form ──► careers Worker ──► R2 (the résumé file)
-        │                │
-        │                └──────────┐
-        │                           ▼
-        └──────────────────────► lead relay ──► D1 (the lead book)
+        │                │                   ▲
+        │                └──────────┐        │ read-only
+        │                           ▼        │
+        └──────────────────────► lead relay ─┘
                                       │
+                                      ├────────► D1 (the lead book)
+                                      │
+                                      ├────────► CRM webhook
+                                      │            (leads)
                                       └────────► CRM webhook
+                                                   (applications, optional)
+
+  office ── clicks the link on a CRM record ──► Cloudflare Access
+                                                     │
+                                          GET /resume/:leadId
 ```
 
 ## Why it stores before it forwards
@@ -74,6 +83,49 @@ rather than quietly falling back to `generic`, because a typo would
 otherwise throw every lead at whatever `CRM_WEBHOOK_URL` happened to
 hold. Rows park as `disabled` and the log says so.
 
+### Adapters
+
+The *shape* sent to that URL is a `CRM_ADAPTER` away, because the shape
+is the only part that a change of CRM changes:
+
+| `CRM_ADAPTER` | Sends | `CRM_AUTH_TOKEN` |
+| --- | --- | --- |
+| `generic` (default) | one flat JSON object — what this Worker has always sent, and what a Zapier or Make hook wants | if the target asks for one |
+| `hubspot` | HubSpot Forms API v3, `{fields: [{name, value}, …]}` | none — the endpoint is unauthenticated, the form GUID in the URL is the credential |
+
+For HubSpot Free, `CRM_WEBHOOK_URL` is the whole submit endpoint:
+
+```
+https://api.hsforms.com/submissions/v3/integration/submit/{portalId}/{formGuid}
+```
+
+Two HubSpot-specific things that will otherwise cost an evening. It
+identifies a contact **by email address**, so a lead that arrived with
+only a phone number is refused with a 400 — left as a visible failure in
+`crm_error` rather than papered over with a synthetic address, because a
+made-up email in a CRM is wrong forever and wrong in the field the
+office will try to reach the customer on. And every field name has to
+exist on that form, so everything a stock form has no box for is sent as
+prose inside `message` rather than as a field that may not be there.
+
+Adding JobNimbus or AccuLynx is writing one `CrmAdapter` function and
+adding one line to `CRM_ADAPTERS` — deliberately nowhere near
+`forward()`, which holds the ordering guarantee, the attempt cap and the
+retry bookkeeping. A mapping mistake in a new adapter costs a
+badly-shaped record the retry will show you, not a lost lead.
+
+### Applicants do not have to go where customers go
+
+`CRM_APPLICATION_WEBHOOK_URL` is optional. Set it and `kind='application'`
+rows go there instead; unset, they follow the leads, which is the
+previous behaviour exactly.
+
+Worth setting once a real CRM is live. Job applicants in a sales CRM's
+contact list burn a free tier's contact cap, and they carry retention
+obligations a customer does not — the site promises an applicant's file
+is deleted after twelve months, and that promise only covers storage we
+control.
+
 ## Routes
 
 | Route | Who calls it | Auth |
@@ -81,12 +133,20 @@ hold. Rows park as `disabled` and the log says so.
 | `POST /lead` | the contact form, from a browser | CORS origin allowlist |
 | `POST /application` | the careers Worker, server-to-server | `X-Ingest-Secret` |
 | `GET /export.csv` | a person, occasionally | `Authorization: Bearer` |
+| `GET /resume/:leadId` | a person, from a link on a CRM record | **Cloudflare Access** |
 | `GET /health` | uptime checks | none |
 
 `POST /lead`'s origin check stops another *website* posting on a
 visitor's behalf and nothing else — a script sets `Origin` to whatever
 it likes. The KV rate limiter is a backstop; a WAF rate-limiting rule on
 the route is better, because it stops the request before it bills.
+
+`GET /resume/:leadId` is the one route with **no auth in this code**, and
+that is the design rather than an omission — see below. Do not put
+Access in front of `/lead` or `/application`: the first is posted to by
+a visitor's browser and the second by the careers Worker, and a sign-in
+page in front of either breaks the form for everyone while every
+application silently 302s into HTML.
 
 The only content rule is reachability, and it differs by kind. A `/lead`
 must carry an **email address** — the contact form requires one, the CRM
@@ -111,12 +171,33 @@ npx wrangler secret put EXPORT_TOKEN    # any long random string
 # When a CRM is chosen — either the generic webhook:
 npx wrangler secret put CRM_WEBHOOK_URL
 npx wrangler secret put CRM_AUTH_TOKEN  # if it wants one
+# When a CRM is chosen — either the generic webhook:
+npx wrangler secret put CRM_WEBHOOK_URL
+npx wrangler secret put CRM_AUTH_TOKEN  # if it wants one
+
 # …or HubSpot (set CRM_ADAPTER = "hubspot" in wrangler.toml first):
 npx wrangler secret put CRM_AUTH_TOKEN  # the private app token
+
+# Optional: send job applicants somewhere other than the sales CRM
+npx wrangler secret put CRM_APPLICATION_WEBHOOK_URL
 
 # 3. Deploy
 npx wrangler deploy
 ```
+
+Two `[vars]` in `wrangler.toml` matter for the résumé link:
+
+- `RELAY_PUBLIC_ORIGIN` — this Worker's own public origin, which is what
+  `resumeUrl` is built from. It must be the hostname the Access
+  application covers; point it at a `workers.dev` address and every link
+  in the CRM bypasses the sign-in. Unset, rows still forward and still
+  carry `resumeKey`, they just arrive with no link — and the log says so
+  on every one.
+- `CRM_ADAPTER` — see *Adapters* above.
+
+Then create the Access application, per `docs/LAUNCH-CREDENTIALS.md`.
+Nothing in this Worker refuses to run without it; the route is simply
+open to anybody holding a lead id until it exists.
 
 Then connect the two producers:
 
@@ -135,6 +216,66 @@ whether that is no `CRM_WEBHOOK_URL` on the generic adapter or no
 `crm_status='disabled'` and delivered in full the first time the secret
 exists.
 
+## Getting a résumé out
+
+`GET /resume/:leadId` looks the lead up in D1, reads its `resume_key`,
+and streams the object out of R2 as an attachment named for the
+applicant — `Jane-Doe-resume.pdf`, not `9f2c…-cv.pdf`. The `resumeUrl`
+on every forwarded record points at it.
+
+What it says when it cannot serve a file:
+
+| | |
+| --- | --- |
+| `404` | no such lead, or that lead has no résumé. One answer for both, so the route cannot be used to ask whether an id exists |
+| **`410`** | the row has a key and R2 has no object — the 365-day lifecycle rule has expired it. Says so in words |
+| `503` | the `RESUMES` binding is missing on this deployment. The file is fine; fetch it with wrangler |
+
+The 410 is the point of the whole table. A row with a key and no object
+is the retention rule having worked: applications are deleted after
+twelve months, deliberately, and the privacy policy promises exactly
+that. A 404 there would read as a broken link and send somebody hunting
+for a file that was destroyed on purpose. A truthful 410 beats a broken
+download.
+
+### Why Cloudflare Access, and not code
+
+The office reaches this by **clicking a link inside a CRM record**. A
+browser following a link cannot attach an `Authorization` header, so a
+bearer token on this route would only ever be a token *in the URL* — a
+live credential sitting in every CRM record, browser history and
+forwarded email that ever touched the lead. Signed R2 URLs do not solve
+it either: R2's S3-compatible signing tops out at seven days, and a
+résumé link that dies after a week is worse than one that never claimed
+to exist, because it fails long after anybody is watching.
+
+So the gate is a Cloudflare Access application in front of the route —
+free up to 50 users, authenticating against Google Workspace, no code.
+Setup is in `docs/LAUNCH-CREDENTIALS.md`.
+
+Two consequences that follow from the gate living outside this code:
+
+- **This Worker cannot tell whether Access is there.** The lead id in
+  the path is an unguessable v4 UUID, which is worth having and is not
+  access control.
+- **`*.workers.dev` must be off.** Access binds to hostnames on a zone;
+  a `workers.dev` address is not on the zone and is not covered by the
+  policy, so it would be an ungated door beside the gated one. The
+  `[[routes]]` block and `workers_dev = false` in `wrangler.toml` are
+  commented out, to be enabled at the same time as the application.
+
+A `Cf-Access-Jwt-Assertion` header check was considered as a
+belt-and-braces gate and rejected: a header check is not a signature
+check, so it would refuse an honest misconfiguration while waving
+through anyone who can reach the Worker off-zone and set a header —
+exactly the case it would be there to catch. Verifying that JWT properly
+is the real upgrade, and it needs the team domain and audience tag as
+configuration.
+
+The bucket stays private throughout. There is no `r2.dev` URL and no
+custom domain on it, which is what keeps the privacy policy's promise
+that a CV sits somewhere "only we can reach" true.
+
 ## Getting the leads out
 
 ```bash
@@ -147,9 +288,11 @@ That is not cosmetic: spreadsheets treat those as formulas, and this
 table is filled in by strangers through a public form — the exact threat
 model CSV injection was written for.
 
-There is no other read path. The table holds names, phone numbers and
-addresses; with `EXPORT_TOKEN` unset, `/export.csv` refuses everything
-rather than serving customer records to anyone who guesses the path.
+This is the only way the *table* leaves the Worker — `/resume/:leadId`
+serves one file and never a record. The table holds names, phone numbers
+and addresses; with `EXPORT_TOKEN` unset, `/export.csv` refuses
+everything rather than serving customer records to anyone who guesses the
+path.
 
 ## What was verified, and how
 
@@ -184,6 +327,50 @@ without a CRM account: the property mapping, and the delivery flow
 against a stand-in HubSpot told to answer 409, 429 or 401 on demand.
 It is not integration testing — the first real lead through a real
 portal is still what proves the property names.
+
+The résumé route and the adapters were added later, and D1 is still
+unprovisioned (see `docs/PRODUCTION-READINESS.md`, finding 1), so those
+were driven against **stub D1 and R2 bindings** rather than the real
+ones — the module's own `fetch` and `scheduled` handlers, called
+directly, with `fetch()` captured to see what a CRM would have received:
+
+- an application stored and forwarded with
+  `resumeUrl = https://<origin>/resume/<id>`, `resumeKey` intact beside
+  it, and the row marked `sent`
+- `GET /resume/:leadId` → 200, `Content-Type` from R2,
+  `Content-Disposition: attachment; filename="Jane-Doe-resume.pdf"`,
+  `no-store`, `nosniff`, and the file's bytes
+- **the expiry case**: the same lead with the object removed from the
+  bucket → `410` and text naming the twelve-month rule, not a 404
+- 404 for an unknown lead, an empty id, a lead with no `resume_key`, an
+  over-long id and an encoded `../../` traversal; 405 on POST; 503 with
+  the wrangler fallback when `RESUMES` is unbound
+- `RELAY_PUBLIC_ORIGIN` unset → empty `resumeUrl`, `resumeKey` still
+  there, and a warning in the log
+- `CRM_ADAPTER=hubspot` → posted to the hsforms URL as
+  `{fields: […]}`, the name split across firstname/lastname, empty
+  fields omitted rather than sent blank, and the role, questionnaire and
+  résumé link flattened into `message`; an unknown `CRM_ADAPTER` fell
+  back to `generic` and said so
+- with both webhook URLs set, the application went to the applicant URL
+  and the lead to the sales URL; with only the applicant URL set, the
+  lead was stored `disabled` and never forwarded, and the sweep's query
+  asked for `kind IN ('application')` alone rather than filling its
+  batch with rows it would decline to send
+- a row whose `answers` never parsed as an object forwarded anyway,
+  with the text intact in both shapes — a bare `JSON.parse` there is a
+  row that fails six times and then sits forever with a `SyntaxError`
+  where the CRM's own reason should be
+- the outage case again: with the CRM returning 503 the caller still got
+  `{"ok":true}`, the row went to `failed` with `503` in `crm_error`, and
+  the sweep delivered it once the CRM recovered
+- `/export.csv`, `/health`, the 401s and the unknown-route 404 all
+  unchanged
+
+60 assertions, all passing. What that does *not* cover is anything only
+the real bindings can show — D1's own behaviour, R2 streaming at size,
+and whether Access is actually in front of the route. The end-to-end
+proof in `docs/PRODUCTION-READINESS.md` is still owed.
 
 ## Operating notes
 

@@ -5,8 +5,20 @@ compatibility_date = "2026-08-01"
 # ── R2 ───────────────────────────────────────────────────────────────
 # This bucket must stay PRIVATE. Do not connect a custom domain to it
 # and do not enable the r2.dev public URL — it holds strangers' names,
-# phone numbers and CVs. The Worker only ever writes; reading is done
-# from the dashboard or `wrangler r2 object get`.
+# phone numbers and CVs.
+#
+# THIS Worker only ever writes; it has no read path and is not getting
+# one. Reading happens in two places, neither of them here:
+#
+#   - the lead relay's GET /resume/:leadId, which has its own read-only
+#     binding on this bucket and is gated by Cloudflare Access. That is
+#     the path the office uses: a link on the CRM record.
+#   - the R2 dashboard, or `wrangler r2 object get`, for support and for
+#     anything the relay cannot answer.
+#
+# Both reach the file through something that authenticates a person.
+# Neither makes the bucket public, which is what keeps the privacy
+# policy's "only we can reach it" true.
 [[r2_buckets]]
 binding = "RESUMES"
 bucket_name = "ctl-resumes"

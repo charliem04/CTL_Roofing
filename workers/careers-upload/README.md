@@ -13,13 +13,20 @@ Worker — it posts to Web3Forms directly, which needs no server and so
 should not have one in front of it. Keeping the Worker to one job means
 the site's revenue path cannot be taken down by a Worker deploy.
 
-There is no read path, no listing endpoint, and no way to get a file
-back out over HTTP — retrieving an application is done from the R2
-dashboard or with `wrangler r2 object get`.
+There is no read path here, no listing endpoint, and no way to get a
+file back out of *this* Worker over HTTP.
 
 That is the important design decision. The bucket holds strangers'
 names, phone numbers and CVs, so the failure mode worth engineering out
 is "someone found a public URL", not "someone uploaded a 6MB file".
+
+Reading a résumé back is the **lead relay's** job. It holds a read-only
+binding on the same bucket and serves one download route,
+`GET /resume/:leadId`, gated by Cloudflare Access — so the office
+clicks a link on the CRM record. The R2 dashboard and
+`wrangler r2 object get` are still there for support. The bucket stays
+private in every one of those cases; what changed is that a person no
+longer needs a Cloudflare login to read a CV.
 
 ## Deploy
 
@@ -152,6 +159,13 @@ KV under `srcip:<key>` with a 30-day TTL and expires on its own. Set
 `IP_HASH_SALT`, or nothing IP-derived is recorded at all.
 
 ## Reading applications
+
+Normally nobody does this by hand: the lead relay's
+`GET /resume/:leadId` serves the file as a download behind Cloudflare
+Access, and that URL is on the CRM record. Reach for wrangler when the
+relay cannot answer — a lead id that predates the route, a file the
+office needs while D1 is down, or a support question about the object
+itself:
 
 ```sh
 npx wrangler r2 object list ctl-resumes --prefix applications/2026/

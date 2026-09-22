@@ -6,12 +6,19 @@
  *  exists solely so somebody can attach a résumé: it takes one
  *  multipart POST, validates it hard, writes the file to a PRIVATE R2
  *  bucket, and pings the office. Nothing else. It has no read path, no
- *  listing, and no way to hand a file back out — retrieving an
- *  application is done from the R2 dashboard or with wrangler.
+ *  listing, and no way to hand a file back out.
  *
  *  That is deliberate. A public read path on a bucket full of
  *  strangers' phone numbers and addresses is the failure mode worth
  *  designing out, not the file-size limit.
+ *
+ *  Reading a résumé back is somebody else's job, and stays that way.
+ *  The lead relay holds a read-only binding on the same bucket and
+ *  serves one download route, GET /resume/:leadId, behind Cloudflare
+ *  Access — so the office clicks a link on the CRM record rather than
+ *  opening the R2 dashboard. This Worker is not that route and must not
+ *  grow into it: the thing that takes anonymous uploads from the
+ *  internet is the last thing that should also be able to serve them.
  *
  *  ── THE LAYERS, and what each is actually worth ─────────────────────
  *

@@ -56,6 +56,7 @@ minutes each once he is sitting there.
 | Analytics account (Plausible paid / GA4 free) | `NEXT_PUBLIC_PLAUSIBLE_DOMAIN` | No analytics. Banner still behaves correctly |
 | Call-tracking provider, if adopted | `client.config.ts → tracking.dniScriptUrl` | Every number on the site stays the real one, which is the correct default |
 | Résumé handling decision | `NEXT_PUBLIC_CAREERS_ENDPOINT` | `/careers/` is a **live nav item** — the form refuses and points at email until this is resolved |
+| **Who may read a résumé**, and the Google accounts they use | Cloudflare Access policy (§6) | Nobody can open a CV from a CRM record. The file is safe in R2 and reachable with wrangler, which is not a thing the office can do |
 
 ---
 
@@ -67,9 +68,12 @@ No client involvement. Listed so nothing is forgotten at wiring time.
 |---|---|---|
 | `INGEST_SECRET` | lead-relay | Must equal `RELAY_INGEST_SECRET` on careers-upload, or applications are refused with a 401 |
 | `RELAY_INGEST_SECRET` | careers-upload | ″ |
-| `EXPORT_TOKEN` | lead-relay | Gates `/export.csv`, the only way customer data leaves the Worker. Unset = refuses everything |
+| `EXPORT_TOKEN` | lead-relay | Gates `/export.csv`, the only way the lead *table* leaves the Worker. Unset = refuses everything. The other read path, `/resume/:leadId`, serves one file and is gated by Access (§6) |
 | `IP_HASH_SALT` | careers-upload | Unset = no IP-derived value stored at all. Safe, but loses the "same source" signal |
 | `NOTIFY_WEBHOOK` | careers-upload | Point at the relay's `/application` route |
+| `RELAY_PUBLIC_ORIGIN` | lead-relay `[vars]` | The relay's own hostname, and it must be the one Access covers (§6). Unset, forwarded records carry `resumeKey` but no clickable link — and the Worker log says so on every one |
+| `CRM_ADAPTER` | lead-relay `[vars]` | `generic` (default) or `hubspot`. Wrong value = the CRM quietly receives the wrong shape, which is the slowest failure here to notice |
+| `CRM_APPLICATION_WEBHOOK_URL` | lead-relay | Optional. Unset, job applicants land in the sales CRM alongside customers — see §6 for why that is worth avoiding |
 | D1 `database_id` | `workers/lead-relay/wrangler.toml` | **Currently a placeholder string.** `wrangler d1 create ctl-leads`, paste the real id, `npm run schema` |
 | GitHub OAuth app client ID + secret | the `sveltia-cms-auth` Worker | Plus `ALLOWED_DOMAINS` |
 | `CMS_AUTH_URL` | Pages build env | Build-time only — **not** `NEXT_PUBLIC_`. Read by `scripts/cms.mjs` |
@@ -120,7 +124,77 @@ Node comes from `.nvmrc` (20). If Pages ignores it, set `NODE_VERSION=20`.
 
 ---
 
-## 6. Privacy policy must be updated before two of these switch on
+## 6. Cloudflare Access on the résumé route
+
+The lead relay serves `GET /resume/:leadId`, which streams a job
+applicant's CV out of the private R2 bucket. That URL is what
+`crmPayload()` now puts on every forwarded record, so the office opens a
+résumé by clicking a link on a CRM record instead of learning the R2
+dashboard.
+
+**The route has no authentication of its own.** That is the design, not
+an omission: a browser following a link cannot attach an `Authorization`
+header, so a token there would be a token *in the URL* — a live
+credential in every CRM record, browser history and forwarded email that
+ever touched the lead. Cloudflare Access puts a Google sign-in in front
+of the route instead, and costs nothing at CTL's size.
+
+| | |
+|---|---|
+| **What to create** | Zero Trust → Access → Applications → **Self-hosted** |
+| **Application name** | `CTL résumé downloads` |
+| **Domain** | the relay's hostname, path `resume` — i.e. `relay.ctlpro.com/resume`. A path-scoped application covers everything under it |
+| **Identity provider** | Google (Workspace). Free tier covers 50 users; CTL will use a handful |
+| **Policy** | Action **Allow**, rule *Emails ending in* `@ctlpro.com` — or *Emails* with the specific addresses if CTL's mail is not on its own domain |
+| **Session duration** | 24 hours. Long enough that nobody signs in twice in a working day, short enough that a borrowed laptop is not a standing grant |
+| **Who gets access** | whoever handles hiring, and Charlie. Not "everyone at CTL" — this is the only route on the whole site that serves one person's private document to another |
+
+Three things that have to be true at the same time, and the first is the
+one that gets forgotten:
+
+1. **`*.workers.dev` must be off.** Access binds to hostnames on a zone.
+   A `workers.dev` address is not on the zone, is not covered by any
+   policy, and serves the identical code — an ungated door beside the
+   gated one. `workers/lead-relay/wrangler.toml` carries a `[[routes]]`
+   block and `workers_dev = false`, both commented out, to be enabled at
+   the same moment the application is created. Not before: without a
+   route the Worker has no hostname at all.
+2. **`RELAY_PUBLIC_ORIGIN` must be that same hostname.** It is what the
+   links in the CRM are built from. Point it at `workers.dev` and every
+   record carries a link that bypasses the sign-in.
+3. **Do not protect `/lead` or `/application`.** Scope the application to
+   the `resume` path and nothing else. `/lead` is posted to by a
+   visitor's browser and `/application` by the careers Worker, server to
+   server; an Access sign-in page in front of either breaks the contact
+   form for every visitor and turns every job application into a silent
+   302 into HTML. Both already have their own gate — an origin check and
+   a shared secret.
+
+**Without it:** the route answers anybody who has a lead id. Those ids
+are unguessable v4 UUIDs, so this is not an open directory of CVs — but
+an unguessable URL is not access control, and the ids travel in CRM
+records, in `/export.csv` and in the JSON the contact form gets back.
+Treat the application as required before the first real application
+arrives.
+
+**What it does not change:** the bucket stays private. No `r2.dev` URL,
+no custom domain on it, and the relay's binding is read-only by
+convention — it only ever calls `get()`. The privacy policy tells
+applicants their CV sits somewhere "only we can reach", and an
+Access-gated Worker route keeps that sentence true where a public bucket
+would not.
+
+One related decision worth making in the same sitting: set
+`CRM_APPLICATION_WEBHOOK_URL` on the relay so job applicants go
+somewhere other than the sales CRM. Unset, they land in the same contact
+list as customers, where they burn a free tier's contact cap and sit
+under a retention policy written for leads. The site promises an
+applicant's file is deleted after twelve months, and that promise only
+covers storage we control.
+
+---
+
+## 7. Privacy policy must be updated before two of these switch on
 
 `app/privacy/page.tsx` names Web3Forms, Calendly, Plausible, Cloudflare and
 R2. It does **not** mention Google Places or the lead relay/CRM. Both are

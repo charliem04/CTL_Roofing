@@ -219,13 +219,41 @@ does.
 CRM_ADAPTER = "hubspot"
 ```
 
-**b. The token**, as a Worker secret:
+**b. The key**, as a Worker secret — but note the order, which is the
+opposite of what feels natural:
 
 ```bash
 cd workers/lead-relay
-npx wrangler secret put CRM_AUTH_TOKEN     # paste the key from section 2, then Enter
-npx wrangler deploy
+npx wrangler deploy                                  # FIRST — creates the Worker
+npx wrangler secret put CRM_AUTH_TOKEN --env=""      # then paste the key at the prompt
 ```
+
+> **Deploy first.** A secret is attached to a Worker, so there is nothing to
+> attach one to until the Worker exists. Running `secret put` first gets you
+> *"There doesn't seem to be a Worker called ctl-lead-relay. Do you want to
+> create a new Worker with that name?"* — say **no** to that and deploy
+> properly instead. Saying yes creates a placeholder Worker with no code in it,
+> which then answers every form submission with an error until the real deploy
+> lands on top.
+>
+> And `wrangler deploy` itself will not work until D1 exists: `wrangler.toml`
+> ships with `database_id = "<paste the id wrangler prints>"`, which is not an
+> id. Run `npx wrangler d1 create ctl-leads`, paste the real id in, then
+> `npm run schema`. The relay README has the full first-deploy sequence.
+
+> **`secret put` takes the NAME, not the value.** `CRM_AUTH_TOKEN` is the
+> argument; the key itself goes in at the hidden prompt that follows. Passing
+> the key as the argument creates a secret *named* after your key — and puts a
+> live credential into your shell history, where `Get-History` or `.bash_history`
+> will hand it to the next person who looks. If that happens, rotate the key in
+> HubSpot before doing anything else; it is a thirty-second fix and the
+> alternative is a credential you cannot un-leak.
+
+> **`--env=""` is not optional here.** `wrangler.toml` defines an `[env.dev]`
+> block, so wrangler refuses to guess which environment you mean and warns on
+> every secret command. The empty string explicitly means "the top-level
+> environment" — the production one. Without it you get the warning every time
+> and, on some wrangler versions, the secret on the wrong environment.
 
 That is the whole integration. `CRM_WEBHOOK_URL` is not used by this adapter
 and can stay unset; leaving it set does nothing, and switching `CRM_ADAPTER`
@@ -375,10 +403,13 @@ date on it, so here is the source, checked **22 September 2026**:
 - [Make API requests using a service key](https://developers.hubspot.com/docs/apps/developer-platform/build-apps/authentication/account-service-keys)
   — the UI path, the scope model, and `Authorization: Bearer …` usage.
 
-Two things deliberately *not* stated above, because they could not be
-confirmed first-hand and nothing here depends on them: the **prefix** a service
-key carries (a private app token starts `pat-`; sources disagree on whether a
-service key does too — copy whatever HubSpot shows you), and whether the public
-beta has since gone GA. If the Service Keys screen looks different from section
-2, trust the screen and update this file.
+**Confirmed since:** a real service key issued from a CTL portal carries the
+form `pat-na2-` followed by a UUID — so service keys *do* use the same `pat-`
+prefix a private app token does, with a region segment (`na1`, `na2`, …) that
+varies by where the portal lives. Do not treat the prefix as a way to tell the
+two credentials apart; they are interchangeable here regardless.
+
+Still unconfirmed, and nothing here depends on it: whether the public beta has
+gone GA. If the Service Keys screen looks different from section 2, trust the
+screen and update this file.
 

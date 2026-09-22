@@ -1,5 +1,13 @@
 # The gallery CMS
 
+> **⚠️ This describes the CMS being replaced.** On 21 September 2026 the
+> gallery editor was set to move from Sveltia to Sanity — see
+> `PRODUCTION-READINESS.md` §B for why. Until that migration ships, everything
+> below is accurate and this is still the setup to follow if `/admin/` needs
+> connecting in the meantime. Once Sanity is live this file is replaced, not
+> edited.
+
+
 The gallery at `/gallery/`, and the handful of photos on the home page,
 are edited from **`https://ctlpro.com/admin/`** — a sign-in with GitHub,
 a list of photos, and a save button. No deploy, no editor, no developer.

@@ -13,7 +13,7 @@ compatibility_date = "2026-08-01"
 [[d1_databases]]
 binding = "DB"
 database_name = "ctl-leads"
-database_id = "<paste the id wrangler prints>"
+database_id = "1aa7faa5-ff93-4a51-8191-cd7933f7654f"
 
 # ── The résumé bucket, read side ─────────────────────────────────────
 # The careers Worker (workers/careers-upload) owns the write side of

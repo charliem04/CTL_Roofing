@@ -92,9 +92,12 @@ does not cover, `scripts/harden.mjs` scans for leaked secrets and stray
 `.env`/source-map/`.git` files, `scripts/check.mjs` catches inherited frontend
 defaults.
 
-All of it runs only when somebody types `npm run build`. Nothing gates a commit
-— including the CMS's direct-to-`main` commits from `/admin/`, which trigger a
-Pages build with no check in front of it.
+All of it runs only when somebody types `npm run build`. Nothing gates a commit.
+
+That was sharpest while the CMS committed straight to `main` from `/admin/`
+with no check in front of it. Moving to Sanity (§B) removes *that* path, since
+content edits stop being commits — but it does not add CI, and the build
+pipeline still runs unsupervised on every deploy.
 
 A workflow running `npm run build` and `npm run check` on pull requests and on
 pushes to `main` would close this.
@@ -178,28 +181,65 @@ retention promise both get rewritten. If the vendor can webhook into the relay's
 `/application` route the unified lead book survives; if not, that is a real loss
 and should be named rather than discovered.
 
-### B. Repo ownership and the CMS
+### B. Replace the CMS with Sanity
 
-**Move the site to a client-owned repo first.** The CMS commits directly to
-`main` on whatever repo it points at, and today that is a personal account. Then:
+**Decision, 21 September 2026: the gallery CMS moves from Sveltia to Sanity.**
 
-- update `backend.repo` in `public/admin/config.yml`
-- re-point the `sveltia-cms-auth` Worker's `ALLOWED_DOMAINS`
-- repo hygiene (finding 9) is done: `ctl_pictures/` moved to `assets/source-photos/`, `graphify-out/` and `.idea/` are untracked and gitignored, the stale root `README-DEPLOY.md` was deleted, and `package.json` was renamed to `ctl-roofing`.
+What exists today is a git-backed editor — Sveltia at `/admin/`, committing
+`content/gallery.json` straight to `main`. It works, and the content pipeline
+around it is sound. It was replaced for one reason that no amount of polish
+fixes: **signing in means a GitHub account with write access, per editor.**
+For a roofing office that is real friction, and it puts the client's content
+edits in a developer's personal repository.
 
-**Then extend the CMS beyond the gallery.** The pattern already exists:
-`content/gallery.json` is CMS-written, read through `lib/content.ts`, and
-validated by `scripts/gallery.mjs`, which fails the build on a missing alt text,
-a duplicate, a missing file or an unknown category. Repeat it for `team`,
-`testimonials`, `caseStudies`, `careers.roles` and `financing` — convert each
-from `.ts` to `.json`, add a Sveltia collection, and leave the loader boundary
-in `lib/content.ts` unchanged so the pages do not move.
+Sanity was chosen over the alternatives (Tina Cloud, CloudCannon, Storyblok,
+DatoCMS, Contentful) on three grounds:
 
-Worth naming: Sveltia sign-in needs a GitHub account with write access per
-editor. For a non-technical office that is real overhead, and it is the reason a
-hosted CMS is the alternative. Extending Sveltia is the chosen path, so the
-mitigation is creating and documenting those accounts properly rather than
-pretending the friction is not there.
+1. **No GitHub accounts.** Editors are invited by email.
+2. **A real image pipeline.** This is the one that earns its keep. There is no
+   image processing anywhere in this project — `next.config.mjs` sets
+   `images.unoptimized: true` because a static export requires it, so photos
+   are committed and served at whatever size they were uploaded.
+   `docs/GALLERY-CMS.md` currently has to *ask editors to resize their own
+   photos*, and warn that a 12 MB phone photo is a 12 MB download for every
+   visitor on `/gallery/`. Sanity serves transforms from its CDN and returns
+   intrinsic dimensions from its API, which deletes that whole problem class —
+   and with it most of `scripts/gallery.mjs`.
+3. **The free tier covers this site comfortably**, so the recurring cost of
+   the decision is zero at CTL's size.
+
+**The repo move happens anyway, and first.** It is a smaller job once the CMS
+no longer commits to the repository, but the site still lives in a personal
+account today:
+
+- move to a client-owned repo, re-point Cloudflare Pages at it
+- drop `ctl_pictures/`, `graphify-out/` and `.idea/`; delete the stale root
+  `README-DEPLOY.md`; rename the package (finding 9)
+- retire the `sveltia-cms-auth` Worker and the GitHub OAuth app, if they were
+  ever deployed
+
+**What makes this a contained change rather than a rewrite** is `lib/content.ts`.
+Every page and component reads content through its ~30 accessor functions, and
+a check across `app/` and `components/` confirms the boundary holds: the only
+direct `@/content/*` imports are `import type`, which stay as code regardless.
+So the migration replaces the bodies of those accessors and touches no page.
+
+Two things must survive the move, because they are the reason nothing broken
+has ever reached the site:
+
+- **Alt text enforced at build time.** A Sanity "required field" is weaker than
+  a build that fails naming the photo. Keep the check; point it at the fetched
+  data instead of the local files.
+- **Categories staying in code.** `content/gallery.ts` owns them as a
+  TypeScript union because each maps to a real service route. They are a set
+  that changes when the business changes, not when a photo is added. Sanity
+  should offer them as a fixed list validated against that union, exactly as
+  the Sveltia dropdown was.
+
+The implementation is specified separately — see the migration brief referenced
+in the pull request for this decision. Sequence: repo move, then Sanity, then
+extend to `team`, `testimonials`, `caseStudies`, `careers.roles` and
+`financing` once the gallery is proven.
 
 ### C. Close the gaps
 
@@ -250,6 +290,6 @@ curl -H "Authorization: Bearer $EXPORT_TOKEN" https://<relay>/export.csv
 1. Start the long-lead items: attorney review, Business Profile ownership, and
    the old-site crawl (they block the cutover and nothing else depends on them)
 2. Wire the integrations as credentials arrive — §A
-3. Repo move and CMS extension — §B
+3. Repo move, then the Sanity migration — §B
 4. Close the gaps — §C
 5. Preview verification, then `CUTOVER.md`

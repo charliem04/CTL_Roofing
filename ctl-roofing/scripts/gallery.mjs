@@ -70,6 +70,11 @@ import { readFileSync, writeFileSync, existsSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { createImageUrlBuilder } from "@sanity/image-url";
+import { loadEnvFile } from "./env-file.mjs";
+
+// Before anything reads SANITY_*: a real environment variable still
+// wins, this only fills in what .env.local holds. See env-file.mjs.
+loadEnvFile();
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const SITE = resolve(HERE, "..");

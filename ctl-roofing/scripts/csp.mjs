@@ -48,6 +48,12 @@
  */
 import { appendFileSync, existsSync, readFileSync, readdirSync, statSync } from "node:fs";
 import { join } from "node:path";
+import { loadEnvFile } from "./env-file.mjs";
+
+// connect-src is built from the endpoint variables, so without this a
+// local build writes a policy forbidding the endpoints the JavaScript
+// in the same build was compiled to call.
+loadEnvFile();
 
 const HEADERS = "out/_headers";
 const MARKER = "# ── Content-Security-Policy (generated) ──";

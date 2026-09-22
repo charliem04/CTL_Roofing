@@ -91,13 +91,16 @@ submits real enquiries and sends real email. That means **the whole
 integration is testable on your own machine** — there is no need to wait for
 a Cloudflare preview deployment to prove this one works.
 
-> **`.env.local` does not reach every part of the build.** Next loads it for
-> `NEXT_PUBLIC_*`, so the form picks the key up in `npm run dev`. The standalone
-> Node scripts in `scripts/` do not — there is no `dotenv` in this project —
-> so `scripts/csp.mjs` and `scripts/gallery.mjs` see only the real
-> environment. It does not affect Web3Forms (`https://api.web3forms.com` is
-> hardcoded in the generated policy), but it is why `SANITY_PROJECT_ID` in
-> `.env.local` appears to do nothing. Export those in the shell instead.
+> **`.env.local` is the one place build configuration lives**, on every
+> platform. Next reads it for `NEXT_PUBLIC_*`, and the standalone Node
+> scripts either side of it — `gallery.mjs`, `csp.mjs`, `harden.mjs` — read
+> it through `scripts/env-file.mjs`. So there is nothing to `export`, and
+> no PowerShell-versus-bash syntax to get right.
+>
+> A real environment variable wins over the file if one is set, which is
+> what keeps a Cloudflare build authoritative; and an empty assignment
+> counts as unset, so the placeholder lines `.env.example` ships do not
+> shadow a value you add later.
 
 ---
 

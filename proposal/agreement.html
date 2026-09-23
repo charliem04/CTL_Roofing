@@ -1,0 +1,686 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>CTL Roofing — Website Build &amp; Engagement</title>
+<style>
+/* FONTS_PLACEHOLDER */
+:root{
+  --ink:#0B1233;         /* deepest ground */
+  --ground:#0B1233;
+  --ground-alt:#131C45;  /* raised dark surface */
+  --ground-lift:#1A2455;
+  --paper:#FFFFFF;
+  --soft:#B8BDCE;        /* body copy on dark */
+  --faint:#8189A5;
+  --gold:#F1CC47;
+  --gold-press:#D4A81F;
+  --peri:#5160A6;
+  --line:rgba(233,237,250,.20);
+  --line-soft:rgba(233,237,250,.10);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+@page{size:8.5in 11in;margin:0}
+html,body{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+body{
+  font-family:"IBM Plex Sans",-apple-system,"Segoe UI",sans-serif;
+  background:var(--ground);color:var(--soft);
+  font-size:9.6pt;line-height:1.55;
+}
+.page{
+  position:relative;width:8.5in;height:11in;overflow:hidden;
+  background:var(--ground);page-break-after:always;
+  padding:0.72in 0.78in 0.72in;
+}
+.page:last-child{page-break-after:auto}
+
+/* ── type ──────────────────────────────────────────── */
+h1,h2,h3{font-family:"Big Shoulders Display","Arial Narrow",Impact,sans-serif;
+  color:#fff;font-weight:600;letter-spacing:.005em;line-height:.94}
+h1{font-size:62pt;line-height:.88}
+h2{font-size:31pt;margin-bottom:.16in}
+h3{font-size:15pt;line-height:1.02;margin-bottom:.055in;color:#fff}
+p{margin-bottom:.1in}
+p:last-child{margin-bottom:0}
+strong{color:#EDF0F8;font-weight:600}
+em{font-style:normal;color:var(--gold)}
+.mono{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace}
+
+.eyebrow{
+  font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+  font-size:7.4pt;letter-spacing:.17em;text-transform:uppercase;
+  color:var(--gold);display:flex;align-items:center;gap:.1in;margin-bottom:.1in;
+}
+.eyebrow::after{content:"";flex:1;height:1px;background:var(--line)}
+.lede{font-size:11pt;line-height:1.5;color:#DDE1EE;margin-bottom:.22in;max-width:6.1in}
+.note{font-size:8.2pt;line-height:1.45;color:var(--faint)}
+.rule{height:1px;background:var(--line);margin:.2in 0}
+
+/* ── cover ─────────────────────────────────────────── */
+.cover{padding:0;display:flex;flex-direction:column;justify-content:space-between}
+.cover .ribs{position:absolute;inset:0;
+  background:repeating-linear-gradient(90deg,
+    rgba(255,255,255,.028) 0 1px, rgba(255,255,255,0) 1px 26px);}
+.cover .glow{position:absolute;top:-2.6in;right:-2.2in;width:7.4in;height:7.4in;border-radius:50%;
+  background:radial-gradient(circle,rgba(81,96,166,.42) 0%,rgba(11,18,51,0) 68%)}
+.cover .glow2{position:absolute;bottom:-3in;left:-2.4in;width:6.4in;height:6.4in;border-radius:50%;
+  background:radial-gradient(circle,rgba(241,204,71,.13) 0%,rgba(11,18,51,0) 66%)}
+.cover-inner{position:relative;padding:.9in .78in .72in;display:flex;flex-direction:column;height:100%}
+.cover img.logo{width:2.05in;display:block;margin-bottom:.9in}
+.cover h1{margin-bottom:.18in}
+.cover .sub{font-size:12.5pt;color:#DDE1EE;max-width:4.9in;line-height:1.45}
+.cover .spacer{flex:1}
+.cover-meta{display:flex;gap:.5in;border-top:1px solid var(--line);padding-top:.16in}
+.cover-meta div{flex:1}
+.cover-meta div:first-child{flex:1.45}
+.cover-meta div:nth-child(2){flex:1.25}
+.cover-meta div:nth-child(3){flex:.95}
+.cover-meta div:last-child{flex:.85}
+.cover-meta .k{font-family:"IBM Plex Mono",monospace;font-size:7pt;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--gold);margin-bottom:.045in}
+.cover-meta .v{font-size:9.4pt;color:#EDF0F8;line-height:1.35}
+.headline-fig{display:flex;gap:.34in;margin:.55in 0 .1in}
+.headline-fig .f{border-left:2px solid var(--gold);padding-left:.14in}
+.headline-fig .n{font-family:"Big Shoulders Display",sans-serif;font-size:30pt;color:#fff;line-height:.9}
+.headline-fig .l{font-family:"IBM Plex Mono",monospace;font-size:6.9pt;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--faint);margin-top:.05in}
+
+/* ── running header / footer ───────────────────────── */
+.rh{position:absolute;top:.36in;left:.78in;right:.78in;display:flex;justify-content:space-between;
+  font-family:"IBM Plex Mono",monospace;font-size:6.9pt;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--faint);border-bottom:1px solid var(--line-soft);padding-bottom:.07in}
+.rf{position:absolute;bottom:.4in;left:.78in;right:.78in;display:flex;justify-content:space-between;
+  font-family:"IBM Plex Mono",monospace;font-size:6.9pt;letter-spacing:.14em;
+  color:var(--faint);border-top:1px solid var(--line-soft);padding-top:.07in}
+.rf .pg{color:var(--gold)}
+
+/* ── blocks ────────────────────────────────────────── */
+.card{background:var(--ground-alt);border:1px solid var(--line-soft);padding:.16in .18in;border-radius:2px}
+.card.gold{border-left:2px solid var(--gold)}
+.cols{display:flex;gap:.26in}
+.cols>*{flex:1}
+.stack>*+*{margin-top:.13in}
+
+table{width:100%;border-collapse:collapse}
+th{font-family:"IBM Plex Mono",monospace;font-size:6.9pt;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--gold);text-align:left;font-weight:500;padding:0 .1in .07in 0;border-bottom:1px solid var(--line)}
+td{padding:.075in .1in .075in 0;border-bottom:1px solid var(--line-soft);vertical-align:top;font-size:9pt}
+td.num{font-family:"IBM Plex Mono",monospace;color:#fff;white-space:nowrap}
+td.k{color:#EDF0F8;font-weight:500;white-space:nowrap}
+tr:last-child td{border-bottom:none}
+.eng .card{padding:.125in .16in}
+.eng .stack>*+*{margin-top:.11in}
+.tight td{padding:.052in .1in .052in 0;font-size:8.6pt}
+.tag{font-family:"IBM Plex Mono",monospace;font-size:6.6pt;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--ground);background:var(--gold);padding:.02in .06in;border-radius:2px;white-space:nowrap}
+.tag.q{background:transparent;color:var(--gold);border:1px solid rgba(241,204,71,.5)}
+
+ul{list-style:none}
+li{position:relative;padding-left:.16in;margin-bottom:.055in;font-size:9pt;line-height:1.45}
+li::before{content:"";position:absolute;left:0;top:.062in;width:.055in;height:.055in;background:var(--gold)}
+ul.dash li::before{background:var(--peri);top:.085in;height:1px;width:.09in}
+
+.big{display:flex;align-items:baseline;gap:.08in}
+.big .v{font-family:"Big Shoulders Display",sans-serif;font-size:34pt;color:var(--gold);line-height:.85}
+.big .u{font-family:"IBM Plex Mono",monospace;font-size:7.4pt;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--faint)}
+
+.sect{margin-bottom:.24in}
+.sect:last-child{margin-bottom:0}
+.flag{border-left:2px solid var(--peri);background:rgba(81,96,166,.12);padding:.11in .14in;
+  font-size:8.3pt;line-height:1.45;color:#C9CFE2}
+.flag b{color:var(--gold);font-weight:600;font-family:"IBM Plex Mono",monospace;
+  font-size:7pt;letter-spacing:.13em;text-transform:uppercase;display:block;margin-bottom:.035in}
+
+.sig{display:flex;gap:.4in;margin-top:.3in}
+.sig div{flex:1}
+.sig .line{border-bottom:1px solid var(--line);height:.36in}
+.sig .cap{font-family:"IBM Plex Mono",monospace;font-size:7pt;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--faint);margin-top:.06in}
+</style>
+</head>
+<body>
+
+<!-- ══════════ 1 · COVER ══════════ -->
+<section class="page cover">
+  <div class="ribs"></div><div class="glow"></div><div class="glow2"></div>
+  <div class="cover-inner">
+    <img class="logo" src="LOGO_SRC" alt="CTL Roofing">
+    <div class="mono" style="font-size:7.4pt;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:.2in">
+      Website build &amp; ongoing engagement
+    </div>
+    <h1>Scope, terms<br>and what<br>performance<br>means.</h1>
+    <div class="headline-fig">
+      <div class="f"><div class="n">$10,000</div><div class="l">Build — 30% at start</div></div>
+      <div class="f"><div class="n">$300<span style="font-size:15pt">/mo</span></div><div class="l">Retainer — from hosting</div></div>
+      <div class="f"><div class="n">$2,000</div><div class="l">Bonus — at month 6</div></div>
+    </div>
+    <div class="spacer"></div>
+    <p class="sub" style="font-size:10.6pt;color:var(--soft);margin-bottom:.34in;max-width:5.5in">
+      The agreement reached in conversation, written down: what the ten thousand
+      buys, what the monthly three hundred covers, and the exact conditions under
+      which the incentive bonus is earned — so nobody is reading the other's mind
+      six months from now.
+    </p>
+    <div class="cover-meta">
+      <div><div class="k">Prepared for</div><div class="v">Robert<br>CTL Pro Construction LLC<br>Broussard &amp; Lafayette, LA</div></div>
+      <div><div class="k">Prepared by</div><div class="v">Charles Meyers<br>charliem04work@gmail.com</div></div>
+      <div><div class="k">Date</div><div class="v" style="white-space:nowrap">23 September 2026<br><span style="color:var(--faint)">Valid 30 days</span></div></div>
+      <div><div class="k">Reference</div><div class="v">CTL-WEB-01<br><span style="color:var(--faint)">Revision A</span></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 2 · TERMS AT A GLANCE ══════════ -->
+<section class="page">
+  <div class="rh"><span>CTL Roofing — Website Build &amp; Engagement</span><span>CTL-WEB-01 · Rev A</span></div>
+  <div style="height:.28in"></div>
+  <div class="eyebrow">01 — The agreement</div>
+  <h2>Terms at a glance</h2>
+  <p class="lede">Four numbers, and the trigger that starts each one. Everything
+  after this page is detail underneath these four lines.</p>
+
+  <table style="margin-bottom:.22in">
+    <tr><th style="width:1.35in">Amount</th><th style="width:1.9in">What it is</th><th>When it is due</th></tr>
+    <tr>
+      <td class="num">$3,000</td>
+      <td class="k">Deposit — 30% of build</td>
+      <td>On signing. This is the trigger that starts the build clock; work already
+          performed to date is credited against the total, not billed on top.</td>
+    </tr>
+    <tr>
+      <td class="num">$7,000</td>
+      <td class="k">Balance of build</td>
+      <td>Spread across <strong>6 to 12 monthly instalments</strong>, term chosen by CTL
+          at launch. First instalment 30 days after the production build is hosted.</td>
+    </tr>
+    <tr>
+      <td class="num">$300 / mo</td>
+      <td class="k">Care retainer</td>
+      <td>Begins only once the <strong>final production build is hosted</strong> and serving
+          on CTL's domain. Nothing is charged during the build.</td>
+    </tr>
+    <tr>
+      <td class="num">$2,000</td>
+      <td class="k">Performance incentive</td>
+      <td>Evaluated once, <strong>six months after launch</strong>, against the criteria
+          on page 7. Earned or not earned — never partial guesswork.</td>
+    </tr>
+  </table>
+
+  <div class="cols" style="margin-bottom:.22in">
+    <div class="card gold">
+      <h3>What "launch" means</h3>
+      <p style="font-size:8.8pt">One defined moment, used by every clause in this
+      document: the production build is live on <span class="mono" style="color:#fff">ctlpro.com</span>,
+      DNS has been cut over, forms deliver to CTL, and the site is serving real
+      visitors. Not a preview link. Not a staging URL.</p>
+    </div>
+    <div class="card gold">
+      <h3>What is already built</h3>
+      <p style="font-size:8.8pt">Twenty-one pages, rendering, on real CTL content —
+      40 job photographs, nine named faces, ten reviews reproduced word for word,
+      sixteen towns. The remaining work is accounts, decisions and sign-offs, not
+      construction.</p>
+    </div>
+  </div>
+
+  <div class="sect">
+    <div class="eyebrow">Payment mechanics</div>
+    <ul>
+      <li>Invoices are issued electronically. <strong>Bank transfer (ACH) costs a few dollars flat;
+          card payment carries a percentage fee</strong> that becomes meaningful at five figures — same
+          invoice, different button.</li>
+      <li>Instalments are due on the same calendar day each month. Payments more than
+          <strong>14 days late</strong> pause non-emergency retainer work until cleared; emergency
+          response is never withheld over an invoice.</li>
+      <li><strong>Ownership of the site — code, configuration and build tooling — transfers to
+          CTL Pro Construction LLC on receipt of the final build payment.</strong> Photographs,
+          copy, reviews and the CTL name are CTL's throughout and always were.</li>
+      <li>Third-party running costs (domain, any CRM, hiring platform, call tracking, the
+          per-lookup Google reviews charge) are billed by those vendors directly to CTL
+          and are not part of any figure on this page.</li>
+    </ul>
+  </div>
+
+  <div class="flag">
+    <b>Two points to confirm at signing</b>
+    The instalment term (6, 9 or 12 months) and the qualified-lead target on page 7 are
+    the only figures in this document not already settled in conversation. Both are
+    written here as proposals with recommended defaults, and both are one line to change.
+  </div>
+
+  <div class="rf"><span>Terms at a glance</span><span class="pg">02</span></div>
+</section>
+
+<!-- ══════════ 3 · THE BUILD ══════════ -->
+<section class="page">
+  <div class="rh"><span>CTL Roofing — Website Build &amp; Engagement</span><span>CTL-WEB-01 · Rev A</span></div>
+  <div style="height:.28in"></div>
+  <div class="eyebrow">02 — Scope of the build</div>
+  <h2>What the $10,000 buys</h2>
+  <p class="lede" style="margin-bottom:.18in">A complete, live, twenty-one page site — designed,
+  written into structure, built, tested, hosted and handed over with documentation. Not a
+  template with a logo dropped in.</p>
+
+  <div class="sect">
+    <div class="eyebrow">The pages</div>
+    <div class="cols">
+      <div>
+        <table class="tight">
+          <tr><th style="width:1.35in">Page</th><th>What is on it</th></tr>
+          <tr><td class="k mono">/</td><td>Hero, services, storm strip, gallery band, reviews, booking, contact form</td></tr>
+          <tr><td class="k mono">/services/</td><td>Hub for all five service lines</td></tr>
+          <tr><td class="k mono">· roofing</td><td>Materials, process, warranty, FAQs</td></tr>
+          <tr><td class="k mono">· remodeling</td><td>Remodeling &amp; restoration</td></tr>
+          <tr><td class="k mono">· outdoor-living</td><td>Patios, decks, outdoor structures</td></tr>
+          <tr><td class="k mono">· emergency</td><td>Emergency response and inspections</td></tr>
+          <tr><td class="k mono">· commercial</td><td>Commercial roofing</td></tr>
+          <tr><td class="k mono">/storm-damage/</td><td>Storm damage and the claim process</td></tr>
+          <tr><td class="k mono">/insurance/</td><td>How a claim works, start to finish</td></tr>
+          <tr><td class="k mono">/gallery/</td><td>40 photographs, five filters, lightbox</td></tr>
+          <tr><td class="k mono">/video/</td><td>Job walkthrough video</td></tr>
+        </table>
+      </div>
+      <div>
+        <table class="tight">
+          <tr><th style="width:1.35in">Page</th><th>What is on it</th></tr>
+          <tr><td class="k mono">/team/</td><td>Robert, plus eight crew headshots</td></tr>
+          <tr><td class="k mono">/reviews/</td><td>Live Google reviews + 10 Facebook recommendations</td></tr>
+          <tr><td class="k mono">/areas/</td><td>16 towns across 6 parishes</td></tr>
+          <tr><td class="k mono">/financing/</td><td>Options and a monthly payment estimator</td></tr>
+          <tr><td class="k mono">/contact/</td><td>Assessment request form and booking calendar</td></tr>
+          <tr><td class="k mono">/careers/</td><td>Application form and questionnaire</td></tr>
+          <tr><td class="k mono">/case-studies/</td><td>Page type built; waiting on projects</td></tr>
+          <tr><td class="k mono">/terms/</td><td>Terms of service</td></tr>
+          <tr><td class="k mono">/privacy/</td><td>Privacy policy</td></tr>
+          <tr><td class="k mono">404</td><td>Not-found page, styled and routed</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <p class="note" style="margin-top:.12in;max-width:6.3in">Every page is built, rendering and
+  navigable today. Where one is still waiting on something from CTL — a decision, a photograph,
+  an attorney's read — that item is numbered in the handover document, not quietly forgotten.</p>
+
+  <div class="rule" style="margin:.16in 0"></div>
+
+  <div class="eyebrow">Built on real CTL material</div>
+  <div class="cols" style="align-items:flex-start">
+    <div style="flex:1.55">
+      <p style="font-size:9.1pt">Not one photograph, name, review or number on this site was
+      invented to fill a hole. The crew grid is eight of CTL's own people, under their own names —
+      no stock photography of strangers in hard hats. The Facebook recommendations are reproduced
+      word for word, typos included, because tidying a customer's grammar is editing their
+      testimonial. Google reviews load live from the Business Profile, so the rating a visitor
+      sees is the rating CTL actually has that morning.</p>
+    </div>
+    <div style="flex:1">
+      <div class="card" style="padding:.14in .16in">
+        <div style="display:flex;gap:.22in;margin-bottom:.1in">
+          <div><div class="big"><span class="v" style="font-size:26pt">40</span></div>
+               <div class="l" style="font-family:'IBM Plex Mono',monospace;font-size:6.6pt;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);margin-top:.03in">Job photographs</div></div>
+          <div><div class="big"><span class="v" style="font-size:26pt">9</span></div>
+               <div class="l" style="font-family:'IBM Plex Mono',monospace;font-size:6.6pt;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);margin-top:.03in">Real faces, named</div></div>
+        </div>
+        <div style="display:flex;gap:.22in">
+          <div><div class="big"><span class="v" style="font-size:26pt">10</span></div>
+               <div class="l" style="font-family:'IBM Plex Mono',monospace;font-size:6.6pt;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);margin-top:.03in">Reviews, verbatim</div></div>
+          <div><div class="big"><span class="v" style="font-size:26pt">16</span></div>
+               <div class="l" style="font-family:'IBM Plex Mono',monospace;font-size:6.6pt;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);margin-top:.03in">Towns, 6 parishes</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="rf"><span>Scope of the build — the pages</span><span class="pg">03</span></div>
+</section>
+
+<!-- ══════════ 4 · ENGINEERING ══════════ -->
+<section class="page eng">
+  <div class="rh"><span>CTL Roofing — Website Build &amp; Engagement</span><span>CTL-WEB-01 · Rev A</span></div>
+  <div style="height:.28in"></div>
+  <div class="eyebrow">02 — Scope of the build, continued</div>
+  <h2>The engineering underneath</h2>
+  <p class="lede" style="margin-bottom:.15in">Six things a customer never sees, every one of which
+  decides whether the site earns anything.</p>
+
+  <div class="sect">
+    <div class="cols">
+      <div class="stack">
+        <div class="card">
+          <h3>Built to stay up</h3>
+          <p style="font-size:8.6pt">Static site on Cloudflare's global network — no database to
+          patch, nothing to hack on a Tuesday, free to serve at the traffic a regional contractor
+          sees. Every internal link is verified at build time; a broken link fails the build
+          rather than reaching a customer.</p>
+        </div>
+        <div class="card">
+          <h3>Leads that arrive</h3>
+          <p style="font-size:8.6pt">A dedicated form service records every assessment request,
+          notifies CTL, and can hand the lead straight to a CRM. Spam is filtered before it
+          reaches an inbox. A second service takes résumé uploads on the careers page into
+          private storage only CTL can open.</p>
+        </div>
+        <div class="card">
+          <h3>Editable without a developer</h3>
+          <p style="font-size:8.6pt">Reviews, towns, services, team and gallery live in plain
+          structured content files, plus a photo manager at <span class="mono">/admin/</span>.
+          Changing a phone number or adding job photos does not mean touching design code.</p>
+        </div>
+      </div>
+      <div class="stack">
+        <div class="card">
+          <h3>Found in search</h3>
+          <p style="font-size:8.6pt">Sitemap, robots, structured business data, per-page titles
+          and descriptions, clean URL structure, Open Graph cards for when a link is shared.
+          Deliberately <em>no</em> fake review markup — Google penalises it, and CTL's stars
+          already come from the Business Profile.</p>
+        </div>
+        <div class="card">
+          <h3>Fast and accessible</h3>
+          <p style="font-size:8.6pt">Self-hosted fonts, processed images, measured performance
+          pass, no layout shift. Keyboard navigable, screen-reader labelled, contrast checked —
+          the legal exposure a contractor's site quietly carries, closed.</p>
+        </div>
+        <div class="card">
+          <h3>Launch and handover</h3>
+          <p style="font-size:8.6pt">DNS cutover run to a written T-14 → T+7 plan with a rollback,
+          plus a documented set: go-live checklist, credentials register, production readiness
+          audit, route map, CMS guide. CTL is never locked to one person.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="rule" style="margin:.15in 0 .13in"></div>
+
+  <div class="eyebrow">Left off on purpose</div>
+  <p style="font-size:9pt;margin-bottom:.09in;max-width:6.6in">Four absences that look like gaps and are
+  not — each a decision, and each reversible the moment the underlying fact changes.</p>
+  <table class="tight">
+    <tr><th style="width:1.9in">Not on the site</th><th>Why not</th></tr>
+    <tr><td class="k">Review stars in search markup</td>
+        <td>Google stopped showing stars for businesses marking up reviews about themselves in 2019. The code produces no stars and risks a penalty across the domain. CTL's stars come from the Business Profile, which already works.</td></tr>
+    <tr><td class="k">Monthly payment figures</td>
+        <td>The estimator is built and switched off until the financing terms are real ones. A number a customer reads on the site is one they will expect at signing.</td></tr>
+    <tr><td class="k">Sixteen separate town pages</td>
+        <td>One areas page instead. Thin town pages with nothing local on them are the pattern search engines demote — worth building once there are case studies to put on them.</td></tr>
+    <tr><td class="k">A Facebook review feed</td>
+        <td>Meta retired the reviews API. The recommendations are reproduced on the page and the tab is linked — a live feed is not something anyone can build any more.</td></tr>
+  </table>
+
+  <div class="rf"><span>Scope of the build — the engineering</span><span class="pg">04</span></div>
+</section>
+
+<!-- ══════════ 4 · SCHEDULE + EXCLUSIONS ══════════ -->
+<section class="page">
+  <div class="rh"><span>CTL Roofing — Website Build &amp; Engagement</span><span>CTL-WEB-01 · Rev A</span></div>
+  <div style="height:.28in"></div>
+  <div class="eyebrow">03 — Payment schedule</div>
+  <h2>How the ten thousand is paid</h2>
+  <p class="lede">Thirty per cent to start, seventy per cent spread across the months after
+  the site is earning its keep. CTL picks the term at launch.</p>
+
+  <table style="margin-bottom:.2in">
+    <tr><th style="width:1.25in">Term</th><th style="width:1.35in">Monthly instalment</th><th style="width:1.35in">With retainer</th><th>Total monthly, first year</th></tr>
+    <tr><td class="k">6 months</td><td class="num">$1,166.67</td><td class="num">$1,466.67</td><td>Balance cleared in half a year; months 7–12 drop to $300.</td></tr>
+    <tr><td class="k">9 months</td><td class="num">$777.78</td><td class="num">$1,077.78</td><td>The middle path. Balance clears before the bonus review is banked.</td></tr>
+    <tr><td class="k">12 months</td><td class="num">$583.33</td><td class="num">$883.33</td><td>Lightest monthly figure; balance clears at the one-year mark.</td></tr>
+  </table>
+
+  <div class="cols" style="margin-bottom:.2in">
+    <div class="card gold">
+      <h3>The sequence</h3>
+      <ul style="margin-top:.06in">
+        <li><strong>Signing</strong> — $3,000 deposit. Build clock starts.</li>
+        <li><strong>Build &amp; launch</strong> — no further invoices. Nothing is billed monthly while the site is not yet live.</li>
+        <li><strong>Launch + 30 days</strong> — first balance instalment, plus the first $300 retainer.</li>
+        <li><strong>Launch + 6 months</strong> — performance review. Bonus earned or not, in writing, within 30 days.</li>
+      </ul>
+    </div>
+    <div class="card gold">
+      <h3>No interest, no penalty</h3>
+      <p style="font-size:8.8pt">The instalment plan carries no interest and no financing charge —
+      $10,000 paid over twelve months is $10,000. CTL may settle the balance early at any point
+      with no fee. The only consequence attached to timing is the 14-day pause described on
+      page 2, and it applies to convenience work, never to an outage.</p>
+    </div>
+  </div>
+
+  <div class="sect">
+    <div class="eyebrow">04 — Boundaries</div>
+    <h2 style="font-size:23pt;margin-bottom:.12in">What sits outside the build price</h2>
+    <div class="cols">
+      <div>
+        <p style="font-size:8.4pt;color:var(--faint);margin-bottom:.07in" class="mono">CTL PROVIDES</p>
+        <ul>
+          <li>Domain ownership and registrar access</li>
+          <li>Google Business Profile ownership and an API key for the live reviews feed</li>
+          <li>Attorney review of terms, privacy, the application questions and the claims language</li>
+          <li>Decisions on CRM, hiring platform, call tracking and scheduler</li>
+          <li>Remaining content: commercial photos, case-study projects, the walkthrough video</li>
+          <li>One named person who can answer questions and sign off</li>
+        </ul>
+      </div>
+      <div>
+        <p style="font-size:8.4pt;color:var(--faint);margin-bottom:.07in" class="mono">NOT INCLUDED — QUOTED SEPARATELY</p>
+        <ul class="dash">
+          <li>Paid advertising, ad spend, or managed SEO campaigns</li>
+          <li>Photography, videography and original copywriting beyond what exists</li>
+          <li>New page types, new sections or feature work commissioned after launch</li>
+          <li>Third-party subscriptions and usage fees billed by those vendors</li>
+          <li>Rebuilds forced by a vendor CTL chooses to replace after launch</li>
+          <li>Print, signage, vehicle wraps or other non-web design</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="rf"><span>Payment schedule &amp; boundaries</span><span class="pg">05</span></div>
+</section>
+
+<!-- ══════════ 6 · RETAINER ══════════ -->
+<section class="page">
+  <div class="rh"><span>CTL Roofing — Website Build &amp; Engagement</span><span>CTL-WEB-01 · Rev A</span></div>
+  <div style="height:.28in"></div>
+  <div class="eyebrow">05 — The monthly retainer</div>
+  <h2>What $300 a month covers</h2>
+  <p class="lede" style="margin-bottom:.15in">A site with forms, a photo manager and a live reviews feed
+  is not a thing you hang on a wall. The retainer answers "who gets called when a form stops working on
+  a Saturday" in advance, rather than during the first outage.</p>
+
+  <table class="tight" style="margin-bottom:.16in">
+    <tr><th style="width:1.9in">Included every month</th><th>What that means in practice</th></tr>
+    <tr><td class="k">Hosting &amp; infrastructure</td>
+        <td>Cloudflare Pages and both background services kept configured, deployed and healthy. Hosting itself is free at CTL's traffic; this covers the hands on it.</td></tr>
+    <tr><td class="k">Uptime &amp; form monitoring</td>
+        <td>The site and — more importantly — the lead path are watched. A form that silently stops delivering is the failure that costs real money, so it is checked, not assumed.</td></tr>
+    <tr><td class="k">Security &amp; updates</td>
+        <td>Dependency and framework updates, security headers maintained, spam filtering tuned, TLS and DNS records kept correct.</td></tr>
+    <tr><td class="k">Content edits — 2 hrs</td>
+        <td>Text changes, new gallery photographs, team and town updates, hours, phone numbers, service copy, seasonal storm messaging. Unused time rolls forward one month (4 hrs maximum).</td></tr>
+    <tr><td class="k">Bug fixes</td>
+        <td>Anything delivered in the build that stops behaving correctly is fixed at no charge, for as long as the retainer runs. Not a 90-day warranty that quietly expires.</td></tr>
+    <tr><td class="k">Monthly report</td>
+        <td>One page: leads received, where visitors came from, top pages, search queries CTL appears for, page-speed health. The same numbers the bonus is judged on — visible monthly, not revealed at month six.</td></tr>
+    <tr><td class="k">Backups &amp; rollback</td>
+        <td>Every change version-controlled. Any bad change can be reversed to the previous live state in minutes.</td></tr>
+  </table>
+
+  <div class="cols" style="margin-bottom:.18in">
+    <div class="card gold">
+      <h3>Response times</h3>
+      <ul style="margin-top:.06in">
+        <li><strong>Site down, or forms not delivering</strong> — acknowledged same day, worked until resolved, including weekends after storms.</li>
+        <li><strong>Something broken but not blocking leads</strong> — within 2 business days.</li>
+        <li><strong>Content edits and requests</strong> — within 3 business days.</li>
+      </ul>
+    </div>
+    <div class="card gold">
+      <h3>Terms of the retainer</h3>
+      <ul style="margin-top:.06in">
+        <li>Month to month. Either side may end it with <strong>30 days' written notice</strong>.</li>
+        <li>Ending it does not affect the build balance, the bonus, or CTL's ownership of the site.</li>
+        <li>Work beyond the included hours is quoted before it starts — never billed as a surprise.</li>
+        <li>Additional hours, when wanted, are billed at <strong>$85/hr</strong> <span class="tag q">proposed</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="flag">
+    <b>Why it starts at hosting and not before</b>
+    Charging a care fee for a site nobody can visit would be charging for nothing. The retainer keeps
+    a <em>live</em> site healthy, so the first $300 falls due the day the final production build is
+    serving on CTL's domain — not one day sooner, however long the remaining sign-offs take.
+  </div>
+
+  <div class="rf"><span>The monthly retainer</span><span class="pg">06</span></div>
+</section>
+
+<!-- ══════════ 6 · BONUS ══════════ -->
+<section class="page">
+  <div class="rh"><span>CTL Roofing — Website Build &amp; Engagement</span><span>CTL-WEB-01 · Rev A</span></div>
+  <div style="height:.28in"></div>
+  <div class="eyebrow">06 — The performance incentive</div>
+  <h2>What "performs well" has to mean</h2>
+  <p class="lede" style="margin-bottom:.15in">A $2,000 bonus judged on a feeling is a $2,000 argument.
+  So it is judged on five measurements CTL can read in the monthly report, from sources neither side
+  controls.</p>
+
+  <table class="tight" style="margin-bottom:.14in">
+    <tr><th style="width:.3in">#</th><th style="width:1.55in">Criterion</th><th style="width:2.1in">Measured from</th><th>Target at month 6</th></tr>
+    <tr><td class="num">1</td><td class="k">Qualified leads</td>
+        <td>Form records + tracked calls, averaged across months 4, 5 and 6</td>
+        <td><strong>≥ 10 per month</strong> <span class="tag q">confirm</span><br><span class="note">Or 2× the pre-launch baseline, whichever CTL prefers to set at signing.</span></td></tr>
+    <tr><td class="num">2</td><td class="k">Conversion rate</td>
+        <td>Qualified leads ÷ unique visitors, same three months</td>
+        <td><strong>≥ 2.0%</strong><br><span class="note">Industry median for contractor sites sits near 1–2%.</span></td></tr>
+    <tr><td class="num">3</td><td class="k">Search visibility</td>
+        <td>Google Search Console</td>
+        <td><strong>Organic clicks in month 6 ≥ 150% of month 1</strong></td></tr>
+    <tr><td class="num">4</td><td class="k">Speed &amp; experience</td>
+        <td>Google's own field data, mobile, 75th percentile</td>
+        <td><strong>LCP ≤ 2.5s · INP ≤ 200ms · CLS ≤ 0.1</strong> — "good" on all three</td></tr>
+    <tr><td class="num">5</td><td class="k">Reliability</td>
+        <td>Uptime and form-delivery monitoring</td>
+        <td><strong>≥ 99.9% uptime</strong>, no lead-path outage left unresolved past 24 hours</td></tr>
+  </table>
+
+  <div class="cols" style="margin-bottom:.16in">
+    <div class="card gold">
+      <h3>How it pays</h3>
+      <p style="font-size:8.8pt;margin-bottom:.08in"><span class="big" style="display:inline-flex"><span class="v" style="font-size:22pt">$2,000</span></span>
+      &nbsp;— criterion 1 met, <strong>and</strong> at least three of criteria 2–5.</p>
+      <p style="font-size:8.8pt;margin-bottom:.08in"><span class="big" style="display:inline-flex"><span class="v" style="font-size:22pt">$1,000</span></span>
+      &nbsp;— criterion 1 met, fewer than three of the rest.</p>
+      <p style="font-size:8.8pt"><span class="big" style="display:inline-flex"><span class="v" style="font-size:22pt;color:var(--faint)">$0</span></span>
+      &nbsp;— criterion 1 not met. The site's job is leads; everything else is in service of that.</p>
+      <p class="note" style="margin-top:.08in">Assessed once, in the 30 days after month 6, and payable
+      within 30 days of that written assessment — one evaluation, not a rolling target.</p>
+    </div>
+    <div class="card gold">
+      <h3>What counts as a qualified lead</h3>
+      <p style="font-size:8.8pt">A real person in the service area making a genuine enquiry about
+      work — through the assessment form, the storm line, or a tracked call originating from
+      the site.</p>
+      <p style="font-size:8.8pt;margin-top:.07in"><strong>Not counted:</strong> spam and bot submissions,
+      vendor and marketing solicitations, duplicates from the same person inside 30 days, job
+      applications (tracked separately), obvious tests, and anyone plainly outside Acadiana.</p>
+      <p class="note" style="margin-top:.08in">Every submission is timestamped and stored, so the count
+      is a record both sides can open — not a claim either side makes.</p>
+    </div>
+  </div>
+
+  <div class="sect" style="font-size:8.6pt">
+    <div class="eyebrow">Fairness clauses — both directions</div>
+    <div class="cols">
+      <div>
+        <p style="font-size:8.4pt;color:var(--faint);margin-bottom:.07in" class="mono">THE BONUS IS NOT EARNED BY</p>
+        <ul class="dash">
+          <li>Traffic, impressions or rankings alone — the target is enquiries, not applause</li>
+          <li>Leads CTL sourced elsewhere that the site merely happened to be live for</li>
+          <li>Paid advertising CTL funds separately, unless both sides agree to include it</li>
+        </ul>
+      </div>
+      <div>
+        <p style="font-size:8.4pt;color:var(--faint);margin-bottom:.07in" class="mono">MONTHS EXCLUDED FROM THE COUNT</p>
+        <ul class="dash">
+          <li>Any month where analytics, call tracking or the reviews key was not yet live — nothing to measure</li>
+          <li>Any month where CTL asked for the site, a form or a page to be held back</li>
+          <li>A named storm that materially disrupts CTL's operations — the window extends by that month</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="rf"><span>The performance incentive</span><span class="pg">07</span></div>
+</section>
+
+<!-- ══════════ 7 · ACCEPTANCE ══════════ -->
+<section class="page">
+  <div class="rh"><span>CTL Roofing — Website Build &amp; Engagement</span><span>CTL-WEB-01 · Rev A</span></div>
+  <div style="height:.28in"></div>
+  <div class="eyebrow">07 — Acceptance</div>
+  <h2>The whole thing, on one page</h2>
+  <p class="lede">Sign here and the deposit invoice follows the same day.</p>
+
+  <table class="tight" style="margin-bottom:.2in">
+    <tr><th style="width:2.4in">Item</th><th style="width:1.35in">Amount</th><th>Trigger</th></tr>
+    <tr><td class="k">Website build — deposit (30%)</td><td class="num">$3,000</td><td>On signing</td></tr>
+    <tr><td class="k">Website build — balance</td><td class="num">$7,000</td><td>Equal instalments over ______ months, from launch + 30 days</td></tr>
+    <tr><td class="k">Care retainer</td><td class="num">$300 / month</td><td>From the day the production build is hosted; 30 days' notice either side</td></tr>
+    <tr><td class="k">Performance incentive</td><td class="num">up to $2,000</td><td>Assessed at launch + 6 months against page 7</td></tr>
+    <tr><td class="k">Build total</td><td class="num" style="color:var(--gold)">$10,000</td><td>No interest, no financing charge, early settlement free</td></tr>
+  </table>
+
+  <div class="cols" style="margin-bottom:.18in">
+    <div class="card">
+      <h3>What happens next</h3>
+      <ul style="margin-top:.06in">
+        <li><strong>Same day</strong> — deposit invoice issued; the attorney starts reading the four documents; Business Profile ownership is confirmed.</li>
+        <li><strong>Week 1</strong> — accounts and keys collected, outstanding decisions taken, remaining content gathered.</li>
+        <li><strong>T-14 → T-1</strong> — final content in, sign-offs banked, DNS prepared, rollback rehearsed.</li>
+        <li><strong>Launch day</strong> — cutover. Minutes of work; the fortnight before it is what makes those minutes uneventful.</li>
+        <li><strong>T+7</strong> — first report, monitoring confirmed, retainer running.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Good faith, stated plainly</h3>
+      <p style="font-size:8.6pt">This document is the commercial agreement between CTL Pro
+      Construction LLC and Charles Meyers for the CTL Roofing website. It replaces anything
+      discussed verbally before it and can only be changed in writing signed by both.</p>
+      <p style="font-size:8.6pt;margin-top:.08in">Nothing here is designed to be leaned on later.
+      Every number in it came out of the same conversation, and every definition exists so that
+      the six-month review is arithmetic rather than a negotiation.</p>
+    </div>
+  </div>
+
+  <div class="flag" style="margin-bottom:.16in">
+    <b>Instalment term — circle one</b>
+    <strong>6 months ($1,166.67/mo)</strong> &nbsp;·&nbsp; <strong>9 months ($777.78/mo)</strong>
+    &nbsp;·&nbsp; <strong>12 months ($583.33/mo)</strong>. The term can be shortened at any point;
+    it cannot be extended past twelve months.
+  </div>
+
+  <div class="sig" style="margin-top:0">
+    <div>
+      <div class="line"></div>
+      <div class="cap">Signed for CTL Pro Construction LLC</div>
+      <div class="line" style="height:.26in;margin-top:.12in"></div>
+      <div class="cap">Date</div>
+    </div>
+    <div>
+      <div class="line"></div>
+      <div class="cap">Charles Meyers</div>
+      <div class="line" style="height:.26in;margin-top:.12in"></div>
+      <div class="cap">Date</div>
+    </div>
+  </div>
+
+  <div class="rf"><span>Acceptance</span><span class="pg">08</span></div>
+</section>
+
+</body>
+</html>

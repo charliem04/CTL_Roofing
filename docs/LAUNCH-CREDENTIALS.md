@@ -75,7 +75,7 @@ No client involvement. Listed so nothing is forgotten at wiring time.
 | `RELAY_PUBLIC_ORIGIN` | lead-relay `[vars]` | The relay's own hostname, and it must be the one Access covers (§6). Unset, forwarded records carry `resumeKey` but no clickable link — and the Worker log says so on every one |
 | `CRM_ADAPTER` | lead-relay `[vars]` | `generic` (default) or `hubspot`. Wrong value = the CRM quietly receives the wrong shape, which is the slowest failure here to notice |
 | `CRM_APPLICATION_WEBHOOK_URL` | lead-relay | Optional. Unset, job applicants land in the sales CRM alongside customers — see §6 for why that is worth avoiding |
-| D1 `database_id` | `workers/lead-relay/wrangler.toml` | **Currently a placeholder string.** `wrangler d1 create ctl-leads`, paste the real id, `npm run schema` |
+| D1 `database_id` | `workers/lead-relay/wrangler.toml` | Set — `ctl-leads` has been created and its id is in the file. Apply the schema with `npm run schema` if it has not been |
 | `SANITY_PROJECT_ID`, `SANITY_DATASET` | Pages build env | Public identifiers, in every gallery photo URL. Build-time only |
 | `SANITY_READ_TOKEN` | Pages build env, **encrypted** | Only if the dataset is private. Viewer role, read-only. **Not** `NEXT_PUBLIC_` — `scripts/harden.mjs` fails the build if it reaches `out/` |
 | Cloudflare Pages deploy hook URL | Sanity webhook | The whole reason a publish appears on the site. Treat the URL as a secret: anyone holding it can trigger builds |

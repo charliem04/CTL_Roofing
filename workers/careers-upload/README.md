@@ -47,6 +47,10 @@ npx wrangler secret put TURNSTILE_SECRET
 # a Slack incoming webhook, or the CRM — anything that takes JSON.
 npx wrangler secret put NOTIFY_WEBHOOK
 
+# Only when NOTIFY_WEBHOOK is the lead relay's /application route: the
+# same value as INGEST_SECRET on the relay, or it refuses with a 401.
+npx wrangler secret put RELAY_INGEST_SECRET
+
 # Any long random string. This is what lets the bucket record "these
 # uploads came from one place" without recording where that place is.
 # Unset, no IP-derived value is stored at all.
@@ -61,8 +65,9 @@ npm run retention
 ```
 
 Then put the deployed URL in the site's `NEXT_PUBLIC_CAREERS_ENDPOINT`,
-rebuild the site, and flip `/careers/` to `live: true` in
-`ctl-roofing/lib/routes.ts`.
+and rebuild the site. `/careers/` is already `live: true` in
+`ctl-roofing/lib/routes.ts`; until the endpoint is set, its form tells
+applicants to email the office instead.
 
 ## Configuration
 
@@ -80,6 +85,7 @@ Secrets (`wrangler secret put`, never in the toml):
 |---|---|
 | `TURNSTILE_SECRET` | **Required.** Unset, the Worker refuses every upload (500) and tells applicants to email the office. The dev env opts out with `ALLOW_INSECURE_NO_CAPTCHA`; never set that on the deployed Worker. |
 | `NOTIFY_WEBHOOK` | Unset = the file is stored silently and only the Workers log knows. |
+| `RELAY_INGEST_SECRET` | Sent as `X-Ingest-Secret` on the notification. Must equal `INGEST_SECRET` on the lead relay when `NOTIFY_WEBHOOK` points at its `/application` route. |
 | `IP_HASH_SALT` | Salt for the stored IP digest. Unset = nothing IP-derived is stored, which is safe but loses the "same source" signal. |
 
 ### Two configuration traps

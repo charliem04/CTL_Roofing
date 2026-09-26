@@ -133,9 +133,9 @@ export function Lightbox({
  * assume the file was there. That held exactly as long as every photo
  * arrived through a developer who remembered to regenerate the
  * thumbnails — and stopped holding the moment the gallery got a CMS,
- * because a photo uploaded at /admin/ lands in /ctl/gallery/ with no
- * thumbnail beside it. Every such photo would have rendered as a
- * broken tile: the one failure mode a page that exists to show off the
+ * because a photo uploaded through the CMS (then Sveltia at /admin/,
+ * now Sanity) arrives with no thumbnail beside it. Every such photo
+ * would have rendered as a broken tile: the one failure mode a page that exists to show off the
  * work cannot have, on the newest photo, which is the one somebody
  * just added and will go look at.
  *

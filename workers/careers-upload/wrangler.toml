@@ -43,6 +43,7 @@ IP_RETENTION_DAYS = "30"
 # ── Secrets — set with `wrangler secret put`, never in this file ─────
 #   wrangler secret put TURNSTILE_SECRET   <- REQUIRED
 #   wrangler secret put NOTIFY_WEBHOOK
+#   wrangler secret put RELAY_INGEST_SECRET  <- = the relay's INGEST_SECRET
 #   wrangler secret put IP_HASH_SALT       <- any long random string
 #
 # IP_HASH_SALT is what lets the bucket record "these uploads came from

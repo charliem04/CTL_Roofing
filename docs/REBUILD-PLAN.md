@@ -9,7 +9,7 @@ order, the decisions taken, and what is still blocked on the client.
 |---|---|
 | Scope now | Phase 1 shipped, then most of phase 2: gallery, areas hub, video, team, reviews. Case studies, town pages, careers and the blog remain. |
 | What this build is for | **A spec pitch.** Robert has not commissioned it, there is no deploy access and no crawl of the old site. It has to stand up on its own as a demo, which is why nothing on it reads as unfinished. |
-| CMS | **CMS-ready, no CMS yet.** Content lives in typed modules under `content/`, read through one loader (`lib/content.ts`). Adding Decap/Sveltia or a headless CMS later replaces the loader, not the pages. |
+| CMS | **The gallery is in Sanity; everything else is typed modules.** Content lives under `content/`, read through one loader (`lib/content.ts`). The gallery moved to Sanity (see `docs/GALLERY-CMS.md`) by generating `content/gallery.generated.json` before the build, so neither the loader nor the pages changed. |
 | Missing client content | **Dev-only gap markers.** `<Pending>` returns null outside `npm run dev` — a note reading "waiting on Robert" is the right thing in a dev server and the wrong thing to show the client it names. Every gap therefore needs real visitor-facing copy in the built site: nothing invented, nothing apologetic, no reference to what is missing. The gaps stay tracked in `content/pending.ts`. |
 
 ## Constraint that shapes everything

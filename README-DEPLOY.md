@@ -74,13 +74,17 @@ also the one file a CMS would replace.
 
 ## 2. Routes
 
-Phase-2 pages are registered in `lib/routes.ts` with `live: false`.
-Nothing links to them and the sitemap omits them until that flips.
+A page that is built but not ready is registered in `lib/routes.ts`
+with `live: false`. Nothing links to it and the sitemap omits it until
+that flips.
 
 - [x] `/`, `/services/` + five service pages, `/storm-damage/`,
-      `/contact/`, `/financing/`, `/gallery/`, `/terms/`, `/privacy/`, 404
-- [ ] Phase 2: `/case-studies/`, `/video/`, `/team/`, `/areas/` + town
-      pages, `/reviews/`, `/careers/`, blog
+      `/insurance/`, `/contact/`, `/financing/`, `/gallery/`, `/terms/`,
+      `/privacy/`, 404
+- [x] Phase 2, live: `/video/`, `/team/`, `/areas/`, `/reviews/`,
+      `/careers/`
+- [ ] Phase 2, still to come: `/case-studies/` (built, `live: false`),
+      town pages, blog
 
 ## 2a. The gallery is now editable without a developer
 
@@ -143,9 +147,11 @@ Worker. Each has its own README with the exact commands.
       open. Do not attach a public URL to that bucket.
 - [ ] **`workers/lead-relay`** — the lead book. Stores every assessment
       request and job application in D1 and forwards to whichever CRM is
-      chosen. `CRM_WEBHOOK_URL` unset is a supported state: leads are
-      still captured, and the first retry sweep after it is set delivers
-      the whole backlog.
+      chosen (`CRM_ADAPTER`, set to `hubspot` today). A CRM without its
+      credential — `CRM_AUTH_TOKEN` for HubSpot, `CRM_WEBHOOK_URL` for the
+      generic webhook — is a supported state: leads are still captured,
+      and the first retry sweep after it is set delivers the whole
+      backlog. See `docs/HUBSPOT-SETUP.md`.
 There used to be a third: a published `sveltia/sveltia-cms-auth` Worker
 holding a GitHub OAuth client secret so `/admin/` could sign in. The
 gallery no longer signs in with GitHub, so if that Worker was ever
@@ -248,13 +254,13 @@ from production, which defeats the point of checking it there.
       sees the failure and the phone number rather than a false success
 - [ ] Confirm the same submission appears in the relay:
       `curl -H "Authorization: Bearer $EXPORT_TOKEN" https://<relay>/export.csv`
-      — first add the preview origin to `ALLOWED_ORIGINS` in **both**
-      Workers' `wrangler.toml` and redeploy them. They ship with the two
-      production hostnames only, so a preview submission is refused with a
-      403 that is invisible from the page: the contact form does not await
-      that request, so it still reports success and the email still arrives
-      while no row is ever written. An empty CSV here usually means this and
-      not a broken relay.
+      — both Workers' `ALLOWED_ORIGINS` already carry the preview's
+      stable alias, `https://ctl-preview.pages.dev`, so browse the preview
+      from that hostname, not the per-deploy hash URL. Any other origin is
+      refused with a 403 that is invisible from the page: the contact form
+      does not await that request, so it still reports success and the
+      email still arrives while no row is ever written. An empty CSV here
+      usually means this and not a broken relay.
 - [ ] Apply through `/careers/` with a real PDF, and confirm both the
       object in R2 and the row in the relay
 - [ ] Open the studio, change a caption and publish — then confirm the
@@ -278,9 +284,10 @@ from production, which defeats the point of checking it there.
 Pages → Custom domains → add the domain, then move the DNS records.
 Afterwards:
 
-- [ ] Turn on HSTS in the Cloudflare dashboard (deliberately not set in
-      `_headers` — committing to it before the domain is fully served
-      over HTTPS is hard to undo)
+- [ ] Confirm HSTS is being sent. `public/_headers` already sets
+      `Strict-Transport-Security: max-age=31536000`, deliberately without
+      `includeSubDomains` or `preload` — see the comment there before
+      adding either
 - [ ] Submit `{siteUrl}/sitemap.xml` in Google Search Console
 - [ ] Re-check the old site's top URLs now redirect rather than 404
 

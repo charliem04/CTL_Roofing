@@ -20,9 +20,10 @@ and in the run sheet in `ctl-handover.html`. One list, three renderings.
 
 Each verified in the tree, not inferred. The "where" column is the file to open.
 
-### 1. The lead relay cannot deploy as written
+### 1. The lead relay cannot deploy as written — **closed**
 
-`workers/lead-relay/wrangler.toml` carries
+Since closed: `ctl-leads` was created and its real `database_id` is in
+`workers/lead-relay/wrangler.toml`. As originally found, the file carried
 `database_id = "<paste the id wrangler prints>"`. D1 was never provisioned, so
 the Worker has no database to bind. `npx wrangler d1 create ctl-leads`, paste
 the real id, then `npm run schema`.

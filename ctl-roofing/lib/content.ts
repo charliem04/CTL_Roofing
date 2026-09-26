@@ -4,9 +4,11 @@
  *
  *  Pages and components import from here, never from content/* directly.
  *  Today these are synchronous reads of typed modules bundled at build
- *  time. Swapping in a CMS (Decap/Sveltia reading markdown, or a
- *  headless API fetched at build) means rewriting this file and nothing
- *  else — every consumer already speaks the types in content/types.ts.
+ *  time. The gallery already comes from a CMS without touching this
+ *  file: scripts/gallery.mjs fetches it from Sanity before the build
+ *  into content/gallery.generated.json, which content/gallery.ts reads.
+ *  Every consumer speaks the types in content/types.ts, whatever the
+ *  source.
  *
  *  If you add a getter, keep it returning the same shapes.
  * ════════════════════════════════════════════════════════════════════

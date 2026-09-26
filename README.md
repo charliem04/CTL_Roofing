@@ -11,6 +11,7 @@ Cloudflare Workers that handle the things a static site cannot.
 | `ctl-roofing/` | The Next.js app. All `npm` commands run from here. |
 | `workers/lead-relay/` | Worker: receives form submissions, stores the lead, notifies. |
 | `workers/careers-upload/` | Worker: validates résumé uploads, writes to a private R2 bucket. |
+| `studio/` | The Sanity Studio the office uses to edit the gallery. Hosted by Sanity; the site never imports from it. See `studio/README.md`. |
 | `docs/` | Engineering documentation — see below. |
 | `assets/source-photos/` | The client's original unprocessed photos and video. Not a build input; the site's images are the processed copies under `ctl-roofing/public/ctl/`. |
 | `ctl-handover.html` | Client-facing: what is built, and the run sheet for the session that collects the rest. Mirrored to a published artifact — read the note in its header before editing. |
@@ -32,7 +33,10 @@ Cloudflare Workers that handle the things a static site cannot.
   was planned against.
 - **`docs/ROUTE-MAP.md`** — generated. Where every link and button goes.
   Written by `npm run routes`; `npm run build` verifies it.
-- **`docs/GALLERY-CMS.md`** — how the photo CMS at `/admin/` works.
+- **`docs/GALLERY-CMS.md`** — how the gallery CMS (Sanity, edited in
+  `studio/`) works.
+- **`docs/WEB3FORMS-SETUP.md`** — how a lead reaches the office inbox.
+- **`docs/HUBSPOT-SETUP.md`** — wiring the lead relay to HubSpot.
 - **`docs/OPTIMISATION.md`** — the measured performance pass.
 
 ## Running it

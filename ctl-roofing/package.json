@@ -6,7 +6,6 @@
     "dev": "node scripts/gallery.mjs && next dev",
     "build": "node scripts/gallery.mjs && next build && node scripts/csp.mjs && node scripts/fonts.mjs && node scripts/seo.mjs && node scripts/routes.mjs --check && node scripts/harden.mjs",
     "start": "next start",
-    "lint": "next lint",
     "deploy": "npm run build && npx wrangler pages deploy out --project-name ctl-roofing",
     "preview:build": "node scripts/preview-build.mjs",
     "preview:deploy": "npm run preview:build && npx wrangler pages deploy out --project-name ctl-preview --branch main --commit-dirty=true",

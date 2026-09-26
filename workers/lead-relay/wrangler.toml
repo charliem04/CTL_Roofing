@@ -106,9 +106,7 @@ CRM_ADAPTER = "hubspot"
 # sign-in, which is the one mistake this whole route is shaped to avoid.
 RELAY_PUBLIC_ORIGIN = "https://relay.ctlpro.com"
 
-# The active setting. See the block above for what the values mean;
-# adding a CRM is one file in src/crm/ and one line in its registry.
-# CRM_ADAPTER = "generic"
+# Adding a CRM is one file in src/crm/ and one line in its registry.
 
 # ── Secrets — set with `wrangler secret put`, never in this file ─────
 #

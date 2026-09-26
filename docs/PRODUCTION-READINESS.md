@@ -153,10 +153,11 @@ pipeline still runs unsupervised on every deploy.
 A workflow running `npm run build` and `npm run check` on pull requests and on
 pushes to `main` would close this.
 
-### 8. `npm run lint` does nothing, and the site has no tests
+### 8. The site has no linter and no tests
 
-No eslint config and no eslint dependency, so `next lint` would offer to set one
-up rather than lint. Nothing under `ctl-roofing/` is covered by a test.
+No eslint config and no eslint dependency. The `lint` script that ran
+`next lint` only offered to set one up, so it was removed; adding eslint means
+adding the script back. Nothing under `ctl-roofing/` is covered by a test.
 
 TypeScript is `strict: true` and `next build` type-checks, so types *are*
 enforced — but there is no standalone `typecheck` script.
